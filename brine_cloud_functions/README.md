@@ -16,3 +16,7 @@ Create a new message by opening the URL in a new tab in your browser.
 View the effects of the functions in the Emulator Suite UI:
 
 In the Logs tab, you should see new logs indicating that the function ran.
+
+### Usage Example
+Request:  http://localhost:5001/brine-3b212/us-central1/updateLevels?deviceid=whimsical_gold_squirrel&saltlevel=0.5&batterylevel=0.2
+Successful response:  {"result":"Device, whimsical_gold_squirrel, updated."}
