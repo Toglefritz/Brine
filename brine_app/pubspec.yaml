@@ -1,5 +1,5 @@
 name: brine
-description: An IoT water softener monitor used to measure the amount of salt left in the appliance.
+description: Companion app for the Brine water softener monitor.
 
 publish_to: 'none'
 
@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Creates Material color schemes based on a platform's implementation of dynamic color
+  dynamic_color: ^1.5.4
 
 dev_dependencies:
   flutter_test:
@@ -21,4 +23,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets
+    - assets/

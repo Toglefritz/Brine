@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Returns [ThemeData] for the app's light theme.
-ThemeData buildLightThemeData() {
-  return ThemeData(
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
-    useMaterial3: true,
-    brightness: Brightness.light,
-  );
-}
+/// The default light [ColorScheme] if the app is unable to build a dynamic Material color scheme.
+final ColorScheme defaultLightColorScheme = ColorScheme.fromSwatch(primarySwatch: Colors.yellow);
 
-/// Returns [ThemeData] for the app's dark theme.
-ThemeData buildDarkThemeData() {
-  return ThemeData(
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
-    useMaterial3: true,
-    brightness: Brightness.dark,
-  );
-}
+/// The default dark [ColorScheme] if the app is unable to build a dynamic Material color scheme.
+final ColorScheme defaultDarkColorScheme =
+    ColorScheme.fromSwatch(primarySwatch: Colors.yellow, brightness: Brightness.dark);
