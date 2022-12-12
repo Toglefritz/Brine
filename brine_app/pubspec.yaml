@@ -13,6 +13,10 @@ dependencies:
     sdk: flutter
   # Creates Material color schemes based on a platform's implementation of dynamic color
   dynamic_color: ^1.5.4
+  # Used to display SVG assets
+  flutter_svg: ^1.1.6
+  # Used to get Google Fonts font styles
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -24,3 +28,4 @@ flutter:
 
   assets:
     - assets/
+    - assets/icons/

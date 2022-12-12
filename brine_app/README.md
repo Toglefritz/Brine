@@ -1,6 +1,6 @@
 # Brine
 
-![Brine logo](assets/icons/Brine.png)
+![Brine logo](assets/icons/brine.png)
 
 The companion app for the Brine Monitor, an IoT device that monitors the amount of salt remaining
 in a water softener.
