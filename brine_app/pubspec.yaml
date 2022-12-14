@@ -17,6 +17,8 @@ dependencies:
   flutter_svg: ^1.1.6
   # Used to get Google Fonts font styles
   google_fonts: ^3.0.1
+  # Provides additional icons beyond the Material icons
+  font_awesome_flutter: ^10.3.0
 
 dev_dependencies:
   flutter_test:

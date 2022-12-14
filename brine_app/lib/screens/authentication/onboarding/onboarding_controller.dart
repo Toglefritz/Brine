@@ -1,4 +1,6 @@
+import 'package:brine/screens/authentication/login/login_route.dart';
 import 'package:flutter/material.dart';
+
 import 'onboarding_route.dart';
 import 'onboarding_view.dart';
 
@@ -6,7 +8,13 @@ import 'onboarding_view.dart';
 class OnboardingController extends State<OnboardingRoute> {
   /// Handles taps on the login button.
   void handleLoginTap() {
-    // TODO go to login route
+    // TODO Analytics tag
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => const LoginRoute(),
+      ),
+    );
   }
 
   /// Handles taps on the create an account button.

@@ -1,4 +1,4 @@
-import 'package:brine/screens/onboarding/onboarding_route.dart';
+import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
 import 'package:brine/theme/build_theme_data.dart';
 import 'package:flutter/material.dart';
 

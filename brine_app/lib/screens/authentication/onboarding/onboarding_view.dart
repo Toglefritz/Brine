@@ -2,12 +2,13 @@ import 'package:brine/models/insets.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../values/image_asset.dart';
-import '../../values/strings.dart';
-import 'components/onboarding_button.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../../values/image_asset.dart';
+import '../../../values/strings.dart';
+import '../components/onboarding_button.dart';
 import 'components/onboarding_legal_prompt.dart';
 import 'onboarding_controller.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// View for [OnboardingRoute].
 class OnboardingView extends StatelessWidget {
@@ -73,7 +74,10 @@ class OnboardingView extends StatelessWidget {
               padding: const EdgeInsets.all(
                 Insets.medium,
               ),
-              child: OnboardingLegalPrompt(state: state),
+              child: OnboardingLegalPrompt(
+                termsOnTap: state.handleTermsAndConditionsTap,
+                privacyOnTap: state.handlePrivacyPolicyTap,
+              ),
             ),
           ],
         ),
