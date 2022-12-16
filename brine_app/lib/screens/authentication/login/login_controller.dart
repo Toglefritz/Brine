@@ -5,6 +5,16 @@ import 'login_view.dart';
 
 /// Controller for [LoginRoute].
 class LoginController extends State<LoginRoute> {
+  /// A key used for the username and password login form.
+  final loginFormKey = GlobalKey<FormState>();
+
+  /// Handles submission of the username and password to perform basic authentication against Firebase.
+  void handleBasicAuthLoginSubmit() {
+    if (loginFormKey.currentState!.validate()) {
+      // TODO perform basic auth
+    }
+  }
+
   /// Handles taps on the back button.
   void handleBackTap() {
     Navigator.pop(context);
