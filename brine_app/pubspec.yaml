@@ -19,6 +19,8 @@ dependencies:
   google_fonts: ^3.0.1
   # Provides additional icons beyond the Material icons
   font_awesome_flutter: ^10.3.0
+  # Enables the use of Firebase services
+  firebase_core: ^2.4.0
 
 dev_dependencies:
   flutter_test:
