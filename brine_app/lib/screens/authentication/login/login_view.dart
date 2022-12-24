@@ -1,3 +1,4 @@
+import 'package:brine/models/device.dart';
 import 'package:brine/models/insets.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class LoginView extends StatelessWidget {
                       child: Text(
                         Strings.login,
                         style: GoogleFonts.bungee().copyWith(
-                          fontSize: 42,
+                          fontSize: 52,
                           color: ColorLibrary.primaryDefault,
                         ),
                       ),
@@ -69,6 +70,7 @@ class LoginView extends StatelessWidget {
                       DarkOnboardingButton(
                         onPressed: state.handleBasicAuthLoginSubmit,
                         text: Strings.submit,
+                        width: 350,
                       ),
                     ],
                   ),
@@ -88,8 +90,8 @@ class LoginView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Insets.small,
+                      padding: const EdgeInsets.only(
+                        bottom: Insets.small,
                       ),
                       child: OnboardingButton(
                         onPressed: state.handleGoogleLogin,
@@ -97,11 +99,12 @@ class LoginView extends StatelessWidget {
                         icon: FontAwesomeIcons.google,
                       ),
                     ),
-                    OnboardingButton(
-                      onPressed: state.handleAppleLogin,
-                      text: Strings.apple,
-                      icon: FontAwesomeIcons.apple,
-                    ),
+                    if (Device.isIOS)
+                      OnboardingButton(
+                        onPressed: state.handleAppleLogin,
+                        text: Strings.apple,
+                        icon: FontAwesomeIcons.apple,
+                      ),
                   ],
                 ),
                 Expanded(

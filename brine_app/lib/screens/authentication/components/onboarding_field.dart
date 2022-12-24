@@ -16,10 +16,12 @@ class OnboardingField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 250,
+      width: 350,
       child: TextFormField(
         obscureText: obscureText ?? false,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: ColorLibrary.primaryLight,
           contentPadding: const EdgeInsets.all(Insets.small),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),

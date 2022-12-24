@@ -20,14 +20,15 @@ class OnboardingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width ?? 250,
-      child: OutlinedButton(
+      width: width ?? 350,
+      child: ElevatedButton(
         onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
+        style: ElevatedButton.styleFrom(
           side: const BorderSide(
             width: 4.0,
             color: ColorLibrary.primaryDefault,
           ),
+          backgroundColor: ColorLibrary.primaryLight,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
