@@ -60,7 +60,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC8Jp6ChQT_YiGZYcXIVbecMwZgzxMT3EM',
-    appId: '1:431909607108:ios:3d9ecb7378f2af9a081b91',
+    appId: '1:431909607108:ios:a427284d82db43be081b91',
     messagingSenderId: '431909607108',
     projectId: 'brine-3b212',
     databaseURL: 'https://brine-3b212-default-rtdb.firebaseio.com',
