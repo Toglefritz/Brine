@@ -2,7 +2,7 @@ import 'package:brine/models/insets.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 
-///
+/// A bordered text input field.
 class OnboardingField extends StatelessWidget {
   const OnboardingField({
     Key? key,

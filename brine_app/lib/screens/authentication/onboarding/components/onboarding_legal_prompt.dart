@@ -8,12 +8,17 @@ import '../../../../values/strings.dart';
 class OnboardingLegalPrompt extends StatelessWidget {
   const OnboardingLegalPrompt({
     Key? key,
-    required this.termsOnTap,
-    required this.privacyOnTap,
   }) : super(key: key);
 
-  final VoidCallback termsOnTap;
-  final VoidCallback privacyOnTap;
+  /// Handles taps on the privacy policy link.
+  void handleTermsAndConditionsTap() {
+    // TODO open terms and conditions
+  }
+
+  /// Handles taps on the privacy policy link.
+  void handlePrivacyPolicyTap() {
+    // TODO open privacy policy
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class OnboardingLegalPrompt extends StatelessWidget {
           TextSpan(
             text: Strings.termsOfService,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            recognizer: TapGestureRecognizer()..onTap = termsOnTap,
+            recognizer: TapGestureRecognizer()..onTap = handleTermsAndConditionsTap,
           ),
           const TextSpan(
             text: Strings.and,
@@ -36,7 +41,7 @@ class OnboardingLegalPrompt extends StatelessWidget {
           TextSpan(
             text: Strings.privacyPolicy,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            recognizer: TapGestureRecognizer()..onTap = privacyOnTap,
+            recognizer: TapGestureRecognizer()..onTap = handlePrivacyPolicyTap,
           ),
           const TextSpan(
             text: Strings.onboardingLegalPrompt2,

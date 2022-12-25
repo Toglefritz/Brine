@@ -40,13 +40,12 @@ class OnboardingView extends StatelessWidget {
                       fontSize: 52,
                       color: ColorLibrary.primaryDefault,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 // TODO replace with vector
                 Image.asset(
                   ImageAsset.logoTransparentBackground,
-                  width: 250,
-                  height: 250,
                 ),
               ],
             ),
@@ -75,14 +74,11 @@ class OnboardingView extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(
+            const Padding(
+              padding: EdgeInsets.all(
                 Insets.medium,
               ),
-              child: OnboardingLegalPrompt(
-                termsOnTap: state.handleTermsAndConditionsTap,
-                privacyOnTap: state.handlePrivacyPolicyTap,
-              ),
+              child: OnboardingLegalPrompt(),
             ),
           ],
         ),

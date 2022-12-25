@@ -25,7 +25,7 @@ class OnboardingButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           side: const BorderSide(
-            width: 4.0,
+            width: 3.0,
             color: ColorLibrary.primaryDefault,
           ),
           backgroundColor: ColorLibrary.primaryLight,

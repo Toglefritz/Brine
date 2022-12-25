@@ -46,6 +46,7 @@ class LoginView extends StatelessWidget {
                           fontSize: 52,
                           color: ColorLibrary.primaryDefault,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],
@@ -95,14 +96,14 @@ class LoginView extends StatelessWidget {
                       ),
                       child: OnboardingButton(
                         onPressed: state.handleGoogleLogin,
-                        text: Strings.google,
+                        text: Strings.loginWithGoogle,
                         icon: FontAwesomeIcons.google,
                       ),
                     ),
                     if (Device.isIOS)
                       OnboardingButton(
                         onPressed: state.handleAppleLogin,
-                        text: Strings.apple,
+                        text: Strings.loginWithApple,
                         icon: FontAwesomeIcons.apple,
                       ),
                   ],
@@ -110,15 +111,12 @@ class LoginView extends StatelessWidget {
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: const [
                       Padding(
-                        padding: const EdgeInsets.all(
+                        padding: EdgeInsets.all(
                           Insets.medium,
                         ),
-                        child: OnboardingLegalPrompt(
-                          termsOnTap: state.handleTermsAndConditionsTap,
-                          privacyOnTap: state.handlePrivacyPolicyTap,
-                        ),
+                        child: OnboardingLegalPrompt(),
                       ),
                     ],
                   ),

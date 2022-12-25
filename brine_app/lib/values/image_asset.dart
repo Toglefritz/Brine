@@ -9,5 +9,6 @@ class ImageAsset {
   static String iconLogoRoundMonochrome = '${pathPrefix}icons/brine_round_monochrome.png';
 
   // Images
-  static String logoTransparentBackground = '${pathPrefix}brine_round.png';
+  static String logoTransparentBackground = '${pathPrefix}brine.png';
+  static String logoTransparentBackgroundRound = '${pathPrefix}brine_round.png';
 }

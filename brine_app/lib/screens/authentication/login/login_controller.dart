@@ -1,3 +1,4 @@
+import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +20,12 @@ class LoginController extends State<LoginRoute> {
 
   /// Handles taps on the back button.
   void handleBackTap() {
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => const OnboardingRoute(),
+      ),
+    );
   }
 
   /// Handles taps on the Google sign in button.
@@ -43,16 +49,6 @@ class LoginController extends State<LoginRoute> {
   /// Handles taps on the Apple sign in button.
   void handleAppleLogin() {
     // TODO do login with Apple
-  }
-
-  /// Handles taps on the privacy policy link.
-  void handleTermsAndConditionsTap() {
-    // TODO open terms and conditions
-  }
-
-  /// Handles taps on the privacy policy link.
-  void handlePrivacyPolicyTap() {
-    // TODO open privacy policy
   }
 
   @override
