@@ -66,6 +66,7 @@ class CreateAccountView extends StatelessWidget {
                                 controller: state.usernameFieldController,
                                 validator: state.validateUsernameField,
                                 errorState: state.usernameFieldError,
+                                additionalError: state.createAccountUsernameExceptionError,
                               ),
                             ),
                             Padding(
@@ -107,6 +108,7 @@ class CreateAccountView extends StatelessWidget {
                                         controller: state.passwordConfirmationFieldController,
                                         validator: state.validatePasswordConfirmationField,
                                         errorState: state.passwordConfirmationFieldError,
+                                        additionalError: state.createAccountPasswordExceptionError,
                                       ),
                                     ),
                                   ],
@@ -117,6 +119,7 @@ class CreateAccountView extends StatelessWidget {
                               onPressed: state.handleCreateAccountSubmit,
                               text: Strings.submit,
                               width: 350,
+                              loading: state.creatingAccount,
                             ),
                           ],
                         ),

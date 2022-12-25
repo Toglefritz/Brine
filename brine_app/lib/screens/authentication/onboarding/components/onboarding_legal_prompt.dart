@@ -6,6 +6,7 @@ import '../../../../values/strings.dart';
 /// A sentence built with a [RichText] widget prompting the user to view the terms and conditions and
 /// the privacy policy before using the app.
 class OnboardingLegalPrompt extends StatelessWidget {
+  /// Creates an [OnboardingLegalPrompt].
   const OnboardingLegalPrompt({
     Key? key,
   }) : super(key: key);
