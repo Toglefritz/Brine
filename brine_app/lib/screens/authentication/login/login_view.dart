@@ -64,6 +64,7 @@ class LoginView extends StatelessWidget {
                               controller: state.usernameFieldController,
                               validator: state.validateUsernameField,
                               errorState: state.usernameFieldError,
+                              additionalError: state.loginUsernameExceptionError,
                             ),
                           ),
                           Padding(
@@ -74,12 +75,14 @@ class LoginView extends StatelessWidget {
                               controller: state.passwordFieldController,
                               validator: state.validatePasswordField,
                               errorState: state.passwordFieldError,
+                              additionalError: state.loginPasswordExceptionError,
                             ),
                           ),
                           DarkOnboardingButton(
                             onPressed: state.handleBasicAuthLoginSubmit,
                             text: Strings.submit,
                             width: 350,
+                            loading: state.loginProcessing,
                           ),
                         ],
                       ),

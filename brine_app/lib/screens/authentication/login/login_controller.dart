@@ -26,10 +26,89 @@ class LoginController extends State<LoginRoute> {
   /// [validatePasswordField] method.
   bool passwordFieldError = false;
 
+  /// An additional error string set by exceptions thrown during the login process related to the username entry.
+  String? loginUsernameExceptionError;
+
+  /// An additional error string set by exceptions thrown during the login process related to the password entry.
+  String? loginPasswordExceptionError;
+
+  /// Determines if the account creation process is in progress
+  bool loginProcessing = false;
+
   /// Handles submission of the username and password to perform basic authentication against Firebase.
-  void handleBasicAuthLoginSubmit() {
+  Future<void> handleBasicAuthLoginSubmit() async {
+    setState(() {
+      loginUsernameExceptionError = null;
+      loginPasswordExceptionError = null;
+      usernameFieldError = false;
+      passwordFieldError = false;
+      loginProcessing = true;
+    });
+
     if (loginFormKey.currentState!.validate()) {
-      // TODO perform basic auth
+      setState(() {
+        loginProcessing = true;
+      });
+
+      try {
+        await login(
+          emailAddress: usernameFieldController.text,
+          password: passwordFieldController.text,
+        );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          setState(() {
+            usernameFieldError = true;
+            loginUsernameExceptionError = 'No user found with that email.';
+            loginProcessing = false;
+          });
+
+          return;
+        } else if (e.code == 'wrong-password') {
+          setState(() {
+            passwordFieldError = true;
+            loginPasswordExceptionError = 'That password wasn\'t quite right.';
+            loginProcessing = false;
+          });
+
+          return;
+        } else if (e.code == 'user-disabled') {
+          setState(() {
+            passwordFieldError = true;
+            loginUsernameExceptionError = 'Your account is currently disabled.';
+            loginProcessing = false;
+          });
+
+          return;
+        }
+      }
+    }
+
+    setState(() {
+      loginUsernameExceptionError = null;
+      loginPasswordExceptionError = null;
+      usernameFieldError = false;
+      passwordFieldError = false;
+      loginProcessing = false;
+    });
+  }
+
+  /// Logs into a Firebase account using a username and password combination.
+  ///
+  /// Various exceptions can be thrown from the [FirebaseAuth] [signInWithEmailAndPassword] method that indicate
+  /// different problems with the login. The codes from these exceptions are used to set the
+  /// [loginUsernameExceptionError] and [loginPasswordExceptionError] fields. These show up in the UI the same way
+  /// as form validation errors.
+  Future<UserCredential?> login({required String emailAddress, required String password}) async {
+    try {
+      final UserCredential credential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailAddress, password: password);
+
+      return credential;
+    } on FirebaseAuthException catch (e) {
+      debugPrint('Login failed with exception, $e');
+
+      rethrow;
     }
   }
 
