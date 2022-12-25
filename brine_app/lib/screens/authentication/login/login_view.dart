@@ -28,101 +28,111 @@ class LoginView extends StatelessWidget {
         Scaffold(
           backgroundColor: Theme.of(context).colorScheme.primary,
           resizeToAvoidBottomInset: false,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Column(
+          body: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: Insets.xxLarge,
-                        bottom: Insets.large,
-                      ),
-                      child: Text(
-                        Strings.login,
-                        style: GoogleFonts.bungee().copyWith(
-                          fontSize: 52,
-                          color: ColorLibrary.primaryDefault,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: Insets.xxLarge,
+                            bottom: Insets.large,
+                          ),
+                          child: Text(
+                            Strings.login,
+                            style: GoogleFonts.bungee().copyWith(
+                              fontSize: 52,
+                              color: ColorLibrary.primaryDefault,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
+                      ],
+                    ),
+                    Form(
+                      key: state.loginFormKey,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: Insets.small),
+                            child: OnboardingField(
+                              hint: Strings.username,
+                              controller: state.usernameFieldController,
+                              validator: state.validateUsernameField,
+                              errorState: state.usernameFieldError,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: Insets.small),
+                            child: OnboardingField(
+                              hint: Strings.password,
+                              obscureText: true,
+                              controller: state.passwordFieldController,
+                              validator: state.validatePasswordField,
+                              errorState: state.passwordFieldError,
+                            ),
+                          ),
+                          DarkOnboardingButton(
+                            onPressed: state.handleBasicAuthLoginSubmit,
+                            text: Strings.submit,
+                            width: 350,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Insets.large,
+                        horizontal: Insets.xLarge,
+                      ),
+                      child: Divider(
+                        thickness: 2,
+                        height: Insets.large,
+                        color: ColorLibrary.primaryDefault,
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: Insets.small,
+                          ),
+                          child: OnboardingButton(
+                            onPressed: state.handleGoogleLogin,
+                            text: Strings.loginWithGoogle,
+                            icon: FontAwesomeIcons.google,
+                          ),
+                        ),
+                        if (Device.isIOS)
+                          OnboardingButton(
+                            onPressed: state.handleAppleLogin,
+                            text: Strings.loginWithApple,
+                            icon: FontAwesomeIcons.apple,
+                          ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(
+                              Insets.medium,
+                            ),
+                            child: OnboardingLegalPrompt(),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                Form(
-                  key: state.loginFormKey,
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: Insets.small),
-                        child: OnboardingField(
-                          hint: Strings.username,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: Insets.small),
-                        child: OnboardingField(
-                          hint: Strings.password,
-                          obscureText: true,
-                        ),
-                      ),
-                      DarkOnboardingButton(
-                        onPressed: state.handleBasicAuthLoginSubmit,
-                        text: Strings.submit,
-                        width: 350,
-                      ),
-                    ],
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: Insets.large,
-                    horizontal: Insets.xLarge,
-                  ),
-                  child: Divider(
-                    thickness: 2,
-                    height: Insets.large,
-                    color: ColorLibrary.primaryDefault,
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: Insets.small,
-                      ),
-                      child: OnboardingButton(
-                        onPressed: state.handleGoogleLogin,
-                        text: Strings.loginWithGoogle,
-                        icon: FontAwesomeIcons.google,
-                      ),
-                    ),
-                    if (Device.isIOS)
-                      OnboardingButton(
-                        onPressed: state.handleAppleLogin,
-                        text: Strings.loginWithApple,
-                        icon: FontAwesomeIcons.apple,
-                      ),
-                  ],
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.all(
-                          Insets.medium,
-                        ),
-                        child: OnboardingLegalPrompt(),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         Positioned(

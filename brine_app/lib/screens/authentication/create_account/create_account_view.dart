@@ -11,6 +11,7 @@ import '../components/dark_onboarding_button.dart';
 import '../components/onboarding_button.dart';
 import '../components/onboarding_field.dart';
 import '../onboarding/components/onboarding_legal_prompt.dart';
+import 'components/borderless_field.dart';
 import 'create_account_controller.dart';
 
 /// View for [CreateAccountRoute].
@@ -29,162 +30,141 @@ class CreateAccountView extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.primary,
           resizeToAvoidBottomInset: false,
           body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: Insets.xxLarge,
-                        bottom: Insets.large,
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: Insets.xxLarge,
+                              bottom: Insets.large,
+                            ),
+                            child: Text(
+                              Strings.createAccount,
+                              style: GoogleFonts.bungee().copyWith(
+                                fontSize: 52,
+                                color: ColorLibrary.primaryDefault,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        Strings.createAccount,
-                        style: GoogleFonts.bungee().copyWith(
-                          fontSize: 52,
+                      Form(
+                        key: state.createAccountFormKey,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: Insets.small),
+                              child: OnboardingField(
+                                hint: Strings.username,
+                                controller: state.usernameFieldController,
+                                validator: state.validateUsernameField,
+                                errorState: state.usernameFieldError,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: Insets.small),
+                              child: SizedBox(
+                                width: 350,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border: Border.all(
+                                          width: 3.0,
+                                          color: ColorLibrary.primaryDefault,
+                                        ),
+                                        color: ColorLibrary.primaryLight,
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(top: 51),
+                                      child: Divider(
+                                        thickness: 3,
+                                        color: ColorLibrary.primaryDefault,
+                                      ),
+                                    ),
+                                    BorderlessField(
+                                      hint: Strings.password,
+                                      obscureText: true,
+                                      controller: state.passwordFieldController,
+                                      validator: state.validatePasswordField,
+                                      errorState: state.passwordFieldError,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 57),
+                                      child: BorderlessField(
+                                        hint: Strings.confirmPassword,
+                                        obscureText: true,
+                                        controller: state.passwordConfirmationFieldController,
+                                        validator: state.validatePasswordConfirmationField,
+                                        errorState: state.passwordConfirmationFieldError,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            DarkOnboardingButton(
+                              onPressed: state.handleCreateAccountSubmit,
+                              text: Strings.submit,
+                              width: 350,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Insets.medium,
+                          horizontal: Insets.xLarge,
+                        ),
+                        child: Divider(
+                          thickness: 2,
+                          height: Insets.large,
                           color: ColorLibrary.primaryDefault,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
-                ),
-                Form(
-                  key: state.createAccountFormKey,
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: Insets.small),
-                        child: OnboardingField(
-                          hint: Strings.username,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: Insets.small),
-                        child: SizedBox(
-                          width: 350,
-                          child: Stack(
-                            children: [
-                              Container(
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                    width: 3.0,
-                                    color: ColorLibrary.primaryDefault,
-                                  ),
-                                  color: ColorLibrary.primaryLight,
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 51),
-                                child: Divider(
-                                  thickness: 3,
-                                  color: ColorLibrary.primaryDefault,
-                                ),
-                              ),
-                              TextFormField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.all(Insets.small),
-                                  hintText: Strings.password,
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                    color: ColorLibrary.primaryDefault.withOpacity(0.5),
-                                  ),
-                                ),
-                                cursorColor: ColorLibrary.primaryDefault,
-                                cursorRadius: const Radius.circular(5.0),
-                                style: const TextStyle(
-                                  color: ColorLibrary.primaryDefault,
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a password';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 57),
-                                child: TextFormField(
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.all(Insets.small),
-                                    hintText: Strings.confirmPassword,
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                      color: ColorLibrary.primaryDefault.withOpacity(0.5),
-                                    ),
-                                  ),
-                                  cursorColor: ColorLibrary.primaryDefault,
-                                  cursorRadius: const Radius.circular(5.0),
-                                  style: const TextStyle(
-                                    color: ColorLibrary.primaryDefault,
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter a password confirmation';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ],
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: Insets.small,
+                            ),
+                            child: OnboardingButton(
+                              onPressed: state.handleGoogleCreateAccount,
+                              text: Strings.signUpWithGoogle,
+                              icon: FontAwesomeIcons.google,
+                            ),
                           ),
+                          if (Device.isIOS)
+                            OnboardingButton(
+                              onPressed: state.handleAppleCreateAccount,
+                              text: Strings.signUpWithApple,
+                              icon: FontAwesomeIcons.apple,
+                            ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.all(
+                                Insets.medium,
+                              ),
+                              child: OnboardingLegalPrompt(),
+                            ),
+                          ],
                         ),
-                      ),
-                      DarkOnboardingButton(
-                        onPressed: state.handleCreateAccountSubmit,
-                        text: Strings.submit,
-                        width: 350,
-                      ),
-                    ],
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: Insets.medium,
-                    horizontal: Insets.xLarge,
-                  ),
-                  child: Divider(
-                    thickness: 2,
-                    height: Insets.large,
-                    color: ColorLibrary.primaryDefault,
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: Insets.small,
-                      ),
-                      child: OnboardingButton(
-                        onPressed: state.handleGoogleCreateAccount,
-                        text: Strings.signUpWithGoogle,
-                        icon: FontAwesomeIcons.google,
-                      ),
-                    ),
-                    if (Device.isIOS)
-                      OnboardingButton(
-                        onPressed: state.handleAppleCreateAccount,
-                        text: Strings.signUpWithApple,
-                        icon: FontAwesomeIcons.apple,
-                      ),
-                  ],
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.all(
-                          Insets.medium,
-                        ),
-                        child: OnboardingLegalPrompt(),
                       ),
                     ],
                   ),

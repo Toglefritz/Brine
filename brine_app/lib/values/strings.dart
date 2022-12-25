@@ -16,5 +16,5 @@ class Strings {
   static const String signUpWithApple = 'sign up with Google';
   static const String submit = 'Submit';
   static const String termsOfService = 'terms of service';
-  static const String username = 'Username';
+  static const String username = 'Username (email)';
 }
