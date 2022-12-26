@@ -1,8 +1,13 @@
-import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
-import 'package:brine/theme/build_theme_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-/// Loads the app theme and home page.
+import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
+import 'package:brine/screens/softener_monitor/softener_monitor_route.dart';
+import 'package:brine/theme/build_theme_data.dart';
+
+/// The entry point of the application.
+///
+/// The [BrineApp] widget returns a [MaterialApp]
 class BrineApp extends StatelessWidget {
   const BrineApp({super.key});
 
@@ -14,7 +19,17 @@ class BrineApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightThemeData,
       darkTheme: darkThemeData,
-      home: const OnboardingRoute(),
+      home: Scaffold(
+        body: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return const SoftenerMonitorRoute();
+            }
+            return const OnboardingRoute();
+          },
+        ),
+      ),
     );
   }
 }

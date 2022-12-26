@@ -1,4 +1,5 @@
 import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
+import 'package:brine/screens/softener_monitor/softener_monitor_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -91,6 +92,15 @@ class LoginController extends State<LoginRoute> {
       passwordFieldError = false;
       loginProcessing = false;
     });
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const SoftenerMonitorRoute(),
+        ),
+      );
+    }
   }
 
   /// Logs into a Firebase account using a username and password combination.
@@ -169,7 +179,7 @@ class LoginController extends State<LoginRoute> {
   }
 
   /// Handles taps on the Google sign in button.
-  Future<UserCredential> handleGoogleLogin() async {
+  Future<void> handleGoogleLogin() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -182,8 +192,23 @@ class LoginController extends State<LoginRoute> {
       idToken: googleAuth?.idToken,
     );
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    // Once the credentials is obtained from the Google authentication flow, sign in using that credential
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      debugPrint('Failed to authenticate using Google account with exception, $e');
+
+      // TODO catch and respond to exceptions
+    }
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const SoftenerMonitorRoute(),
+        ),
+      );
+    }
   }
 
   /// Handles taps on the Apple sign in button.

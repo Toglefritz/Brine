@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../values/regex.dart';
+import '../../softener_monitor/softener_monitor_route.dart';
 import 'create_account_route.dart';
 import 'create_account_view.dart';
 
@@ -98,6 +99,15 @@ class CreateAccountController extends State<CreateAccountRoute> {
         passwordFieldError = false;
         creatingAccount = false;
       });
+
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const SoftenerMonitorRoute(),
+          ),
+        );
+      }
     }
   }
 
