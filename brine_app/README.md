@@ -15,3 +15,22 @@ The Brine water softener monitor keeps track of the amount of salt remaining in 
 and delivers alerts when the level is low. With this tool, you can keep your water softener filled
 with salt and working properly, which, in turn, will keep your appliances free of mineral deposits,
 your hands and hair well-moisturized, your laundry machine effective, and spots off your dishes.
+
+# Application Flow
+
+The application has two main workflows. First, the app implements a provisioning process used to 
+add a Brine device to the user's account. This process consists of communicating with a target 
+Brine device via Bluetooth, connecting that device to a WiFi network, and performing an API call 
+necessary to associate the Brine device to the user's account. 
+
+Second
+
+# Firebase Local Emulator Notes
+
+Development can be done against the Firebase local emulator rather than the live Firebase 
+environment in order to prevent interference with the production environment and to provide a 
+safe environment for development without billing.
+
+Start the Firebase emulator with the command, `firebase emulators:start`.
+
+

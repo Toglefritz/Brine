@@ -25,6 +25,8 @@ dependencies:
   firebase_auth: ^4.2.3
   # Allows authentication using a Google account
   google_sign_in: ^5.4.2
+  # Used to access Firestore
+  cloud_firestore: ^4.3.0
 
 dev_dependencies:
   flutter_test:
