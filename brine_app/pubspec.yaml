@@ -27,6 +27,8 @@ dependencies:
   google_sign_in: ^5.4.2
   # Used to access Firestore
   cloud_firestore: ^4.3.0
+  # Automates setting the app icons
+  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_test:
@@ -39,3 +41,11 @@ flutter:
   assets:
     - assets/
     - assets/icons/
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/brine_round.png"
+  remove_alpha_ios: true
+  adaptive_icon_background: #ffffff
+  adaptive_icon_foreground: "assets/icons/brine_round.png"
