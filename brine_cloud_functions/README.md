@@ -1,5 +1,7 @@
 # Brine_Cloud_Functions
 
+This repository contains a series of functions that, when deployed to Firebase, form the backend infrastructure for the Bine monitor.
+
 ## To emulate functions:
 
 Run firebase emulators:start and check the output for the URL of the Emulator Suite UI. It defaults to localhost:4000, but may be hosted on a different port on your machine. Enter that URL in your browser to open the Emulator Suite UI.
