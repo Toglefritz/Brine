@@ -26,7 +26,7 @@ class LoginView extends StatelessWidget {
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).primaryColor,
           resizeToAvoidBottomInset: false,
           body: CustomScrollView(
             slivers: [

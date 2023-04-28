@@ -21,7 +21,7 @@ class OnboardingView extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,6 +46,7 @@ class OnboardingView extends StatelessWidget {
                 // TODO replace with vector
                 Image.asset(
                   ImageAsset.logoTransparentBackground,
+                  width: 200,
                 ),
               ],
             ),
