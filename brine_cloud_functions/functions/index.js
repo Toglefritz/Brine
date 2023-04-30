@@ -111,3 +111,83 @@ const updateDeviceLevels = functions.https.onRequest(async (req, res) => {
 });
 
 exports.updateDeviceLevels = updateDeviceLevels;
+
+/**
+ * This Firebase callable function retrieves the salt level and battery level for the
+ * specified IoT device associated with the authenticated user. The Firestore structure
+ * consists of a "users" collection that stores user documents with an array of associated
+ * device IDs, and a "devices" collection that stores device documents with device ID,
+ * salt level, and battery level.
+ *
+ * The function checks if the user is authenticated and has access to the specified device.
+ * If the user has access, it retrieves the device document from the "devices" collection
+ * and returns the salt level and battery level.
+ *
+ * @param {Object} data - The data object passed by the client, containing the device ID.
+ * @param {Object} context - The context object containing information about the user and the function call.
+ * @returns {Object} - An object containing the battery level and salt level for the specified IoT device.
+ * @throws {HttpsError} - Throws an error if the user is unauthenticated, the device ID is not provided, the user or device is not found, or the user does not have access to the specified device.
+ *
+ * Example usage (client-side):
+ *
+ * const getDeviceLevels = firebase.functions().httpsCallable('getDeviceLevels');
+ * getDeviceLevels({ deviceId: 'vast_teal_elephant' })
+ *   .then((result) => {
+ *     console.log('Battery Level:', result.data.battery_level);
+ *     console.log('Salt Level:', result.data.salt_level);
+ *   })
+ *   .catch((error) => {
+ *     console.error('Error getting device levels:', error);
+ *   });
+ */
+exports.getDeviceLevels = functions.https.onCall(async (data, context) => {
+    // Check if the user is authenticated
+    if (!context.auth) {
+        throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
+    }
+
+    // Get the user's UID and device ID from the request
+    const userUid = context.auth.uid;
+    const deviceId = data.deviceId;
+
+    if (!deviceId) {
+        throw new functions.https.HttpsError("invalid-argument", "Device ID must be provided");
+    }
+
+    try {
+        // Get the user document from Firestore
+        const userDocRef = admin.firestore().collection("users").doc(userUid);
+        const userDocSnapshot = await userDocRef.get();
+
+        if (!userDocSnapshot.exists) {
+            throw new functions.https.HttpsError("not-found", "User not found");
+        }
+
+        // Check if the user has access to the specified device
+        const userDevices = userDocSnapshot.get("devices");
+        if (!userDevices.includes(deviceId)) {
+            throw new functions.https.HttpsError("permission-denied", "User does not have access to the specified device");
+        }
+
+        // Get the device document from Firestore
+        const deviceDocRef = admin.firestore().collection("devices").doc(deviceId);
+        const deviceDocSnapshot = await deviceDocRef.get();
+
+        if (!deviceDocSnapshot.exists) {
+            throw new functions.https.HttpsError("not-found", "Device not found");
+        }
+
+        // Get the battery level and salt level from the device document
+        const batteryLevel = deviceDocSnapshot.get("battery_level");
+        const saltLevel = deviceDocSnapshot.get("salt_level");
+
+        // Return the battery level and salt level
+        return {
+            battery_level: batteryLevel,
+            salt_level: saltLevel
+        };
+    } catch (error) {
+        console.error("Error getting device levels:", error);
+        throw new functions.https.HttpsError("internal", "An error occurred while getting device levels");
+    }
+});
