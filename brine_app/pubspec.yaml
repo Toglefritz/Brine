@@ -27,6 +27,8 @@ dependencies:
   google_sign_in: ^5.4.2
   # Used to access Firestore
   cloud_firestore: ^4.3.0
+  # Used to call Firebase callable functions
+  cloud_functions: ^4.1.1
   # Automates setting the app icons
   flutter_launcher_icons: ^0.11.0
   # Used to ensure only authorized clients access Firebase resources
