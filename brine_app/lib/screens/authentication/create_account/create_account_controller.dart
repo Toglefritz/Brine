@@ -2,6 +2,7 @@ import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../services/firebase/authentication/sign_in_with_google.dart';
 import '../../../values/regex.dart';
 import '../../softener_monitor/softener_monitor_route.dart';
 import 'create_account_route.dart';
@@ -223,7 +224,14 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
   /// Handles taps on the Google sign in button.
   Future<void> handleGoogleCreateAccount() async {
-    // TODO create account with Google
+    try {
+      await signInWithGoogle();
+
+      // Create the user record in Firebase
+      // _createUser();
+    } catch (e) {
+      debugPrint('Failed to sign in with Google with exception, $e');
+    }
   }
 
   /// Handles taps on the Apple sign in button.
