@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../values/strings.dart';
 import '../components/authentication_page.dart';
 import '../components/dark_onboarding_button.dart';
 import '../components/onboarding_button.dart';
@@ -34,7 +34,7 @@ class LoginView extends StatelessWidget {
                 bottom: Insets.large,
               ),
               child: Text(
-                Strings.login,
+                AppLocalizations.of(context).login,
                 style: GoogleFonts.bungee().copyWith(
                   fontSize: 52,
                   color: ColorLibrary.primaryDefault,
@@ -51,7 +51,7 @@ class LoginView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: Insets.small),
                 child: OnboardingField(
-                  hint: Strings.username,
+                  hint: AppLocalizations.of(context).username,
                   controller: state.usernameFieldController,
                   validator: state.validateUsernameField,
                   errorState: state.usernameFieldError,
@@ -61,7 +61,7 @@ class LoginView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: Insets.small),
                 child: OnboardingField(
-                  hint: Strings.password,
+                  hint: AppLocalizations.of(context).password,
                   obscureText: true,
                   controller: state.passwordFieldController,
                   validator: state.validatePasswordField,
@@ -71,7 +71,7 @@ class LoginView extends StatelessWidget {
               ),
               DarkOnboardingButton(
                 onPressed: state.handleBasicAuthLoginSubmit,
-                text: Strings.submit,
+                text: AppLocalizations.of(context).submit,
                 width: 350,
                 loading: state.loginProcessing,
               ),
@@ -98,14 +98,14 @@ class LoginView extends StatelessWidget {
               ),
               child: OnboardingButton(
                 onPressed: state.handleGoogleLogin,
-                text: Strings.loginWithGoogle,
+                text: AppLocalizations.of(context).loginWithGoogle,
                 icon: FontAwesomeIcons.google,
               ),
             ),
             if (Device.isIOS)
               OnboardingButton(
                 onPressed: state.handleAppleLogin,
-                text: Strings.loginWithApple,
+                text: AppLocalizations.of(context).loginWithApple,
                 icon: FontAwesomeIcons.apple,
               ),
           ],

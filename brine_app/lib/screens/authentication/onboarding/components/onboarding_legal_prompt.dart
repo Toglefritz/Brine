@@ -1,7 +1,7 @@
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../../../../values/strings.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// A sentence built with a [RichText] widget prompting the user to view the terms and conditions and
 /// the privacy policy before using the app.
@@ -29,23 +29,24 @@ class OnboardingLegalPrompt extends StatelessWidget {
         style: const TextStyle(
           color: ColorLibrary.primaryDefault,
         ),
-        text: Strings.onboardingLegalPrompt1,
+        text: AppLocalizations.of(context).onboardingLegalPrompt1,
         children: <TextSpan>[
           TextSpan(
-            text: Strings.termsOfService,
+            text: AppLocalizations.of(context).termsOfService,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            recognizer: TapGestureRecognizer()..onTap = handleTermsAndConditionsTap,
-          ),
-          const TextSpan(
-            text: Strings.and,
+            recognizer: TapGestureRecognizer()
+              ..onTap = handleTermsAndConditionsTap,
           ),
           TextSpan(
-            text: Strings.privacyPolicy,
+            text: AppLocalizations.of(context).and,
+          ),
+          TextSpan(
+            text: AppLocalizations.of(context).privacyPolicy,
             style: const TextStyle(fontWeight: FontWeight.bold),
             recognizer: TapGestureRecognizer()..onTap = handlePrivacyPolicyTap,
           ),
-          const TextSpan(
-            text: Strings.onboardingLegalPrompt2,
+          TextSpan(
+            text: AppLocalizations.of(context).onboardingLegalPrompt2,
           ),
         ],
       ),

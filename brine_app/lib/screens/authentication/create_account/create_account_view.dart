@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../values/strings.dart';
 import '../components/dark_onboarding_button.dart';
 import '../components/onboarding_button.dart';
 import '../components/onboarding_field.dart';
@@ -35,7 +35,7 @@ class CreateAccountView extends StatelessWidget {
                 bottom: Insets.large,
               ),
               child: Text(
-                Strings.createAccount,
+                AppLocalizations.of(context).createAccount,
                 style: GoogleFonts.bungee().copyWith(
                   fontSize: 52,
                   color: ColorLibrary.primaryDefault,
@@ -52,7 +52,7 @@ class CreateAccountView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: Insets.small),
                 child: OnboardingField(
-                  hint: Strings.username,
+                  hint: AppLocalizations.of(context).username,
                   controller: state.usernameFieldController,
                   validator: state.validateUsernameField,
                   errorState: state.usernameFieldError,
@@ -84,7 +84,7 @@ class CreateAccountView extends StatelessWidget {
                         ),
                       ),
                       BorderlessField(
-                        hint: Strings.password,
+                        hint: AppLocalizations.of(context).password,
                         obscureText: true,
                         controller: state.passwordFieldController,
                         validator: state.validatePasswordField,
@@ -93,7 +93,7 @@ class CreateAccountView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 57),
                         child: BorderlessField(
-                          hint: Strings.confirmPassword,
+                          hint: AppLocalizations.of(context).confirmPassword,
                           obscureText: true,
                           controller: state.passwordConfirmationFieldController,
                           validator: state.validatePasswordConfirmationField,
@@ -108,7 +108,7 @@ class CreateAccountView extends StatelessWidget {
               ),
               DarkOnboardingButton(
                 onPressed: state.handleCreateAccountSubmit,
-                text: Strings.submit,
+                text: AppLocalizations.of(context).submit,
                 width: 350,
                 loading: state.creatingAccount,
               ),
@@ -135,14 +135,14 @@ class CreateAccountView extends StatelessWidget {
               ),
               child: OnboardingButton(
                 onPressed: state.handleGoogleCreateAccount,
-                text: Strings.signUpWithGoogle,
+                text: AppLocalizations.of(context).signUpWithGoogle,
                 icon: FontAwesomeIcons.google,
               ),
             ),
             if (Device.isIOS)
               OnboardingButton(
                 onPressed: state.handleAppleCreateAccount,
-                text: Strings.signUpWithApple,
+                text: AppLocalizations.of(context).signUpWithApple,
                 icon: FontAwesomeIcons.apple,
               ),
           ],

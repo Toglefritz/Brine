@@ -1,0 +1,20 @@
+{
+     "and": " and ",
+      "back": "back",
+      "brine": "Brine",
+      "confirmPassword": "Confirm password",
+      "createAccount": "create account",
+      "createAnAccount": "create an account",
+      "login": "login",
+      "loginWithApple": "login with Apple",
+      "loginWithGoogle": "login with Google",
+      "onboardingLegalPrompt1": "Please take a look at our ",
+      "onboardingLegalPrompt2": " before using this app.",
+      "password": "Password",
+      "privacyPolicy": "privacy policy",
+      "signUpWithApple": "sign up with Apple",
+      "signUpWithGoogle": "sign up with Google",
+      "submit": "Submit",
+      "termsOfService": "terms of service",
+      "username": "Username (email)"
+}

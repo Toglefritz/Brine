@@ -1,4 +1,4 @@
-class Strings {
+class StringsREMOVE {
   static const String and = ' and ';
   static const String back = 'back';
   static const String brine = 'Brine';

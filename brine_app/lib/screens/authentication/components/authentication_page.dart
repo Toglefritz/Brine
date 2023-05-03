@@ -2,8 +2,8 @@ import 'package:brine/models/insets.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../values/strings.dart';
 import '../onboarding/components/onboarding_legal_prompt.dart';
 
 /// A page presented as part of the authentication process.
@@ -39,7 +39,7 @@ class AuthenticationPage extends StatelessWidget {
             color: ColorLibrary.primaryDefault,
           ),
           label: Text(
-            Strings.back.toUpperCase(),
+            AppLocalizations.of(context).back.toUpperCase(),
             style: const TextStyle(
               color: ColorLibrary.primaryDefault,
             ),

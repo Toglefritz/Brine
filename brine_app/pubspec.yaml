@@ -33,6 +33,11 @@ dependencies:
   flutter_launcher_icons: ^0.11.0
   # Used to ensure only authorized clients access Firebase resources
   firebase_app_check: ^0.1.1+8
+  # Used to define localizable strings
+  flutter_localizations:
+    sdk: flutter
+  # Used for internationalization
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +46,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/

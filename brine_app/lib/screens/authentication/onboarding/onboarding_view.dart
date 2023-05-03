@@ -3,9 +3,9 @@ import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../values/image_asset.dart';
-import '../../../values/strings.dart';
 import '../components/onboarding_button.dart';
 import 'components/onboarding_legal_prompt.dart';
 import 'onboarding_controller.dart';
@@ -36,7 +36,7 @@ class OnboardingView extends StatelessWidget {
                       bottom: Insets.large,
                     ),
                     child: Text(
-                      Strings.brine,
+                      AppLocalizations.of(context).brine,
                       style: GoogleFonts.bungee().copyWith(
                         fontSize: 52,
                         color: ColorLibrary.primaryDefault,
@@ -65,12 +65,12 @@ class OnboardingView extends StatelessWidget {
                         ),
                         child: OnboardingButton(
                           onPressed: state.handleLoginTap,
-                          text: Strings.login,
+                          text: AppLocalizations.of(context).login,
                         ),
                       ),
                       OnboardingButton(
                         onPressed: state.handleCreateAccountTap,
-                        text: Strings.createAnAccount,
+                        text: AppLocalizations.of(context).createAnAccount,
                       ),
                     ],
                   ),
