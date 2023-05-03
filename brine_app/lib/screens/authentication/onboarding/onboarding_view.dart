@@ -22,66 +22,68 @@ class OnboardingView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: Insets.xxLarge,
+                      bottom: Insets.large,
+                    ),
+                    child: Text(
+                      Strings.brine,
+                      style: GoogleFonts.bungee().copyWith(
+                        fontSize: 52,
+                        color: ColorLibrary.primaryDefault,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  // TODO replace with vector
+                  Image.asset(
+                    ImageAsset.logoTransparentBackground,
+                    width: 200,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Padding(
                   padding: const EdgeInsets.only(
-                    top: Insets.xxLarge,
-                    bottom: Insets.large,
+                    bottom: Insets.xLarge,
                   ),
-                  child: Text(
-                    Strings.brine,
-                    style: GoogleFonts.bungee().copyWith(
-                      fontSize: 52,
-                      color: ColorLibrary.primaryDefault,
-                    ),
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Insets.small,
+                        ),
+                        child: OnboardingButton(
+                          onPressed: state.handleLoginTap,
+                          text: Strings.login,
+                        ),
+                      ),
+                      OnboardingButton(
+                        onPressed: state.handleCreateAccountTap,
+                        text: Strings.createAnAccount,
+                      ),
+                    ],
                   ),
-                ),
-                // TODO replace with vector
-                Image.asset(
-                  ImageAsset.logoTransparentBackground,
-                  width: 200,
-                ),
-              ],
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: Insets.xLarge,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Insets.small,
-                      ),
-                      child: OnboardingButton(
-                        onPressed: state.handleLoginTap,
-                        text: Strings.login,
-                      ),
-                    ),
-                    OnboardingButton(
-                      onPressed: state.handleCreateAccountTap,
-                      text: Strings.createAnAccount,
-                    ),
-                  ],
                 ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(
-                Insets.medium,
+              const Padding(
+                padding: EdgeInsets.all(
+                  Insets.medium,
+                ),
+                child: OnboardingLegalPrompt(),
               ),
-              child: OnboardingLegalPrompt(),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
