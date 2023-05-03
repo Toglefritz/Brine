@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,6 +46,17 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDjGD4mVK8_rbOGn7u1-FMuUTLJN2EijBE',
+    appId: '1:431909607108:web:7e8a0530cc1cd5a8081b91',
+    messagingSenderId: '431909607108',
+    projectId: 'brine-3b212',
+    authDomain: 'brine-3b212.firebaseapp.com',
+    databaseURL: 'https://brine-3b212-default-rtdb.firebaseio.com',
+    storageBucket: 'brine-3b212.appspot.com',
+    measurementId: 'G-G0FBWT7JL0',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC6Er8QPJGPl5PZy-9unKz95YnGcK8_IH0',
     appId: '1:431909607108:android:f445d8bb684be5ed081b91',
@@ -60,12 +68,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC8Jp6ChQT_YiGZYcXIVbecMwZgzxMT3EM',
-    appId: '1:431909607108:ios:a427284d82db43be081b91',
+    appId: '1:431909607108:ios:b460491fabbdbbe7081b91',
     messagingSenderId: '431909607108',
     projectId: 'brine-3b212',
     databaseURL: 'https://brine-3b212-default-rtdb.firebaseio.com',
     storageBucket: 'brine-3b212.appspot.com',
-    iosClientId: '431909607108-lcjsidfjbrtd6a0vq9dseleodh4fnorj.apps.googleusercontent.com',
-    iosBundleId: 'com.example.brine',
+    iosClientId: '431909607108-fm71ojb002kpajjshvbiq339al6425m3.apps.googleusercontent.com',
+    iosBundleId: 'com.splendidendeavors.brine',
   );
 }

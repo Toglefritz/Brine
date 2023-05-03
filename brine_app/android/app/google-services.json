@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "431909607108",
+    "firebase_url": "https://brine-3b212-default-rtdb.firebaseio.com",
+    "project_id": "brine-3b212",
+    "storage_bucket": "brine-3b212.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431909607108:android:f445d8bb684be5ed081b91",
+        "android_client_info": {
+          "package_name": "com.splendidendeavors.brine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431909607108-aglqu028ssgr4nfvcmose16hk02stpei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6Er8QPJGPl5PZy-9unKz95YnGcK8_IH0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431909607108-aglqu028ssgr4nfvcmose16hk02stpei.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "431909607108-fm71ojb002kpajjshvbiq339al6425m3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.splendidendeavors.brine"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

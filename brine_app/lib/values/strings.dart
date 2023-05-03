@@ -12,8 +12,8 @@ class Strings {
   static const String onboardingLegalPrompt2 = ' before using this app.';
   static const String password = 'Password';
   static const String privacyPolicy = 'privacy policy';
-  static const String signUpWithGoogle = 'sign up with Apple';
-  static const String signUpWithApple = 'sign up with Google';
+  static const String signUpWithApple = 'sign up with Apple';
+  static const String signUpWithGoogle = 'sign up with Google';
   static const String submit = 'Submit';
   static const String termsOfService = 'terms of service';
   static const String username = 'Username (email)';
