@@ -1,0 +1,46 @@
+name: brinemonitor
+description: The website for the Brine water softener monitor.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Automates the creation of application icons
+  flutter_launcher_icons: ^0.12.0
+  # Provides localizations for text (generate with `flutter gen-l10n`)
+  flutter_localizations:
+    sdk: flutter
+  firebase_analytics: ^10.1.4
+  # SDK for Firebase Auth authentication service
+  firebase_auth: ^4.2.9
+  # Used to interact with Firebase Cloud Functions
+  cloud_functions: ^4.0.11
+  # Provides core Firebase services
+  firebase_core: ^2.7.0
+  # Provides additional icons beyond the set available from Material Design
+  font_awesome_flutter: ^10.4.0
+  # Provides font families
+  google_fonts: ^4.0.3
+  # Allows users to authenticate with Google
+  google_sign_in: ^6.0.2
+  # Navigation plugin supporting URL-based routing
+  go_router: ^6.5.5
+  # Used for internationalization
+  intl: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/
