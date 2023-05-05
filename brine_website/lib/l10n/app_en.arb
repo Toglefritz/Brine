@@ -2,8 +2,12 @@
   "addTeamMember": "Add a Team Member",
   "brine": "Brine",
   "getStartedButton": "Let's Go!",
+  "landingPageDescription1": "Brine is a ",
+  "landingPageDescription2": " app-connected device that monitors the salt level in your water softener and sends you alerts when it's time to refill. With Brine, you can ensure that your water softener is always working at its best.",
+  "landingPageHook": "It's super important to keep your water softener filled with salt! It helps remove minerals that can harm your pipes and appliances. But sometimes it's easy to forget to check the salt level. That's where Brine comes in!",
   "landingPageTitle": "Never forget to fill your water softener with salt",
   "legalStuff": "Legal stuff:",
   "privacyPolicy": "Privacy Policy",
+  "smart": "smart",
   "termsAndConditions": "Terms and Conditions"
 }

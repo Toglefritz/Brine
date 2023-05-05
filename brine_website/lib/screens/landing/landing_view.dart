@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../components/app_bar/main_app_bar.dart';
-import '../../components/primary_cta_button.dart';
 import '../../values/insets.dart';
 import 'components/footer.dart';
-import 'components/ron_burgundy_gif.dart';
+import 'components/bill_nye_gif.dart';
+import 'components/icon_animated_button.dart';
 import 'landing_controller.dart';
 
 /// View for the [OnboardingRoute].
@@ -27,50 +26,67 @@ class LandingView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: insetsGiant,
+                  bottom: insetsLarge,
+                  left: insetsGiant,
+                ),
+                child: Text(
+                  AppLocalizations.of(context).landingPageTitle,
+                  style: GoogleFonts.changaOne().copyWith(
+                    fontSize: 42,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(bottom: insetsLarge),
+                child: BillNyeGif(),
+              ),
               ConstrainedBox(
                 constraints: const BoxConstraints(
-                  maxWidth: 600,
+                  maxWidth: 800,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: insetsLarge),
-                  child: Text(
-                    AppLocalizations.of(context).landingPageTitle,
-                    style: GoogleFonts.changaOne().copyWith(
-                      fontSize: 42,
-                    ),
-                    textAlign: TextAlign.center,
+                child: Text(
+                  AppLocalizations.of(context).landingPageHook,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(insetsXLarge),
+                child: IconAnimatedButton(
+                  iconSpacing: state.animatedPaddingValue,
+                  startAnimationCallback: state.startPaddingAnimation,
+                  stopAnimationCallback: state.stopPaddingAnimation,
+                  onTap: state.letsGoooooooo,
+                ),
+              ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 800,
+                ),
+                child: RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: AppLocalizations.of(context).landingPageDescription1,
+                      ),
+                      TextSpan(
+                        text: AppLocalizations.of(context).smart,
+                        style: const TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                      TextSpan(
+                        text: AppLocalizations.of(context).landingPageDescription2,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const BillNyeGif(),
-              Padding(
-                padding: const EdgeInsets.all(insetsLarge),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const FaIcon(
-                      FontAwesomeIcons.handPointRight,
-                      size: 42,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: state.animatedPaddingValue),
-                      child: MouseRegion(
-                        onEnter: state.startPaddingAnimation,
-                        onExit: state.stopPaddingAnimation,
-                        child: PrimaryCTAButton(
-                          onTap: state.letsGoooooooo,
-                          text: AppLocalizations.of(context).getStartedButton,
-                        ),
-                      ),
-                    ),
-                    const FaIcon(
-                      FontAwesomeIcons.handPointLeft,
-                      size: 42,
-                    ),
-                  ],
-                ),
-              ),
-              // TODO add more product info
               const Padding(
                 padding: EdgeInsets.only(top: insetsLarge),
                 child: Footer(),
