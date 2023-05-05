@@ -53,10 +53,14 @@ class LandingView extends StatelessWidget {
                       size: 42,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: insetsMedium),
-                      child: PrimaryCTAButton(
-                        onTap: state.letsGoooooooo,
-                        text: AppLocalizations.of(context).getStartedButton,
+                      padding: EdgeInsets.symmetric(horizontal: state.animatedPaddingValue),
+                      child: MouseRegion(
+                        onEnter: state.startPaddingAnimation,
+                        onExit: state.stopPaddingAnimation,
+                        child: PrimaryCTAButton(
+                          onTap: state.letsGoooooooo,
+                          text: AppLocalizations.of(context).getStartedButton,
+                        ),
                       ),
                     ),
                     const FaIcon(
