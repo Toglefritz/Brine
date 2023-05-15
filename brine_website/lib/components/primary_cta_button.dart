@@ -18,13 +18,17 @@ class PrimaryCTAButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color themeColor = Theme.of(context).brightness == Brightness.light
+        ? Theme.of(context).primaryColorDark
+        : Theme.of(context).primaryColorLight;
+
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         elevation: 8,
         backgroundColor: Theme.of(context).primaryColor,
         side: BorderSide(
-          color: Theme.of(context).primaryColorDark,
+          color: themeColor,
           width: 2.0,
         ),
       ),
@@ -34,7 +38,7 @@ class PrimaryCTAButton extends StatelessWidget {
           text,
           style: GoogleFonts.changaOne().copyWith(
             fontSize: 36,
-            color: Theme.of(context).primaryColorDark,
+            color: themeColor,
           ),
           textAlign: TextAlign.center,
         ),

@@ -10,11 +10,15 @@ class BillNyeGif extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color themeColor = Theme.of(context).brightness == Brightness.light
+        ? Theme.of(context).primaryColorDark
+        : Theme.of(context).primaryColor;
+
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColorDark,
+        color: themeColor,
         border: Border.all(
-          color: Theme.of(context).primaryColorDark,
+          color: themeColor,
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(12),

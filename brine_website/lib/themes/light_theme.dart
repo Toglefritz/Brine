@@ -22,6 +22,11 @@ ThemeData lightTheme = ThemeData(
   primaryColorDark: const Color(0xff212121),
   primaryColorLight: Colors.grey[200],
   fontFamily: GoogleFonts.mavenPro().fontFamily,
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(
+      fontSize: 20,
+    ),
+  ),
   appBarTheme: const AppBarTheme(
     elevation: 0,
     backgroundColor: Colors.transparent,
