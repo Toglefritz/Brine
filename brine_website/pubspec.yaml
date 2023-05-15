@@ -32,6 +32,10 @@ dependencies:
   go_router: ^6.5.5
   # Used for internationalization
   intl: any
+  # Wrapper around InheritedWidget
+  provider: ^6.0.5
+  # Saves key-value pairs to store user preferences
+  shared_preferences: ^2.1.1
 
 dev_dependencies:
   flutter_test:

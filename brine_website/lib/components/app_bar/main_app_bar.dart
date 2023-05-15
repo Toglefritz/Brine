@@ -3,10 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import '../../screens/landing/landing_route.dart';
+import '../../themes/dark_theme_provider.dart';
 import '../../values/assets.dart';
 import '../../values/insets.dart';
+import 'dark_theme_toggle.dart';
 
 /// The main [AppBar] appearing at the top of the website for most pages.
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -31,6 +34,11 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Handles taps on the back navigation button
   void goBack(BuildContext context) {
     context.go(const LandingRoute().screenName);
+  }
+
+  /// Handles taps on the dark theme toggle by setting the dark theme preference to the value of the toggle.
+  void toggleDarkTheme({required bool value, required BuildContext context}) {
+    Provider.of<DarkThemeProvider>(context, listen: false).darkTheme = value;
   }
 
   @override
@@ -73,6 +81,14 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       leadingWidth: 300,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: insetsMedium),
+          child: DarkThemeToggle(
+            onChanged: (newValue) => toggleDarkTheme(value: newValue, context: context),
+          ),
+        ),
+      ],
       bottom: bottom,
     );
   }
