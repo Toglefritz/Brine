@@ -39,7 +39,7 @@ class _BrineMonitorWebsiteState extends State<BrineMonitorWebsite> {
       child: Consumer<DarkThemeProvider>(
         builder: (BuildContext context, DarkThemeProvider darkThemeProvider, Widget? child) {
           return MaterialApp.router(
-            title: 'HerdGPT',
+            title: 'Brine',
             debugShowCheckedModeBanner: false,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
