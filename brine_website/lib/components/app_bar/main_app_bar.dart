@@ -16,6 +16,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MainAppBar({
     this.displayBackButton,
     this.bottom,
+    this.confettiCallback,
     super.key,
   });
 
@@ -27,6 +28,10 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// The height of the [AppBar].
   double get _height => bottom == null ? 72.0 : 144.0;
+
+  /// A callback triggered when the confetti button is pressed. If null, the confetti button is not
+  /// shown in the [AppBar].
+  final VoidCallback? confettiCallback;
 
   @override
   Size get preferredSize => Size.fromHeight(_height);
@@ -82,6 +87,17 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       leadingWidth: 300,
       actions: [
+        if (confettiCallback != null)
+          Padding(
+            padding: const EdgeInsets.only(right: insetsMedium),
+            child: IconButton(
+              icon: Icon(
+                Icons.celebration_outlined,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              onPressed: confettiCallback,
+            ),
+          ),
         Padding(
           padding: const EdgeInsets.only(right: insetsMedium),
           child: DarkThemeToggle(

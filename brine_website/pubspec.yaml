@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # A critical security plugin that generates a decorative confetti effect
+  confetti: ^0.7.0
   # Automates the creation of application icons
   flutter_launcher_icons: ^0.12.0
   # Provides localizations for text (generate with `flutter gen-l10n`)

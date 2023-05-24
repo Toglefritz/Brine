@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
 
 import '../../components/navigable_page_controller.dart';
 import 'landing_route.dart';
@@ -29,6 +30,9 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
 
   double get animatedPaddingValue => _animatedPaddingValue;
 
+  /// A controller for the decorative confetti effect
+  late ConfettiController confettiController;
+
   @override
   void initState() {
     if (kDebugMode == false) {
@@ -42,6 +46,8 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
     );
 
     initializeCTAAnimation();
+
+    initializeConfettiAnimation();
 
     super.initState();
   }
@@ -58,6 +64,21 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
           _animatedPaddingValue = _paddingAnimation.value;
         });
       });
+  }
+
+  /// Initializes the controller for the decorative confetti animation.
+  ///
+  /// The [ConfettiController] is initialized with a [Duration] that determines the duration of the
+  /// confetti animation.
+  void initializeConfettiAnimation() {
+    setState(() {
+      confettiController = ConfettiController(duration: const Duration(seconds: 1));
+    });
+  }
+
+  /// Launches the confetti!
+  void launchConfettiBlast() {
+    confettiController.play();
   }
 
   /// Starts the animation on the primary CTA button.
