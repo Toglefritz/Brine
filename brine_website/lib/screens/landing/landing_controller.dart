@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 
 import '../../components/navigable_page_controller.dart';
+import 'components/signup_dialog/email_optin_animated_dialog.dart';
 import 'landing_route.dart';
 import 'landing_view.dart';
 
@@ -95,9 +96,21 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
     });
   }
 
-  /// Handles taps on the main CTA button on the landing page
+  /// Handles taps on the main CTA button on the landing page by TODO ...
   void letsGoooooooo() {
-    //context.go(const AuthenticationRoute().screenName);
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'email signup dialog',
+      transitionDuration: const Duration(milliseconds: 700),
+      pageBuilder: (_, __, ___) => const EmailOptinAnimatedDialog(),
+      transitionBuilder: (_, anim, __, child) {
+        return FadeTransition(
+          opacity: anim,
+          child: child,
+        );
+      },
+    );
   }
 
   @override

@@ -92,7 +92,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             padding: const EdgeInsets.only(right: insetsMedium),
             child: IconButton(
               icon: Icon(
-                Icons.celebration_outlined,
+                Icons.celebration,
                 color: Theme.of(context).primaryColorDark,
               ),
               onPressed: confettiCallback,
