@@ -26,12 +26,17 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
   /// An [Animation] used for the primary CTA button animation.
   late Animation<double> _paddingAnimation;
 
+  /// Determines the maximum and minimum extents of the padding values applied to the icons in this widget by the
+  /// [_paddingAnimation]. Adjusting this value adjusts the amplitude of the animation.
+  final RangeValues _amplitude = const RangeValues(16, 32);
+
   /// The padding value between the primary CTA buttons and the icons that surround it.
-  double _animatedPaddingValue = 16;
+  late double _animatedPaddingValue;
 
   @override
   void initState() {
     // Initialize the animation controller.
+    _animatedPaddingValue = _amplitude.start;
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -48,7 +53,7 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
   /// tree via the [setState] call inside.
   void _initializeCTAAnimation() {
     super.initState();
-    _paddingAnimation = Tween<double>(begin: 16, end: 24).animate(_animationController)
+    _paddingAnimation = Tween<double>(begin: _amplitude.start, end: _amplitude.end).animate(_animationController)
       ..addListener(() {
         setState(() {
           _animatedPaddingValue = _paddingAnimation.value;
@@ -66,7 +71,7 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
     _animationController.stop();
     _animationController.reset();
     setState(() {
-      _animatedPaddingValue = 16;
+      _animatedPaddingValue = _amplitude.start;
     });
   }
 
