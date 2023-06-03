@@ -30,7 +30,7 @@ class BillNyeGif extends StatelessWidget {
         ),
         child: Image.asset(
           Gifs.billNyeSalt.path,
-          width: 450,
+          width: 400,
         ),
       ),
     );

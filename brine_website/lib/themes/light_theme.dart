@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../values/insets.dart';
+
 /// In this [ThemeData] object:
 ///
 ///   - Brightness.light specifies that the app is in light mode.
@@ -13,6 +15,25 @@ import 'package:google_fonts/google_fonts.dart';
 ///     color and teal for selected items and gray for unselected items.
 ///   - The [cardTheme] defines the style of cards. They have a white background color, a slight elevation, and
 ///     rounded corners with a radius of 8.
+///   - the [textSelectionTheme] defines the colors of the cursor, handles, and text highlight when text elements
+///     are selected.
+///   - The [inputDecorationTheme] defines styling parameters for text input form field widgets.
+
+OutlineInputBorder border = OutlineInputBorder(
+  borderSide: const BorderSide(
+    color: Color(0xff212121),
+    width: 2.0,
+  ),
+  borderRadius: BorderRadius.circular(50),
+);
+
+OutlineInputBorder errorBorder = OutlineInputBorder(
+  borderSide: BorderSide(
+    color: Colors.red[900]!,
+    width: 2.0,
+  ),
+  borderRadius: BorderRadius.circular(50),
+);
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -40,5 +61,25 @@ ThemeData lightTheme = ThemeData(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
     ),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Colors.amber,
+    selectionHandleColor: Colors.amber,
+    selectionColor: Colors.amber.withOpacity(0.2),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    labelStyle: const TextStyle(
+      color: Color(0xff212121),
+    ),
+    contentPadding: const EdgeInsets.symmetric(
+      horizontal: insetsLarge,
+      vertical: insetsSmall,
+    ),
+    border: border,
+    enabledBorder: border,
+    focusedBorder: border,
+    errorBorder: errorBorder,
+    filled: true,
+    fillColor: Colors.grey[200],
   ),
 );

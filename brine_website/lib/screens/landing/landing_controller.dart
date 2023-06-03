@@ -20,17 +20,6 @@ import 'landing_view.dart';
 /// The [MouseRegion] widget surrounding the [PrimaryCTAButton] provides two callbacks: [onEnter] and [onExit]. These
 /// callbacks are used to start and stop the padding animation respectively.
 class LandingController extends NavigablePageController<LandingRoute> with SingleTickerProviderStateMixin {
-  /// A controller for the primary CTA button animation.
-  late AnimationController _animationController;
-
-  /// An [Animation] used for the primary CTA button animation.
-  late Animation<double> _paddingAnimation;
-
-  /// The padding value between the primary CTA buttons and the icons that surround it.
-  double _animatedPaddingValue = 16;
-
-  double get animatedPaddingValue => _animatedPaddingValue;
-
   /// A controller for the decorative confetti effect
   late ConfettiController confettiController;
 
@@ -40,31 +29,9 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
       FirebaseAnalytics.instance.logAppOpen();
     }
 
-    // Initialize the animation controller.
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-
-    initializeCTAAnimation();
-
     initializeConfettiAnimation();
 
     super.initState();
-  }
-
-  /// Initializes the [AnimationController] and the [Animation] for the primary CTA button.
-  ///
-  /// This method creates a [Tween} to animate between 16 and 24. The [addListener] callback is used to rebuild the widget
-  /// tree via the [setState] call inside.
-  void initializeCTAAnimation() {
-    super.initState();
-    _paddingAnimation = Tween<double>(begin: 16, end: 24).animate(_animationController)
-      ..addListener(() {
-        setState(() {
-          _animatedPaddingValue = _paddingAnimation.value;
-        });
-      });
   }
 
   /// Initializes the controller for the decorative confetti animation.
@@ -80,20 +47,6 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
   /// Launches the confetti!
   void launchConfettiBlast() {
     confettiController.play();
-  }
-
-  /// Starts the animation on the primary CTA button.
-  void startPaddingAnimation(PointerEvent details) {
-    _animationController.repeat(reverse: true);
-  }
-
-  /// Stops the animation on the primary CTA button.
-  void stopPaddingAnimation(PointerEvent details) {
-    _animationController.stop();
-    _animationController.reset();
-    setState(() {
-      _animatedPaddingValue = 16;
-    });
   }
 
   /// Handles taps on the main CTA button on the landing page by TODO ...
@@ -115,10 +68,4 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
 
   @override
   Widget build(BuildContext context) => LandingView(this);
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
 }

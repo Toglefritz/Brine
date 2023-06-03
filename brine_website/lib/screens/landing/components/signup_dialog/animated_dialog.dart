@@ -35,6 +35,13 @@ class AnimatedDialogState extends State<AnimatedDialog> with SingleTickerProvide
       child: AlertDialog(
         content: widget.child,
         backgroundColor: Theme.of(context).primaryColorLight,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+          side: BorderSide(
+            width: 3.0,
+            color: Theme.of(context).primaryColorDark,
+          ),
+        ),
       ),
     );
   }

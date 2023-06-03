@@ -1,56 +1,92 @@
+import 'package:brinemonitor/screens/landing/components/icon_animated_button_vertical.dart';
+import 'package:brinemonitor/values/insets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../../../values/insets.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// A [Form] used to collect a name and email from the visitor so they can be notified about updates for Brine.
 class EmailSignupForm extends StatelessWidget {
-  const EmailSignupForm({
+  EmailSignupForm({
     super.key,
   });
 
+  /// A key for the email optin form.
+  final _formKey = GlobalKey<FormState>();
+
+  /// Handles submissions of the signup form.
+  Future<void> _onSubmit() async {
+    // TODO implement this and submit the info or something like that
+  }
+
   @override
   Widget build(BuildContext context) {
-    OutlineInputBorder border = OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Theme.of(context).primaryColorDark,
-        width: 2.0,
-      ),
-      borderRadius: BorderRadius.circular(50),
-    );
-
-    OutlineInputBorder errorBorder = OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.red[900]!,
-        width: 2.0,
-      ),
-      borderRadius: BorderRadius.circular(50),
-    );
-
-    return Form(
-      child: Column(
-        children: [
-          Text(
-            AppLocalizations.of(context).landingPageEmailInvite,
-            style: Theme.of(context).textTheme.headlineMedium,
-            textAlign: TextAlign.center,
-          ),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 300),
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context).nameFieldHint,
-                contentPadding: const EdgeInsets.symmetric(horizontal: insetsSmall),
-                border: border,
-                enabledBorder: border,
-                focusedBorder: border,
-                errorBorder: errorBorder,
-                filled: true,
-                fillColor: Theme.of(context).primaryColorLight,
+    return FractionallySizedBox(
+      widthFactor: 0.8,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                left: insetsLarge,
+              ),
+              child: Text(
+                AppLocalizations.of(context).nameFieldHint,
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
-          ),
-        ],
+            TextFormField(
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: insetsMedium,
+                ),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: insetsMedium),
+                  child: Icon(Icons.person),
+                ),
+              ),
+              style: GoogleFonts.shareTechMono().copyWith(
+                color: Theme.of(context).primaryColorDark,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: insetsLarge,
+                left: insetsLarge,
+              ),
+              child: Text(
+                AppLocalizations.of(context).emailFieldHint,
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: insetsMedium,
+                ),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: insetsMedium),
+                  child: Icon(Icons.mail),
+                ),
+              ),
+              style: GoogleFonts.shareTechMono().copyWith(
+                color: Theme.of(context).primaryColorDark,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: insetsXLarge,
+              ),
+              child: IconAnimatedButtonVertical(
+                onTap: _onSubmit,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
