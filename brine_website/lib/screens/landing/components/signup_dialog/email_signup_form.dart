@@ -20,25 +20,29 @@ class EmailSignupForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.8,
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: insetsLarge,
-              ),
-              child: Text(
-                AppLocalizations.of(context).nameFieldHint,
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: insetsMedium,
             ),
-            TextFormField(
+            child: Text(
+              AppLocalizations
+                  .of(context)
+                  .nameFieldHint,
+              textAlign: TextAlign.start,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodyLarge,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: insetsMedium),
+            child: TextFormField(
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   vertical: insetsMedium,
@@ -49,21 +53,31 @@ class EmailSignupForm extends StatelessWidget {
                 ),
               ),
               style: GoogleFonts.shareTechMono().copyWith(
-                color: Theme.of(context).primaryColorDark,
+                color: Theme
+                    .of(context)
+                    .primaryColorDark,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: insetsLarge,
-                left: insetsLarge,
-              ),
-              child: Text(
-                AppLocalizations.of(context).emailFieldHint,
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: insetsLarge,
+              left: insetsLarge,
             ),
-            TextFormField(
+            child: Text(
+              AppLocalizations
+                  .of(context)
+                  .emailFieldHint,
+              textAlign: TextAlign.start,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodyLarge,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: insetsMedium),
+            child: TextFormField(
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   vertical: insetsMedium,
@@ -74,19 +88,22 @@ class EmailSignupForm extends StatelessWidget {
                 ),
               ),
               style: GoogleFonts.shareTechMono().copyWith(
-                color: Theme.of(context).primaryColorDark,
+                color: Theme
+                    .of(context)
+                    .primaryColorDark,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: insetsXLarge,
-              ),
-              child: IconAnimatedButtonVertical(
-                onTap: _onSubmit,
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: insetsXLarge,
+              bottom: insetsLarge,
             ),
-          ],
-        ),
+            child: IconAnimatedButtonVertical(
+              onTap: _onSubmit,
+            ),
+          ),
+        ],
       ),
     );
   }

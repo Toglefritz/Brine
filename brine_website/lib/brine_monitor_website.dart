@@ -15,6 +15,7 @@ class BrineMonitorWebsite extends StatefulWidget {
 }
 
 class _BrineMonitorWebsiteState extends State<BrineMonitorWebsite> {
+  /// A [Provider] for the application's theme mode.
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 
   @override
@@ -22,11 +23,11 @@ class _BrineMonitorWebsiteState extends State<BrineMonitorWebsite> {
     super.initState();
 
     // Get the current darkTheme preference
-    getCurrentAppTheme();
+    _getCurrentAppTheme();
   }
 
   /// Gets the current dark theme preference.
-  void getCurrentAppTheme() async {
+  void _getCurrentAppTheme() async {
     themeChangeProvider.darkTheme = await themeChangeProvider.darkThemePreference.getTheme();
   }
 

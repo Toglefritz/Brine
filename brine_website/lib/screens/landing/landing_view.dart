@@ -30,66 +30,68 @@ class LandingView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: insetsLarge),
               child: SingleChildScrollView(
                 child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 900,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: insetsGiant,
-                            bottom: insetsLarge,
-                            left: insetsGiant,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: insetsMedium),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: 900,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: insetsLarge,
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context).landingPageTitle,
+                              style: GoogleFonts.changaOne().copyWith(
+                                fontSize: 42,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                          child: Text(
-                            AppLocalizations.of(context).landingPageTitle,
-                            style: GoogleFonts.changaOne().copyWith(
-                              fontSize: 42,
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: insetsLarge),
+                            child: BillNyeGif(),
+                          ),
+                          Text(
+                            AppLocalizations.of(context).landingPageHook,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(insetsLarge),
+                            child: IconAnimatedButtonHorizontal(
+                              onTap: state.letsGoooooooo,
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              style: Theme.of(context).textTheme.bodyLarge,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: AppLocalizations.of(context).landingPageDescription1,
+                                ),
+                                TextSpan(
+                                  text: AppLocalizations.of(context).smart,
+                                  style: const TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: AppLocalizations.of(context).landingPageDescription2,
+                                ),
+                              ],
                             ),
                             textAlign: TextAlign.center,
                           ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: insetsLarge),
-                          child: BillNyeGif(),
-                        ),
-                        Text(
-                          AppLocalizations.of(context).landingPageHook,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          textAlign: TextAlign.center,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(insetsXLarge),
-                          child: IconAnimatedButtonHorizontal(
-                            onTap: state.letsGoooooooo,
+                          const Padding(
+                            padding: EdgeInsets.only(top: insetsLarge),
+                            child: Footer(),
                           ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: AppLocalizations.of(context).landingPageDescription1,
-                              ),
-                              TextSpan(
-                                text: AppLocalizations.of(context).smart,
-                                style: const TextStyle(
-                                  decoration: TextDecoration.lineThrough,
-                                ),
-                              ),
-                              TextSpan(
-                                text: AppLocalizations.of(context).landingPageDescription2,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: insetsLarge),
-                          child: Footer(),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

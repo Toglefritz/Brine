@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../values/insets.dart';
+import '../../../../values/screen.dart';
 import 'animated_dialog.dart';
 
 /// Presents an [AnimatedDialog] with a form allowing the user to sign up for notifications about Brine.
@@ -16,29 +17,32 @@ class EmailOptinAnimatedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedDialog(
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.6,
-        height: MediaQuery.of(context).size.height * 0.7,
-        child: Padding(
+        width: Screen.width(context) * 0.75,
+        height: Screen.height(context) * 0.7,
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(insetsMedium),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text(
-                  AppLocalizations.of(context).landingPageEmailInvite,
-                  style: GoogleFonts.changaOne().copyWith(
-                    fontSize: 42,
-                  ),
+          child: Column(
+            children: [
+              Text(
+                AppLocalizations.of(context).landingPageEmailInvite,
+                style: GoogleFonts.changaOne().copyWith(
+                  fontSize: 42,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(insetsLarge),
-                  child: Text(
-                    AppLocalizations.of(context).emailOptinDescription,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: insetsMedium,
+                  vertical: insetsLarge,
                 ),
-                EmailSignupForm(),
-              ],
-            ),
+                child: Text(
+                  AppLocalizations.of(context).emailOptinDescription,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              EmailSignupForm(),
+            ],
           ),
         ),
       ),

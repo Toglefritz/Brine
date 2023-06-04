@@ -33,7 +33,7 @@ class PrimaryCTAButton extends StatelessWidget {
         ),
       ),
       child: SizedBox(
-        width: 400,
+        width: MediaQuery.of(context).size.width * 0.3,
         child: Text(
           text,
           style: GoogleFonts.changaOne().copyWith(

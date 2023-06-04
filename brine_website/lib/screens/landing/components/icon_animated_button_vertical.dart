@@ -89,7 +89,7 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
           ),
           child: const FaIcon(
             FontAwesomeIcons.solidThumbsUp,
-            size: 42,
+            size: 38,
           ),
         ),
         MouseRegion(
@@ -108,7 +108,7 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
           ),
           child: const FaIcon(
             FontAwesomeIcons.solidThumbsUp,
-            size: 42,
+            size: 38,
           ),
         ),
       ],
