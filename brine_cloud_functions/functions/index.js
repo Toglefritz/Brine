@@ -8,6 +8,65 @@ admin.initializeApp();
 const db = admin.firestore();
 
 /**
+ * `addLead` is a Firebase Cloud Function designed to add a new lead document
+ * to the 'leads' collection in Firestore. This function is callable from a client application.
+ * 
+ * @param {Object} data - The data argument is expected to be an object with the following properties:
+ * @param {string} data.email - The email address of the lead.
+ * @param {string} data.name - The name of the lead.
+ * @param {number} data.timestamp - The timestamp when the lead was created.
+ * 
+ * These parameters are validated for type consistency before adding the lead to the Firestore.
+ * If any of the inputs are of the incorrect type, the function throws a Firebase 'invalid-argument' HttpsError.
+ *
+ * @param {Object} context - The function context which includes information about the user who invoked the function.
+ *
+ * The function then attempts to add a new document to the 'leads' collection with the passed data.
+ * If the operation is successful, the function returns an object with a 'result' property that contains a message 
+ * indicating the ID of the newly added document. If an error occurs when trying to add the document,
+ * the function logs the error and throws a Firebase 'internal' HttpsError.
+ */
+exports.addLead = functions.https.onCall(async (data, context) => {
+    console.log('Function addLead was called with data:', data);
+    
+    // Validate input
+    if (!(typeof data.email === 'string') ||
+        !(typeof data.name === 'string') ||
+        !(typeof data.timestamp === 'number')) {
+        throw new functions.https.HttpsError(
+            'invalid-argument',
+            'The function must be called with valid arguments. Expected "email" as string, "name" as string, and "timestamp" as number.'
+        );
+    }
+
+    const newLead = {
+        email: data.email,
+        name: data.name,
+        timestamp: data.timestamp,
+    };
+
+    try {
+        const docRef = await admin.firestore().collection('leads').add(newLead);
+        return { result: `Lead with ID: ${docRef.id} added.` };
+    } catch (error) {
+        console.log('Error adding document: ', error);
+
+        // Provide custom error messages based on error codes.
+        // Be careful not to expose too much information in error messages.
+        let message = 'Failed to add the lead';
+        if (error.code === 'permission-denied') {
+            message = 'Insufficient permissions to add the lead';
+        } else if (error.code === 'unavailable') {
+            message = 'The Firestore service is currently unavailable';
+        } else if (error.code === 'deadline-exceeded') {
+            message = 'The request to add the lead took too long to complete';
+        }
+
+        throw new functions.https.HttpsError(message, 'An internal error occurred', { detailedMessage: message });
+    }
+});
+
+/**
  * This helper function verifies the ID token sent in the request header.
  * It expects the request object (req) to contain an "Authorization" header
  * with a valid ID token, formatted as "Bearer <ID_TOKEN>". The function
@@ -28,7 +87,6 @@ const db = admin.firestore();
  *   // Handle the unauthorized request
  * }
  */
-
 async function verifyIdToken(req) {
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
         throw new Error('Unauthorized');
