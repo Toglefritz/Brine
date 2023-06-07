@@ -53,11 +53,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBFCZmtCZcPCz-RE95-cPowqPD8B3h4t2I',
-    appId: '1:965150161743:web:f70ca8bd41d9566de5a33a',
-    messagingSenderId: '965150161743',
-    projectId: 'brinewebsite',
-    authDomain: 'brinewebsite.firebaseapp.com',
-    storageBucket: 'brinewebsite.appspot.com',
+    apiKey: 'AIzaSyDjGD4mVK8_rbOGn7u1-FMuUTLJN2EijBE',
+    appId: '1:431909607108:web:7e8a0530cc1cd5a8081b91',
+    messagingSenderId: '431909607108',
+    projectId: 'brine-3b212',
+    authDomain: 'brine-3b212.firebaseapp.com',
+    databaseURL: 'https://brine-3b212-default-rtdb.firebaseio.com',
+    storageBucket: 'brine-3b212.appspot.com',
+    measurementId: 'G-G0FBWT7JL0',
   );
 }

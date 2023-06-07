@@ -72,7 +72,13 @@ ThemeData darkTheme = ThemeData(
     enabledBorder: border,
     focusedBorder: border,
     errorBorder: errorBorder,
+    errorStyle: const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+    ),
     filled: false,
   ),
-  dialogTheme: const DialogTheme(backgroundColor: Color(0xff363636)),
+  dialogTheme: const DialogTheme(
+    backgroundColor: Color(0xff363636),
+  ),
 );

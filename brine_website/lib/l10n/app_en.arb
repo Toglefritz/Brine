@@ -13,5 +13,8 @@
   "nameFieldHint": "First name right here",
   "privacyPolicy": "Privacy Policy",
   "smart": "smart",
-  "termsAndConditions": "Terms and Conditions"
+  "termsAndConditions": "Terms and Conditions",
+  "validationEmailEmpty": "How are you supported to receive Brine news without an email?",
+  "validationEmailInvalid": "This email address looks a little fishy...",
+  "validationNameEmpty": "Oh $#!%, it looks like you forgot this field."
 }

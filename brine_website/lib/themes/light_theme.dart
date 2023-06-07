@@ -79,6 +79,10 @@ ThemeData lightTheme = ThemeData(
     enabledBorder: border,
     focusedBorder: border,
     errorBorder: errorBorder,
+    errorStyle: const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+    ),
     filled: true,
     fillColor: Colors.grey[200],
   ),
