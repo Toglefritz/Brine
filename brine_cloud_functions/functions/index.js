@@ -27,8 +27,14 @@ const db = admin.firestore();
  * the function logs the error and throws a Firebase 'internal' HttpsError.
  */
 exports.addLead = functions.https.onCall(async (data, context) => {
-    console.log('Function addLead was called with data:', data);
-    
+    if (!context.auth) {
+        // Throwing an HttpsError so that the client gets error details.
+        throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    const uid = context.auth.uid;
+    console.log(`Function called by user ${uid} with data:', data`);
+
     // Validate input
     if (!(typeof data.email === 'string') ||
         !(typeof data.name === 'string') ||
