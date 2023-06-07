@@ -90,7 +90,7 @@ packages:
     source: hosted
     version: "5.4.2"
   cloud_functions_web:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: cloud_functions_web
       sha256: e8040eabee8e75e26319d0c05faf1fc88c7ecccdb1169325bed7ae3b9a2e711a
