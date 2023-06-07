@@ -1,11 +1,13 @@
 import 'package:cloud_functions/cloud_functions.dart';
-
 import 'package:flutter/material.dart';
+
+import '../authentication/sign_in_anonymously.dart';
 
 /// Submits a new lead to a Firebase Firestore vs a Firebase Cloud Function.
 ///
 /// This function uses the Firebase Cloud Functions package to send a new lead to the 'addLead' Cloud Function. The
-/// 'addLead' Cloud Function then adds this lead to the Firestore database.
+/// 'addLead' Cloud Function then adds this lead to the Firestore database. Anonymous authentication is used for the
+/// `addLead` Cloud Function so this method authenticates using this method prior to calling the Cloud Function.
 ///
 /// This function accepts three parameters:
 ///   - [email]: The email address of the lead.
@@ -21,6 +23,14 @@ import 'package:flutter/material.dart';
 /// await addLead('jeb@kerbalspaceprogram.gov', 'Jeb', DateTime.now().millisecondsSinceEpoch);
 /// ```
 Future<void> callAddLeadFunction({required String name, required String email}) async {
+  // Sign in anonymously
+  try {
+    await signInAnonymously();
+  } catch (e) {
+    debugPrint('Authentication failed for addLead function');
+    rethrow;
+  }
+
   try {
     HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addLead');
     final response = await callable.call(<String, dynamic>{
@@ -31,6 +41,7 @@ Future<void> callAddLeadFunction({required String name, required String email}) 
     debugPrint('Successfully executed addLead function: ${response.data}');
   } on FirebaseFunctionsException catch (e) {
     debugPrint('Failed to execute addLead function. Code: ${e.code}, Message: ${e.details}');
+    rethrow;
   } catch (e) {
     debugPrint('Failed to execute addLead function: $e');
     rethrow;

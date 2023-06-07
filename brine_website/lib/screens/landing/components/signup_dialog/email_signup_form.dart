@@ -48,8 +48,9 @@ class EmailSignupForm extends StatelessWidget {
 
   /// Handles submissions of the signup form.
   ///
-  /// If the input to the form is valid, this method calls the [callAddLeadFunction] Firebase callable function to submit
-  /// the lead to Firebase, which creates a new record in Firestore for the new lead.
+  /// If the input to the form is valid, this method calls the [callAddLeadFunction] Firebase callable function to
+  /// submit the lead to Firebase, which creates a new record in Firestore for the new lead. Assuming this cloud
+  /// function call is successful,
   Future<void> _onSubmit() async {
     if (_formKey.currentState!.validate()) {
       // Submit the lead to Firebase
