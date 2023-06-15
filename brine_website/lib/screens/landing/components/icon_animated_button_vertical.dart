@@ -1,7 +1,6 @@
 import 'package:brinemonitor/values/insets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../components/primary_cta_button.dart';
 
@@ -9,8 +8,12 @@ import '../../../components/primary_cta_button.dart';
 class IconAnimatedButtonVertical extends StatefulWidget {
   const IconAnimatedButtonVertical({
     super.key,
+    required this.buttonText,
     required this.onTap,
   });
+
+  /// The text to display on the [PrimaryCTAButton].
+  final String buttonText;
 
   /// The action performed when the CTA button is tapped.
   final Function() onTap;
@@ -97,7 +100,7 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
           onExit: _stopPaddingAnimation,
           child: PrimaryCTAButton(
             onTap: widget.onTap,
-            text: AppLocalizations.of(context).getStartedButton,
+            text: widget.buttonText,
           ),
         ),
         Padding(

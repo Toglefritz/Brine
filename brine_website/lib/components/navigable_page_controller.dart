@@ -12,7 +12,7 @@ abstract class NavigablePageController<T extends NavigablePage> extends State<T>
     if (kDebugMode == false) {
       FirebaseAnalytics.instance.logScreenView(
         screenClass: widget.runtimeType.toString(),
-        screenName: widget.screenName,
+        screenName: NavigablePage.screenName,
       );
     }
 

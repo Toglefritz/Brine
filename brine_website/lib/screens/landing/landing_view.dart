@@ -5,7 +5,7 @@ import 'package:confetti/confetti.dart';
 
 import '../../components/app_bar/main_app_bar.dart';
 import '../../values/insets.dart';
-import 'components/footer.dart';
+import '../../components/footer.dart';
 import 'components/bill_nye_gif.dart';
 import 'components/icon_animated_button_horizontal.dart';
 import 'landing_controller.dart';

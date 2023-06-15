@@ -5,8 +5,7 @@ import 'privacy_policy_controller.dart';
 
 /// Displays the Splendid Endeavors terms and conditions.
 class PrivacyPolicyRoute extends NavigablePage {
-  @override
-  String get screenName => '/privacy';
+  static String get screenName => '/privacy';
 
   const PrivacyPolicyRoute({super.key});
 

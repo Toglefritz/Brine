@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../values/insets.dart';
-import '../../privacy_policy/privacy_policy_route.dart';
-import '../../terms_and_conditions/terms_and_conditions_route.dart';
-import 'footer_button.dart';
+import '../../values/insets.dart';
+import '../screens/privacy_policy/privacy_policy_route.dart';
+import '../screens/terms_and_conditions/terms_and_conditions_route.dart';
+import '../screens/landing/components/footer_button.dart';
 
 /// THe [Footer] appears at the bottom of the [HomeView] and contains a set of navigational
 /// buttons to administrative pages on the site.
@@ -16,12 +16,12 @@ class Footer extends StatelessWidget {
 
   /// Handles taps on the terms and conditions button.
   void termsAndConditionsOnTap(BuildContext context) {
-    context.push(const TermsAndConditionsRoute().screenName);
+    context.push(TermsAndConditionsRoute.screenName);
   }
 
   /// Handles taps on the privacy policy button.
   void privacyPolicyOnTap(BuildContext context) {
-    context.push(const PrivacyPolicyRoute().screenName);
+    context.push(PrivacyPolicyRoute.screenName);
   }
 
   @override

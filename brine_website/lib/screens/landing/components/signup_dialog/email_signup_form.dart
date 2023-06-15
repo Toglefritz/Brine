@@ -1,8 +1,10 @@
 import 'package:brinemonitor/screens/landing/components/icon_animated_button_vertical.dart';
+import 'package:brinemonitor/screens/thanks/thanks_route.dart';
 import 'package:brinemonitor/services/firestore/add_lead_function.dart';
 import 'package:brinemonitor/values/insets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// A [Form] used to collect a name and email from the visitor so they can be notified about updates for Brine.
@@ -50,14 +52,25 @@ class EmailSignupForm extends StatelessWidget {
   ///
   /// If the input to the form is valid, this method calls the [callAddLeadFunction] Firebase callable function to
   /// submit the lead to Firebase, which creates a new record in Firestore for the new lead. Assuming this cloud
-  /// function call is successful,
-  Future<void> _onSubmit() async {
+  /// function call is successful, the method will return a `true` value via a call to [Navigator.pop].
+  Future<void> _onSubmit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      // Submit the lead to Firebase
-      callAddLeadFunction(
-        name: _nameFieldController.text,
-        email: _emailFieldController.text,
-      );
+      try {
+        // Submit the lead to Firebase
+        callAddLeadFunction(
+          name: _nameFieldController.text,
+          email: _emailFieldController.text,
+        );
+      } catch (e) {
+        debugPrint('Failed to add lead to Firebase');
+
+        // TODO how should this error be handled?
+
+        return;
+      }
+
+      // Return true to the caller to indicate success
+      context.pushReplacement('${ThanksRoute.screenName}/${_nameFieldController.text}');
     }
   }
 
@@ -139,7 +152,8 @@ class EmailSignupForm extends StatelessWidget {
               bottom: insetsLarge,
             ),
             child: IconAnimatedButtonVertical(
-              onTap: _onSubmit,
+              buttonText: AppLocalizations.of(context).emailOptinButtonText,
+              onTap: () => _onSubmit(context),
             ),
           ),
         ],

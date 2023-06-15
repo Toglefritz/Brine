@@ -20,8 +20,12 @@ import 'landing_view.dart';
 /// The [MouseRegion] widget surrounding the [PrimaryCTAButton] provides two callbacks: [onEnter] and [onExit]. These
 /// callbacks are used to start and stop the padding animation respectively.
 class LandingController extends NavigablePageController<LandingRoute> with SingleTickerProviderStateMixin {
-  /// A controller for the decorative confetti effect
+  /// A controller for the decorative confetti effect launch-able from the main menu.
   late ConfettiController confettiController;
+
+  /// A controller for the much bigger and grander confetti effect triggered when the visitor successfully signs
+  /// up for updates from Brine.
+  late ConfettiController partyController;
 
   @override
   void initState() {
@@ -34,13 +38,14 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
     super.initState();
   }
 
-  /// Initializes the controller for the decorative confetti animation.
+  /// Initializes the controllers for the decorative confetti animations.
   ///
-  /// The [ConfettiController] is initialized with a [Duration] that determines the duration of the
-  /// confetti animation.
+  /// The [ConfettiController]s are initialized with [Duration]s that determines the duration of their
+  /// confetti animations.
   void initializeConfettiAnimation() {
     setState(() {
       confettiController = ConfettiController(duration: const Duration(seconds: 1));
+      partyController = ConfettiController(duration: const Duration(seconds: 5));
     });
   }
 
@@ -49,9 +54,12 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
     confettiController.play();
   }
 
-  /// Handles taps on the main CTA button on the landing page by TODO ...
-  void letsGoooooooo() {
-    showGeneralDialog(
+  /// Handles taps on the main CTA button on the landing page by showing a dialog allowing the visitor to sign up for
+  /// updates about Brine. The [EmailOptinAnimatedDialog] returns a boolean value to indicate whether or not the
+  /// ultimate call to add the visitor's information to a Firebase collection succeeded. If the visitor successfully
+  /// signs up, we have a little party with lots of confetti and stuff, if not, we get sad and display an error message.
+  Future<void> letsGoooooooo() async {
+    bool? success = await showGeneralDialog<bool?>(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'email signup dialog',
@@ -64,6 +72,24 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
         );
       },
     );
+
+    if(success == true) {
+      throwAParty();
+    }
+  }
+
+  /// Throws a little party to celebrate the visitor successfully signing up for updates from Brine by launching a
+  /// bunch of confetti and showing a very special GIF to thank the visitor for signing up.
+  ///
+  /// While the main view is enjoying a party, this method also saves an entry in [SharedPreferences] to indicate
+  /// that the visitor has successfully signed up so that they are presented with a message indicating such on their
+  /// next visit to the site.
+  void throwAParty() {
+    partyController.play();
+
+    setState(() {
+
+    });
   }
 
   @override

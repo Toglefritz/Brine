@@ -2,6 +2,7 @@
   "addTeamMember": "Add a Team Member",
   "brine": "Brine",
   "emailFieldHint": "Email in this one",
+  "emailOptinButtonText": "Make it so",
   "emailOptinDescription": "Brine is coming soon to a water softener near you. Put your info right here in this handy form to sign up for updates and, you know, maybe a couple discounts as well.",
   "getStartedButton": "Let's Go!",
   "landingPageDescription1": "Brine is a ",
@@ -14,6 +15,8 @@
   "privacyPolicy": "Privacy Policy",
   "smart": "smart",
   "termsAndConditions": "Terms and Conditions",
+  "thanksPageDescription": "You're all signed up to receive updates about Brine, which will be launching soon. You'll be among the first to know when Brine is available because you'll receive a nice discount right into your inbox.",
+  "thanksPageTitlePrefix": "Thanks, ",
   "validationEmailEmpty": "How are you supported to receive Brine news without an email?",
   "validationEmailInvalid": "This email address looks a little fishy...",
   "validationNameEmpty": "Oh $#!%, it looks like you forgot this field."

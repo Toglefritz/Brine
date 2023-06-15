@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:brinemonitor/screens/privacy_policy/privacy_policy_route.dart';
 import 'package:brinemonitor/screens/terms_and_conditions/terms_and_conditions_route.dart';
+import 'package:brinemonitor/screens/thanks/thanks_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -25,12 +26,21 @@ GoRouter router = GoRouter(
       ),
     ),
     GoRoute(
-      path: const PrivacyPolicyRoute().screenName,
+      path: PrivacyPolicyRoute.screenName,
       builder: (context, state) => const PrivacyPolicyRoute(),
     ),
     GoRoute(
-      path: const TermsAndConditionsRoute().screenName,
+      path: TermsAndConditionsRoute.screenName,
       builder: (context, state) => const TermsAndConditionsRoute(),
+    ),
+    GoRoute(
+      path: '${ThanksRoute.screenName}/:name',
+      builder: (BuildContext context, GoRouterState state) {
+        final String name = state.params['name']!;
+        return ThanksRoute(
+          name: name,
+        );
+      },
     ),
   ],
 );

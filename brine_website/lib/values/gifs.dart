@@ -1,6 +1,7 @@
 /// An enumeration of all the animated GIF assets used in the application.
 enum Gifs {
-  billNyeSalt('na_cl_bill_nye.gif');
+  billNyeSalt('na_cl_bill_nye.gif'),
+  thanksFrog('frog_thanks.gif');
 
   /// The file path for the image asset.
   final String gifPath;

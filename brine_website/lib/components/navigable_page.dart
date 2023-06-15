@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 /// used in navigation calls with the *go_router* package.
 abstract class NavigablePage extends StatefulWidget {
   /// A string identifier for the screen used in logging calls.
-  abstract final String screenName;
+  static String get screenName {
+    throw UnimplementedError();
+  }
 
   const NavigablePage({super.key});
 }
