@@ -75,7 +75,7 @@ class BorderlessField extends StatelessWidget {
                 ),
               )
             : const SizedBox.shrink(),
-        errorMaxLines: 2,
+        errorMaxLines: 3,
         errorStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,

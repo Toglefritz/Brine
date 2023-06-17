@@ -1,10 +1,11 @@
 import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
+import 'package:brine/screens/setup/setup_route.dart';
+import 'package:brine/services/firebase/authentication/create_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../services/firebase/authentication/sign_in_with_google.dart';
+import '../../../services/firebase/authentication/auth_methods.dart';
 import '../../../values/regex.dart';
-import '../../softener_monitor/softener_monitor_route.dart';
 import 'create_account_route.dart';
 import 'create_account_view.dart';
 
@@ -57,7 +58,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
     if (createAccountFormKey.currentState!.validate()) {
       try {
-        await createAccount(
+        await createUser(
+          method: AuthMethod.basicAuth,
           emailAddress: usernameFieldController.text,
           password: passwordFieldController.text,
         );
@@ -101,37 +103,16 @@ class CreateAccountController extends State<CreateAccountRoute> {
         creatingAccount = false;
       });
 
+      debugPrint('Successfully created account, ${FirebaseAuth.instance.currentUser?.uid}');
+
       if (mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => const SoftenerMonitorRoute(),
+            builder: (BuildContext context) => const SetupRoute(),
           ),
         );
       }
-    }
-  }
-
-  /// Creates a password-based account with Firebase Auth.
-  ///
-  /// As part of creating a password-based account with Firebase Auth, a [FirebaseAuthException] can be thrown if
-  /// issues with the provided username or password are discovered.
-  Future<UserCredential?> createAccount({required String emailAddress, required String password}) async {
-    try {
-      final UserCredential credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailAddress,
-        password: password,
-      );
-
-      return credential;
-    } on FirebaseAuthException catch (e) {
-      debugPrint('FirebaseAuthException thrown during account creation: $e');
-
-      rethrow;
-    } catch (e) {
-      debugPrint('Creating password-based account failed with exception, $e');
-
-      rethrow;
     }
   }
 
@@ -224,19 +205,16 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
   /// Handles taps on the Google sign in button.
   Future<void> handleGoogleCreateAccount() async {
-    try {
-      await signInWithGoogle();
+    // TODO tag
 
-      // Create the user record in Firebase
-      // _createUser();
-    } catch (e) {
-      debugPrint('Failed to sign in with Google with exception, $e');
-    }
+    createUser(method: AuthMethod.google);
   }
 
   /// Handles taps on the Apple sign in button.
   Future<void> handleAppleCreateAccount() async {
-    // TODO create account with Apple
+    // TODO tag
+
+    createUser(method: AuthMethod.apple);
   }
 
   @override

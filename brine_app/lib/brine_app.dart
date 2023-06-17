@@ -1,9 +1,9 @@
+import 'package:brine/screens/setup/setup_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
-import 'package:brine/screens/softener_monitor/softener_monitor_route.dart';
 import 'package:brine/theme/build_theme_data.dart';
 
 /// The entry point of the application.
@@ -25,9 +25,9 @@ class BrineApp extends StatelessWidget {
       home: Scaffold(
         body: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
             if (snapshot.hasData) {
-              return const SoftenerMonitorRoute();
+              return const SetupRoute();
             }
             return const OnboardingRoute();
           },
