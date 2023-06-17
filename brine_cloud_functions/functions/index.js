@@ -107,6 +107,85 @@ async function verifyIdToken(req) {
     }
 }
 
+
+/// Calls the 'createUser' Firebase Cloud Function to create a new user 
+/// document in Firestore.
+///
+/// This function requires the client to be authenticated. If the client is 
+/// not authenticated, it will automatically authenticate anonymously.
+///
+/// The authenticated user's UID is used as both the document ID and the uid 
+/// field value in the document in Firestore. An empty devices array is also 
+/// added to the document.
+///
+/// If an error occurs during the process, the error code and message are printed.
+///
+/// Example usage:
+/// ```dart
+/// createUser();
+/// ```
+///
+/// The function does not return a value.
+exports.createUser = functions.https.onCall(async (data, context) => {
+    // Check that the user is authenticated.
+    if (!context.auth) {
+        // Throwing an HttpsError so that the client gets error details.
+        throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    const uid = context.auth.uid;
+
+    try {
+        // Create a new document in the "users" collection with the user's UID.
+        await admin.firestore().collection('users').doc(uid).set({
+            uid: uid,
+            devices: [],
+        });
+
+        return { result: `User with UID ${uid} added.` };
+    } catch (error) {
+        // Handle any errors that occurred while adding the user to Firestore.
+        console.error('Error adding user to Firestore: ', error);
+        throw new functions.https.HttpsError('unknown', 'Failed to create user.');
+    }
+});
+
+/*
+ * This function checks if the user is authenticated and then retrieves the user document from the users collection in Firestore. 
+ * If the user document exists, it gets the list of devices and returns it as a response. If there's an error or the user is not 
+ * authenticated, the function throws an appropriate error message.
+*/
+exports.getUserDevices = functions.https.onCall(async (data, context) => {
+    // Check if the user is authenticated
+    if (!context.auth) {
+        throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
+    }
+
+    // Get the user's UID from the context
+    const userUid = context.auth.uid;
+
+    try {
+        // Get the user document from Firestore
+        const userDocRef = admin.firestore().collection("users").doc(userUid);
+        const userDocSnapshot = await userDocRef.get();
+
+        if (!userDocSnapshot.exists) {
+            throw new functions.https.HttpsError("not-found", "User not found");
+        }
+
+        // Get the list of devices from the user document
+        const devices = userDocSnapshot.get("devices");
+
+        // Return the list of devices
+        return {
+            devices: devices
+        };
+    } catch (error) {
+        console.error("Error getting user devices:", error);
+        throw new functions.https.HttpsError("internal", "An error occurred while getting user devices");
+    }
+});
+
 /**
  * This function updates the battery level and salt level of a device in a Firestore document.
  * The function is an HTTP-triggered Firebase Cloud Function that requires authentication via
