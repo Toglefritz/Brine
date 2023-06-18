@@ -54,10 +54,10 @@ class AuthenticationPage extends StatelessWidget {
               child: Column(
                 children: content
                   ..add(
-                    Expanded(
+                    const Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
+                        children: [
                           Padding(
                             padding: EdgeInsets.all(
                               Insets.medium,

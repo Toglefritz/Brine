@@ -1,4 +1,3 @@
-import 'package:brine/services/firebase/exceptions/get_device_exception.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -31,12 +30,10 @@ import 'models/brine_device.dart';
 Future<BrineDevice> getDevice(String deviceId) async {
   try {
     // Create a reference to the 'getDeviceLevels' callable function
-    HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('getDeviceLevels');
+    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getDeviceLevels');
 
     // Call the function with the device ID as an argument
-    final response =
-        await callable.call(<String, dynamic>{'deviceId': deviceId});
+    final response = await callable.call(<String, dynamic>{'deviceId': deviceId});
 
     // Get the salt level and battery level from the response
     double saltLevel = response.data['salt_level'];
@@ -52,6 +49,6 @@ Future<BrineDevice> getDevice(String deviceId) async {
   } catch (e) {
     debugPrint('Error getting device levels: $e');
 
-    throw GetDeviceException('Failed to get device details with exception, $e');
+    rethrow;
   }
 }

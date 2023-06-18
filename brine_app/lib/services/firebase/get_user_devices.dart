@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
-import 'exceptions/get_user_devices_exception.dart';
-
 /// Retrieves the list of devices for the authenticated user's account by calling the `getUserDevices` Firebase
 /// callable function.
 ///
@@ -23,6 +21,7 @@ Future<List<String>> getUserDevices() async {
     return devices;
   } catch (e) {
     debugPrint('Error getting user devices: $e');
-    throw GetUserDevicesException('Failed to get user devices with exception, $e');
+
+    rethrow;
   }
 }
