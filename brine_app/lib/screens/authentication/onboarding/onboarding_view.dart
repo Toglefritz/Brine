@@ -1,4 +1,4 @@
-import 'package:brine/models/insets.dart';
+import 'package:brine/theme/insets.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../values/image_asset.dart';
-import '../components/onboarding_button.dart';
+import '../../../components/light_button.dart';
 import 'components/onboarding_legal_prompt.dart';
 import 'onboarding_controller.dart';
 
@@ -63,12 +63,12 @@ class OnboardingView extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                           vertical: Insets.small,
                         ),
-                        child: OnboardingButton(
+                        child: LightButton(
                           onPressed: state.handleLoginTap,
                           text: AppLocalizations.of(context).login,
                         ),
                       ),
-                      OnboardingButton(
+                      LightButton(
                         onPressed: state.handleCreateAccountTap,
                         text: AppLocalizations.of(context).createAnAccount,
                       ),
@@ -77,9 +77,7 @@ class OnboardingView extends StatelessWidget {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.all(
-                  Insets.medium,
-                ),
+                padding: EdgeInsets.all(Insets.medium),
                 child: OnboardingLegalPrompt(),
               ),
             ],

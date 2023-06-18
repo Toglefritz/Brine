@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
-import 'package:brine/theme/build_theme_data.dart';
+import 'package:brine/theme/themes.dart';
 
 /// The entry point of the application.
 ///

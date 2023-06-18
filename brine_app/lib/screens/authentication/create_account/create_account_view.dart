@@ -1,5 +1,5 @@
 import 'package:brine/models/device.dart';
-import 'package:brine/models/insets.dart';
+import 'package:brine/theme/insets.dart';
 import 'package:brine/screens/authentication/components/authentication_page.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/dark_onboarding_button.dart';
-import '../components/onboarding_button.dart';
+import '../../../components/light_button.dart';
 import '../components/onboarding_field.dart';
 import 'components/borderless_field.dart';
 import 'create_account_controller.dart';
@@ -133,14 +133,14 @@ class CreateAccountView extends StatelessWidget {
               padding: const EdgeInsets.only(
                 bottom: Insets.small,
               ),
-              child: OnboardingButton(
+              child: LightButton(
                 onPressed: state.handleGoogleCreateAccount,
                 text: AppLocalizations.of(context).signUpWithGoogle,
                 icon: FontAwesomeIcons.google,
               ),
             ),
             if (Device.isIOS)
-              OnboardingButton(
+              LightButton(
                 onPressed: state.handleAppleCreateAccount,
                 text: AppLocalizations.of(context).signUpWithApple,
                 icon: FontAwesomeIcons.apple,

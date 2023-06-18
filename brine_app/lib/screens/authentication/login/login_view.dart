@@ -1,5 +1,5 @@
 import 'package:brine/models/device.dart';
-import 'package:brine/models/insets.dart';
+import 'package:brine/theme/insets.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../components/authentication_page.dart';
 import '../components/dark_onboarding_button.dart';
-import '../components/onboarding_button.dart';
+import '../../../components/light_button.dart';
 import '../components/onboarding_field.dart';
 import 'login_controller.dart';
 
@@ -96,14 +96,14 @@ class LoginView extends StatelessWidget {
               padding: const EdgeInsets.only(
                 bottom: Insets.small,
               ),
-              child: OnboardingButton(
+              child: LightButton(
                 onPressed: state.handleGoogleLogin,
                 text: AppLocalizations.of(context).loginWithGoogle,
                 icon: FontAwesomeIcons.google,
               ),
             ),
             if (Device.isIOS)
-              OnboardingButton(
+              LightButton(
                 onPressed: state.handleAppleLogin,
                 text: AppLocalizations.of(context).loginWithApple,
                 icon: FontAwesomeIcons.apple,

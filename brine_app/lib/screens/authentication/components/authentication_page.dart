@@ -1,4 +1,4 @@
-import 'package:brine/models/insets.dart';
+import 'package:brine/theme/insets.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

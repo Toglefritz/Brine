@@ -1,6 +1,7 @@
 import 'package:brine/screens/setup/setup_route.dart';
 import 'package:brine/screens/setup/setup_view.dart';
 import 'package:brine/screens/softener_monitor/softener_monitor_route.dart';
+import 'package:brine/screens/welcome/welcome_route.dart';
 import 'package:brine/services/firebase/get_device.dart';
 import 'package:brine/services/firebase/get_user_devices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,12 +35,20 @@ class SetupController extends State<SetupRoute> {
       // TODO handle error
     }
 
-    // Check if there are any devices on the account
+    // If there are no devices on the account, go to the [WelcomeRoute]
     if (deviceList == null || deviceList.isEmpty) {
-      // TODO go to AddDeviceRoute
-      // TODO remove this method once AddDeviceRoute exists
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const WelcomeRoute(),
+        ),
+      );
       signOut();
-    } else {
+    }
+    // If there is at least one device on the account, go to the [SoftenerMonitorRoute].
+    else {
       // Go to the water softener monitor route
       if (mounted) {
         Navigator.pushReplacement(

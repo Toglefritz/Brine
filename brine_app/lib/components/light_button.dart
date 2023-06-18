@@ -1,17 +1,17 @@
-import 'package:brine/models/insets.dart';
+import 'package:brine/theme/insets.dart';
 import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 
 /// A button appearing on the [OnboardingView].
-class OnboardingButton extends StatelessWidget {
-  /// Creates anm [OnboardingButton].
+class LightButton extends StatelessWidget {
+  /// Creates anm [LightButton].
   ///
   /// This widget uses, at its base, an [ElevatedButton] widget. The text displayed on the button is determined by the
   /// [text] field. When it is tapped, the widget calls the function provided by the [onPressed] field. By default,
   /// the button has a width of 350 logical pixels. However, this value can be overridden by the [width] field. An
   /// icon can be optionally displayed on the left side of the button by providing [IconData] to the [icon] field.
   /// If this field is null, no icon is displayed on the button.
-  const OnboardingButton({
+  const LightButton({
     Key? key,
     required this.text,
     required this.onPressed,
