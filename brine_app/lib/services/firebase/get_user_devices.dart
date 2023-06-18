@@ -3,12 +3,11 @@ import 'package:cloud_functions/cloud_functions.dart';
 
 import 'exceptions/get_user_devices_exception.dart';
 
-/// Retrieves the list of devices for the authenticated user's account by
-/// calling the `getUserDevices` Firebase callable function.
+/// Retrieves the list of devices for the authenticated user's account by calling the `getUserDevices` Firebase
+/// callable function.
 ///
-/// This function returns a `Future<List<String>>` containing the device IDs
-/// for the authenticated user. It throws an error if there is an issue while
-/// calling the Firebase function, such as an unauthenticated user.
+/// This function returns a `Future<List<String>>` containing the device IDs for the authenticated user. It throws an
+/// error if there is an issue while calling the Firebase function, such as an unauthenticated user.
 Future<List<String>> getUserDevices() async {
   try {
     // Create a reference to the 'getUserDevices' callable function

@@ -17,10 +17,10 @@ class SetupView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
+          children: <Widget>[
             SpinKitWave(
               color: ColorLibrary.primaryDefault,
             ),

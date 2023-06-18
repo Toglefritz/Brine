@@ -1,6 +1,5 @@
-/// Represents a Brine monitor device and includes the salt and battery levels
-/// obtained from the device, along with a timestamp of when the levels were
-/// last retrieved.
+/// Represents a Brine monitor device and includes the salt and battery levels obtained from the device, along with a
+/// timestamp of when the levels were last retrieved.
 class BrineDevice {
   /// A unique identifier for the device.
   final String deviceId;

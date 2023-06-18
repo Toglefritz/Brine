@@ -1,4 +1,4 @@
-/// An [Exception] thrown from errors in the [getDevice)] call.
+/// An [Exception] thrown from errors in the [getDevice] call.
 class GetDeviceException implements Exception {
   final String message;
 
