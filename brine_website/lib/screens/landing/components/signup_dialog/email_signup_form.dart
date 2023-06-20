@@ -75,7 +75,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     if (_formKey.currentState!.validate()) {
       try {
         // Submit the lead to Firebase
-        callAddLeadFunction(
+        await callAddLeadFunction(
           name: _nameFieldController.text,
           email: _emailFieldController.text,
         );
