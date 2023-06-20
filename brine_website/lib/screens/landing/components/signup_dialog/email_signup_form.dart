@@ -1,18 +1,25 @@
 import 'package:brinemonitor/screens/landing/components/icon_animated_button_vertical.dart';
 import 'package:brinemonitor/screens/thanks/thanks_route.dart';
-import 'package:brinemonitor/services/firestore/add_lead_function.dart';
 import 'package:brinemonitor/values/insets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../services/authentication/sign_in_anonymously.dart';
+import '../../../../services/lead_management/add_lead_function.dart';
+
 /// A [Form] used to collect a name and email from the visitor so they can be notified about updates for Brine.
-class EmailSignupForm extends StatelessWidget {
-  EmailSignupForm({
+class EmailSignupForm extends StatefulWidget {
+  const EmailSignupForm({
     super.key,
   });
 
+  @override
+  State<EmailSignupForm> createState() => _EmailSignupFormState();
+}
+
+class _EmailSignupFormState extends State<EmailSignupForm> {
   /// A key for the email optin form.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -53,7 +60,18 @@ class EmailSignupForm extends StatelessWidget {
   /// If the input to the form is valid, this method calls the [callAddLeadFunction] Firebase callable function to
   /// submit the lead to Firebase, which creates a new record in Firestore for the new lead. Assuming this cloud
   /// function call is successful, the method will return a `true` value via a call to [Navigator.pop].
-  Future<void> _onSubmit(BuildContext context) async {
+  Future<void> _onSubmit() async {
+    // Sign in anonymously
+    try {
+      await signInAnonymously();
+    } catch (e) {
+      debugPrint('Authentication failed for addLead function');
+
+      // TODO how should this error be handled?
+
+      return;
+    }
+
     if (_formKey.currentState!.validate()) {
       try {
         // Submit the lead to Firebase
@@ -70,6 +88,7 @@ class EmailSignupForm extends StatelessWidget {
       }
 
       // Return true to the caller to indicate success
+      if (!mounted) return;
       context.pushReplacement('${ThanksRoute.screenName}/${_nameFieldController.text}');
     }
   }
@@ -153,7 +172,7 @@ class EmailSignupForm extends StatelessWidget {
             ),
             child: IconAnimatedButtonVertical(
               buttonText: AppLocalizations.of(context).emailOptinButtonText,
-              onTap: () => _onSubmit(context),
+              onTap: () => _onSubmit(),
             ),
           ),
         ],

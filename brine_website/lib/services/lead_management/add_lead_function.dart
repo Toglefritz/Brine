@@ -23,14 +23,6 @@ import '../authentication/sign_in_anonymously.dart';
 /// await addLead('jeb@kerbalspaceprogram.gov', 'Jeb', DateTime.now().millisecondsSinceEpoch);
 /// ```
 Future<void> callAddLeadFunction({required String name, required String email}) async {
-  // Sign in anonymously
-  try {
-    await signInAnonymously();
-  } catch (e) {
-    debugPrint('Authentication failed for addLead function');
-    rethrow;
-  }
-
   try {
     HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addLead');
     final response = await callable.call(<String, dynamic>{
