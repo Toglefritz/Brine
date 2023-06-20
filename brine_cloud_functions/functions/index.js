@@ -11,20 +11,25 @@ const db = admin.firestore();
  * `addLead` is a Firebase Cloud Function designed to add a new lead document
  * to the 'leads' collection in Firestore. This function is callable from a client application.
  * 
+ * The function now checks for an existing lead with the same email before attempting to create
+ * a new lead. If a lead with the given email already exists, the function still completes successfully,
+ * but returns a message indicating that a lead with the given email already exists.
+ * 
  * @param {Object} data - The data argument is expected to be an object with the following properties:
  * @param {string} data.email - The email address of the lead.
  * @param {string} data.name - The name of the lead.
  * @param {number} data.timestamp - The timestamp when the lead was created.
  * 
- * These parameters are validated for type consistency before adding the lead to the Firestore.
+ * These parameters are validated for type consistency before attempting to add the lead to the Firestore.
  * If any of the inputs are of the incorrect type, the function throws a Firebase 'invalid-argument' HttpsError.
  *
  * @param {Object} context - The function context which includes information about the user who invoked the function.
  *
- * The function then attempts to add a new document to the 'leads' collection with the passed data.
- * If the operation is successful, the function returns an object with a 'result' property that contains a message 
- * indicating the ID of the newly added document. If an error occurs when trying to add the document,
- * the function logs the error and throws a Firebase 'internal' HttpsError.
+ * The function then attempts to add a new document to the 'leads' collection with the passed data if no existing
+ * lead with the same email is found. If the operation is successful, the function returns an object with a 'result' 
+ * property that contains a message indicating the ID of the newly added document or a message indicating that a lead 
+ * with the given email already exists. If an error occurs when trying to add the document, the function logs the error 
+ * and throws a Firebase 'internal' HttpsError.
  */
 exports.addLead = functions.https.onCall(async (data, context) => {
     if (!context.auth) {
@@ -52,20 +57,29 @@ exports.addLead = functions.https.onCall(async (data, context) => {
     };
 
     try {
-        const docRef = await admin.firestore().collection('leads').add(newLead);
-        return { result: `Lead with ID: ${docRef.id} added.` };
+        // Check if a lead with the given email already exists.
+        const leadsRef = admin.firestore().collection('leads');
+        const snapshot = await leadsRef.where('email', '==', data.email).get();
+
+        if (!snapshot.empty) {
+            // A lead with the given email already exists.
+            console.log(`Lead with email: ${data.email} already exists.`);
+            return { result: `Lead with email: ${data.email} already exists.` };
+        } else {
+            // Add the new lead.
+            const docRef = await leadsRef.add(newLead);
+            return { result: `Lead with ID: ${docRef.id} added.` };
+        }
     } catch (error) {
         console.log('Error adding document: ', error);
 
-        // Provide custom error messages based on error codes.
-        // Be careful not to expose too much information in error messages.
         let message = 'Failed to add the lead';
         if (error.code === 'permission-denied') {
             message = 'Insufficient permissions to add the lead';
         } else if (error.code === 'unavailable') {
-            message = 'The Firestore service is currently unavailable';
+            message = 'The service is currently unavailable';
         } else if (error.code === 'deadline-exceeded') {
-            message = 'The request to add the lead took too long to complete';
+            message = 'The request timed out';
         }
 
         throw new functions.https.HttpsError(message, 'An internal error occurred', { detailedMessage: message });
