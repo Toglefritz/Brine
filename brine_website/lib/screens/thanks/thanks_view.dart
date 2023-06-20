@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../components/app_bar/main_app_bar.dart';
+import '../../components/primary_cta_button.dart';
 import '../../values/insets.dart';
 import '../../components/footer.dart';
 import 'components/confetti_cannon.dart';
@@ -41,7 +42,7 @@ class ThanksView extends StatelessWidget {
                               bottom: insetsLarge,
                             ),
                             child: Text(
-                              '${AppLocalizations.of(context).thanksPageTitlePrefix} ${state.widget.name}',
+                              '${AppLocalizations.of(context).thanksPageTitlePrefix} ${state.widget.name}!',
                               style: GoogleFonts.changaOne().copyWith(
                                 fontSize: 42,
                               ),
@@ -56,6 +57,13 @@ class ThanksView extends StatelessWidget {
                             AppLocalizations.of(context).thanksPageDescription,
                             style: Theme.of(context).textTheme.bodyLarge,
                             textAlign: TextAlign.center,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(insetsLarge),
+                            child: PrimaryCTAButton(
+                              onTap: state.onButtonPressed,
+                              text: AppLocalizations.of(context).accessInsiderPortal,
+                            ),
                           ),
                           const Padding(
                             padding: EdgeInsets.only(top: insetsLarge),

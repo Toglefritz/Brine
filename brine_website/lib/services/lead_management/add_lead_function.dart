@@ -1,8 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 
-import '../authentication/sign_in_anonymously.dart';
-
 /// Submits a new lead to a Firebase Firestore vs a Firebase Cloud Function.
 ///
 /// This function uses the Firebase Cloud Functions package to send a new lead to the 'addLead' Cloud Function. The

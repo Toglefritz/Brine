@@ -2,8 +2,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../components/navigable_page_controller.dart';
+import '../insider/insider_route.dart';
 import 'thanks_route.dart';
 import 'thanks_view.dart';
 
@@ -24,7 +26,7 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
   @override
   void initState() {
     if (kDebugMode == false) {
-      FirebaseAnalytics.instance.logAppOpen();
+      FirebaseAnalytics.instance.logEvent(name: 'thanks_page_opened');
     }
 
     initializeConfettiAnimation();
@@ -41,6 +43,13 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
     setState(() {
       partyController = ConfettiController(duration: const Duration(seconds: 1));
     });
+  }
+
+  /// Handles taps on the [PrimaryCTAButton] on the [ThanksView].
+  void onButtonPressed() {
+    // TODO tag
+
+    context.pushReplacement(InsiderRoute.screenName);
   }
 
   @override

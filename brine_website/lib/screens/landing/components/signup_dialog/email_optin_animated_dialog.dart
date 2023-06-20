@@ -41,7 +41,7 @@ class EmailOptinAnimatedDialog extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              EmailSignupForm(),
+              const EmailSignupForm(),
             ],
           ),
         ),
