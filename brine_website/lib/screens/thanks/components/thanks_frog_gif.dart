@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../values/gifs.dart';
+import '../../../values/insets.dart';
 
 /// A GIF showing a super cute little frog saying "thanks," inside a container with rounded corners.
 class ThanksFrogGif extends StatelessWidget {
@@ -24,13 +25,16 @@ class ThanksFrogGif extends StatelessWidget {
           Radius.circular(12),
         ),
       ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12),
-        ),
-        child: Image.asset(
-          Gifs.thanksFrog.path,
-          width: 500,
+      child: Padding(
+        padding: const EdgeInsets.all(insetsXSmall),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(10),
+          ),
+          child: Image.asset(
+            Gifs.thanksFrog.path,
+            width: 400,
+          ),
         ),
       ),
     );

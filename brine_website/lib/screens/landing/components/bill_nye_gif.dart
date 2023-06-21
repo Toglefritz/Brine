@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../values/gifs.dart';
+import '../../../values/insets.dart';
 
 /// A GIF from the greatest science show, Bill Nye the Science Guy, inside a container with rounded corners.
 class BillNyeGif extends StatelessWidget {
@@ -24,13 +25,16 @@ class BillNyeGif extends StatelessWidget {
           Radius.circular(12),
         ),
       ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12),
-        ),
-        child: Image.asset(
-          Gifs.billNyeSalt.path,
-          width: 400,
+      child: Padding(
+        padding: const EdgeInsets.all(insetsXSmall),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(12),
+          ),
+          child: Image.asset(
+            Gifs.billNyeSalt.path,
+            width: 400,
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 /// Common inset values, primarily used for [Padding] widgets throughout the app.
+const double insetsXSmall = 2.0;
 const double insetsSmall = 8.0;
 const double insetsMedium = 16.0;
 const double insetsLarge = 32.0;

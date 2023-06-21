@@ -23,5 +23,12 @@ Future<void> main() async {
     }
   }
 
+  // Persist the authentication state, even when the browser is closed
+  FirebaseAuth auth = FirebaseAuth.instance;
+  auth.setPersistence(Persistence.LOCAL);
+  if (kIsWeb) {
+    await FirebaseAuth.instance.authStateChanges().first;
+  }
+
   runApp(const BrineMonitorWebsite());
 }
