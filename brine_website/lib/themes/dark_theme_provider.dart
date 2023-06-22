@@ -8,6 +8,7 @@ import 'dark_theme_preference.dart';
 class DarkThemeProvider with ChangeNotifier {
   final DarkThemePreference darkThemePreference = DarkThemePreference();
 
+  /// Determines if a dark theme is enabled.
   bool _darkTheme = false;
 
   bool get darkTheme => _darkTheme;

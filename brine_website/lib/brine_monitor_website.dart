@@ -45,7 +45,7 @@ class _BrineMonitorWebsiteState extends State<BrineMonitorWebsite> {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             themeMode: darkThemeProvider.darkTheme ? ThemeMode.dark : ThemeMode.light,
-            theme: darkThemeProvider.darkTheme ? darkTheme : lightTheme,
+            theme: darkThemeProvider.darkTheme ? DarkTheme.darkTheme : LightTheme.lightTheme,
             routerConfig: router,
           );
         },
