@@ -25,11 +25,15 @@ class ThanksView extends StatelessWidget {
         builder: (context) => Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: insetsLarge),
+              padding: EdgeInsets.symmetric(
+                vertical: Insets.kInsetsLarge,
+              ),
               child: SingleChildScrollView(
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: insetsMedium),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Insets.kInsetsMedium,
+                    ),
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxWidth: 900,
@@ -38,8 +42,8 @@ class ThanksView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: insetsLarge,
+                            padding: EdgeInsets.only(
+                              bottom: Insets.kInsetsLarge,
                             ),
                             child: Text(
                               '${AppLocalizations.of(context).thanksPageTitlePrefix} ${state.widget.name}!',
@@ -49,9 +53,11 @@ class ThanksView extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: insetsLarge),
-                            child: ThanksFrogGif(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: Insets.kInsetsLarge,
+                            ),
+                            child: const ThanksFrogGif(),
                           ),
                           Text(
                             AppLocalizations.of(context).thanksPageDescription,
@@ -59,15 +65,19 @@ class ThanksView extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(insetsLarge),
+                            padding: EdgeInsets.all(
+                              Insets.kInsetsLarge,
+                            ),
                             child: PrimaryCTAButton(
                               onTap: state.onButtonPressed,
                               text: AppLocalizations.of(context).accessInsiderPortal,
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(top: insetsLarge),
-                            child: Footer(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: Insets.kInsetsLarge,
+                            ),
+                            child: const Footer(),
                           ),
                         ],
                       ),

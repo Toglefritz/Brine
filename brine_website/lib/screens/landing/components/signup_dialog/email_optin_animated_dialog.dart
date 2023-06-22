@@ -20,7 +20,9 @@ class EmailOptinAnimatedDialog extends StatelessWidget {
         width: Screen.width(context) * 0.75,
         height: Screen.height(context) * 0.7,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(insetsMedium),
+          padding: EdgeInsets.all(
+            Insets.kInsetsMedium,
+          ),
           child: Column(
             children: [
               Text(
@@ -31,9 +33,9 @@ class EmailOptinAnimatedDialog extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: insetsMedium,
-                  vertical: insetsLarge,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Insets.kInsetsMedium,
+                  vertical: Insets.kInsetsLarge,
                 ),
                 child: Text(
                   AppLocalizations.of(context).emailOptinDescription,

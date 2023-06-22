@@ -101,8 +101,8 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              left: insetsLarge,
+            padding: EdgeInsets.only(
+              left: Insets.kInsetsLarge,
             ),
             child: Text(
               AppLocalizations.of(context).nameFieldHint,
@@ -111,16 +111,20 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: insetsLarge),
+            padding: EdgeInsets.symmetric(
+              horizontal: Insets.kInsetsLarge,
+            ),
             child: TextFormField(
               controller: _nameFieldController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: insetsMedium,
+                  vertical: Insets.kInsetsMedium,
                 ),
                 prefixIcon: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: insetsMedium),
-                  child: Icon(Icons.person),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Insets.kInsetsMedium,
+                  ),
+                  child: const Icon(Icons.person),
                 ),
               ),
               style: GoogleFonts.shareTechMono().copyWith(
@@ -133,9 +137,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              top: insetsLarge,
-              left: insetsLarge,
+            padding: EdgeInsets.only(
+              top: Insets.kInsetsLarge,
+              left: Insets.kInsetsLarge,
             ),
             child: Text(
               AppLocalizations.of(context).emailFieldHint,
@@ -144,16 +148,20 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: insetsLarge),
+            padding: EdgeInsets.symmetric(
+              horizontal: Insets.kInsetsLarge,
+            ),
             child: TextFormField(
               controller: _emailFieldController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: insetsMedium,
+                  vertical: Insets.kInsetsMedium,
                 ),
                 prefixIcon: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: insetsMedium),
-                  child: Icon(Icons.mail),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Insets.kInsetsMedium,
+                  ),
+                  child: const Icon(Icons.mail),
                 ),
               ),
               style: GoogleFonts.shareTechMono().copyWith(
@@ -166,9 +174,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              top: insetsXLarge,
-              bottom: insetsLarge,
+            padding: EdgeInsets.only(
+              top: Insets.kInsetsXLarge,
+              bottom: Insets.kInsetsLarge,
             ),
             child: IconAnimatedButtonVertical(
               buttonText: AppLocalizations.of(context).emailOptinButtonText,

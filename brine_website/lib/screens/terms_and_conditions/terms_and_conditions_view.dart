@@ -49,8 +49,8 @@ class TermsAndConditionsView extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(
-              insetsLarge,
+            padding: EdgeInsets.all(
+              Insets.kInsetsLarge,
             ),
             child: SelectableText.rich(
               TextSpan(
@@ -113,7 +113,8 @@ class TermsAndConditionsView extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: '5.1 Brine provides salt level measurements and estimated battery life as a convenience. The accuracy and reliability of these measurements may vary and are not guaranteed.\n5.2 Brine operates on a periodic measurement schedule of approximately 24 hours and does not provide real-time monitoring.\n5.3 The Brine company does not assume any liability for damages or losses resulting from the use or misuse of Brine, the App, or the Services.\n5.4 You acknowledge that the Brine company does not control the availability, quality, or reliability of your home WiFi network, and any interruption or failure in the network may affect the functionality of Brine or the App.',
+                    text:
+                        '5.1 Brine provides salt level measurements and estimated battery life as a convenience. The accuracy and reliability of these measurements may vary and are not guaranteed.\n5.2 Brine operates on a periodic measurement schedule of approximately 24 hours and does not provide real-time monitoring.\n5.3 The Brine company does not assume any liability for damages or losses resulting from the use or misuse of Brine, the App, or the Services.\n5.4 You acknowledge that the Brine company does not control the availability, quality, or reliability of your home WiFi network, and any interruption or failure in the network may affect the functionality of Brine or the App.',
                   ),
                   TextSpan(
                     text: '\n\n6. Purchasing and Warranty\n',

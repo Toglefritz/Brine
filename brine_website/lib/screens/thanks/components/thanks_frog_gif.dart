@@ -26,7 +26,9 @@ class ThanksFrogGif extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(insetsXSmall),
+        padding: EdgeInsets.all(
+          Insets.kInsetsXSmall,
+        ),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(
             Radius.circular(10),

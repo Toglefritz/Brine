@@ -30,20 +30,25 @@ class Footer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(right: insetsMedium),
+          padding: EdgeInsets.only(
+            right: Insets.kInsetsMedium,
+          ),
           child: Text(
             AppLocalizations.of(context).legalStuff,
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(insetsSmall),
+          padding: EdgeInsets.all(Insets.kInsetsSmall),
           child: FooterButton(
             text: AppLocalizations.of(context).termsAndConditions,
             onPressed: () => termsAndConditionsOnTap(context),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: insetsSmall, right: insetsMedium),
+          padding: EdgeInsets.only(
+            left: Insets.kInsetsSmall,
+            right: Insets.kInsetsMedium,
+          ),
           child: FooterButton(
             text: AppLocalizations.of(context).privacyPolicy,
             onPressed: () => privacyPolicyOnTap(context),

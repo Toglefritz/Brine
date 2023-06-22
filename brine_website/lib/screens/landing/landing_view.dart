@@ -27,11 +27,15 @@ class LandingView extends StatelessWidget {
         builder: (context) => Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: insetsLarge),
+              padding: EdgeInsets.symmetric(
+                vertical: Insets.kInsetsLarge,
+              ),
               child: SingleChildScrollView(
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: insetsMedium),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Insets.kInsetsMedium,
+                    ),
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxWidth: 900,
@@ -40,8 +44,8 @@ class LandingView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: insetsLarge,
+                            padding: EdgeInsets.only(
+                              bottom: Insets.kInsetsLarge,
                             ),
                             child: Text(
                               AppLocalizations.of(context).landingPageTitle,
@@ -51,9 +55,11 @@ class LandingView extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: insetsLarge),
-                            child: BillNyeGif(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: Insets.kInsetsLarge,
+                            ),
+                            child: const BillNyeGif(),
                           ),
                           Text(
                             AppLocalizations.of(context).landingPageHook,
@@ -61,7 +67,7 @@ class LandingView extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(insetsLarge),
+                            padding: EdgeInsets.all(Insets.kInsetsLarge),
                             child: IconAnimatedButtonHorizontal(
                               onTap: state.letsGoooooooo,
                             ),
@@ -86,9 +92,11 @@ class LandingView extends StatelessWidget {
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(top: insetsLarge),
-                            child: Footer(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: Insets.kInsetsLarge,
+                            ),
+                            child: const Footer(),
                           ),
                         ],
                       ),

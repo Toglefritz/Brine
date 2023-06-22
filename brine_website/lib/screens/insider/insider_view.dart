@@ -18,11 +18,15 @@ class InsiderView extends StatelessWidget {
     return Scaffold(
       appBar: const MainAppBar(),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: insetsLarge),
+        padding: EdgeInsets.symmetric(
+          vertical: Insets.kInsetsLarge,
+        ),
         child: SingleChildScrollView(
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: insetsMedium),
+              padding: EdgeInsets.symmetric(
+                horizontal: Insets.kInsetsMedium,
+              ),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxWidth: 900,
@@ -31,8 +35,8 @@ class InsiderView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: insetsLarge,
+                      padding: EdgeInsets.only(
+                        bottom: Insets.kInsetsLarge,
                       ),
                       child: Text(
                         AppLocalizations.of(context).insiderPageTitle,
@@ -42,9 +46,11 @@ class InsiderView extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: insetsLarge),
-                      child: Footer(),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: Insets.kInsetsLarge,
+                      ),
+                      child: const Footer(),
                     ),
                   ],
                 ),

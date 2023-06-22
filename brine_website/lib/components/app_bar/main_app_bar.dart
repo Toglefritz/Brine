@@ -51,12 +51,17 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: _height,
       leading: Padding(
-        padding: const EdgeInsets.only(top: insetsMedium, left: insetsLarge),
+        padding: EdgeInsets.only(
+          top: Insets.kInsetsMedium,
+          left: Insets.kInsetsLarge,
+        ),
         child: Row(
           children: [
             if (displayBackButton == true)
               Padding(
-                padding: const EdgeInsets.only(right: insetsMedium),
+                padding: EdgeInsets.only(
+                  right: Insets.kInsetsMedium,
+                ),
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
@@ -69,7 +74,9 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
             Padding(
-              padding: const EdgeInsets.only(right: insetsSmall),
+              padding: EdgeInsets.only(
+                right: Insets.kInsetsSmall,
+              ),
               child: Image.asset(
                 Assets.brineLogo.path,
                 width: 56,
@@ -89,7 +96,9 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         if (confettiCallback != null)
           Padding(
-            padding: const EdgeInsets.only(right: insetsMedium),
+            padding: EdgeInsets.only(
+              right: Insets.kInsetsMedium,
+            ),
             child: IconButton(
               icon: Icon(
                 Icons.celebration,
@@ -99,9 +108,14 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         Padding(
-          padding: const EdgeInsets.only(right: insetsMedium),
+          padding: EdgeInsets.only(
+            right: Insets.kInsetsMedium,
+          ),
           child: DarkThemeToggle(
-            onChanged: (newValue) => toggleDarkTheme(value: newValue, context: context),
+            onChanged: (newValue) => toggleDarkTheme(
+              value: newValue,
+              context: context,
+            ),
           ),
         ),
       ],

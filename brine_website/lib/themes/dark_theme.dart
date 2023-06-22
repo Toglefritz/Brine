@@ -64,9 +64,9 @@ ThemeData darkTheme = ThemeData(
     labelStyle: const TextStyle(
       color: Color(0xfdffffff),
     ),
-    contentPadding: const EdgeInsets.symmetric(
-      horizontal: insetsLarge,
-      vertical: insetsSmall,
+    contentPadding: EdgeInsets.symmetric(
+      horizontal: Insets.kInsetsLarge,
+      vertical: Insets.kInsetsSmall,
     ),
     border: border,
     enabledBorder: border,

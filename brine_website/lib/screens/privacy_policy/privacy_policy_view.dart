@@ -49,8 +49,8 @@ class PrivacyPolicyView extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(
-              insetsLarge,
+            padding: EdgeInsets.all(
+              Insets.kInsetsLarge,
             ),
             child: SelectableText.rich(
               TextSpan(
