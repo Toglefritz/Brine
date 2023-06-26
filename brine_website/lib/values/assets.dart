@@ -1,15 +1,16 @@
 /// An enumeration of all the image assets used in the application.
 enum Assets {
-  brineLogo('brine_logo_large');
+  brineLogo('brine_logo_large'),
+  iphone13Mockup('iphone13_mockup');
 
   /// The file path for the image asset.
-  final String imagePath;
+  final String _imagePath;
 
-  /// Creates a new [Assets] instance with the given [imagePath].
-  const Assets(this.imagePath);
+  /// Creates a new [Assets] instance with the given [_imagePath].
+  const Assets(this._imagePath);
 
-  /// Returns the [imagePath] prefixed with the directory in which all image assets are stored.
+  /// Returns the [_imagePath] prefixed with the directory in which all image assets are stored.
   String get path {
-    return 'assets/$imagePath.png';
+    return 'assets/$_imagePath.png';
   }
 }

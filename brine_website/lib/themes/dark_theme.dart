@@ -40,13 +40,17 @@ class DarkTheme {
   static ThemeData get darkTheme => ThemeData(
         brightness: Brightness.dark,
         useMaterial3: true,
-        primaryColor: Colors.amber,
+        primaryColor: const Color(0xFFEDA200),
         primaryColorLight: const Color(0xff262626),
         primaryColorDark: const Color(0xfdffffff),
         scaffoldBackgroundColor: const Color(0xff262626),
-        fontFamily: GoogleFonts.mavenPro().fontFamily,
         appBarTheme: AppBarTheme(
           color: Colors.grey[900],
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontSize: 20,
+          ),
         ),
         cardTheme: CardTheme(
           elevation: 2,
@@ -59,9 +63,9 @@ class DarkTheme {
           ),
         ),
         textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Colors.amber,
-          selectionHandleColor: Colors.amber,
-          selectionColor: Colors.amber.withOpacity(0.2),
+          cursorColor: const Color(0xFFEDA200),
+          selectionHandleColor: const Color(0xFFEDA200),
+          selectionColor: const Color(0xFFEDA200).withOpacity(0.2),
         ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: const TextStyle(

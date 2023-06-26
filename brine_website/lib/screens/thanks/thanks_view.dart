@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../components/app_bar/main_app_bar.dart';
-import '../../components/primary_cta_button.dart';
+import '../../components/light_button.dart';
 import '../../values/insets.dart';
 import '../../components/footer.dart';
 import 'components/confetti_cannon.dart';
@@ -68,8 +68,8 @@ class ThanksView extends StatelessWidget {
                             padding: EdgeInsets.all(
                               Insets.kInsetsLarge,
                             ),
-                            child: PrimaryCTAButton(
-                              onTap: state.onButtonPressed,
+                            child: LightButton(
+                              onPressed: state.onButtonPressed,
                               text: AppLocalizations.of(context).accessInsiderPortal,
                             ),
                           ),

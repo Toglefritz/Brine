@@ -50,6 +50,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: _height,
+      elevation: 0,
       leading: Padding(
         padding: EdgeInsets.only(
           top: Insets.kInsetsMedium,
@@ -83,8 +84,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Text(
-              AppLocalizations.of(context).brine,
-              style: GoogleFonts.changaOne().copyWith(
+              AppLocalizations.of(context).brine.toUpperCase(),
+              style: GoogleFonts.bungee().copyWith(
                 fontSize: 32,
                 color: Theme.of(context).primaryColorDark,
               ),

@@ -39,57 +39,54 @@ class LightTheme {
 
   /// The [ThemeData] object for the light theme.
   static ThemeData get lightTheme => ThemeData(
-    brightness: Brightness.light,
-    useMaterial3: true,
-    primaryColor: Colors.amber,
-    scaffoldBackgroundColor: Colors.grey[300],
-    primaryColorDark: const Color(0xff212121),
-    primaryColorLight: Colors.grey[200],
-    fontFamily: GoogleFonts
-        .mavenPro()
-        .fontFamily,
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(
-        fontSize: 20,
-      ),
-    ),
-    appBarTheme: const AppBarTheme(
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-    ),
-    cardTheme: CardTheme(
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-    ),
-    textSelectionTheme: TextSelectionThemeData(
-      cursorColor: Colors.amber,
-      selectionHandleColor: Colors.amber,
-      selectionColor: Colors.amber.withOpacity(0.2),
-    ),
-    inputDecorationTheme: InputDecorationTheme(
-      labelStyle: const TextStyle(
-        color: Color(0xff212121),
-      ),
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: Insets.kInsetsLarge,
-        vertical: Insets.kInsetsSmall,
-      ),
-      border: _border,
-      enabledBorder: _border,
-      focusedBorder: _border,
-      errorBorder: _errorBorder,
-      errorStyle: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-      ),
-      filled: true,
-      fillColor: Colors.grey[200],
-    ),
-  );
+        brightness: Brightness.light,
+        useMaterial3: true,
+        primaryColor: const Color(0xFFEDA200),
+        scaffoldBackgroundColor: const Color(0xAFEDA200),
+        primaryColorDark: const Color(0xff212121),
+        primaryColorLight: Colors.grey[200],
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        cardTheme: CardTheme(
+          elevation: 2,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: const Color(0xFFEDA200),
+          selectionHandleColor: const Color(0xFFEDA200),
+          selectionColor: const Color(0xFFEDA200).withOpacity(0.2),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: const TextStyle(
+            color: Color(0xff212121),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: Insets.kInsetsLarge,
+            vertical: Insets.kInsetsSmall,
+          ),
+          border: _border,
+          enabledBorder: _border,
+          focusedBorder: _border,
+          errorBorder: _errorBorder,
+          errorStyle: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
+        ),
+      );
 }

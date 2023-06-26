@@ -2,7 +2,7 @@ import 'package:brinemonitor/values/insets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../components/primary_cta_button.dart';
+import '../../../components/light_button.dart';
 
 /// A CTA button with an icon on either side.
 class IconAnimatedButtonVertical extends StatefulWidget {
@@ -98,8 +98,8 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
         MouseRegion(
           onEnter: _startPaddingAnimation,
           onExit: _stopPaddingAnimation,
-          child: PrimaryCTAButton(
-            onTap: widget.onTap,
+          child: LightButton(
+            onPressed: widget.onTap,
             text: widget.buttonText,
           ),
         ),

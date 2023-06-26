@@ -6,7 +6,7 @@ import 'package:confetti/confetti.dart';
 import '../../components/navigable_page_controller.dart';
 import 'components/signup_dialog/email_optin_animated_dialog.dart';
 import 'landing_route.dart';
-import 'landing_view.dart';
+import 'landing_view_desktop.dart';
 
 /// Controller for the [LandingRoute].
 ///
@@ -92,6 +92,7 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
     });
   }
 
+  // TODO use different views for different screen sizes
   @override
-  Widget build(BuildContext context) => LandingView(this);
+  Widget build(BuildContext context) => LandingViewDesktop(this);
 }

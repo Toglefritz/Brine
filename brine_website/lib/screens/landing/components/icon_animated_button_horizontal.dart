@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../components/primary_cta_button.dart';
+import '../../../components/light_button.dart';
 
 /// A CTA button with an icon on either side.
 class IconAnimatedButtonHorizontal extends StatefulWidget {
   const IconAnimatedButtonHorizontal({
     super.key,
+    required this.text,
     required this.onTap,
   });
+
+  /// The text displayed in the button.
+  final String text;
 
   /// The action performed when the CTA button is tapped.
   final Function() onTap;
@@ -91,9 +94,9 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
           child: MouseRegion(
             onEnter: _startPaddingAnimation,
             onExit: _stopPaddingAnimation,
-            child: PrimaryCTAButton(
-              onTap: widget.onTap,
-              text: AppLocalizations.of(context).getStartedButton,
+            child: LightButton(
+              onPressed: widget.onTap,
+              text: widget.text,
             ),
           ),
         ),

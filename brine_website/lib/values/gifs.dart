@@ -9,7 +9,7 @@ enum Gifs {
   /// Creates a new [Gifs] instance with the given [gifPath].
   const Gifs(this.gifPath);
 
-  /// Returns the [imagePath] prefixed with the directory in which all image assets are stored.
+  /// Returns the [_imagePath] prefixed with the directory in which all image assets are stored.
   String get path {
     return 'assets/$gifPath';
   }
