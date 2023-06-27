@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../values/insets.dart';
 
@@ -42,7 +41,7 @@ class LightTheme {
         brightness: Brightness.light,
         useMaterial3: true,
         primaryColor: const Color(0xFFEDA200),
-        scaffoldBackgroundColor: const Color(0xAFEDA200),
+        scaffoldBackgroundColor: const Color(0xFFF3BF50),
         primaryColorDark: const Color(0xff212121),
         primaryColorLight: Colors.grey[200],
         textTheme: const TextTheme(

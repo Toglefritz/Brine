@@ -39,31 +39,36 @@ class LandingViewDesktop extends StatelessWidget {
                       children: [
                         // First element occupying 30% width
                         Expanded(
-                          child: PaddedColumn(
-                            childrenPadding: Insets.kInsetsMedium,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context).landingPageTitle,
-                                style: GoogleFonts.changaOne().copyWith(
-                                  fontSize: 42,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              left: Insets.kInsetsMedium,
+                            ),
+                            child: PaddedColumn(
+                              childrenPadding: Insets.kInsetsLarge,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context).landingPageTitle,
+                                  style: GoogleFonts.changaOne().copyWith(
+                                    fontSize: 42,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                AppLocalizations.of(context).landingPageHook,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                                textAlign: TextAlign.center,
-                              ),
-                              IconAnimatedButtonHorizontal(
-                                text: AppLocalizations.of(context).getStartedButton,
-                                onTap: state.letsGoooooooo,
-                              ),
-                              Text(
-                                AppLocalizations.of(context).landingPageDescription,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                                Text(
+                                  AppLocalizations.of(context).landingPageHook,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                  textAlign: TextAlign.center,
+                                ),
+                                IconAnimatedButtonHorizontal(
+                                  text: AppLocalizations.of(context).getStartedButton,
+                                  onTap: state.letsGoooooooo,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context).landingPageDescription,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         // Second element occupying 30% width
@@ -80,8 +85,9 @@ class LandingViewDesktop extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: Insets.kInsetsLarge,
+                    padding: EdgeInsets.only(
+                      top: Insets.kInsetsSmall,
+                      bottom: Insets.kInsetsLarge,
                     ),
                     child: const Footer(),
                   ),

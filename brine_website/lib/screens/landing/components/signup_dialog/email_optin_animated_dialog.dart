@@ -17,8 +17,7 @@ class EmailOptinAnimatedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedDialog(
       child: SizedBox(
-        width: Screen.width(context) * 0.75,
-        height: Screen.height(context) * 0.7,
+        width: Screen.width(context) * 0.6,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(
             Insets.kInsetsMedium,

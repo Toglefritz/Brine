@@ -102,17 +102,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         children: [
           Padding(
             padding: EdgeInsets.only(
+              top: Insets.kInsetsLarge,
+              right: Insets.kInsetsLarge,
               left: Insets.kInsetsLarge,
-            ),
-            child: Text(
-              AppLocalizations.of(context).nameFieldHint,
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Insets.kInsetsLarge,
             ),
             child: TextFormField(
               controller: _nameFieldController,
@@ -139,17 +131,8 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
           Padding(
             padding: EdgeInsets.only(
               top: Insets.kInsetsLarge,
+              right: Insets.kInsetsLarge,
               left: Insets.kInsetsLarge,
-            ),
-            child: Text(
-              AppLocalizations.of(context).emailFieldHint,
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Insets.kInsetsLarge,
             ),
             child: TextFormField(
               controller: _emailFieldController,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../components/light_button.dart';
@@ -21,10 +22,15 @@ class IconAnimatedButtonHorizontal extends StatefulWidget {
   State<IconAnimatedButtonHorizontal> createState() => _IconAnimatedButtonHorizontalState();
 }
 
-class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizontal>
-    with SingleTickerProviderStateMixin {
+class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizontal> with TickerProviderStateMixin {
   /// A controller for the primary CTA button animation.
   late AnimationController _animationController;
+
+  /// Provides a callback for each animation frame.
+  late final Ticker _ticker;
+
+  /// Determines if the animation should be stopped after the current cycle completes.
+  bool _shouldStopOnNextCycle = false;
 
   /// An [Animation] used for the primary CTA button animation.
   late Animation<double> _paddingAnimation;
@@ -47,6 +53,8 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
 
     _initializeCTAAnimation();
 
+    _ticker = createTicker(_onTick);
+
     super.initState();
   }
 
@@ -64,18 +72,27 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
       });
   }
 
-  /// Starts the animation on the primary CTA button.
-  void _startPaddingAnimation(PointerEvent details) {
-    _animationController.repeat(reverse: true);
+  /// A callback called on each animation frame.
+  void _onTick(Duration elapsed) {
+    double roundedDouble = double.parse(_animationController.value.toStringAsFixed(2));
+    // Check if the animation cycle is completed and should be stopped
+    if (_shouldStopOnNextCycle && roundedDouble < 0.5) {
+      _animationController.stop();
+      _ticker.stop();
+      _shouldStopOnNextCycle = false;
+    }
   }
 
-  /// Stops the animation on the primary CTA button.
+  /// Starts the animation on the primary button.
+  void _startPaddingAnimation(PointerEvent details) {
+    _shouldStopOnNextCycle = false;
+    _animationController.repeat(reverse: true);
+    _ticker.start();
+  }
+
+  /// Stops the animation on the primary button.
   void _stopPaddingAnimation(PointerEvent details) {
-    _animationController.stop();
-    _animationController.reset();
-    setState(() {
-      _animatedPaddingValue = _amplitude.start;
-    });
+    _shouldStopOnNextCycle = true;
   }
 
   @override
