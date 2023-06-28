@@ -71,6 +71,7 @@ class ThanksView extends StatelessWidget {
                             child: LightButton(
                               onPressed: state.onButtonPressed,
                               text: AppLocalizations.of(context).accessInsiderPortal,
+                              width: 350,
                             ),
                           ),
                           Padding(

@@ -136,6 +136,7 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
   @override
   void dispose() {
     _animationController.dispose();
+    _ticker.dispose();
     super.dispose();
   }
 }

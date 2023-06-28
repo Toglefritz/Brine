@@ -148,6 +148,7 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
   @override
   void dispose() {
     _animationController.dispose();
+    _ticker.dispose();
     super.dispose();
   }
 }

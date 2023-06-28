@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../../services/authentication/sign_in_anonymously.dart';
 import '../../../../services/lead_management/add_lead_function.dart';
@@ -28,6 +29,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
   /// A controller for the email entry [TextFormField].
   final TextEditingController _emailFieldController = TextEditingController();
+
+  /// Determines if a valid submission to the form is currently being processed.
+  bool processingLead = false;
 
   /// Validates inputs into the name field.
   String? validateNameField({required BuildContext context, required String? entry}) {
@@ -60,6 +64,10 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// If the input to the form is valid, this method calls the [callAddLeadFunction] Firebase callable function to
   /// submit the lead to Firebase, which creates a new record in Firestore for the new lead. Assuming this cloud
   /// function call is successful, the method will return a `true` value via a call to [Navigator.pop].
+  ///
+  /// Because it takes time for the Firebase backend to process the new lead, a loading indicator is displayed in place
+  /// of the form's submit button while the app waits for a response from the endpoint. This method sets
+  /// [processingLead] to true while waiting for this response.
   Future<void> _onSubmit() async {
     // Sign in anonymously
     try {
@@ -73,6 +81,11 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     }
 
     if (_formKey.currentState!.validate()) {
+      // Turn on the loading indicator
+      setState(() {
+        processingLead = true;
+      });
+
       try {
         // Submit the lead to Firebase
         await callAddLeadFunction(
@@ -81,6 +94,10 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         );
       } catch (e) {
         debugPrint('Failed to add lead to Firebase');
+
+        setState(() {
+          processingLead = false;
+        });
 
         // TODO how should this error be handled?
 
@@ -158,16 +175,28 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: Insets.kInsetsXLarge,
-              bottom: Insets.kInsetsLarge,
+          if (!processingLead)
+            Padding(
+              padding: EdgeInsets.only(
+                top: Insets.kInsetsXLarge,
+                bottom: Insets.kInsetsLarge,
+              ),
+              child: IconAnimatedButtonVertical(
+                buttonText: AppLocalizations.of(context).emailOptinButtonText,
+                onTap: () => _onSubmit(),
+              ),
             ),
-            child: IconAnimatedButtonVertical(
-              buttonText: AppLocalizations.of(context).emailOptinButtonText,
-              onTap: () => _onSubmit(),
+          if (processingLead)
+            Padding(
+              padding: EdgeInsets.only(
+                top: Insets.kInsetsXLarge,
+                bottom: Insets.kInsetsLarge,
+              ),
+              child: SpinKitWave(
+                color: Theme.of(context).primaryColorDark,
+                size: 36,
+              ),
             ),
-          ),
         ],
       ),
     );
