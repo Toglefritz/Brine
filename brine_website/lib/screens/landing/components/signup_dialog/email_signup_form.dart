@@ -118,6 +118,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
                   ),
                   child: const Icon(Icons.person),
                 ),
+                labelText: AppLocalizations.of(context).nameFieldHint,
               ),
               style: GoogleFonts.shareTechMono().copyWith(
                 color: Theme.of(context).primaryColorDark,
@@ -146,6 +147,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
                   ),
                   child: const Icon(Icons.mail),
                 ),
+                labelText: AppLocalizations.of(context).emailFieldHint,
               ),
               style: GoogleFonts.shareTechMono().copyWith(
                 color: Theme.of(context).primaryColorDark,
