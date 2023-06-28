@@ -65,7 +65,6 @@ class LightButton extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     vertical: Insets.kInsetsSmall,
-                    horizontal: Insets.kInsetsMedium,
                   ),
                   child: Text(
                     text.toUpperCase(),

@@ -37,11 +37,11 @@ class LandingViewDesktop extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // First element occupying 30% width
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.only(
                               left: Insets.kInsetsMedium,
+                              top: Insets.kInsetsMedium,
                             ),
                             child: PaddedColumn(
                               childrenPadding: Insets.kInsetsLarge,
@@ -71,7 +71,6 @@ class LandingViewDesktop extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Second element occupying 30% width
                         Expanded(
                           child: Center(
                             child: Image.asset(
@@ -80,7 +79,6 @@ class LandingViewDesktop extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Third element occupying 30% width
                       ],
                     ),
                   ),

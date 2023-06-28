@@ -7,7 +7,7 @@ class DeviceInfo {
   /// Determines if the host platform is a desktop environment on any operating system.
   static bool get isDesktop => !isWeb && (isWindows || isLinux || isMacOS);
 
-  /// Determines if the host platform is a mobile environment on any opperating system.
+  /// Determines if the host platform is a mobile environment on any operating system.
   static bool get isMobile => isAndroid || isIOS;
 
   /// Determines if the host platform is a website.

@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../values/insets.dart';
 import '../screens/privacy_policy/privacy_policy_route.dart';
 import '../screens/terms_and_conditions/terms_and_conditions_route.dart';
-import '../screens/landing/components/footer_button.dart';
+import 'footer_button.dart';
 
 /// THe [Footer] appears at the bottom of the [HomeView] and contains a set of navigational
 /// buttons to administrative pages on the site.

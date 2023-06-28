@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 
 import '../../components/navigable_page_controller.dart';
+import '../../themes/screen_info.dart';
 import 'components/signup_dialog/email_optin_animated_dialog.dart';
 import 'landing_route.dart';
 import 'landing_view_desktop.dart';
+import 'landing_view_handheld.dart';
 
 /// Controller for the [LandingRoute].
 ///
@@ -73,7 +75,7 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
       },
     );
 
-    if(success == true) {
+    if (success == true) {
       throwAParty();
     }
   }
@@ -87,12 +89,21 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
   void throwAParty() {
     partyController.play();
 
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   // TODO use different views for different screen sizes
   @override
-  Widget build(BuildContext context) => LandingViewDesktop(this);
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        print('screen width: ${ScreenInfo.width(context)}');
+        if (ScreenInfo.width(context) > 900) {
+          return LandingViewDesktop(this);
+        } else {
+          return LandingViewHandheld(this);
+        }
+      },
+    );
+  }
 }

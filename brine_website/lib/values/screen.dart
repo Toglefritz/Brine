@@ -21,7 +21,7 @@ class Screen {
   /// Returns a boolean indicating whether the screen is in landscape orientation.
   static bool isLandscape(BuildContext c) => MediaQuery.of(c).orientation == Orientation.landscape;
 
-  //PIXELS
+  // PIXELS
 
   /// Returns the total screen size in pixels as a `Size`.
   static Size size(BuildContext c) => MediaQuery.of(c).size;
@@ -38,7 +38,7 @@ class Screen {
     return sqrt((s.width * s.width) + (s.height * s.height));
   }
 
-  //INCHES
+  // INCHES
 
   /// Returns the total screen size in inches as a `Size`.
   static Size inches(BuildContext c) {
