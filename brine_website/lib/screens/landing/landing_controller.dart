@@ -97,7 +97,6 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        print('screen width: ${ScreenInfo.width(context)}');
         if (ScreenInfo.width(context) > 900) {
           return LandingViewDesktop(this);
         } else {
