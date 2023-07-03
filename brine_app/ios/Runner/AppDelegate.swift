@@ -10,10 +10,10 @@ import Firebase
   ) -> Bool {
 
     // Use the debug provider in Debug builds:
-    #if DEBUG
-        let providerFactory = AppCheckDebugProviderFactory()
-        AppCheck.setAppCheckProviderFactory(providerFactory)
-    #endif
+    //#if DEBUG
+        //let providerFactory = AppCheckDebugProviderFactory()
+        //AppCheck.setAppCheckProviderFactory(providerFactory)
+    //#endif
 
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

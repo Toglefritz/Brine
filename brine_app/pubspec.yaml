@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   # Used to access Firestore
-  cloud_firestore: ^4.7.1
+  cloud_firestore: ^4.8.2
   # Used to call Firebase callable functions
   cloud_functions: ^4.3.1
   # Creates Material color schemes based on a platform's implementation of dynamic color
@@ -29,8 +29,6 @@ dependencies:
   google_fonts: ^4.0.4
   # Allows authentication using a Google account
   google_sign_in: ^6.1.1
-  # Helps to protect Firebase backend resources
-  firebase_app_check: ^0.1.4+2
   # Automates setting the app icons
   flutter_launcher_icons: ^0.13.1
   # Provides loading widgets
