@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Used to interact with Firebase Cloud Functions
+  cloud_functions: ^4.0.11
   # A critical security plugin that generates a decorative confetti effect
   confetti: ^0.7.0
   # Automates the creation of application icons
@@ -18,11 +20,9 @@ dependencies:
   # Provides localizations for text (generate with `flutter gen-l10n`)
   flutter_localizations:
     sdk: flutter
-  firebase_analytics: ^10.1.4
+  firebase_analytics: ^10.4.3
   # SDK for Firebase Auth authentication service
-  firebase_auth: ^4.2.9
-  # Used to interact with Firebase Cloud Functions
-  cloud_functions: ^4.0.11
+  firebase_auth: ^4.6.3
   # Provides core Firebase services
   firebase_core: ^2.7.0
   # A set of loading widgets
