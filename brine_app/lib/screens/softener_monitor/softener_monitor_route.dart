@@ -10,6 +10,7 @@ class SoftenerMonitorRoute extends StatefulWidget {
     required this.devices,
   });
 
+  /// A list of devices associated to the user's account.
   final List<BrineDevice> devices;
 
   @override
