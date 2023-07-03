@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/color_library.dart';
 import 'components/battery_indicator.dart';
+import 'components/wave_progress_indicator.dart';
 
 /// View for [SoftenerMonitorRoute].
 // TODO implement option for selecting device
@@ -17,58 +18,70 @@ class SoftenerMonitorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Insets.medium,
-                ),
-                child: Text(
-                  '${(state.widget.devices[0].saltLevel * 100).toInt()}%',
-                  style: GoogleFonts.bungee().copyWith(
-                    fontSize: 52,
-                    color: ColorLibrary.primaryDefault,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Insets.medium,
-                ),
-                child: Text(
-                  AppLocalizations.of(context).saltRemaining.toUpperCase(),
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+      body: Stack(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: WaveProgressIndicator(
+              progressPercent: state.widget.devices[0].saltLevel,
+              // Defaults to 0.5.
+            ),
+          ),
+          SafeArea(
+            child: Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Insets.medium,
+                    ),
+                    child: Text(
+                      '${(state.widget.devices[0].saltLevel * 100).toInt()}%',
+                      style: GoogleFonts.bungee().copyWith(
+                        fontSize: 52,
                         color: ColorLibrary.primaryDefault,
                       ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: Insets.xSmall,
-                        bottom: Insets.medium,
-                      ),
-                      child: BatteryIndicator(
-                        batteryLife: state.widget.devices[0].batteryLevel,
-                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Insets.medium,
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context).saltRemaining.toUpperCase(),
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: ColorLibrary.primaryDefault,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: Insets.xSmall,
+                            bottom: Insets.medium,
+                          ),
+                          child: BatteryIndicator(
+                            batteryLife: state.widget.devices[0].batteryLevel,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
