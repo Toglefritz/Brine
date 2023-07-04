@@ -29,6 +29,7 @@ class SoftenerMonitorView extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             child: WaveProgressIndicator(
               progressPercent: 1 - state.widget.devices[0].saltLevel,
+              fillColor: Theme.of(context).primaryColor,
               // Defaults to 0.5.
             ),
           ),
@@ -71,7 +72,7 @@ class SoftenerMonitorView extends StatelessWidget {
                             bottom: Insets.medium,
                           ),
                           child: BatteryIndicator(
-                            batteryLife: state.widget.devices[0].batteryLevel,
+                            batteryLife: state.testProgress,//state.widget.devices[0].batteryLevel,
                           ),
                         ),
                       ],

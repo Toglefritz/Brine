@@ -9,11 +9,15 @@ class WaveProgressIndicator extends StatefulWidget {
   const WaveProgressIndicator({
     super.key,
     required this.progressPercent,
+    required this.fillColor,
   });
 
   /// The percentage of progress to be displayed by the progress indicator. This value should be between 0.0 and 1.0,
   /// where 0.0 means no progress, and 1.0 means that the progress is 100% complete.
   final double progressPercent;
+
+  /// The fill color for the progress indication portion of the widget.
+  final Color fillColor;
 
   @override
   WaveProgressIndicatorState createState() => WaveProgressIndicatorState();
@@ -21,37 +25,80 @@ class WaveProgressIndicator extends StatefulWidget {
 
 /// [WaveProgressIndicatorState] is the state class for [WaveProgressIndicator].
 /// It holds the [AnimationController] which is used to animate the wave.
-class WaveProgressIndicatorState extends State<WaveProgressIndicator> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class WaveProgressIndicatorState extends State<WaveProgressIndicator> with TickerProviderStateMixin {
+  late AnimationController _waveController;
+  late Animation<double> _waveAnimation;
+
+  late AnimationController _progressController;
+  late Animation<double> _progressAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+
+    // Initialize the wave AnimationController with a duration of 2 seconds
+    _waveController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
+
+    // Create a linear animation for the wave
+    _waveAnimation = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _waveController, curve: Curves.linear),
+    );
+
+    // Add listener to the waveController to rebuild when value changes
+    _waveController.addListener(() {
+      setState(() {});
+    });
+
+    // Initialize the progress AnimationController
+    _progressController = AnimationController(
+      duration: const Duration(milliseconds: 500), // adjust duration for the progress change animation
+      vsync: this,
+    );
+
+    _progressAnimation = Tween(begin: widget.progressPercent, end: widget.progressPercent).animate(
+      CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
+    );
+
+    // Add listener to the progressController to rebuild when value changes
+    _progressController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void didUpdateWidget(WaveProgressIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // If the progress value has changed, animate to the new value
+    if (widget.progressPercent != oldWidget.progressPercent) {
+      _progressAnimation = Tween(begin: oldWidget.progressPercent, end: widget.progressPercent).animate(
+        CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
+      );
+
+      _progressController
+        ..reset()
+        ..forward();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return CustomPaint(
-          foregroundPainter: WavePainter(
-            progressPercent: widget.progressPercent,
-            waveAnimationValue: _controller.value,
-            fillColor: Theme.of(context).primaryColor,
-          ),
-        );
-      },
+    return CustomPaint(
+      painter: WavePainter(
+        progressPercent: _progressAnimation.value,
+        waveAnimationValue: _waveAnimation.value,
+        fillColor: widget.fillColor,
+      ),
     );
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _waveController.dispose();
+    _progressController.dispose();
     super.dispose();
   }
 }
