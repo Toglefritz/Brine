@@ -19,7 +19,11 @@
   "termsAndConditions": "Terms and Conditions",
   "thanksPageDescription": "You're all signed up to receive updates about Brine, which will be launching soon. You'll be among the first to know when Brine is available because you'll receive a nice discount right into your inbox.",
   "thanksPageTitlePrefix": "Thanks, ",
+  "validationEmailControlCharacters": "There are some odd characters in this email entry.",
   "validationEmailEmpty": "How are you supported to receive Brine news without an email?",
+  "validationEmailHtmlCharacters": "This email looks a little like HTML...",
   "validationEmailInvalid": "This email address looks a little fishy...",
-  "validationNameEmpty": "Oh $#!%, it looks like you forgot this field."
+  "validationNameEmpty": "Oh $#!%, it looks like you forgot this field.",
+  "validationNameControlCharacters": "This input contains some fishy characters.",
+  "validationNameInvalidHtml": "This name seems to contain some HTML. Why?"
 }

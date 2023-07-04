@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 ///
 /// The [child] argument is the content of the dialog and must not be null.
 class AnimatedDialog extends StatefulWidget {
-  final Widget child;
-
   const AnimatedDialog({super.key, required this.child});
+
+  final Widget child;
 
   @override
   AnimatedDialogState createState() => AnimatedDialogState();

@@ -92,7 +92,6 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
     setState(() {});
   }
 
-  // TODO use different views for different screen sizes
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
