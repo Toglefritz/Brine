@@ -22,7 +22,9 @@ class AppPreview extends StatelessWidget {
       children: [
         // Reference a view from the Brine mobile app
         Theme(
-          data: lightThemeData,
+          data: lightThemeData.copyWith(
+            scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          ),
           child: SizedBox(
             width: 300,
             height: 615,
