@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../components/light_button.dart';
@@ -34,12 +33,6 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
   /// A controller for the primary CTA button animation.
   late AnimationController _animationController;
 
-  /// Provides a callback for each animation frame.
-  late final Ticker _ticker;
-
-  /// Determines if the animation should be stopped after the current cycle completes.
-  bool _shouldStopOnNextCycle = false;
-
   /// An [Animation] used for the primary CTA button animation.
   late Animation<double> _paddingAnimation;
 
@@ -61,7 +54,7 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
 
     _initializeCTAAnimation();
 
-    _ticker = createTicker(_onTick);
+    _startPaddingAnimation();
 
     super.initState();
   }
@@ -80,27 +73,9 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
       });
   }
 
-  /// A callback called on each animation frame.
-  void _onTick(Duration elapsed) {
-    double roundedDouble = double.parse(_animationController.value.toStringAsFixed(2));
-    // Check if the animation cycle is completed and should be stopped
-    if (_shouldStopOnNextCycle && roundedDouble < 0.5) {
-      _animationController.stop();
-      _ticker.stop();
-      _shouldStopOnNextCycle = false;
-    }
-  }
-
   /// Starts the animation on the primary button.
-  void _startPaddingAnimation(PointerEvent details) {
-    _shouldStopOnNextCycle = false;
+  void _startPaddingAnimation() {
     _animationController.repeat(reverse: true);
-    _ticker.start();
-  }
-
-  /// Stops the animation on the primary button.
-  void _stopPaddingAnimation(PointerEvent details) {
-    _shouldStopOnNextCycle = true;
   }
 
   @override
@@ -117,8 +92,6 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
             horizontal: _animatedPaddingValue,
           ),
           child: MouseRegion(
-            onEnter: _startPaddingAnimation,
-            onExit: _stopPaddingAnimation,
             child: LightButton(
               onPressed: widget.onTap,
               text: widget.text,
@@ -136,7 +109,6 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
   @override
   void dispose() {
     _animationController.dispose();
-    _ticker.dispose();
     super.dispose();
   }
 }
