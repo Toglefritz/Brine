@@ -1,0 +1,3 @@
+[submodule "Brine_App"]
+	path = Brine_App
+	url = https://github.com/Toglefritz/Brine_App.git

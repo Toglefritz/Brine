@@ -7,8 +7,8 @@ import '../../components/app_bar/main_app_bar.dart';
 import '../../components/footer.dart';
 import '../../components/padded_column.dart';
 import '../../components/responsive_safe_area.dart';
-import '../../values/assets.dart';
 import '../../values/insets.dart';
+import 'components/app_preview.dart';
 import 'components/icon_animated_button_horizontal.dart';
 import 'landing_controller.dart';
 
@@ -71,12 +71,9 @@ class LandingViewDesktop extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           child: Center(
-                            child: Image.asset(
-                              Assets.iphone13Mockup.path,
-                              width: 400,
-                            ),
+                            child: AppPreview(),
                           ),
                         ),
                       ],

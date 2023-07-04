@@ -1,3 +1,4 @@
+import 'package:brinemonitor/screens/landing/components/app_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,7 +8,6 @@ import '../../components/app_bar/main_app_bar.dart';
 import '../../components/footer.dart';
 import '../../components/padded_column.dart';
 import '../../components/responsive_safe_area.dart';
-import '../../values/assets.dart';
 import '../../values/insets.dart';
 import 'components/icon_animated_button_horizontal.dart';
 import 'landing_controller.dart';
@@ -45,11 +45,8 @@ class LandingViewHandheld extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    Center(
-                      child: Image.asset(
-                        Assets.iphone13Mockup.path,
-                        width: 350,
-                      ),
+                    const Center(
+                      child: AppPreview(),
                     ),
                     Text(
                       AppLocalizations.of(context).landingPageHook,
