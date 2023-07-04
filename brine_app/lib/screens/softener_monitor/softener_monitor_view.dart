@@ -28,7 +28,7 @@ class SoftenerMonitorView extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: WaveProgressIndicator(
-              progressPercent: state.widget.devices[0].saltLevel,
+              progressPercent: 1 - state.widget.devices[0].saltLevel,
               // Defaults to 0.5.
             ),
           ),
