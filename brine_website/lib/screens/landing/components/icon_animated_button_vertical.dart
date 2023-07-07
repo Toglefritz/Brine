@@ -96,15 +96,6 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
     _shouldStopOnNextCycle = true;
   }
 
-  /// Listener function for animation status.
-  void _animationStatusListener(AnimationStatus status) {
-    // When the animation completes a cycle, stop the animation and remove the listener
-    if (status == AnimationStatus.completed || status == AnimationStatus.dismissed) {
-      _animationController.stop();
-      _animationController.removeStatusListener(_animationStatusListener);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(

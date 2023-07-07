@@ -1,9 +1,11 @@
+import 'package:brinemonitor/components/padded_column.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../components/app_bar/main_app_bar.dart';
 import '../../components/light_button.dart';
+import '../../components/social_sharing_buttons.dart';
 import '../../values/insets.dart';
 import '../../components/footer.dart';
 import 'components/confetti_cannon.dart';
@@ -38,48 +40,31 @@ class ThanksView extends StatelessWidget {
                       constraints: const BoxConstraints(
                         maxWidth: 900,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      child: PaddedColumn(
+                        childrenPadding: Insets.kInsetsMedium,
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: Insets.kInsetsLarge,
+                          Text(
+                            '${AppLocalizations.of(context).thanksPageTitlePrefix} ${state.widget.name}!',
+                            style: GoogleFonts.changaOne().copyWith(
+                              fontSize: 42,
                             ),
-                            child: Text(
-                              '${AppLocalizations.of(context).thanksPageTitlePrefix} ${state.widget.name}!',
-                              style: GoogleFonts.changaOne().copyWith(
-                                fontSize: 42,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: Insets.kInsetsLarge,
-                            ),
-                            child: const ThanksFrogGif(),
-                          ),
+                          const ThanksFrogGif(),
                           Text(
                             AppLocalizations.of(context).thanksPageDescription,
                             style: Theme.of(context).textTheme.bodyLarge,
                             textAlign: TextAlign.center,
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(
-                              Insets.kInsetsLarge,
-                            ),
-                            child: LightButton(
-                              onPressed: state.onButtonPressed,
-                              text: AppLocalizations.of(context).accessInsiderPortal,
-                              width: 350,
-                            ),
+                          SocialSharingButtons(
+                            successCallback: () => state.partyController.play(),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: Insets.kInsetsLarge,
-                            ),
-                            child: const Footer(),
+                          LightButton(
+                            onPressed: state.onButtonPressed,
+                            text: AppLocalizations.of(context).accessInsiderPortal,
+                            width: 350,
                           ),
+                          const Footer(),
                         ],
                       ),
                     ),
@@ -96,18 +81,6 @@ class ThanksView extends StatelessWidget {
               controller: state.partyController,
               blastDirection: 150,
               right: 24,
-            ),
-            ConfettiCannon(
-              controller: state.partyController,
-              blastDirection: 210,
-              right: 24,
-              bottom: 24,
-            ),
-            ConfettiCannon(
-              controller: state.partyController,
-              blastDirection: 330,
-              left: 24,
-              bottom: 24,
             ),
           ],
         ),

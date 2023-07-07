@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.0.5
   # Saves key-value pairs to store user preferences
   shared_preferences: ^2.1.1
+  # Plugin for launching URLs
+  url_launcher: ^6.1.11
 
   # The Brine mobile app included as a submodule for demonstration purposes
   brine:
