@@ -72,7 +72,7 @@ class SoftenerMonitorView extends StatelessWidget {
                             bottom: Insets.medium,
                           ),
                           child: BatteryIndicator(
-                            batteryLife: state.testProgress,//state.widget.devices[0].batteryLevel,
+                            batteryLife: state.widget.devices[0].batteryLevel,
                           ),
                         ),
                       ],
