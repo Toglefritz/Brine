@@ -36,8 +36,8 @@ Future<BrineDevice> getDevice(String deviceId) async {
     final response = await callable.call(<String, dynamic>{'deviceId': deviceId});
 
     // Get the salt level and battery level from the response
-    double saltLevel = response.data['salt_level'];
-    double batteryLevel = response.data['battery_level'];
+    double saltLevel = response.data['salt_level'].toDouble();
+    double batteryLevel = response.data['battery_level'].toDouble();
 
     // Return the battery level and salt level as a map
     return BrineDevice(

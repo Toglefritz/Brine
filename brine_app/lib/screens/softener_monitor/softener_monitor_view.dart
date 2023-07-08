@@ -23,6 +23,7 @@ class SoftenerMonitorView extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Stack(
+        alignment: Alignment.center,
         children: [
           SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -62,6 +63,17 @@ class SoftenerMonitorView extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
+                  if (state.widget.devices[0].saltLevel <= 0.1)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: Insets.medium,
+                      ),
+                      child: Icon(
+                        Icons.warning_amber_rounded,
+                        size: 64,
+                        color: Colors.red[900],
+                      ),
+                    ),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
