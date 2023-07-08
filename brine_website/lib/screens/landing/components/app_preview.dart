@@ -65,7 +65,7 @@ class _AppPreviewState extends State<AppPreview> {
     _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       setState(() {
         // Generate new values
-        saltLevel = _generateRandomDouble(0.1, 0.9);
+        saltLevel = _generateRandomDouble(0.02, 0.95);
         batteryLevel = _generateRandomDouble(0.4, 0.8);
       });
     });
@@ -80,9 +80,7 @@ class _AppPreviewState extends State<AppPreview> {
       children: [
         // Reference a view from the Brine mobile app
         Theme(
-          data: lightThemeData.copyWith(
-            scaffoldBackgroundColor: const Color(0xFFFFF0D1),
-          ),
+          data: lightThemeData,
           child: SizedBox(
             width: 300,
             height: 615,

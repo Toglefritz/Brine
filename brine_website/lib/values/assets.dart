@@ -1,7 +1,11 @@
 /// An enumeration of all the image assets used in the application.
 enum Assets {
   brineLogo('brine_logo_large'),
-  iphone13Mockup('iphone13_mockup');
+  iphone13Mockup('iphone13_mockup'),
+  numeral1('numeral_1'),
+  numeral2('numeral_2'),
+  numeral3('numeral_3'),
+  partsDiagram('brine_parts_map');
 
   /// The file path for the image asset.
   final String _imagePath;

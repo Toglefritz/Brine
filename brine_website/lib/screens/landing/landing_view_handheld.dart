@@ -9,6 +9,7 @@ import '../../components/footer.dart';
 import '../../components/padded_column.dart';
 import '../../components/responsive_safe_area.dart';
 import '../../values/insets.dart';
+import 'components/device_info.dart';
 import 'components/icon_animated_button_horizontal.dart';
 import 'landing_controller.dart';
 
@@ -61,6 +62,9 @@ class LandingViewHandheld extends StatelessWidget {
                       AppLocalizations.of(context).landingPageDescription,
                       style: Theme.of(context).textTheme.bodyLarge,
                       textAlign: TextAlign.center,
+                    ),
+                    BrineInfo(
+                      direction: Axis.vertical,
                     ),
                     const Footer(),
                   ],

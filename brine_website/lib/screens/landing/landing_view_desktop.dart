@@ -9,6 +9,7 @@ import '../../components/padded_column.dart';
 import '../../components/responsive_safe_area.dart';
 import '../../values/insets.dart';
 import 'components/app_preview.dart';
+import 'components/device_info.dart';
 import 'components/icon_animated_button_horizontal.dart';
 import 'landing_controller.dart';
 
@@ -77,6 +78,14 @@ class LandingViewDesktop extends StatelessWidget {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Insets.kInsetsLarge,
+                    ),
+                    child: BrineInfo(
+                      direction: MediaQuery.of(context).size.width > 1000 ? Axis.horizontal : Axis.vertical,
                     ),
                   ),
                   Padding(
