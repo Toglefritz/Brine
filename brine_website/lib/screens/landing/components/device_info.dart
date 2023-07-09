@@ -8,8 +8,8 @@ import '../../../values/assets.dart';
 /// corresponding annotations.
 ///
 /// The [direction] parameter determines whether the image and table are displayed in a row or a column.
-class BrineInfo extends StatelessWidget {
-  BrineInfo({
+class BrineInfo extends StatefulWidget {
+  const BrineInfo({
     super.key,
     required this.direction,
   });
@@ -17,6 +17,11 @@ class BrineInfo extends StatelessWidget {
   /// The direction, either horizontal or vertical, to show the image and corresponding table.
   final Axis direction;
 
+  @override
+  State<BrineInfo> createState() => _BrineInfoState();
+}
+
+class _BrineInfoState extends State<BrineInfo> {
   /// A list of assets to display on each row of the table where the index of the asset in the list
   /// corresponds to the row on which it should be displayed.
   final List<Assets> rowAssets = [
@@ -38,19 +43,79 @@ class BrineInfo extends StatelessWidget {
     return rowStrings[index]!;
   }
 
+  /// The index of the annotation over which the cursor is currently hovering.
+  int? _hoverIndex;
+
+  /// A callback for when the mouse enters the [MouseRegion]s over the annotations on the info diagram.
+  void _onAnnotationEnter(int annotationIndex) {
+    setState(() {
+      _hoverIndex = annotationIndex;
+    });
+  }
+
+  /// A callback for when the mouse enters the [MouseRegion]s over the annotations on the info diagram.
+  void _onAnnotationExit() {
+    setState(() {
+      _hoverIndex = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Flex(
-      direction: direction,
+      direction: widget.direction,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(
             bottom: Insets.medium,
           ),
-          child: Image.asset(
-            Assets.partsDiagram.path,
-            width: 450,
+          child: Stack(
+            children: [
+              Image.asset(
+                Assets.partsDiagram.path,
+                width: 450,
+              ),
+              Positioned(
+                top: 17.2,
+                left: 21.7,
+                child: MouseRegion(
+                  onEnter: (event) => _onAnnotationEnter(0),
+                  onExit: (event) => _onAnnotationExit(),
+                  cursor: SystemMouseCursors.click,
+                  child: const SizedBox(
+                    width: 36,
+                    height: 36,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 152.1,
+                left: 271.4,
+                child: MouseRegion(
+                  onEnter: (event) => _onAnnotationEnter(1),
+                  onExit: (event) => _onAnnotationExit(),
+                  cursor: SystemMouseCursors.click,
+                  child: const SizedBox(
+                    width: 36,
+                    height: 36,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 84.5,
+                left: 391.9,
+                child: MouseRegion(
+                  onEnter: (event) => _onAnnotationEnter(2),
+                  onExit: (event) => _onAnnotationExit(),
+                  cursor: SystemMouseCursors.click,
+                  child: const SizedBox(
+                    width: 36,
+                    height: 36,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Padding(
@@ -84,7 +149,9 @@ class BrineInfo extends StatelessWidget {
                     ),
                     child: Text(
                       _getStringForRow(index: index, context: context),
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight: index == _hoverIndex ? FontWeight.bold : FontWeight.normal,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                   ),
