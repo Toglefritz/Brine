@@ -132,6 +132,7 @@ class _BrineInfoState extends State<BrineInfo> {
                 Radius.circular(16.0),
               ),
               color: Theme.of(context).primaryColorDark,
+              width: 2.0,
             ),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: List.generate(
