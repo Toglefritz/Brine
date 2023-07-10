@@ -1,6 +1,7 @@
 import 'package:brinemonitor/screens/landing/components/icon_animated_button_vertical.dart';
 import 'package:brinemonitor/screens/thanks/thanks_route.dart';
 import 'package:brinemonitor/values/insets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -201,6 +202,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
         return;
       }
+
+      // Update the anonymous profile
+      FirebaseAuth.instance.currentUser?.updateDisplayName(_nameFieldController.text);
 
       // Return true to the caller to indicate success
       if (!mounted) return;

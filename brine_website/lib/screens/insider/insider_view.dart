@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,7 +37,7 @@ class InsiderView extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(
-                        bottom: Insets.kInsetsLarge,
+                        bottom: Insets.kInsetsSmall,
                       ),
                       child: Text(
                         AppLocalizations.of(context).insiderPageTitle,
@@ -46,6 +47,19 @@ class InsiderView extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
+                    if (FirebaseAuth.instance.currentUser?.displayName != null)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: Insets.kInsetsLarge,
+                        ),
+                        child: Text(
+                          '${AppLocalizations.of(context).insiderPageSubtitle}${FirebaseAuth.instance.currentUser?.displayName}.',
+                          style: GoogleFonts.changaOne().copyWith(
+                            fontSize: 28,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     Padding(
                       padding: EdgeInsets.only(
                         top: Insets.kInsetsLarge,
