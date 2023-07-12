@@ -63,7 +63,7 @@ class LandingViewHandheld extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                       textAlign: TextAlign.center,
                     ),
-                    BrineInfo(
+                    const BrineInfo(
                       direction: Axis.vertical,
                     ),
                     const Footer(),
