@@ -19,7 +19,7 @@ class InsiderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 5,
       child: Scaffold(
         appBar: const MainAppBar(),
         body: Padding(

@@ -64,7 +64,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// any of the validation checks fail, the function returns a localized error message string.
   ///
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
-  String? validateNameField({required BuildContext context, required String? entry}) {
+  String? _validateNameField({required BuildContext context, required String? entry}) {
     if (entry == null || entry.isEmpty) {
       return AppLocalizations.of(context).validationNameEmpty;
     }
@@ -127,7 +127,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// any of the validation checks fail, the function returns a localized error message string.
   ///
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
-  String? validateEmailField({required BuildContext context, required String? entry}) {
+  String? _validateEmailField({required BuildContext context, required String? entry}) {
     // Regular expression pattern for validating email address
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -168,47 +168,49 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// of the form's submit button while the app waits for a response from the endpoint. This method sets
   /// [processingLead] to true while waiting for this response.
   Future<void> _onSubmit() async {
-    // Sign in anonymously
-    try {
-      await signInAnonymously();
-    } catch (e) {
-      debugPrint('Authentication failed for addLead function');
-
-      // TODO how should this error be handled?
-
-      return;
-    }
-
-    if (_formKey.currentState!.validate()) {
-      // Turn on the loading indicator
-      setState(() {
-        processingLead = true;
-      });
-
+    if(_formKey.currentState!.validate()) {
+      // Sign in anonymously
       try {
-        // Submit the lead to Firebase
-        await callAddLeadFunction(
-          name: _nameFieldController.text,
-          email: _emailFieldController.text,
-        );
+        await signInAnonymously();
       } catch (e) {
-        debugPrint('Failed to add lead to Firebase');
-
-        setState(() {
-          processingLead = false;
-        });
+        debugPrint('Authentication failed for addLead function');
 
         // TODO how should this error be handled?
 
         return;
       }
 
-      // Update the anonymous profile
-      FirebaseAuth.instance.currentUser?.updateDisplayName(_nameFieldController.text);
+      if (_formKey.currentState!.validate()) {
+        // Turn on the loading indicator
+        setState(() {
+          processingLead = true;
+        });
 
-      // Return true to the caller to indicate success
-      if (!mounted) return;
-      context.pushReplacement('${ThanksRoute.screenName}/${_nameFieldController.text}');
+        try {
+          // Submit the lead to Firebase
+          await callAddLeadFunction(
+            name: _nameFieldController.text,
+            email: _emailFieldController.text,
+          );
+        } catch (e) {
+          debugPrint('Failed to add lead to Firebase');
+
+          setState(() {
+            processingLead = false;
+          });
+
+          // TODO how should this error be handled?
+
+          return;
+        }
+
+        // Update the anonymous profile
+        FirebaseAuth.instance.currentUser?.updateDisplayName(_nameFieldController.text);
+
+        // Return true to the caller to indicate success
+        if (!mounted) return;
+        context.pushReplacement('${ThanksRoute.screenName}/${_nameFieldController.text}');
+      }
     }
   }
 
@@ -242,7 +244,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
               style: GoogleFonts.shareTechMono().copyWith(
                 color: Theme.of(context).primaryColorDark,
               ),
-              validator: (entry) => validateNameField(
+              validator: (entry) => _validateNameField(
                 context: context,
                 entry: entry,
               ),
@@ -271,7 +273,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
               style: GoogleFonts.shareTechMono().copyWith(
                 color: Theme.of(context).primaryColorDark,
               ),
-              validator: (entry) => validateEmailField(
+              validator: (entry) => _validateEmailField(
                 context: context,
                 entry: entry,
               ),

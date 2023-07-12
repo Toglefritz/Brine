@@ -55,7 +55,7 @@
   "nameFieldHint": "First name right here",
   "planTransports": "Plan transports",
   "powerManagementSystem": "Power management system",
-  "preLaunchCampaign": "Pre-Launch Campaign",
+  "preLaunchCampaign": "Pre-Launch campaign",
   "privacyPolicy": "Privacy Policy",
   "projectTimelines": "Project Timelines",
   "proofOfPossessionCheck": "Proof of possession check",
@@ -77,5 +77,5 @@
   "validationNameInvalidHtml": "This name seems to contain some HTML. Why?",
   "wakeUpRoutines": "Wake-up routines",
   "webDevelopment": "Web Development",
-  "wireframesAndPrototypes": "Wireframes and Prototypes"
+  "wireframesAndPrototypes": "Wireframes and prototypes"
 }

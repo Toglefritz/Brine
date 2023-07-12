@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../values/insets.dart';
 
@@ -30,7 +31,7 @@ class PrimaryColorButton extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         side: BorderSide(
           color: themeColor,
-          width: 2.0,
+          width: 3.0,
         ),
       ),
       child: SizedBox(
@@ -41,8 +42,9 @@ class PrimaryColorButton extends StatelessWidget {
           ),
           child: Text(
             text.toUpperCase(),
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontSize: 22,
+            style: GoogleFonts.mavenPro().copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                   color: themeColor,
                 ),
             textAlign: TextAlign.center,
