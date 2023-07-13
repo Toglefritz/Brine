@@ -77,11 +77,6 @@ class ThanksView extends StatelessWidget {
               blastDirection: 30,
               left: 24,
             ),
-            ConfettiCannon(
-              controller: state.partyController,
-              blastDirection: 150,
-              right: 24,
-            ),
           ],
         ),
       ),

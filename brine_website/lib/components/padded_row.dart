@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// A [Column] in which each widget in the [children] will be interleaved with [Padding] that has vertical spacing of
+/// A [Row] in which each widget in the [children] will be interleaved with [Padding] that has horizontal spacing of
 /// [childrenPadding].
 ///
-/// This widget can be used as a direct replacement for a [Column] widget so that padding can be applied to every
+/// This widget can be used as a direct replacement for a [Row] widget so that padding can be applied to every
 /// element in the padding with the [childrenPadding] parameter rather than having to wrap each child in a
 /// [Padding] widget.
-class PaddedColumn extends StatelessWidget {
-  const PaddedColumn({
+class PaddedRow extends StatelessWidget {
+  const PaddedRow({
     super.key,
     required this.childrenPadding,
     required this.children,
@@ -17,10 +17,10 @@ class PaddedColumn extends StatelessWidget {
   /// The padding to apply between children.
   final double childrenPadding;
 
-  /// A list of widgets to display in the [Column].
+  /// A list of widgets to display in the [Row].
   final List<Widget> children;
 
-  /// Determines the way tha the [children] are arranged in the [Column].
+  /// Determines the way tha the [children] are arranged in the [Row].
   final MainAxisAlignment? mainAxisAlignment;
 
   /// Returns a [List<Widget>] in which each widget in the
@@ -29,7 +29,7 @@ class PaddedColumn extends StatelessWidget {
 
     Padding padding = Padding(
       padding: EdgeInsets.symmetric(
-        vertical: childrenPadding,
+        horizontal: childrenPadding,
       ),
     );
 
@@ -43,7 +43,7 @@ class PaddedColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
       children: getPaddedChildren(),
     );

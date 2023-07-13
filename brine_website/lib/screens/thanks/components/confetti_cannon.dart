@@ -55,7 +55,7 @@ class ConfettiCannon extends StatelessWidget {
         blastDirection: blastDirection * pi / 180,
         // Convert degrees to radians
         blastDirectionality: BlastDirectionality.directional,
-        maxBlastForce: 150,
+        maxBlastForce: 80,
         minBlastForce: 40,
         emissionFrequency: 1,
         gravity: 1,

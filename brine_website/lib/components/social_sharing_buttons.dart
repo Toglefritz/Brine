@@ -1,3 +1,5 @@
+import 'package:brine/theme/insets.dart';
+import 'package:brinemonitor/components/padded_row.dart';
 import 'package:brinemonitor/models/social_network.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -62,7 +64,8 @@ class SocialSharingButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return PaddedRow(
+      childrenPadding: Insets.small,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(

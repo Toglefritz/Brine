@@ -30,7 +30,11 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
     }
 
     initializeConfettiAnimation();
-    partyController.play();
+
+    // Fire the confetti after a short delay
+    Future.delayed(const Duration(milliseconds: 250), () {
+      partyController.play();
+    });
 
     super.initState();
   }
@@ -41,7 +45,7 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
   /// confetti animations.
   void initializeConfettiAnimation() {
     setState(() {
-      partyController = ConfettiController(duration: const Duration(seconds: 1));
+      partyController = ConfettiController(duration: const Duration(seconds: 2));
     });
   }
 
