@@ -1,9 +1,12 @@
+import 'package:brinemonitor/components/padded_column.dart';
+import 'package:brinemonitor/screens/insider/components/app_notification_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../components/app_bar/main_app_bar.dart';
+import '../../components/social_sharing_buttons.dart';
 import '../../values/insets.dart';
 import '../../components/footer.dart';
 import 'components/timeline/timelines_tab_bar.dart';
@@ -22,69 +25,88 @@ class InsiderView extends StatelessWidget {
       length: 5,
       child: Scaffold(
         appBar: const MainAppBar(),
-        body: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: Insets.kInsetsLarge,
-          ),
-          child: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Insets.kInsetsMedium,
-                ),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 1200,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                          bottom: Insets.kInsetsSmall,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context).insiderPageTitle,
-                          style: GoogleFonts.changaOne().copyWith(
-                            fontSize: 42,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      if (FirebaseAuth.instance.currentUser?.displayName != null)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            bottom: Insets.kInsetsLarge,
-                          ),
-                          child: Text(
-                            '${AppLocalizations.of(context).insiderPageSubtitle}${FirebaseAuth.instance.currentUser?.displayName}.',
-                            style: GoogleFonts.changaOne().copyWith(
-                              fontSize: 28,
+        body: SingleChildScrollView(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: 1000,
+              ),
+              child: PaddedColumn(
+                childrenPadding: Insets.kInsetsMedium,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: PaddedColumn(
+                          childrenPadding: Insets.kInsetsMedium,
+                          children: <Widget>[
+                            Text(
+                              AppLocalizations.of(context).insiderPageTitle,
+                              style: GoogleFonts.changaOne().copyWith(
+                                fontSize: 42,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          bottom: Insets.kInsetsMedium,
-                          left: Insets.kInsetsSmall,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context).projectTimelines,
-                          style: Theme.of(context).textTheme.headlineMedium,
+                            if (FirebaseAuth.instance.currentUser?.displayName != null)
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: Insets.kInsetsMedium,
+                                ),
+                                child: Text(
+                                  '${AppLocalizations.of(context).insiderPageSubtitle}${FirebaseAuth.instance.currentUser?.displayName}.',
+                                  style: GoogleFonts.changaOne().copyWith(
+                                    fontSize: 28,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            Text(
+                              AppLocalizations.of(context).insiderPageIntro,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              AppLocalizations.of(context).socialSharePrompt,
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SocialSharingButtons(),
+                          ],
                         ),
                       ),
-                      const TimelinesTabBar(),
-                      const TimelinesTabView(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: Insets.kInsetsLarge,
+                      const Expanded(
+                        child: AppNotificationPreview(
+                          width: 300.0,
                         ),
-                        child: const Footer(),
                       ),
                     ],
                   ),
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: Insets.kInsetsLarge,
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context).projectTimelines,
+                      style: GoogleFonts.changaOne().copyWith(
+                        fontSize: 32,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    AppLocalizations.of(context).projectTimelinesExplanation,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const TimelinesTabBar(),
+                  const TimelinesTabView(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Insets.kInsetsLarge,
+                    ),
+                    child: const Footer(),
+                  ),
+                ],
               ),
             ),
           ),
