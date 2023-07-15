@@ -32,7 +32,7 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
   @override
   void initState() {
     if (kDebugMode == false) {
-      FirebaseAnalytics.instance.logAppOpen();
+      FirebaseAnalytics.instance.logScreenView(screenName: 'landing');
     }
 
     initializeConfettiAnimation();
@@ -53,6 +53,10 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
 
   /// Launches the confetti!
   void launchConfettiBlast() {
+    if (kDebugMode == false) {
+      FirebaseAnalytics.instance.logEvent(name: 'landing_confetti');
+    }
+
     confettiController.play();
   }
 
@@ -60,8 +64,20 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
   /// updates about Brine. The [EmailOptinAnimatedDialog] returns a boolean value to indicate whether or not the
   /// ultimate call to add the visitor's information to a Firebase collection succeeded. If the visitor successfully
   /// signs up, we have a little party with lots of confetti and stuff, if not, we get sad and display an error message.
-  Future<void> letsGoooooooo() async {
-    bool? success = await showGeneralDialog<bool?>(
+  ///
+  /// The [buttonLabel] parameter is used in a [logEvent] call to Firebase Analytics so the specific button the
+  /// visitor pressed, of the several buttons on the landing page, can be identified.
+  Future<void> letsGoooooooo(String buttonLabel) async {
+    if (kDebugMode == false) {
+      FirebaseAnalytics.instance.logEvent(
+        name: 'landing_cta',
+        parameters: {
+          'button_key': buttonLabel,
+        },
+      );
+    }
+
+    await showGeneralDialog<bool?>(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'email signup dialog',
@@ -74,22 +90,6 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
         );
       },
     );
-
-    if (success == true) {
-      throwAParty();
-    }
-  }
-
-  /// Throws a little party to celebrate the visitor successfully signing up for updates from Brine by launching a
-  /// bunch of confetti and showing a very special GIF to thank the visitor for signing up.
-  ///
-  /// While the main view is enjoying a party, this method also saves an entry in [SharedPreferences] to indicate
-  /// that the visitor has successfully signed up so that they are presented with a message indicating such on their
-  /// next visit to the site.
-  void throwAParty() {
-    partyController.play();
-
-    setState(() {});
   }
 
   @override

@@ -1,7 +1,10 @@
 import 'package:brinemonitor/screens/landing/components/icon_animated_button_vertical.dart';
 import 'package:brinemonitor/screens/thanks/thanks_route.dart';
 import 'package:brinemonitor/values/insets.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -66,11 +69,29 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
   String? _validateNameField({required BuildContext context, required String? entry}) {
     if (entry == null || entry.isEmpty) {
+      if (kDebugMode == false) {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'name_field_error',
+          parameters: {
+            'error': 'empty or null',
+          },
+        );
+      }
+
       return AppLocalizations.of(context).validationNameEmpty;
     }
 
     // 1. Length check - truncate if length is greater than 30
     if (entry.length > 30) {
+      if (kDebugMode == false) {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'name_field_error',
+          parameters: {
+            'error': 'name too long',
+          },
+        );
+      }
+
       _nameFieldController.text = _nameFieldController.text.replaceRange(30, _nameFieldController.text.length, '...');
     }
 
@@ -89,12 +110,30 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     // 3. Escape or Strip HTML (Enhanced checks)
     RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
     if (htmlCharacters.hasMatch(entry)) {
+      if (kDebugMode == false) {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'name_field_error',
+          parameters: {
+            'error': 'contains HTML',
+          },
+        );
+      }
+
       return AppLocalizations.of(context).validationNameInvalidHtml;
     }
 
     // 4. Reject Control Characters
     RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
     if (controlCharacters.hasMatch(entry)) {
+      if (kDebugMode == false) {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'name_field_error',
+          parameters: {
+            'error': 'contains control characters',
+          },
+        );
+      }
+
       return AppLocalizations.of(context).validationNameControlCharacters;
     }
 
@@ -135,23 +174,59 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
     // Check if the entry is null or empty
     if (entry == null || entry.isEmpty) {
+      if (kDebugMode == false) {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'email_field_error',
+          parameters: {
+            'error': 'empty or null',
+          },
+        );
+      }
+
       return AppLocalizations.of(context).validationEmailEmpty;
     }
 
     // Check if the email address is in valid format
     if (!regex.hasMatch(entry)) {
+      if (kDebugMode == false) {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'email_field_error',
+          parameters: {
+            'error': 'invalid email format',
+          },
+        );
+      }
+
       return AppLocalizations.of(context).validationEmailInvalid;
     }
 
     // Check for HTML characters/tags
     RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
     if (htmlCharacters.hasMatch(entry)) {
+      if (kDebugMode == false) {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'email_field_error',
+          parameters: {
+            'error': 'contains HTML',
+          },
+        );
+      }
+
       return AppLocalizations.of(context).validationEmailHtmlCharacters;
     }
 
     // Reject Control Characters
     RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
     if (controlCharacters.hasMatch(entry)) {
+      if (kDebugMode == false) {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'email_field_error',
+          parameters: {
+            'error': 'contains control characters',
+          },
+        );
+      }
+
       return AppLocalizations.of(context).validationEmailControlCharacters;
     }
 
@@ -168,12 +243,20 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// of the form's submit button while the app waits for a response from the endpoint. This method sets
   /// [processingLead] to true while waiting for this response.
   Future<void> _onSubmit() async {
-    if(_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       // Sign in anonymously
       try {
         await signInAnonymously();
-      } catch (e) {
+      } catch (error, stackTrace) {
         debugPrint('Authentication failed for addLead function');
+
+        if (kDebugMode == false) {
+          FirebaseCrashlytics.instance.recordError(
+            error,
+            stackTrace,
+            reason: 'authentication failed',
+          );
+        }
 
         // TODO how should this error be handled?
 
@@ -192,12 +275,20 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
             name: _nameFieldController.text,
             email: _emailFieldController.text,
           );
-        } catch (e) {
+        } catch (error, stackTrace) {
           debugPrint('Failed to add lead to Firebase');
 
           setState(() {
             processingLead = false;
           });
+
+          if (kDebugMode == false) {
+            FirebaseCrashlytics.instance.recordError(
+              error,
+              stackTrace,
+              reason: 'failed to create lead',
+            );
+          }
 
           // TODO how should this error be handled?
 
@@ -206,6 +297,10 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
         // Update the anonymous profile
         FirebaseAuth.instance.currentUser?.updateDisplayName(_nameFieldController.text);
+
+        if (kDebugMode == false) {
+          FirebaseAnalytics.instance.logGenerateLead();
+        }
 
         // Return true to the caller to indicate success
         if (!mounted) return;

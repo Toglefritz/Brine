@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -43,6 +44,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Handles taps on the dark theme toggle by setting the dark theme preference to the value of the toggle.
   void toggleDarkTheme({required bool value, required BuildContext context}) {
+    FirebaseAnalytics.instance.logEvent(
+      name: 'dark_mode_toggle',
+      parameters: {
+        'enabled': value,
+      },
+    );
+
     Provider.of<DarkThemeProvider>(context, listen: false).darkTheme = value;
   }
 

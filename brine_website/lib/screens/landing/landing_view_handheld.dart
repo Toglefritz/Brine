@@ -57,7 +57,7 @@ class LandingViewHandheld extends StatelessWidget {
                     ),
                     IconAnimatedButtonHorizontal(
                       text: AppLocalizations.of(context).getStartedButton,
-                      onTap: state.letsGoooooooo,
+                      onTap: () => state.letsGoooooooo('button_1'),
                     ),
                     Text(
                       AppLocalizations.of(context).landingPageDescription,

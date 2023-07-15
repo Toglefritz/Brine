@@ -11,7 +11,7 @@ class InsiderController extends NavigablePageController<InsiderRoute> {
   @override
   void initState() {
     if (kDebugMode == false) {
-      FirebaseAnalytics.instance.logEvent(name: 'insider_page_opened');
+      FirebaseAnalytics.instance.logScreenView(screenName: 'insider_page_opened');
     }
 
     super.initState();

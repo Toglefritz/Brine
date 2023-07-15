@@ -64,6 +64,11 @@ class ThanksView extends StatelessWidget {
                             text: AppLocalizations.of(context).accessInsiderPortal,
                             width: 350,
                           ),
+                          LightButton(
+                            onPressed: state.repeatParty,
+                            text: AppLocalizations.of(context).moreConfetti,
+                            width: 350,
+                          ),
                           const Footer(),
                         ],
                       ),

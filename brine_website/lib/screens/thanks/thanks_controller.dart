@@ -1,8 +1,11 @@
+import 'package:brine/theme/insets.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/navigable_page_controller.dart';
 import '../insider/insider_route.dart';
@@ -23,10 +26,13 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
   /// up for updates from Brine.
   late ConfettiController partyController;
 
+  /// Counts the number of times the confetti party has been launched.
+  int _confettiCount = 0;
+
   @override
   void initState() {
     if (kDebugMode == false) {
-      FirebaseAnalytics.instance.logEvent(name: 'thanks_page_opened');
+      FirebaseAnalytics.instance.logScreenView(screenName: 'thanks_page');
     }
 
     initializeConfettiAnimation();
@@ -51,9 +57,48 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
 
   /// Handles taps on the [PrimaryCTAButton] on the [ThanksView].
   void onButtonPressed() {
-    // TODO tag
+    if (kDebugMode == false) {
+      FirebaseAnalytics.instance.logEvent(
+        name: 'thanks_cta_pressed',
+      );
+    }
 
     context.pushReplacement(InsiderRoute.screenName);
+  }
+
+  /// Fires the [ConfettiCannon]s again because everybody loves confetti (except the people who have to clean it
+  /// up after the party).
+  void repeatParty() {
+    if (kDebugMode == false) {
+      FirebaseAnalytics.instance.logEvent(
+        name: 'repeat_party',
+        parameters: {
+          'confetti_count': _confettiCount,
+        },
+      );
+    }
+
+    if (partyController.state != ConfettiControllerState.playing && _confettiCount < 8) {
+      _confettiCount++;
+
+      partyController.play();
+    } else if (_confettiCount > 8) {
+      SnackBar snackBar = SnackBar(
+        content: Text(
+          AppLocalizations.of(context).enoughConfetti,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.changaOne().copyWith(
+            fontSize: 28,
+          ),
+        ),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(
+          bottom: Insets.large,
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   @override

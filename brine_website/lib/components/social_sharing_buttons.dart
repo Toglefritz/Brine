@@ -1,6 +1,8 @@
 import 'package:brine/theme/insets.dart';
 import 'package:brinemonitor/components/padded_row.dart';
 import 'package:brinemonitor/models/social_network.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,13 +17,18 @@ class SocialSharingButtons extends StatelessWidget {
   final Function()? successCallback;
 
   /// Allows the visitor to share a link and message about Brine on various different [SocialNetwork]s.
-  // TODO add tags
   Future<void> socialShare(SocialNetwork network) async {
     switch (network) {
       case SocialNetwork.threads:
         // TODO: Handle this case.
         break;
       case SocialNetwork.twitter:
+        if (kDebugMode == false) {
+          FirebaseAnalytics.instance.logEvent(
+            name: 'twitter_share',
+          );
+        }
+
         await _launchUrl(
           Uri.parse(
             'https://twitter.com/intent/tweet?text=🧂 Is your water softener low on salt? 🧂&url=http://brinemonitor.com/',
@@ -29,6 +36,12 @@ class SocialSharingButtons extends StatelessWidget {
         );
         break;
       case SocialNetwork.facebook:
+        if (kDebugMode == false) {
+          FirebaseAnalytics.instance.logEvent(
+            name: 'facebook_share',
+          );
+        }
+
         await _launchUrl(
           Uri.parse(
             'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbrinemonitor.com%2F&amp;src=sdkpreparse',
@@ -36,6 +49,12 @@ class SocialSharingButtons extends StatelessWidget {
         );
         break;
       case SocialNetwork.linkedin:
+        if (kDebugMode == false) {
+          FirebaseAnalytics.instance.logEvent(
+            name: 'linkedin_share',
+          );
+        }
+
         await _launchUrl(
           Uri.parse(
             'https://www.linkedin.com/shareArticle?mini=true&url=http://brinemonitor.com/&title=🧂 Is your water softener low on salt? 🧂',
@@ -43,6 +62,12 @@ class SocialSharingButtons extends StatelessWidget {
         );
         break;
       case SocialNetwork.pinterest:
+        if (kDebugMode == false) {
+          FirebaseAnalytics.instance.logEvent(
+            name: 'pinterest_share',
+          );
+        }
+
         await _launchUrl(
           Uri.parse(
             'http://pinterest.com/pin/create/button/?url=http://brinemonitor.com/&description=🧂 Is your water softener low on salt? 🧂',
@@ -50,6 +75,12 @@ class SocialSharingButtons extends StatelessWidget {
         );
         break;
       case SocialNetwork.email:
+        if (kDebugMode == false) {
+          FirebaseAnalytics.instance.logEvent(
+            name: 'email_share',
+          );
+        }
+
         // TODO: Handle this case.
         break;
     }

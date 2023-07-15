@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/navigable_page_controller.dart';
@@ -9,7 +10,9 @@ import 'privacy_policy_view.dart';
 class PrivacyPolicyController extends NavigablePageController<PrivacyPolicyRoute> {
   @override
   void initState() {
-    FirebaseAnalytics.instance.logEvent(name: 'privacy_policy_page_opened');
+    if (kDebugMode == false) {
+      FirebaseAnalytics.instance.logScreenView(screenName: 'privacy_policy');
+    }
     super.initState();
   }
 

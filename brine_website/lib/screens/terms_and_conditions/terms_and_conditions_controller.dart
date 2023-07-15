@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +11,10 @@ import 'terms_and_conditions_view.dart';
 class TermsAndConditionsController extends NavigablePageController<TermsAndConditionsRoute> {
   @override
   void initState() {
-    FirebaseAnalytics.instance.logEvent(name: 'terms_and_conditions_page_opened');
+    if (kDebugMode == false) {
+      FirebaseAnalytics.instance.logScreenView(screenName: 'terms_and_conditions');
+    }
+
     super.initState();
   }
 
