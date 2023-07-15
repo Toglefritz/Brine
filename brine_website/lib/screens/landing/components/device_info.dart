@@ -24,10 +24,10 @@ class BrineInfo extends StatefulWidget {
 class _BrineInfoState extends State<BrineInfo> {
   /// A list of assets to display on each row of the table where the index of the asset in the list
   /// corresponds to the row on which it should be displayed.
-  final List<Assets> rowAssets = [
-    Assets.numeral1,
-    Assets.numeral2,
-    Assets.numeral3,
+  final List<Asset> rowAssets = [
+    Asset.numeral1,
+    Asset.numeral2,
+    Asset.numeral3,
   ];
 
   /// Returns the string to display on the row with the provided [index].
@@ -73,7 +73,7 @@ class _BrineInfoState extends State<BrineInfo> {
           child: Stack(
             children: [
               Image.asset(
-                Assets.partsDiagram.path,
+                Asset.partsDiagram.path,
                 width: 450,
               ),
               Positioned(

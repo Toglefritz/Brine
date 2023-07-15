@@ -79,7 +79,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 right: Insets.kInsetsSmall,
               ),
               child: Image.asset(
-                Assets.brineLogo.path,
+                Asset.brineLogo.path,
                 width: 56,
               ),
             ),

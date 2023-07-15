@@ -9,6 +9,7 @@ import '../../components/padded_column.dart';
 import '../../components/responsive_safe_area.dart';
 import '../../values/insets.dart';
 import 'components/app_preview.dart';
+import 'components/benefits_info.dart';
 import 'components/device_info.dart';
 import 'components/icon_animated_button_horizontal.dart';
 import 'landing_controller.dart';
@@ -32,8 +33,10 @@ class LandingViewDesktop extends StatelessWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Insets.kInsetsLarge,
+                    padding: EdgeInsets.only(
+                      right: Insets.kInsetsLarge,
+                      bottom: Insets.kInsetsMedium,
+                      left: Insets.kInsetsLarge,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -82,7 +85,20 @@ class LandingViewDesktop extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: Insets.kInsetsLarge,
+                      vertical: Insets.kInsetsXLarge,
+                    ),
+                    child: LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) {
+                        return BenefitsInfo(
+                          direction: Axis.horizontal,
+                          itemWidth: (constraints.maxWidth - (Insets.kInsetsSmall * 3)) / 5,
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Insets.kInsetsMedium,
                     ),
                     child: BrineInfo(
                       direction: MediaQuery.of(context).size.width > 1000 ? Axis.horizontal : Axis.vertical,

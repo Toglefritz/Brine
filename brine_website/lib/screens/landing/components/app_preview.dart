@@ -102,7 +102,7 @@ class _AppPreviewState extends State<AppPreview> {
           ),
         ),
         Image.asset(
-          Assets.iphone13Mockup.path,
+          Asset.iphone13Mockup.path,
           width: 300,
         ),
       ],
