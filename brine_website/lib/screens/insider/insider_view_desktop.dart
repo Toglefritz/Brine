@@ -14,10 +14,13 @@ import 'components/timeline/timelines_tab_view.dart';
 import 'insider_controller.dart';
 
 /// View for the [OnboardingRoute].
-class InsiderView extends StatelessWidget {
+class InsiderViewDesktop extends StatelessWidget {
   final InsiderController state;
 
-  const InsiderView(this.state, {Key? key}) : super(key: key);
+  const InsiderViewDesktop(
+    this.state, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +100,7 @@ class InsiderView extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context).projectTimelinesExplanation,
                     style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
                   ),
                   const TimelinesTabBar(),
                   const TimelinesTabView(),

@@ -84,7 +84,7 @@ class TimelineItemBadge extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 128,
+          width: 120,
           child: Text(
             item.title,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(

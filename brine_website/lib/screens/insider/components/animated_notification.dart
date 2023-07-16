@@ -88,63 +88,74 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
         position: offset,
         child: Padding(
           padding: const EdgeInsets.only(top: 35),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          width: widget.width,
-          child: Padding(
-            padding: const EdgeInsets.all(Insets.xSmall),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          Asset.brineLogo.path,
-                          width: 20,
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: Insets.xSmall,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            width: widget.width,
+            child: Padding(
+              padding: const EdgeInsets.all(Insets.xSmall),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            Asset.brineLogo.path,
+                            width: 20,
+                            height: 20,
                           ),
-                          child: Text(
-                            AppLocalizations.of(context).brine.toUpperCase(),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: Insets.xSmall,
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context).brine.toUpperCase(),
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        AppLocalizations.of(context).now,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: Colors.black,
+                            ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: Insets.xSmall,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          widget.message,
+                          style: const TextStyle(
+                            color: Colors.black,
                           ),
                         ),
                       ],
                     ),
-                    Text(
-                      AppLocalizations.of(context).now,
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: Insets.xSmall,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(widget.message),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
         ),
       ),
     );
