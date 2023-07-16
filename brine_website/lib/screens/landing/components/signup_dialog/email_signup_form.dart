@@ -343,6 +343,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
                 context: context,
                 entry: entry,
               ),
+              onFieldSubmitted: (entry) => _onSubmit(),
             ),
           ),
           Padding(
@@ -372,6 +373,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
                 context: context,
                 entry: entry,
               ),
+              onFieldSubmitted: (entry) => _onSubmit(),
             ),
           ),
           if (!processingLead)
