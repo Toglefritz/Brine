@@ -39,6 +39,8 @@ dependencies:
   intl: any
   # Wrapper around InheritedWidget
   provider: ^6.0.5
+  # Flutter plugin for sharing content via the platform share UI
+  share_plus: ^7.0.2
   # Saves key-value pairs to store user preferences
   shared_preferences: ^2.1.1
   # Plugin for launching URLs

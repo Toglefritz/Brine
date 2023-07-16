@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 /// Displays a list of buttons to share Brine on various social networks.
 class SocialSharingButtons extends StatelessWidget {
@@ -74,14 +75,17 @@ class SocialSharingButtons extends StatelessWidget {
           ),
         );
         break;
-      case SocialNetwork.email:
+      case SocialNetwork.share:
         if (kDebugMode == false) {
           FirebaseAnalytics.instance.logEvent(
-            name: 'email_share',
+            name: 'generic_share',
           );
         }
 
-        // TODO: Handle this case.
+        Share.share(
+          'I came across something truly fascinating that will, without a doubt, win a nobel prize in the near future. So, I used AI to write this email since I thought the project would be of great interest to you. It\'s called Brine (the "something" I was referring to in the previous sentence), and it\'s an incredible IoT water softener monitor that\'s about to launch on Kickstarter. I couldn\'t resist sharing it with you because I know how important home maintenance is to you. \n\n https://brinemonitor.com',
+        subject: 'Something truly wonderful (and a little salty)',
+        );
         break;
     }
   }
@@ -130,6 +134,14 @@ class SocialSharingButtons extends StatelessWidget {
           ),
           color: Theme.of(context).primaryColorDark,
           onPressed: () => socialShare(SocialNetwork.pinterest),
+        ),
+        IconButton(
+          icon: const Icon(
+            FontAwesomeIcons.squareShareNodes,
+            size: 36,
+          ),
+          color: Theme.of(context).primaryColorDark,
+          onPressed: () => socialShare(SocialNetwork.share),
         ),
       ],
     );

@@ -7,5 +7,5 @@ enum SocialNetwork {
   facebook,
   linkedin,
   pinterest,
-  email,
+  share,
 }
