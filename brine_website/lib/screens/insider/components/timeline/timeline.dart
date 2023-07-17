@@ -1,7 +1,8 @@
-import 'package:brine/theme/insets.dart';
 import 'package:brinemonitor/screens/insider/components/timeline/models/timeline_item.dart';
 import 'package:brinemonitor/screens/insider/components/timeline/timeline_item_badge.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../values/insets.dart';
 
 /// A horizontally scrollable widget that represents a sequence of timeline items in a project timeline.
 ///
@@ -32,7 +33,7 @@ class ProjectTimeline extends StatelessWidget {
         children: items.map<Widget>(
           (item) {
             return Padding(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: Insets.medium,
               ),
               child: TimelineItemBadge(

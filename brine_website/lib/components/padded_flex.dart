@@ -29,7 +29,7 @@ class PaddedFlex extends StatelessWidget {
   final MainAxisAlignment? mainAxisAlignment;
 
   /// Returns a [List<Widget>] in which each widget in the
-  List<Widget> getPaddedChildren() {
+  List<Widget> _getPaddedChildren() {
     List<Widget> paddedWidgets = [];
 
     Padding padding = Padding(
@@ -52,7 +52,7 @@ class PaddedFlex extends StatelessWidget {
     return Flex(
       direction: direction,
       mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
-      children: getPaddedChildren(),
+      children: _getPaddedChildren(),
     );
   }
 }

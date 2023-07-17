@@ -34,9 +34,9 @@ class LandingViewDesktop extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
-                      right: Insets.kInsetsLarge,
-                      bottom: Insets.kInsetsMedium,
-                      left: Insets.kInsetsLarge,
+                      right: Insets.large,
+                      bottom: Insets.medium,
+                      left: Insets.large,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -44,11 +44,11 @@ class LandingViewDesktop extends StatelessWidget {
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.only(
-                              left: Insets.kInsetsMedium,
-                              top: Insets.kInsetsMedium,
+                              left: Insets.medium,
+                              top: Insets.medium,
                             ),
                             child: PaddedColumn(
-                              childrenPadding: Insets.kInsetsLarge,
+                              childrenPadding: Insets.large,
                               children: [
                                 Text(
                                   AppLocalizations.of(context).landingPageTitle,
@@ -85,20 +85,20 @@ class LandingViewDesktop extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: Insets.kInsetsXLarge,
+                      vertical: Insets.xLarge,
                     ),
                     child: LayoutBuilder(
                       builder: (BuildContext context, BoxConstraints constraints) {
                         return BenefitsInfo(
                           direction: Axis.horizontal,
-                          itemWidth: (constraints.maxWidth - (Insets.kInsetsSmall * 3)) / 5,
+                          itemWidth: (constraints.maxWidth - (Insets.small * 3)) / 5,
                         );
                       },
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: Insets.kInsetsMedium,
+                      vertical: Insets.medium,
                     ),
                     child: BrineInfo(
                       direction: MediaQuery.of(context).size.width > 1000 ? Axis.horizontal : Axis.vertical,
@@ -106,8 +106,8 @@ class LandingViewDesktop extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: Insets.kInsetsSmall,
-                      bottom: Insets.kInsetsLarge,
+                      top: Insets.small,
+                      bottom: Insets.large,
                     ),
                     child: const Footer(),
                   ),

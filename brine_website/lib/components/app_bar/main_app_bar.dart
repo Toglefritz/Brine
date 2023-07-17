@@ -39,12 +39,12 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(_height);
 
   /// Handles taps on the back navigation button
-  void goBack(BuildContext context) {
+  void _goBack(BuildContext context) {
     context.go(const LandingRoute().screenName);
   }
 
   /// Handles taps on the dark theme toggle by setting the dark theme preference to the value of the toggle.
-  void toggleDarkTheme({required bool value, required BuildContext context}) {
+  void _toggleDarkTheme({required bool value, required BuildContext context}) {
     if (kDebugMode == false) {
       FirebaseAnalytics.instance.logEvent(
         name: 'dark_mode_toggle',
@@ -64,20 +64,20 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       leading: Padding(
         padding: EdgeInsets.only(
-          top: Insets.kInsetsMedium,
-          left: Insets.kInsetsLarge,
+          top: Insets.medium,
+          left: Insets.large,
         ),
         child: Row(
           children: [
             if (displayBackButton == true)
               Padding(
                 padding: EdgeInsets.only(
-                  right: Insets.kInsetsMedium,
+                  right: Insets.medium,
                 ),
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
-                    onTap: () => goBack(context),
+                    onTap: () => _goBack(context),
                     child: const FaIcon(
                       FontAwesomeIcons.leftLong,
                       size: 42,
@@ -87,7 +87,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             Padding(
               padding: EdgeInsets.only(
-                right: Insets.kInsetsSmall,
+                right: Insets.small,
               ),
               child: Image.asset(
                 Asset.brineLogo.path,
@@ -109,7 +109,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (confettiCallback != null)
           Padding(
             padding: EdgeInsets.only(
-              right: Insets.kInsetsMedium,
+              right: Insets.medium,
             ),
             child: IconButton(
               icon: Icon(
@@ -121,10 +121,10 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         Padding(
           padding: EdgeInsets.only(
-            right: Insets.kInsetsMedium,
+            right: Insets.medium,
           ),
           child: DarkThemeToggle(
-            onChanged: (newValue) => toggleDarkTheme(
+            onChanged: (newValue) => _toggleDarkTheme(
               value: newValue,
               context: context,
             ),

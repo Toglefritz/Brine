@@ -35,13 +35,13 @@ class InsiderViewDesktop extends StatelessWidget {
                 maxWidth: 1000,
               ),
               child: PaddedColumn(
-                childrenPadding: Insets.kInsetsMedium,
+                childrenPadding: Insets.medium,
                 children: <Widget>[
                   Row(
                     children: [
                       Expanded(
                         child: PaddedColumn(
-                          childrenPadding: Insets.kInsetsMedium,
+                          childrenPadding: Insets.medium,
                           children: <Widget>[
                             Text(
                               AppLocalizations.of(context).insiderPageTitle,
@@ -53,7 +53,7 @@ class InsiderViewDesktop extends StatelessWidget {
                             if (FirebaseAuth.instance.currentUser?.displayName != null)
                               Padding(
                                 padding: EdgeInsets.only(
-                                  bottom: Insets.kInsetsMedium,
+                                  bottom: Insets.medium,
                                 ),
                                 child: Text(
                                   '${AppLocalizations.of(context).insiderPageSubtitle}${FirebaseAuth.instance.currentUser?.displayName}.',
@@ -88,7 +88,7 @@ class InsiderViewDesktop extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: Insets.kInsetsLarge,
+                      top: Insets.large,
                     ),
                     child: Text(
                       AppLocalizations.of(context).projectTimelines,
@@ -106,7 +106,7 @@ class InsiderViewDesktop extends StatelessWidget {
                   const TimelinesTabView(),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: Insets.kInsetsLarge,
+                      vertical: Insets.large,
                     ),
                     child: const Footer(),
                   ),

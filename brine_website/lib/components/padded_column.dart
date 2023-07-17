@@ -24,7 +24,7 @@ class PaddedColumn extends StatelessWidget {
   final MainAxisAlignment? mainAxisAlignment;
 
   /// Returns a [List<Widget>] in which each widget in the
-  List<Widget> getPaddedChildren() {
+  List<Widget> _getPaddedChildren() {
     List<Widget> paddedWidgets = [];
 
     Padding padding = Padding(
@@ -45,7 +45,7 @@ class PaddedColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
-      children: getPaddedChildren(),
+      children: _getPaddedChildren(),
     );
   }
 }

@@ -1,9 +1,9 @@
 /// Common inset values, primarily used for [Padding] widgets throughout the app.
 class Insets {
-  static double kInsetsXSmall = 2.0;
-  static double kInsetsSmall = 8.0;
-  static double kInsetsMedium = 16.0;
-  static double kInsetsLarge = 32.0;
-  static double kInsetsXLarge = 64.0;
-  static double kInsetsGiant = 128.0;
+  static double xSmall = 2.0;
+  static double small = 8.0;
+  static double medium = 16.0;
+  static double large = 32.0;
+  static double xLarge = 64.0;
+  static double giant = 128.0;
 }

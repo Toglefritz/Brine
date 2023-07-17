@@ -25,7 +25,7 @@ class EmailSignupForm extends StatefulWidget {
 }
 
 class _EmailSignupFormState extends State<EmailSignupForm> {
-  /// A key for the email optin form.
+  /// A key for the email option form.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   /// A controller for the name entry [TextFormField].
@@ -318,19 +318,19 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-              top: Insets.kInsetsLarge,
-              right: Insets.kInsetsLarge,
-              left: Insets.kInsetsLarge,
+              top: Insets.large,
+              right: Insets.large,
+              left: Insets.large,
             ),
             child: TextFormField(
               controller: _nameFieldController,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: Insets.kInsetsMedium,
+                  vertical: Insets.medium,
                 ),
                 prefixIcon: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: Insets.kInsetsMedium,
+                    horizontal: Insets.medium,
                   ),
                   child: const Icon(Icons.person),
                 ),
@@ -348,19 +348,19 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
           ),
           Padding(
             padding: EdgeInsets.only(
-              top: Insets.kInsetsLarge,
-              right: Insets.kInsetsLarge,
-              left: Insets.kInsetsLarge,
+              top: Insets.large,
+              right: Insets.large,
+              left: Insets.large,
             ),
             child: TextFormField(
               controller: _emailFieldController,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: Insets.kInsetsMedium,
+                  vertical: Insets.medium,
                 ),
                 prefixIcon: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: Insets.kInsetsMedium,
+                    horizontal: Insets.medium,
                   ),
                   child: const Icon(Icons.mail),
                 ),
@@ -379,8 +379,8 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
           if (!processingLead)
             Padding(
               padding: EdgeInsets.only(
-                top: Insets.kInsetsXLarge,
-                bottom: Insets.kInsetsLarge,
+                top: Insets.xLarge,
+                bottom: Insets.large,
               ),
               child: IconAnimatedButtonVertical(
                 buttonText: AppLocalizations.of(context).emailOptinButtonText,
@@ -390,8 +390,8 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
           if (processingLead)
             Padding(
               padding: EdgeInsets.only(
-                top: Insets.kInsetsXLarge,
-                bottom: Insets.kInsetsLarge,
+                top: Insets.xLarge,
+                bottom: Insets.large,
               ),
               child: SpinKitWave(
                 color: Theme.of(context).primaryColorDark,

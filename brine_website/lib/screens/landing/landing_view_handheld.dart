@@ -32,13 +32,13 @@ class LandingViewHandheld extends StatelessWidget {
             SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(
-                  Insets.kInsetsMedium,
+                  Insets.medium,
                 ),
                 child: PaddedColumn(
-                  childrenPadding: Insets.kInsetsLarge,
+                  childrenPadding: Insets.large,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Insets.kInsetsMedium),
+                      padding: EdgeInsets.symmetric(horizontal: Insets.medium),
                       child: Text(
                         AppLocalizations.of(context).landingPageTitle,
                         style: GoogleFonts.changaOne().copyWith(

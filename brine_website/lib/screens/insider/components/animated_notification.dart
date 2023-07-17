@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:brine/theme/insets.dart';
 import 'package:brinemonitor/values/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../values/insets.dart';
 
 /// A stateful widget to create an animated notification
 ///
@@ -95,7 +96,7 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
             ),
             width: widget.width,
             child: Padding(
-              padding: const EdgeInsets.all(Insets.xSmall),
+              padding: EdgeInsets.all(Insets.xSmall),
               child: Column(
                 children: [
                   Row(
@@ -109,7 +110,7 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
                             height: 20,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
+                            padding: EdgeInsets.only(
                               left: Insets.xSmall,
                             ),
                             child: Text(
@@ -130,7 +131,7 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
+                    padding: EdgeInsets.only(
                       top: Insets.xSmall,
                     ),
                     child: Column(

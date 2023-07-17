@@ -18,15 +18,17 @@ class DarkThemeToggle extends StatelessWidget {
 
     return Switch(
       value: darkTheme,
-      thumbIcon: MaterialStateProperty.resolveWith((_) {
-        if (darkTheme) {
-          return Icon(
-            Icons.brightness_7,
-            color: Theme.of(context).primaryColorLight,
-          );
-        }
-        return const Icon(Icons.brightness_2_outlined);
-      }),
+      thumbIcon: MaterialStateProperty.resolveWith(
+        (_) {
+          if (darkTheme) {
+            return Icon(
+              Icons.brightness_7,
+              color: Theme.of(context).primaryColorLight,
+            );
+          }
+          return const Icon(Icons.brightness_2_outlined);
+        },
+      ),
       inactiveThumbColor: Theme.of(context).primaryColorDark,
       activeColor: Theme.of(context).primaryColor,
       onChanged: (newValue) => onChanged(newValue),

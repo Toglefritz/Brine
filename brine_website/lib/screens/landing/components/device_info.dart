@@ -1,8 +1,8 @@
-import 'package:brine/theme/insets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../values/assets.dart';
+import '../../../values/insets.dart';
 
 /// Displays information about the Brine device by showing an annotated image alongside a table with the
 /// corresponding annotations.
@@ -67,7 +67,7 @@ class _BrineInfoState extends State<BrineInfo> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(
+          padding: EdgeInsets.only(
             bottom: Insets.medium,
           ),
           child: Stack(
@@ -119,7 +119,7 @@ class _BrineInfoState extends State<BrineInfo> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: Insets.large,
           ),
           child: Table(
@@ -145,7 +145,7 @@ class _BrineInfoState extends State<BrineInfo> {
                     height: 40,
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(
+                    padding: EdgeInsets.all(
                       Insets.small,
                     ),
                     child: Text(

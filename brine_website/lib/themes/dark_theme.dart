@@ -71,8 +71,8 @@ class DarkTheme {
             color: Color(0xfdffffff),
           ),
           contentPadding: EdgeInsets.symmetric(
-            horizontal: Insets.kInsetsLarge,
-            vertical: Insets.kInsetsSmall,
+            horizontal: Insets.large,
+            vertical: Insets.small,
           ),
           border: _border,
           enabledBorder: _border,

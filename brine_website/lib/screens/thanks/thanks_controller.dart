@@ -1,4 +1,3 @@
-import 'package:brine/theme/insets.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/navigable_page_controller.dart';
+import '../../values/insets.dart';
 import '../insider/insider_route.dart';
 import 'thanks_route.dart';
 import 'thanks_view.dart';
@@ -92,7 +92,7 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
           ),
         ),
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.only(
+        margin: EdgeInsets.only(
           bottom: Insets.large,
         ),
       );

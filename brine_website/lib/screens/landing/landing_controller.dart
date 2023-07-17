@@ -35,7 +35,7 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
       FirebaseAnalytics.instance.logScreenView(screenName: 'landing');
     }
 
-    initializeConfettiAnimation();
+    _initializeConfettiAnimation();
 
     super.initState();
   }
@@ -44,7 +44,7 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
   ///
   /// The [ConfettiController]s are initialized with [Duration]s that determines the duration of their
   /// confetti animations.
-  void initializeConfettiAnimation() {
+  void _initializeConfettiAnimation() {
     setState(() {
       confettiController = ConfettiController(duration: const Duration(seconds: 1));
       partyController = ConfettiController(duration: const Duration(seconds: 5));

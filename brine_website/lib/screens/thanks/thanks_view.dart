@@ -28,20 +28,20 @@ class ThanksView extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                vertical: Insets.kInsetsLarge,
+                vertical: Insets.large,
               ),
               child: SingleChildScrollView(
                 child: Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: Insets.kInsetsMedium,
+                      horizontal: Insets.medium,
                     ),
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxWidth: 900,
                       ),
                       child: PaddedColumn(
-                        childrenPadding: Insets.kInsetsMedium,
+                        childrenPadding: Insets.medium,
                         children: <Widget>[
                           Text(
                             '${AppLocalizations.of(context).thanksPageTitlePrefix} ${state.widget.name}!',

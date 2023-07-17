@@ -8,7 +8,10 @@ class FooterButton extends StatelessWidget {
     super.key,
   });
 
+  /// The text to display inside the button.
   final String text;
+
+  /// The action performed when the button is pressed.
   final VoidCallback onPressed;
 
   @override

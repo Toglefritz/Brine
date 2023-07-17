@@ -23,8 +23,8 @@ class TimelinesTabBar extends StatelessWidget {
         fontSize: 16,
       ),
       labelPadding: EdgeInsets.symmetric(
-        horizontal: Insets.kInsetsSmall,
-        vertical: Insets.kInsetsXSmall,
+        horizontal: Insets.small,
+        vertical: Insets.xSmall,
       ),
       dividerColor: Colors.transparent,
       unselectedLabelStyle: GoogleFonts.shareTechMono().copyWith(

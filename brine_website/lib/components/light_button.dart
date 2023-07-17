@@ -50,7 +50,7 @@ class LightButton extends StatelessWidget {
           children: [
             if (icon != null)
               Padding(
-                padding: EdgeInsets.all(Insets.kInsetsSmall),
+                padding: EdgeInsets.all(Insets.small),
                 child: Icon(
                   icon,
                   color: Theme.of(context).primaryColorDark,
@@ -60,11 +60,11 @@ class LightButton extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(
-                  right: icon != null ? 24 + Insets.kInsetsSmall * 2 : 0,
+                  right: icon != null ? 24 + Insets.small * 2 : 0,
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    vertical: Insets.kInsetsSmall,
+                    vertical: Insets.small,
                   ),
                   child: Text(
                     text.toUpperCase(),

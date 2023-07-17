@@ -20,7 +20,7 @@ class TimelinesTabView extends StatelessWidget {
       height: 250,
       child: Padding(
         padding: EdgeInsets.only(
-          top: Insets.kInsetsLarge,
+          top: Insets.large,
         ),
         child: const TabBarView(
           children: [

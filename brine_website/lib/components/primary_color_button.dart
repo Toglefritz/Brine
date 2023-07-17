@@ -38,7 +38,7 @@ class PrimaryColorButton extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.3,
         child: Padding(
           padding: EdgeInsets.symmetric(
-            vertical: Insets.kInsetsSmall,
+            vertical: Insets.small,
           ),
           child: Text(
             text.toUpperCase(),

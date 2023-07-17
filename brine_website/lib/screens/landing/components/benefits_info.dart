@@ -1,9 +1,9 @@
-import 'package:brine/theme/insets.dart';
 import 'package:brinemonitor/values/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../components/padded_flex.dart';
+import '../../../values/insets.dart';
 import 'benefits_item.dart';
 
 /// A list of widgets explaining the benefits of using Brine.

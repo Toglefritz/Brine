@@ -1,4 +1,3 @@
-import 'package:brine/theme/insets.dart';
 import 'package:brinemonitor/components/padded_row.dart';
 import 'package:brinemonitor/models/social_network.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -8,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../values/insets.dart';
+
 /// Displays a list of buttons to share Brine on various social networks.
 class SocialSharingButtons extends StatelessWidget {
   const SocialSharingButtons({
@@ -15,10 +16,11 @@ class SocialSharingButtons extends StatelessWidget {
     this.successCallback,
   });
 
+  /// A method called after the share operation is completed successfully.
   final Function()? successCallback;
 
   /// Allows the visitor to share a link and message about Brine on various different [SocialNetwork]s.
-  Future<void> socialShare(SocialNetwork network) async {
+  Future<void> _socialShare(SocialNetwork network) async {
     switch (network) {
       case SocialNetwork.threads:
         // TODO: Handle this case.
@@ -109,7 +111,7 @@ class SocialSharingButtons extends StatelessWidget {
             size: 36,
           ),
           color: Theme.of(context).primaryColorDark,
-          onPressed: () => socialShare(SocialNetwork.twitter),
+          onPressed: () => _socialShare(SocialNetwork.twitter),
         ),
         IconButton(
           icon: const Icon(
@@ -117,7 +119,7 @@ class SocialSharingButtons extends StatelessWidget {
             size: 36,
           ),
           color: Theme.of(context).primaryColorDark,
-          onPressed: () => socialShare(SocialNetwork.facebook),
+          onPressed: () => _socialShare(SocialNetwork.facebook),
         ),
         IconButton(
           icon: const Icon(
@@ -125,7 +127,7 @@ class SocialSharingButtons extends StatelessWidget {
             size: 36,
           ),
           color: Theme.of(context).primaryColorDark,
-          onPressed: () => socialShare(SocialNetwork.linkedin),
+          onPressed: () => _socialShare(SocialNetwork.linkedin),
         ),
         IconButton(
           icon: const Icon(
@@ -133,7 +135,7 @@ class SocialSharingButtons extends StatelessWidget {
             size: 36,
           ),
           color: Theme.of(context).primaryColorDark,
-          onPressed: () => socialShare(SocialNetwork.pinterest),
+          onPressed: () => _socialShare(SocialNetwork.pinterest),
         ),
         IconButton(
           icon: const Icon(
@@ -141,7 +143,7 @@ class SocialSharingButtons extends StatelessWidget {
             size: 36,
           ),
           color: Theme.of(context).primaryColorDark,
-          onPressed: () => socialShare(SocialNetwork.share),
+          onPressed: () => _socialShare(SocialNetwork.share),
         ),
       ],
     );

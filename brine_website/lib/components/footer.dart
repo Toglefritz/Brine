@@ -15,12 +15,12 @@ class Footer extends StatelessWidget {
   });
 
   /// Handles taps on the terms and conditions button.
-  void termsAndConditionsOnTap(BuildContext context) {
+  void _termsAndConditionsOnTap(BuildContext context) {
     context.push(TermsAndConditionsRoute.screenName);
   }
 
   /// Handles taps on the privacy policy button.
-  void privacyPolicyOnTap(BuildContext context) {
+  void _privacyPolicyOnTap(BuildContext context) {
     context.push(PrivacyPolicyRoute.screenName);
   }
 
@@ -31,27 +31,27 @@ class Footer extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(
-            right: Insets.kInsetsMedium,
+            right: Insets.medium,
           ),
           child: Text(
             AppLocalizations.of(context).legalStuff,
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(Insets.kInsetsSmall),
+          padding: EdgeInsets.all(Insets.small),
           child: FooterButton(
             text: AppLocalizations.of(context).termsAndConditions,
-            onPressed: () => termsAndConditionsOnTap(context),
+            onPressed: () => _termsAndConditionsOnTap(context),
           ),
         ),
         Padding(
           padding: EdgeInsets.only(
-            left: Insets.kInsetsSmall,
-            right: Insets.kInsetsMedium,
+            left: Insets.small,
+            right: Insets.medium,
           ),
           child: FooterButton(
             text: AppLocalizations.of(context).privacyPolicy,
-            onPressed: () => privacyPolicyOnTap(context),
+            onPressed: () => _privacyPolicyOnTap(context),
           ),
         ),
       ],

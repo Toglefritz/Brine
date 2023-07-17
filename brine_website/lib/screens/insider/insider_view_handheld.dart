@@ -31,14 +31,14 @@ class InsiderViewHandheld extends StatelessWidget {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(
-              Insets.kInsetsMedium,
+              Insets.medium,
             ),
             child: ConstrainedBox(
               constraints: const BoxConstraints(
                 maxWidth: 1000,
               ),
               child: PaddedColumn(
-                childrenPadding: Insets.kInsetsMedium,
+                childrenPadding: Insets.medium,
                 children: <Widget>[
                   Text(
                     AppLocalizations.of(context).insiderPageTitle,
@@ -50,7 +50,7 @@ class InsiderViewHandheld extends StatelessWidget {
                   if (FirebaseAuth.instance.currentUser?.displayName != null)
                     Padding(
                       padding: EdgeInsets.only(
-                        bottom: Insets.kInsetsMedium,
+                        bottom: Insets.medium,
                       ),
                       child: Text(
                         '${AppLocalizations.of(context).insiderPageSubtitle}${FirebaseAuth.instance.currentUser?.displayName}.',
@@ -78,7 +78,7 @@ class InsiderViewHandheld extends StatelessWidget {
                   const SocialSharingButtons(),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: Insets.kInsetsLarge,
+                      top: Insets.large,
                     ),
                     child: Text(
                       AppLocalizations.of(context).projectTimelines,
@@ -96,7 +96,7 @@ class InsiderViewHandheld extends StatelessWidget {
                   const TimelinesTabView(),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: Insets.kInsetsLarge,
+                      vertical: Insets.large,
                     ),
                     child: const Footer(),
                   ),

@@ -104,7 +104,7 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
       children: [
         Padding(
           padding: EdgeInsets.only(
-            right: Insets.kInsetsMedium,
+            right: Insets.medium,
             bottom: _amplitude - _animatedPaddingValue,
             top: _animatedPaddingValue,
           ),
@@ -123,7 +123,7 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
         ),
         Padding(
           padding: EdgeInsets.only(
-            left: Insets.kInsetsMedium,
+            left: Insets.medium,
             bottom: _animatedPaddingValue,
             top: _amplitude - _animatedPaddingValue,
           ),
