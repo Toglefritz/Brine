@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 
 import '../../components/navigable_page_controller.dart';
+import '../../services/analytics/analytics.dart';
 import '../../themes/screen_info.dart';
 import 'components/signup_dialog/email_optin_animated_dialog.dart';
 import 'landing_route.dart';
@@ -53,9 +54,7 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
 
   /// Launches the confetti!
   void launchConfettiBlast() {
-    if (kDebugMode == false) {
-      FirebaseAnalytics.instance.logEvent(name: 'landing_confetti');
-    }
+    Analytics.logEvent(name: 'landing_confetti');
 
     confettiController.play();
   }
@@ -68,14 +67,12 @@ class LandingController extends NavigablePageController<LandingRoute> with Singl
   /// The [buttonLabel] parameter is used in a [logEvent] call to Firebase Analytics so the specific button the
   /// visitor pressed, of the several buttons on the landing page, can be identified.
   Future<void> letsGoooooooo(String buttonLabel) async {
-    if (kDebugMode == false) {
-      FirebaseAnalytics.instance.logEvent(
-        name: 'landing_cta',
-        parameters: {
-          'button_key': buttonLabel,
-        },
-      );
-    }
+    Analytics.logEvent(
+      name: 'landing_cta',
+      parameters: {
+        'button_key': buttonLabel,
+      },
+    );
 
     await showGeneralDialog<bool?>(
       context: context,

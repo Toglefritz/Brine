@@ -1,3 +1,4 @@
+import 'package:brinemonitor/services/analytics/analytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -57,11 +58,9 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
 
   /// Handles taps on the [PrimaryCTAButton] on the [ThanksView].
   void onButtonPressed() {
-    if (kDebugMode == false) {
-      FirebaseAnalytics.instance.logEvent(
-        name: 'thanks_cta_pressed',
-      );
-    }
+    Analytics.logEvent(
+      name: 'thanks_cta_pressed',
+    );
 
     context.pushReplacement(InsiderRoute.screenName);
   }
@@ -69,14 +68,12 @@ class ThanksController extends NavigablePageController<ThanksRoute> with SingleT
   /// Fires the [ConfettiCannon]s again because everybody loves confetti (except the people who have to clean it
   /// up after the party).
   void repeatParty() {
-    if (kDebugMode == false) {
-      FirebaseAnalytics.instance.logEvent(
-        name: 'repeat_party',
-        parameters: {
-          'confetti_count': _confettiCount,
-        },
-      );
-    }
+    Analytics.logEvent(
+      name: 'repeat_party',
+      parameters: {
+        'confetti_count': _confettiCount,
+      },
+    );
 
     if (partyController.state != ConfettiControllerState.playing && _confettiCount < 8) {
       _confettiCount++;

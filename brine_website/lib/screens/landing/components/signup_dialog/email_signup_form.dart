@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../../../../services/analytics/analytics.dart';
 import '../../../../services/authentication/sign_in_anonymously.dart';
 import '../../../../services/lead_management/add_lead_function.dart';
 
@@ -69,28 +70,24 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
   String? _validateNameField({required BuildContext context, required String? entry}) {
     if (entry == null || entry.isEmpty) {
-      if (kDebugMode == false) {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'name_field_error',
-          parameters: {
-            'error': 'empty or null',
-          },
-        );
-      }
+      Analytics.logEvent(
+        name: 'name_field_error',
+        parameters: {
+          'error': 'empty or null',
+        },
+      );
 
       return AppLocalizations.of(context).validationNameEmpty;
     }
 
     // 1. Length check - truncate if length is greater than 30
     if (entry.length > 30) {
-      if (kDebugMode == false) {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'name_field_error',
-          parameters: {
-            'error': 'name too long',
-          },
-        );
-      }
+      Analytics.logEvent(
+        name: 'name_field_error',
+        parameters: {
+          'error': 'name too long',
+        },
+      );
 
       _nameFieldController.text = _nameFieldController.text.replaceRange(30, _nameFieldController.text.length, '...');
     }
@@ -110,14 +107,12 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     // 3. Escape or Strip HTML (Enhanced checks)
     RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
     if (htmlCharacters.hasMatch(entry)) {
-      if (kDebugMode == false) {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'name_field_error',
-          parameters: {
-            'error': 'contains HTML',
-          },
-        );
-      }
+      Analytics.logEvent(
+        name: 'name_field_error',
+        parameters: {
+          'error': 'contains HTML',
+        },
+      );
 
       return AppLocalizations.of(context).validationNameInvalidHtml;
     }
@@ -125,14 +120,12 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     // 4. Reject Control Characters
     RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
     if (controlCharacters.hasMatch(entry)) {
-      if (kDebugMode == false) {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'name_field_error',
-          parameters: {
-            'error': 'contains control characters',
-          },
-        );
-      }
+      Analytics.logEvent(
+        name: 'name_field_error',
+        parameters: {
+          'error': 'contains control characters',
+        },
+      );
 
       return AppLocalizations.of(context).validationNameControlCharacters;
     }
@@ -174,28 +167,24 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
     // Check if the entry is null or empty
     if (entry == null || entry.isEmpty) {
-      if (kDebugMode == false) {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'email_field_error',
-          parameters: {
-            'error': 'empty or null',
-          },
-        );
-      }
+      Analytics.logEvent(
+        name: 'email_field_error',
+        parameters: {
+          'error': 'empty or null',
+        },
+      );
 
       return AppLocalizations.of(context).validationEmailEmpty;
     }
 
     // Check if the email address is in valid format
     if (!regex.hasMatch(entry)) {
-      if (kDebugMode == false) {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'email_field_error',
-          parameters: {
-            'error': 'invalid email format',
-          },
-        );
-      }
+      Analytics.logEvent(
+        name: 'email_field_error',
+        parameters: {
+          'error': 'invalid email format',
+        },
+      );
 
       return AppLocalizations.of(context).validationEmailInvalid;
     }
@@ -203,14 +192,12 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     // Check for HTML characters/tags
     RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
     if (htmlCharacters.hasMatch(entry)) {
-      if (kDebugMode == false) {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'email_field_error',
-          parameters: {
-            'error': 'contains HTML',
-          },
-        );
-      }
+      Analytics.logEvent(
+        name: 'email_field_error',
+        parameters: {
+          'error': 'contains HTML',
+        },
+      );
 
       return AppLocalizations.of(context).validationEmailHtmlCharacters;
     }
@@ -218,14 +205,12 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     // Reject Control Characters
     RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
     if (controlCharacters.hasMatch(entry)) {
-      if (kDebugMode == false) {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'email_field_error',
-          parameters: {
-            'error': 'contains control characters',
-          },
-        );
-      }
+      Analytics.logEvent(
+        name: 'email_field_error',
+        parameters: {
+          'error': 'contains control characters',
+        },
+      );
 
       return AppLocalizations.of(context).validationEmailControlCharacters;
     }

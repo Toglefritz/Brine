@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../services/analytics/analytics.dart';
 import '../values/insets.dart';
 
 /// Displays a list of buttons to share Brine on various social networks.
@@ -26,11 +27,9 @@ class SocialSharingButtons extends StatelessWidget {
         // TODO: Handle this case.
         break;
       case SocialNetwork.twitter:
-        if (kDebugMode == false) {
-          FirebaseAnalytics.instance.logEvent(
-            name: 'twitter_share',
-          );
-        }
+        Analytics.logEvent(
+          name: 'twitter_share',
+        );
 
         await _launchUrl(
           Uri.parse(
@@ -39,11 +38,9 @@ class SocialSharingButtons extends StatelessWidget {
         );
         break;
       case SocialNetwork.facebook:
-        if (kDebugMode == false) {
-          FirebaseAnalytics.instance.logEvent(
-            name: 'facebook_share',
-          );
-        }
+        Analytics.logEvent(
+          name: 'facebook_share',
+        );
 
         await _launchUrl(
           Uri.parse(
@@ -52,11 +49,9 @@ class SocialSharingButtons extends StatelessWidget {
         );
         break;
       case SocialNetwork.linkedin:
-        if (kDebugMode == false) {
-          FirebaseAnalytics.instance.logEvent(
-            name: 'linkedin_share',
-          );
-        }
+        Analytics.logEvent(
+          name: 'linkedin_share',
+        );
 
         await _launchUrl(
           Uri.parse(
@@ -65,11 +60,9 @@ class SocialSharingButtons extends StatelessWidget {
         );
         break;
       case SocialNetwork.pinterest:
-        if (kDebugMode == false) {
-          FirebaseAnalytics.instance.logEvent(
-            name: 'pinterest_share',
-          );
-        }
+        Analytics.logEvent(
+          name: 'pinterest_share',
+        );
 
         await _launchUrl(
           Uri.parse(
@@ -78,15 +71,13 @@ class SocialSharingButtons extends StatelessWidget {
         );
         break;
       case SocialNetwork.share:
-        if (kDebugMode == false) {
-          FirebaseAnalytics.instance.logEvent(
-            name: 'generic_share',
-          );
-        }
+        Analytics.logEvent(
+          name: 'generic_share',
+        );
 
         Share.share(
           'I came across something truly fascinating that will, without a doubt, win a nobel prize in the near future. So, I used AI to write this email since I thought the project would be of great interest to you. It\'s called Brine (the "something" I was referring to in the previous sentence), and it\'s an incredible IoT water softener monitor that\'s about to launch on Kickstarter. I couldn\'t resist sharing it with you because I know how important home maintenance is to you. \n\n https://brinemonitor.com',
-        subject: 'Something truly wonderful (and a little salty)',
+          subject: 'Something truly wonderful (and a little salty)',
         );
         break;
     }
