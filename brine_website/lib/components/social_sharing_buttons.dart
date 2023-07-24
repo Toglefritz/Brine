@@ -1,7 +1,5 @@
 import 'package:brinemonitor/components/padded_row.dart';
 import 'package:brinemonitor/models/social_network.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';

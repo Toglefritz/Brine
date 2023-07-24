@@ -17,6 +17,9 @@ import '../values/insets.dart';
 ///     are selected.
 ///   - The [inputDecorationTheme] defines styling parameters for text input form field widgets.
 class DarkTheme {
+  /// A convenience method for determining if the dark theme is enabled.
+  static bool darkThemeEnabled(BuildContext context) => Theme.of(context).brightness == Brightness.dark;
+
   /// A border for text input form field widgets.
   static final OutlineInputBorder _border = OutlineInputBorder(
     borderSide: const BorderSide(

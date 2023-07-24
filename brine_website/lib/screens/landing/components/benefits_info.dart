@@ -1,3 +1,4 @@
+import 'package:brinemonitor/themes/dark_theme.dart';
 import 'package:brinemonitor/values/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,7 +31,7 @@ class BenefitsInfo extends StatelessWidget {
         BenefitsItem(
           width: itemWidth,
           icon: Image.asset(
-            Asset.waterMinerals.path,
+            DarkTheme.darkThemeEnabled(context) ? Asset.waterMineralsWhite.path : Asset.waterMinerals.path,
             width: 128,
           ),
           title: AppLocalizations.of(context).reduceScaleBuildup,
@@ -39,7 +40,7 @@ class BenefitsInfo extends StatelessWidget {
         BenefitsItem(
           width: itemWidth,
           icon: Image.asset(
-            Asset.soapHands.path,
+            DarkTheme.darkThemeEnabled(context) ? Asset.soapHandsWhite.path : Asset.soapHands.path,
             width: 128,
           ),
           title: AppLocalizations.of(context).increaseCleaningEffectiveness,
@@ -48,7 +49,7 @@ class BenefitsInfo extends StatelessWidget {
         BenefitsItem(
           width: itemWidth,
           icon: Image.asset(
-            Asset.socks.path,
+            DarkTheme.darkThemeEnabled(context) ? Asset.socksWhite.path : Asset.socks.path,
             width: 128,
           ),
           title: AppLocalizations.of(context).protectClothingAndFabrics,
@@ -57,7 +58,7 @@ class BenefitsInfo extends StatelessWidget {
         BenefitsItem(
           width: itemWidth,
           icon: Image.asset(
-            Asset.hair.path,
+            DarkTheme.darkThemeEnabled(context) ? Asset.hairWhite.path : Asset.hair.path,
             width: 128,
           ),
           title: AppLocalizations.of(context).promoteHealthySkinAndHair,

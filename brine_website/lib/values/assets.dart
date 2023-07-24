@@ -2,14 +2,18 @@
 enum Asset {
   brineLogo('brine_logo_large'),
   hair('hair'),
+  hairWhite('hair_white'),
   iphone13Mockup('iphone13_mockup'),
   numeral1('numeral_1'),
   numeral2('numeral_2'),
   numeral3('numeral_3'),
   partsDiagram('brine_parts_map'),
   soapHands('soap_hands'),
+  soapHandsWhite('soap_hands_white'),
   socks('socks'),
-  waterMinerals('water_minerals_icon');
+  socksWhite('socks_white'),
+  waterMinerals('water_minerals_icon'),
+  waterMineralsWhite('water_minerals_icon_white');
 
   /// The file path for the image asset.
   final String _imagePath;
