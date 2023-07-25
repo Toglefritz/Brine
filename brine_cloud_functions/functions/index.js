@@ -1,11 +1,16 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+import pkg1 from 'firebase-functions';
+const { functions } = pkg1;
+import pkg2 from 'firebase-admin';
+const { admin } = pkg2;
 
-// Initialize the Firebase project
-admin.initializeApp();
+import { onCall } from 'firebase-functions/v2/https';
+import { onRequest } from 'firebase-functions/v2/https';
 
-// Create a reference to the Firestore database
-const db = admin.firestore();
+// // Initialize the Firebase project
+// admin.initializeApp();
+
+// // Create a reference to the Firestore database
+// const db = admin.firestore();
 
 /**
  * `addLead` is a Firebase Cloud Function designed to add a new lead document
@@ -31,7 +36,7 @@ const db = admin.firestore();
  * with the given email already exists. If an error occurs when trying to add the document, the function logs the error 
  * and throws a Firebase 'internal' HttpsError.
  */
-exports.addLead = functions.https.onCall(async (data, context) => {
+export const addLead = onCall(async (data, context) => {
     if (!context.auth) {
         // Throwing an HttpsError so that the client gets error details.
         throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
@@ -121,7 +126,6 @@ async function verifyIdToken(req) {
     }
 }
 
-
 /// Calls the 'createUser' Firebase Cloud Function to create a new user 
 /// document in Firestore.
 ///
@@ -140,7 +144,7 @@ async function verifyIdToken(req) {
 /// ```
 ///
 /// The function does not return a value.
-exports.createUser = functions.https.onCall(async (data, context) => {
+export const createUser = onCall(async (data, context) => {
     // Check that the user is authenticated.
     if (!context.auth) {
         // Throwing an HttpsError so that the client gets error details.
@@ -169,7 +173,7 @@ exports.createUser = functions.https.onCall(async (data, context) => {
  * If the user document exists, it gets the list of devices and returns it as a response. If there's an error or the user is not 
  * authenticated, the function throws an appropriate error message.
 */
-exports.getUserDevices = functions.https.onCall(async (data, context) => {
+export const getUserDevices = onCall(async (data, context) => {
     // Check if the user is authenticated
     if (!context.auth) {
         throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
@@ -228,7 +232,7 @@ exports.getUserDevices = functions.https.onCall(async (data, context) => {
  *   "salt_level": 0.4
  * }
  */
-const updateDeviceLevels = functions.https.onRequest(async (req, res) => {
+export const updateDeviceLevels = onRequest(async (req, res) => {
     // Check if the request method is POST
     if (req.method !== 'POST') {
         res.status(400).send('Please send a POST request.');
@@ -236,9 +240,8 @@ const updateDeviceLevels = functions.https.onRequest(async (req, res) => {
     }
 
     // Authenticate the user
-    let decodedToken;
     try {
-        decodedToken = await verifyIdToken(req);
+        await verifyIdToken(req);
     } catch (error) {
         res.status(401).send('Unauthorized');
         return;
@@ -257,7 +260,7 @@ const updateDeviceLevels = functions.https.onRequest(async (req, res) => {
 
     // Update the Firestore document
     try {
-        await db.collection('devices').doc(deviceId).update({
+        await admin.firestore().collection('devices').doc(deviceId).update({
             'battery_level': batteryLevel,
             'salt_level': saltLevel,
         });
@@ -266,8 +269,6 @@ const updateDeviceLevels = functions.https.onRequest(async (req, res) => {
         res.status(500).send({ error: 'An error occurred while updating the device levels.' });
     }
 });
-
-exports.updateDeviceLevels = updateDeviceLevels;
 
 /**
  * This Firebase callable function retrieves the salt level and battery level for the
@@ -297,7 +298,7 @@ exports.updateDeviceLevels = updateDeviceLevels;
  *     console.error('Error getting device levels:', error);
  *   });
  */
-exports.getDeviceLevels = functions.https.onCall(async (data, context) => {
+export const getDeviceLevels = onCall(async (data, context) => {
     // Check if the user is authenticated
     if (!context.auth) {
         throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
