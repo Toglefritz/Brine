@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../components/navigable_page_controller.dart';
 import '../../values/insets.dart';
 import '../insider/insider_route.dart';
 import 'thanks_route.dart';
@@ -22,7 +21,7 @@ import 'thanks_view.dart';
 /// This screen features a big ol' party with a bunch of confetti that displays when the page launches and a very
 /// special GIF thanking the visitor for their interest in Brine. The page shows updates about Brine and links
 /// to share the project with others.
-class ThanksController extends NavigablePageController<ThanksRoute> with SingleTickerProviderStateMixin {
+class ThanksController extends State<ThanksRoute> with SingleTickerProviderStateMixin {
   /// A controller for the much bigger and grander confetti effect triggered when the visitor successfully signs
   /// up for updates from Brine.
   late ConfettiController partyController;

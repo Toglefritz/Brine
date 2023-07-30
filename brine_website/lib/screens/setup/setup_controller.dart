@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../components/navigable_page_controller.dart';
 import '../insider/insider_route.dart';
 import 'setup_route.dart';
 import 'setup_view.dart';
@@ -18,7 +17,7 @@ import 'setup_view.dart';
 /// This screen features a big ol' party with a bunch of confetti that displays when the page launches and a very
 /// special GIF thanking the visitor for their interest in Brine. The page shows updates about Brine and links
 /// to share the project with others.
-class SetupController extends NavigablePageController<SetupRoute> {
+class SetupController extends State<SetupRoute> {
   @override
   void initState() {
     if (kDebugMode == false) {

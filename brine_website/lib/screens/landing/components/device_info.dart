@@ -8,8 +8,8 @@ import '../../../values/insets.dart';
 /// corresponding annotations.
 ///
 /// The [direction] parameter determines whether the image and table are displayed in a row or a column.
-class BrineInfo extends StatefulWidget {
-  const BrineInfo({
+class DeviceInfo extends StatefulWidget {
+  const DeviceInfo({
     super.key,
     required this.direction,
   });
@@ -18,10 +18,10 @@ class BrineInfo extends StatefulWidget {
   final Axis direction;
 
   @override
-  State<BrineInfo> createState() => _BrineInfoState();
+  State<DeviceInfo> createState() => _DeviceInfoState();
 }
 
-class _BrineInfoState extends State<BrineInfo> {
+class _DeviceInfoState extends State<DeviceInfo> {
   /// A list of assets to display on each row of the table where the index of the asset in the list
   /// corresponds to the row on which it should be displayed.
   final List<Asset> rowAssets = [

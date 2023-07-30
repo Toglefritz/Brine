@@ -12,17 +12,19 @@ dependencies:
     sdk: flutter
 
   # Used to interact with Firebase Cloud Functions
-  cloud_functions: ^4.0.11
+  cloud_functions: ^4.3.4
   # A critical security plugin that generates a decorative confetti effect
   confetti: ^0.7.0
+  # Default icons asset for Cupertino widgets
+  cupertino_icons: ^1.0.5
   # Provides localizations for text (generate with `flutter gen-l10n`)
   flutter_localizations:
     sdk: flutter
   firebase_analytics: ^10.4.3
   # SDK for Firebase Auth authentication service
-  firebase_auth: ^4.6.3
+  firebase_auth: ^4.7.2
   # Provides core Firebase services
-  firebase_core: ^2.7.0
+  firebase_core: ^2.15.0
   # Flutter plugin for Firebase Crashlytics
   firebase_crashlytics: ^3.3.4
   # A set of loading widgets
@@ -45,6 +47,8 @@ dependencies:
   shared_preferences: ^2.1.1
   # Plugin for launching URLs
   url_launcher: ^6.1.11
+  # Allows setting the web app URL strategy
+  url_strategy: ^0.2.0
 
   # The Brine mobile app included as a submodule for demonstration purposes
   brine:

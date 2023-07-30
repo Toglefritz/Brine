@@ -1,9 +1,10 @@
-import '../../../components/navigable_page.dart';
+import 'package:flutter/cupertino.dart';
+
 import 'insider_controller.dart';
 
 /// A special page thanking the visitor for signing up for updates from Brine. This page is only shown after the user
 /// submits the form used to enroll for updates. It features a very cute little frog saying, "thanks."
-class InsiderRoute extends NavigablePage {
+class InsiderRoute extends StatefulWidget {
   static String get screenName => '/insider';
 
   const InsiderRoute({

@@ -2,14 +2,13 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../components/navigable_page_controller.dart';
 import '../../themes/screen_info.dart';
 import 'insider_route.dart';
 import 'insider_view_desktop.dart';
 import 'insider_view_handheld.dart';
 
 /// Controller for the [InsiderRoute].
-class InsiderController extends NavigablePageController<InsiderRoute> {
+class InsiderController extends State<InsiderRoute> {
   @override
   void initState() {
     if (kDebugMode == false) {

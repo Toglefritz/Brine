@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 
-import '../../components/navigable_page_controller.dart';
 import '../../services/analytics/analytics.dart';
 import '../../themes/screen_info.dart';
 import 'components/signup_dialog/email_optin_animated_dialog.dart';
@@ -22,7 +21,7 @@ import 'landing_view_handheld.dart';
 ///
 /// The [MouseRegion] widget surrounding the [PrimaryCTAButton] provides two callbacks: [onEnter] and [onExit]. These
 /// callbacks are used to start and stop the padding animation respectively.
-class LandingController extends NavigablePageController<LandingRoute> with SingleTickerProviderStateMixin {
+class LandingController extends State<LandingRoute> with SingleTickerProviderStateMixin {
   /// A controller for the decorative confetti effect launch-able from the main menu.
   late ConfettiController confettiController;
 

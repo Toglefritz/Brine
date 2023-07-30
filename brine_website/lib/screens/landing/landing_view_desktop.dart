@@ -100,7 +100,7 @@ class LandingViewDesktop extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                       vertical: Insets.medium,
                     ),
-                    child: BrineInfo(
+                    child: DeviceInfo(
                       direction: MediaQuery.of(context).size.width > 1000 ? Axis.horizontal : Axis.vertical,
                     ),
                   ),

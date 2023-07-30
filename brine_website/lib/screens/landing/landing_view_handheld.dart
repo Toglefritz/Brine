@@ -68,7 +68,7 @@ class LandingViewHandheld extends StatelessWidget {
                       direction: Axis.vertical,
                       itemWidth: 512,
                     ),
-                    const BrineInfo(
+                    const DeviceInfo(
                       direction: Axis.vertical,
                     ),
                     const Footer(),

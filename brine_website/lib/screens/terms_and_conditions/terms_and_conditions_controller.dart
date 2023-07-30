@@ -3,12 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../components/navigable_page_controller.dart';
 import 'terms_and_conditions_route.dart';
 import 'terms_and_conditions_view.dart';
 
 /// Controller for the [HomeRoute].
-class TermsAndConditionsController extends NavigablePageController<TermsAndConditionsRoute> {
+class TermsAndConditionsController extends State<TermsAndConditionsRoute> {
   @override
   void initState() {
     if (kDebugMode == false) {

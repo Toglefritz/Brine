@@ -108,26 +108,26 @@ packages:
     dependency: "direct main"
     description:
       name: cloud_functions
-      sha256: c21facf70f1d0fe16a170d2fb04a2bc7a47aa516180dafc31266250c983c028f
+      sha256: "61560d62b19f43e1d65b352ae121fc1b7046ceb6efce4e69ecd28fb110c84784"
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.3"
+    version: "4.3.4"
   cloud_functions_platform_interface:
     dependency: transitive
     description:
       name: cloud_functions_platform_interface
-      sha256: "91b400b212697aa3988c0b89dff79ba95ae7b008433b6ad00308b444c978643e"
+      sha256: edfa0a929baec47df698ca28c37d03c27c020545326eeea1ed0f8b3a47b073ca
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.3"
+    version: "5.4.4"
   cloud_functions_web:
     dependency: transitive
     description:
       name: cloud_functions_web
-      sha256: "779538398a658fa002100a7bc291dca3b44e4f16280e23b2ea3bb49612e5deeb"
+      sha256: c2b73ef1bc9b0948bfb701a252e1a4019af4266e204270803ee7fa0f1641c74f
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.3"
+    version: "4.5.4"
   collection:
     dependency: transitive
     description:
@@ -168,6 +168,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  cupertino_icons:
+    dependency: "direct main"
+    description:
+      name: cupertino_icons
+      sha256: e35129dc44c9118cee2a5603506d823bab99c68393879edb440e0090d07586be
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   dynamic_color:
     dependency: transitive
     description:
@@ -228,26 +236,26 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_auth
-      sha256: f693c0aa998b1101453878951b171b69f0db5199003df1c943b33493a1de7917
+      sha256: "49fd35ce06f2530dd460e5dc123235731cb61dd7c76b0af4b6e190404880d04d"
       url: "https://pub.dev"
     source: hosted
-    version: "4.6.3"
+    version: "4.7.2"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
-      sha256: "689ae048b78ad088ba31acdec45f5badb56201e749ed8b534947a7303ddb32aa"
+      sha256: "817f3ceb84ef5e9adaaf50cf7a19255f6ffcdd12c6f9e9aa4cf00fc7f2eb3cfb"
       url: "https://pub.dev"
     source: hosted
-    version: "6.15.3"
+    version: "6.16.1"
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
-      sha256: f35d637a1707afd51f30090bb5234b381d5071ccbfef09b8c393bc7c65e440cd
+      sha256: e9044778287f1ff8f9f4cee7e247b03ec87bb8977e0e65ad27dc337e196132e8
       url: "https://pub.dev"
     source: hosted
-    version: "5.5.3"
+    version: "5.6.2"
   firebase_core:
     dependency: "direct main"
     description:
@@ -833,6 +841,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.6"
+  url_strategy:
+    dependency: "direct main"
+    description:
+      name: url_strategy
+      sha256: "42b68b42a9864c4d710401add17ad06e28f1c1d5500c93b98c431f6b0ea4ab87"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   uuid:
     dependency: transitive
     description:
