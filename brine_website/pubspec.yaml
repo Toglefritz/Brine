@@ -47,8 +47,6 @@ dependencies:
   shared_preferences: ^2.1.1
   # Plugin for launching URLs
   url_launcher: ^6.1.11
-  # Allows setting the web app URL strategy
-  url_strategy: ^0.2.0
 
   # The Brine mobile app included as a submodule for demonstration purposes
   brine:

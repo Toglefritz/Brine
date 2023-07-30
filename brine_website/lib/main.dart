@@ -32,7 +32,9 @@ Future<void> main() async {
   }
 
   // Pass all uncaught errors from the framework to Crashlytics.
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  if (!kIsWeb) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  }
 
   runApp(const BrineMonitorWebsite());
 }
