@@ -12,6 +12,7 @@ enum Asset {
   soapHandsWhite('soap_hands_white'),
   socks('socks'),
   socksWhite('socks_white'),
+  wasTwitter('was_twitter_logo'),
   waterMinerals('water_minerals_icon'),
   waterMineralsWhite('water_minerals_icon_white');
 

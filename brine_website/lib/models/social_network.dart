@@ -3,7 +3,7 @@
 /// is still a sharing option.
 enum SocialNetwork {
   threads,
-  twitter,
+  formerlyTwitter,
   facebook,
   linkedin,
   pinterest,

@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../services/analytics/analytics.dart';
+import '../values/assets.dart';
 import '../values/insets.dart';
 
 /// Displays a list of buttons to share Brine on various social networks.
@@ -24,7 +25,7 @@ class SocialSharingButtons extends StatelessWidget {
       case SocialNetwork.threads:
         // TODO: Handle this case.
         break;
-      case SocialNetwork.twitter:
+      case SocialNetwork.formerlyTwitter:
         Analytics.logEvent(
           name: 'twitter_share',
         );
@@ -95,12 +96,12 @@ class SocialSharingButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          icon: const Icon(
-            FontAwesomeIcons.twitter,
-            size: 36,
+          icon: Image.asset(
+            Asset.wasTwitter.path,
+            width: 36,
           ),
           color: Theme.of(context).primaryColorDark,
-          onPressed: () => _socialShare(SocialNetwork.twitter),
+          onPressed: () => _socialShare(SocialNetwork.formerlyTwitter),
         ),
         IconButton(
           icon: const Icon(
