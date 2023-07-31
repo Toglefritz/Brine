@@ -1,10 +1,9 @@
-import pkg1 from 'firebase-functions';
-const { functions } = pkg1;
-import pkg2 from 'firebase-admin';
-const { admin } = pkg2;
+const {onRequest} = require("firebase-functions/v2/https");
+const {onCall} = require("firebase-functions/v2/https");
+const functions = require('firebase-functions');
+const admin = require("firebase-admin");
 
-import { onCall } from 'firebase-functions/v2/https';
-import { onRequest } from 'firebase-functions/v2/https';
+admin.initializeApp();
 
 // // Initialize the Firebase project
 // admin.initializeApp();
@@ -36,60 +35,57 @@ import { onRequest } from 'firebase-functions/v2/https';
  * with the given email already exists. If an error occurs when trying to add the document, the function logs the error 
  * and throws a Firebase 'internal' HttpsError.
  */
-export const addLead = onCall(async (data, context) => {
-    if (!context.auth) {
-        // Throwing an HttpsError so that the client gets error details.
-        throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
-    }
+exports.addLead = onCall(async (data, context) => {
+  // Validate input
+  if (!(typeof data.data.email === 'string') ||
+      !(typeof data.data.name === 'string') ||
+      !(typeof data.data.timestamp === 'number')) {
+      throw new functions.https.HttpsError(
+          'invalid-argument',
+          'The function must be called with valid arguments. Expected "email" as string, "name" as string, and "timestamp" as number.'
+      );
+  }
 
-    const uid = context.auth.uid;
-    console.log(`Function called by user ${uid} with data:', data`);
+  var email = data.data.email;
+  var name = data.data.name;
+  var timestamp = data.data.timestamp;
 
-    // Validate input
-    if (!(typeof data.email === 'string') ||
-        !(typeof data.name === 'string') ||
-        !(typeof data.timestamp === 'number')) {
-        throw new functions.https.HttpsError(
-            'invalid-argument',
-            'The function must be called with valid arguments. Expected "email" as string, "name" as string, and "timestamp" as number.'
-        );
-    }
+  const newLead = {
+      email: email,
+      name: name,
+      timestamp: timestamp,
+  };
 
-    const newLead = {
-        email: data.email,
-        name: data.name,
-        timestamp: data.timestamp,
-    };
+  try {
+      // Check if a lead with the given email already exists.
+      const leadsRef = admin.firestore().collection('leads');
+      const snapshot = await leadsRef.where('email', '==', email).get();
 
-    try {
-        // Check if a lead with the given email already exists.
-        const leadsRef = admin.firestore().collection('leads');
-        const snapshot = await leadsRef.where('email', '==', data.email).get();
+      if (!snapshot.empty) {
+          // A lead with the given email already exists.
+          console.log(`Lead with email: ${email} already exists.`);
+          return { result: `Lead with email: ${email} already exists.` };
+      } else {
+          // Add the new lead.
+          const docRef = await leadsRef.add(newLead);
+          return { result: `Lead with ID: ${docRef.id} added.` };
+      }
+  } catch (error) {
+      console.log('Error adding document: ', error);
 
-        if (!snapshot.empty) {
-            // A lead with the given email already exists.
-            console.log(`Lead with email: ${data.email} already exists.`);
-            return { result: `Lead with email: ${data.email} already exists.` };
-        } else {
-            // Add the new lead.
-            const docRef = await leadsRef.add(newLead);
-            return { result: `Lead with ID: ${docRef.id} added.` };
-        }
-    } catch (error) {
-        console.log('Error adding document: ', error);
+      let message = 'Failed to add the lead';
+      if (error.code === 'permission-denied') {
+          message = 'Insufficient permissions to add the lead';
+      } else if (error.code === 'unavailable') {
+          message = 'The service is currently unavailable';
+      } else if (error.code === 'deadline-exceeded') {
+          message = 'The request timed out';
+      }
 
-        let message = 'Failed to add the lead';
-        if (error.code === 'permission-denied') {
-            message = 'Insufficient permissions to add the lead';
-        } else if (error.code === 'unavailable') {
-            message = 'The service is currently unavailable';
-        } else if (error.code === 'deadline-exceeded') {
-            message = 'The request timed out';
-        }
-
-        throw new functions.https.HttpsError(message, 'An internal error occurred', { detailedMessage: message });
-    }
+      throw new functions.https.HttpsError(message, 'An internal error occurred', { detailedMessage: message });
+  }
 });
+
 
 /**
  * This helper function verifies the ID token sent in the request header.
@@ -113,18 +109,19 @@ export const addLead = onCall(async (data, context) => {
  * }
  */
 async function verifyIdToken(req) {
-    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
-        throw new Error('Unauthorized');
-    }
+  if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
+      throw new Error('Unauthorized');
+  }
 
-    const idToken = req.headers.authorization.split('Bearer ')[1];
-    try {
-        const decodedToken = await admin.auth().verifyIdToken(idToken);
-        return decodedToken;
-    } catch (error) {
-        throw new Error('Unauthorized');
-    }
+  const idToken = req.headers.authorization.split('Bearer ')[1];
+  try {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      return decodedToken;
+  } catch (error) {
+      throw new Error('Unauthorized');
+  }
 }
+
 
 /// Calls the 'createUser' Firebase Cloud Function to create a new user 
 /// document in Firestore.
@@ -144,65 +141,67 @@ async function verifyIdToken(req) {
 /// ```
 ///
 /// The function does not return a value.
-export const createUser = onCall(async (data, context) => {
-    // Check that the user is authenticated.
-    if (!context.auth) {
-        // Throwing an HttpsError so that the client gets error details.
-        throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
-    }
+exports.createUser = onCall(async (data, context) => {
+  // Check that the user is authenticated.
+  if (!context.auth) {
+      // Throwing an HttpsError so that the client gets error details.
+      throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+  }
 
-    const uid = context.auth.uid;
+  const uid = context.auth.uid;
 
-    try {
-        // Create a new document in the "users" collection with the user's UID.
-        await admin.firestore().collection('users').doc(uid).set({
-            uid: uid,
-            devices: [],
-        });
+  try {
+      // Create a new document in the "users" collection with the user's UID.
+      await admin.firestore().collection('users').doc(uid).set({
+          uid: uid,
+          devices: [],
+      });
 
-        return { result: `User with UID ${uid} added.` };
-    } catch (error) {
-        // Handle any errors that occurred while adding the user to Firestore.
-        console.error('Error adding user to Firestore: ', error);
-        throw new functions.https.HttpsError('unknown', 'Failed to create user.');
-    }
+      return { result: `User with UID ${uid} added.` };
+  } catch (error) {
+      // Handle any errors that occurred while adding the user to Firestore.
+      console.error('Error adding user to Firestore: ', error);
+      throw new functions.https.HttpsError('unknown', 'Failed to create user.');
+  }
 });
+
 
 /*
  * This function checks if the user is authenticated and then retrieves the user document from the users collection in Firestore. 
  * If the user document exists, it gets the list of devices and returns it as a response. If there's an error or the user is not 
  * authenticated, the function throws an appropriate error message.
 */
-export const getUserDevices = onCall(async (data, context) => {
-    // Check if the user is authenticated
-    if (!context.auth) {
-        throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
-    }
+exports.getUserDevices = onCall(async (data, context) => {
+  // Check if the user is authenticated
+  if (!context.auth) {
+      throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
+  }
 
-    // Get the user's UID from the context
-    const userUid = context.auth.uid;
+  // Get the user's UID from the context
+  const userUid = context.auth.uid;
 
-    try {
-        // Get the user document from Firestore
-        const userDocRef = admin.firestore().collection("users").doc(userUid);
-        const userDocSnapshot = await userDocRef.get();
+  try {
+      // Get the user document from Firestore
+      const userDocRef = admin.firestore().collection("users").doc(userUid);
+      const userDocSnapshot = await userDocRef.get();
 
-        if (!userDocSnapshot.exists) {
-            throw new functions.https.HttpsError("not-found", "User not found");
-        }
+      if (!userDocSnapshot.exists) {
+          throw new functions.https.HttpsError("not-found", "User not found");
+      }
 
-        // Get the list of devices from the user document
-        const devices = userDocSnapshot.get("devices");
+      // Get the list of devices from the user document
+      const devices = userDocSnapshot.get("devices");
 
-        // Return the list of devices
-        return {
-            devices: devices
-        };
-    } catch (error) {
-        console.error("Error getting user devices:", error);
-        throw new functions.https.HttpsError("internal", "An error occurred while getting user devices");
-    }
+      // Return the list of devices
+      return {
+          devices: devices
+      };
+  } catch (error) {
+      console.error("Error getting user devices:", error);
+      throw new functions.https.HttpsError("internal", "An error occurred while getting user devices");
+  }
 });
+
 
 /**
  * This function updates the battery level and salt level of a device in a Firestore document.
@@ -232,43 +231,44 @@ export const getUserDevices = onCall(async (data, context) => {
  *   "salt_level": 0.4
  * }
  */
-export const updateDeviceLevels = onRequest(async (req, res) => {
-    // Check if the request method is POST
-    if (req.method !== 'POST') {
-        res.status(400).send('Please send a POST request.');
-        return;
-    }
+exports.updateDeviceLevels = onRequest(async (req, res) => {
+  // Check if the request method is POST
+  if (req.method !== 'POST') {
+      res.status(400).send('Please send a POST request.');
+      return;
+  }
 
-    // Authenticate the user
-    try {
-        await verifyIdToken(req);
-    } catch (error) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
+  // Authenticate the user
+  try {
+      await verifyIdToken(req);
+  } catch (error) {
+      res.status(401).send('Unauthorized');
+      return;
+  }
 
-    // Get the parameters from the request
-    const deviceId = req.body.device_id;
-    const batteryLevel = req.body.battery_level;
-    const saltLevel = req.body.salt_level;
+  // Get the parameters from the request
+  const deviceId = req.body.device_id;
+  const batteryLevel = req.body.battery_level;
+  const saltLevel = req.body.salt_level;
 
-    // Validate the input data
-    if (!deviceId || typeof batteryLevel === 'undefined' || typeof saltLevel === 'undefined') {
-        res.status(400).send('Device ID, battery level, and salt level are required.');
-        return;
-    }
+  // Validate the input data
+  if (!deviceId || typeof batteryLevel === 'undefined' || typeof saltLevel === 'undefined') {
+      res.status(400).send('Device ID, battery level, and salt level are required.');
+      return;
+  }
 
-    // Update the Firestore document
-    try {
-        await admin.firestore().collection('devices').doc(deviceId).update({
-            'battery_level': batteryLevel,
-            'salt_level': saltLevel,
-        });
-        res.status(200).send({ result: 'Device levels updated successfully.' });
-    } catch (error) {
-        res.status(500).send({ error: 'An error occurred while updating the device levels.' });
-    }
+  // Update the Firestore document
+  try {
+      await admin.firestore().collection('devices').doc(deviceId).update({
+          'battery_level': batteryLevel,
+          'salt_level': saltLevel,
+      });
+      res.status(200).send({ result: 'Device levels updated successfully.' });
+  } catch (error) {
+      res.status(500).send({ error: 'An error occurred while updating the device levels.' });
+  }
 });
+
 
 /**
  * This Firebase callable function retrieves the salt level and battery level for the
@@ -298,54 +298,54 @@ export const updateDeviceLevels = onRequest(async (req, res) => {
  *     console.error('Error getting device levels:', error);
  *   });
  */
-export const getDeviceLevels = onCall(async (data, context) => {
-    // Check if the user is authenticated
-    if (!context.auth) {
-        throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
-    }
+exports.getDeviceLevels = onCall(async (data, context) => {
+  // Check if the user is authenticated
+  if (!context.auth) {
+      throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
+  }
 
-    // Get the user's UID and device ID from the request
-    const userUid = context.auth.uid;
-    const deviceId = data.deviceId;
+  // Get the user's UID and device ID from the request
+  const userUid = context.auth.uid;
+  const deviceId = data.deviceId;
 
-    if (!deviceId) {
-        throw new functions.https.HttpsError("invalid-argument", "Device ID must be provided");
-    }
+  if (!deviceId) {
+      throw new functions.https.HttpsError("invalid-argument", "Device ID must be provided");
+  }
 
-    try {
-        // Get the user document from Firestore
-        const userDocRef = admin.firestore().collection("users").doc(userUid);
-        const userDocSnapshot = await userDocRef.get();
+  try {
+      // Get the user document from Firestore
+      const userDocRef = admin.firestore().collection("users").doc(userUid);
+      const userDocSnapshot = await userDocRef.get();
 
-        if (!userDocSnapshot.exists) {
-            throw new functions.https.HttpsError("not-found", "User not found");
-        }
+      if (!userDocSnapshot.exists) {
+          throw new functions.https.HttpsError("not-found", "User not found");
+      }
 
-        // Check if the user has access to the specified device
-        const userDevices = userDocSnapshot.get("devices");
-        if (!userDevices.includes(deviceId)) {
-            throw new functions.https.HttpsError("permission-denied", "User does not have access to the specified device");
-        }
+      // Check if the user has access to the specified device
+      const userDevices = userDocSnapshot.get("devices");
+      if (!userDevices.includes(deviceId)) {
+          throw new functions.https.HttpsError("permission-denied", "User does not have access to the specified device");
+      }
 
-        // Get the device document from Firestore
-        const deviceDocRef = admin.firestore().collection("devices").doc(deviceId);
-        const deviceDocSnapshot = await deviceDocRef.get();
+      // Get the device document from Firestore
+      const deviceDocRef = admin.firestore().collection("devices").doc(deviceId);
+      const deviceDocSnapshot = await deviceDocRef.get();
 
-        if (!deviceDocSnapshot.exists) {
-            throw new functions.https.HttpsError("not-found", "Device not found");
-        }
+      if (!deviceDocSnapshot.exists) {
+          throw new functions.https.HttpsError("not-found", "Device not found");
+      }
 
-        // Get the battery level and salt level from the device document
-        const batteryLevel = deviceDocSnapshot.get("battery_level");
-        const saltLevel = deviceDocSnapshot.get("salt_level");
+      // Get the battery level and salt level from the device document
+      const batteryLevel = deviceDocSnapshot.get("battery_level");
+      const saltLevel = deviceDocSnapshot.get("salt_level");
 
-        // Return the battery level and salt level
-        return {
-            battery_level: batteryLevel,
-            salt_level: saltLevel
-        };
-    } catch (error) {
-        console.error("Error getting device levels:", error);
-        throw new functions.https.HttpsError("internal", "An error occurred while getting device levels");
-    }
+      // Return the battery level and salt level
+      return {
+          battery_level: batteryLevel,
+          salt_level: saltLevel
+      };
+  } catch (error) {
+      console.error("Error getting device levels:", error);
+      throw new functions.https.HttpsError("internal", "An error occurred while getting device levels");
+  }
 });
