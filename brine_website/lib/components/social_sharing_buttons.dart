@@ -99,8 +99,8 @@ class SocialSharingButtons extends StatelessWidget {
           icon: Image.asset(
             Asset.wasTwitter.path,
             width: 36,
+            color: Theme.of(context).primaryColorDark,
           ),
-          color: Theme.of(context).primaryColorDark,
           onPressed: () => _socialShare(SocialNetwork.formerlyTwitter),
         ),
         IconButton(
