@@ -96,7 +96,7 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
             ),
             width: widget.width,
             child: Padding(
-              padding: EdgeInsets.all(Insets.xSmall),
+              padding: EdgeInsets.all(Insets.small),
               child: Column(
                 children: [
                   Row(
