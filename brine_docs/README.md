@@ -20,3 +20,4 @@ your hands and hair well-moisturized, your laundry machine effective, and spots 
 
 1. Power
     - **battery_monitoring**: Information about the voltage divider circuit used to monitor the voltage of the batteries used to power Brine.
+    - **deep_sleep_handling**: Describes how the Brine firmware uses deep sleep mode to maximize battery life.
