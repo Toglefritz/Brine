@@ -9,8 +9,6 @@ import '../../components/app_bar/main_app_bar.dart';
 import '../../components/social_sharing_buttons.dart';
 import '../../values/insets.dart';
 import '../../components/footer.dart';
-import 'components/timeline/timelines_tab_bar.dart';
-import 'components/timeline/timelines_tab_view.dart';
 import 'insider_controller.dart';
 
 /// View for the [OnboardingRoute].
@@ -86,24 +84,6 @@ class InsiderViewDesktop extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Insets.large,
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context).projectTimelines,
-                      style: GoogleFonts.changaOne().copyWith(
-                        fontSize: 32,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    AppLocalizations.of(context).projectTimelinesExplanation,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  const TimelinesTabBar(),
-                  const TimelinesTabView(),
                   Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: Insets.large,

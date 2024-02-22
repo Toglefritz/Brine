@@ -23,7 +23,8 @@ class PaddedColumn extends StatelessWidget {
   /// Determines the way tha the [children] are arranged in the [Column].
   final MainAxisAlignment? mainAxisAlignment;
 
-  /// Returns a [List<Widget>] in which each widget in the
+  /// Returns a [List<Widget>] in which each widget in the in the list is wrapped in
+  /// a [Padding] widget with vertical padding of [childrenPadding].
   List<Widget> _getPaddedChildren() {
     List<Widget> paddedWidgets = [];
 

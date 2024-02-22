@@ -23,7 +23,8 @@ class PaddedRow extends StatelessWidget {
   /// Determines the way tha the [children] are arranged in the [Row].
   final MainAxisAlignment? mainAxisAlignment;
 
-  /// Returns a [List<Widget>] in which each widget in the
+  /// Returns a [List<Widget>] in which each widget in the list is wrapped in
+  /// a [Padding] widget with horizontal padding of [childrenPadding].
   List<Widget> _getPaddedChildren() {
     List<Widget> paddedWidgets = [];
 
