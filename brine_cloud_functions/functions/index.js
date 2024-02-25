@@ -3,13 +3,8 @@ const {onCall} = require("firebase-functions/v2/https");
 const functions = require('firebase-functions');
 const admin = require("firebase-admin");
 
+// Initialize the Firebase project
 admin.initializeApp();
-
-// // Initialize the Firebase project
-// admin.initializeApp();
-
-// // Create a reference to the Firestore database
-// const db = admin.firestore();
 
 /**
  * `addLead` is a Firebase Cloud Function designed to add a new lead document
