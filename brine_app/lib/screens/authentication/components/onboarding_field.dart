@@ -94,9 +94,10 @@ class OnboardingField extends StatelessWidget {
                 )
               : const SizedBox.shrink(),
           errorMaxLines: 2,
-          errorStyle: const TextStyle(
+          errorStyle: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColorDark,
           ),
           errorText: additionalError,
         ),
