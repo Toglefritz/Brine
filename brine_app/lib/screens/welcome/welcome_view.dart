@@ -33,7 +33,7 @@ class WelcomeView extends StatelessWidget {
                   horizontal: Insets.medium,
                 ),
                 child: Text(
-                  AppLocalizations.of(context).addADevice,
+                  AppLocalizations.of(context)!.addADevice,
                   style: GoogleFonts.bungee().copyWith(
                     fontSize: 52,
                     color: ColorLibrary.primaryDefault,
@@ -47,8 +47,10 @@ class WelcomeView extends StatelessWidget {
                   horizontal: Insets.xLarge,
                 ),
                 child: Text(
-                  AppLocalizations.of(context).addDeviceInvitation,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  AppLocalizations.of(context)!.addDeviceInvitation,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: ColorLibrary.primaryDefault,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -63,8 +65,10 @@ class WelcomeView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      AppLocalizations.of(context).salesPrompt,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      AppLocalizations.of(context)!.salesPrompt,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: ColorLibrary.primaryDefault,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     Padding(
@@ -73,7 +77,7 @@ class WelcomeView extends StatelessWidget {
                         bottom: Insets.medium,
                       ),
                       child: LightButton(
-                        text: AppLocalizations.of(context).getOneNow,
+                        text: AppLocalizations.of(context)!.getOneNow,
                         onPressed: state.onOrderButtonPressed,
                       ),
                     ),

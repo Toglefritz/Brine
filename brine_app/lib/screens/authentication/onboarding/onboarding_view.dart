@@ -36,7 +36,7 @@ class OnboardingView extends StatelessWidget {
                       bottom: Insets.large,
                     ),
                     child: Text(
-                      AppLocalizations.of(context).brine,
+                      AppLocalizations.of(context)!.brine,
                       style: GoogleFonts.bungee().copyWith(
                         fontSize: 52,
                         color: ColorLibrary.primaryDefault,
@@ -65,12 +65,12 @@ class OnboardingView extends StatelessWidget {
                         ),
                         child: LightButton(
                           onPressed: state.handleLoginTap,
-                          text: AppLocalizations.of(context).login,
+                          text: AppLocalizations.of(context)!.login,
                         ),
                       ),
                       LightButton(
                         onPressed: state.handleCreateAccountTap,
-                        text: AppLocalizations.of(context).createAnAccount,
+                        text: AppLocalizations.of(context)!.createAnAccount,
                       ),
                     ],
                   ),

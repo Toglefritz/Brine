@@ -29,24 +29,23 @@ class OnboardingLegalPrompt extends StatelessWidget {
         style: const TextStyle(
           color: ColorLibrary.primaryDefault,
         ),
-        text: AppLocalizations.of(context).onboardingLegalPrompt1,
+        text: AppLocalizations.of(context)!.onboardingLegalPrompt1,
         children: <TextSpan>[
           TextSpan(
-            text: AppLocalizations.of(context).termsOfService,
+            text: AppLocalizations.of(context)!.termsOfService,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            recognizer: TapGestureRecognizer()
-              ..onTap = handleTermsAndConditionsTap,
+            recognizer: TapGestureRecognizer()..onTap = handleTermsAndConditionsTap,
           ),
           TextSpan(
-            text: AppLocalizations.of(context).and,
+            text: AppLocalizations.of(context)!.and,
           ),
           TextSpan(
-            text: AppLocalizations.of(context).privacyPolicy,
+            text: AppLocalizations.of(context)!.privacyPolicy,
             style: const TextStyle(fontWeight: FontWeight.bold),
             recognizer: TapGestureRecognizer()..onTap = handlePrivacyPolicyTap,
           ),
           TextSpan(
-            text: AppLocalizations.of(context).onboardingLegalPrompt2,
+            text: AppLocalizations.of(context)!.onboardingLegalPrompt2,
           ),
         ],
       ),

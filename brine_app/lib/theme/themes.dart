@@ -12,7 +12,7 @@ final ThemeData lightThemeData = ThemeData(
   brightness: Brightness.light,
   primaryColor: const Color(0xFFEDA200),
   useMaterial3: true,
-  scaffoldBackgroundColor: const Color(0xFFFFF0D1),
+  scaffoldBackgroundColor: const Color(0xFFffE0A3),
   textTheme: defaultTextTheme,
 );
 

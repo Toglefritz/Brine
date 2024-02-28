@@ -25,50 +25,43 @@ class AuthenticationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      resizeToAvoidBottomInset: false,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leadingWidth: 100,
-        leading: TextButton.icon(
-          onPressed: backOnTap,
-          icon: const Icon(
-            Icons.chevron_left,
-            color: ColorLibrary.primaryDefault,
-          ),
-          label: Text(
-            AppLocalizations.of(context).back.toUpperCase(),
-            style: const TextStyle(
-              color: ColorLibrary.primaryDefault,
-            ),
-          ),
-        ),
-      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(
-                children: content
-                  ..add(
-                    const Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(
-                              Insets.medium,
-                            ),
-                            child: OnboardingLegalPrompt(),
-                          ),
-                        ],
-                      ),
-                    ),
+            SliverAppBar(
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leadingWidth: 100,
+              leading: TextButton.icon(
+                onPressed: backOnTap,
+                icon: const Icon(
+                  Icons.chevron_left,
+                  color: ColorLibrary.primaryDefault,
+                ),
+                label: Text(
+                  AppLocalizations.of(context)!.back.toUpperCase(),
+                  style: const TextStyle(
+                    color: ColorLibrary.primaryDefault,
                   ),
+                ),
               ),
+            ),
+            SliverList.list(
+              children: [
+                ...content,
+                const Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(
+                        Insets.medium,
+                      ),
+                      child: OnboardingLegalPrompt(),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

@@ -56,7 +56,7 @@ class SoftenerMonitorView extends StatelessWidget {
                       horizontal: Insets.medium,
                     ),
                     child: Text(
-                      AppLocalizations.of(context).saltRemaining.toUpperCase(),
+                      AppLocalizations.of(context)!.saltRemaining.toUpperCase(),
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             color: ColorLibrary.primaryDefault,
                           ),

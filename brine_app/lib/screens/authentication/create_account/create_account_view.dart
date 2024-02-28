@@ -35,7 +35,7 @@ class CreateAccountView extends StatelessWidget {
                 bottom: Insets.large,
               ),
               child: Text(
-                AppLocalizations.of(context).createAccount,
+                AppLocalizations.of(context)!.createAccount,
                 style: GoogleFonts.bungee().copyWith(
                   fontSize: 52,
                   color: ColorLibrary.primaryDefault,
@@ -52,7 +52,7 @@ class CreateAccountView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: Insets.small),
                 child: OnboardingField(
-                  hint: AppLocalizations.of(context).username,
+                  hint: AppLocalizations.of(context)!.username,
                   controller: state.usernameFieldController,
                   validator: state.validateUsernameField,
                   errorState: state.usernameFieldError,
@@ -84,7 +84,7 @@ class CreateAccountView extends StatelessWidget {
                         ),
                       ),
                       BorderlessField(
-                        hint: AppLocalizations.of(context).password,
+                        hint: AppLocalizations.of(context)!.password,
                         obscureText: true,
                         controller: state.passwordFieldController,
                         validator: state.validatePasswordField,
@@ -93,13 +93,12 @@ class CreateAccountView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 57),
                         child: BorderlessField(
-                          hint: AppLocalizations.of(context).confirmPassword,
+                          hint: AppLocalizations.of(context)!.confirmPassword,
                           obscureText: true,
                           controller: state.passwordConfirmationFieldController,
                           validator: state.validatePasswordConfirmationField,
                           errorState: state.passwordConfirmationFieldError,
-                          additionalError:
-                              state.createAccountPasswordExceptionError,
+                          additionalError: state.createAccountPasswordExceptionError,
                         ),
                       ),
                     ],
@@ -108,7 +107,7 @@ class CreateAccountView extends StatelessWidget {
               ),
               DarkOnboardingButton(
                 onPressed: state.handleCreateAccountSubmit,
-                text: AppLocalizations.of(context).submit,
+                text: AppLocalizations.of(context)!.submit,
                 width: 350,
                 loading: state.creatingAccount,
               ),
@@ -135,14 +134,14 @@ class CreateAccountView extends StatelessWidget {
               ),
               child: LightButton(
                 onPressed: state.handleGoogleCreateAccount,
-                text: AppLocalizations.of(context).signUpWithGoogle,
+                text: AppLocalizations.of(context)!.signUpWithGoogle,
                 icon: FontAwesomeIcons.google,
               ),
             ),
             if (Device.isIOS)
               LightButton(
                 onPressed: state.handleAppleCreateAccount,
-                text: AppLocalizations.of(context).signUpWithApple,
+                text: AppLocalizations.of(context)!.signUpWithApple,
                 icon: FontAwesomeIcons.apple,
               ),
           ],

@@ -34,7 +34,7 @@ class LoginView extends StatelessWidget {
                 bottom: Insets.large,
               ),
               child: Text(
-                AppLocalizations.of(context).login,
+                AppLocalizations.of(context)!.login,
                 style: GoogleFonts.bungee().copyWith(
                   fontSize: 52,
                   color: ColorLibrary.primaryDefault,
@@ -51,7 +51,7 @@ class LoginView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: Insets.small),
                 child: OnboardingField(
-                  hint: AppLocalizations.of(context).username,
+                  hint: AppLocalizations.of(context)!.username,
                   controller: state.usernameFieldController,
                   validator: state.validateUsernameField,
                   errorState: state.usernameFieldError,
@@ -61,7 +61,7 @@ class LoginView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: Insets.small),
                 child: OnboardingField(
-                  hint: AppLocalizations.of(context).password,
+                  hint: AppLocalizations.of(context)!.password,
                   obscureText: true,
                   controller: state.passwordFieldController,
                   validator: state.validatePasswordField,
@@ -71,7 +71,7 @@ class LoginView extends StatelessWidget {
               ),
               DarkOnboardingButton(
                 onPressed: state.handleBasicAuthLoginSubmit,
-                text: AppLocalizations.of(context).submit,
+                text: AppLocalizations.of(context)!.submit,
                 width: 350,
                 loading: state.loginProcessing,
               ),
@@ -98,14 +98,14 @@ class LoginView extends StatelessWidget {
               ),
               child: LightButton(
                 onPressed: state.handleGoogleLogin,
-                text: AppLocalizations.of(context).loginWithGoogle,
+                text: AppLocalizations.of(context)!.loginWithGoogle,
                 icon: FontAwesomeIcons.google,
               ),
             ),
             if (Device.isIOS)
               LightButton(
                 onPressed: state.handleAppleLogin,
-                text: AppLocalizations.of(context).loginWithApple,
+                text: AppLocalizations.of(context)!.loginWithApple,
                 icon: FontAwesomeIcons.apple,
               ),
           ],
