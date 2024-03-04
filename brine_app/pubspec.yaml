@@ -12,23 +12,23 @@ dependencies:
   flutter:
     sdk: flutter
   # Used to access Firestore
-  cloud_firestore: ^4.8.2
+  cloud_firestore: ^4.15.6
   # Used to call Firebase callable functions
-  cloud_functions: ^4.3.1
+  cloud_functions: ^4.6.6
   # Creates Material color schemes based on a platform's implementation of dynamic color
-  dynamic_color: ^1.5.4
+  dynamic_color: ^1.6.9
   # Used to display SVG assets
-  flutter_svg: ^2.0.6
+  flutter_svg: ^2.0.10+1
   # Provides additional icons beyond the Material icons
-  font_awesome_flutter: ^10.3.0
+  font_awesome_flutter: ^10.7.0
   # Enables the use of Firebase services
-  firebase_core: ^2.13.0
+  firebase_core: ^2.25.5
   # Firebase Auth services
-  firebase_auth: ^4.6.1
+  firebase_auth: ^4.17.6
   # Used to get Google Fonts font styles
-  google_fonts: ^4.0.4
+  google_fonts: ^6.1.0
   # Allows authentication using a Google account
-  google_sign_in: ^6.1.1
+  google_sign_in: ^6.2.1
   # Automates setting the app icons
   flutter_launcher_icons: ^0.13.1
   # Provides loading widgets
@@ -37,7 +37,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   # Used for internationalization
-  intl: ^0.18.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

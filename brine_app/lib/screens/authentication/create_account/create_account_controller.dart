@@ -12,16 +12,16 @@ import 'create_account_view.dart';
 /// Controller for [CreateAccountRoute].
 class CreateAccountController extends State<CreateAccountRoute> {
   /// A key used for the username and password login form.
-  final createAccountFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> createAccountFormKey = GlobalKey<FormState>();
 
   /// A controller used for the username field.
-  final usernameFieldController = TextEditingController();
+  final TextEditingController usernameFieldController = TextEditingController();
 
   /// A controller used for the password field.
-  final passwordFieldController = TextEditingController();
+  final TextEditingController passwordFieldController = TextEditingController();
 
   /// A controller used for the password confirmation field.
-  final passwordConfirmationFieldController = TextEditingController();
+  final TextEditingController passwordConfirmationFieldController = TextEditingController();
 
   /// Determines if the username field is in an error state, which is, in turn, determined by the
   /// [validateUsernameField] method.

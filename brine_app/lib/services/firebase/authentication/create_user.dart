@@ -14,14 +14,7 @@ import 'create_basic_auth_account.dart';
 /// The authenticated user's UID is used as both the document ID and the uid field value in the document in Firestore.
 /// An empty devices array is also added to the document.
 ///
-/// If an error occurs during the process, the error code and message are printed.
-///
-/// Example usage:
-/// ```dart
-/// createUser();
-/// ```
-///
-/// The function does not return a value.
+/// If an error occurs during the process, the error code and message are printed. Exceptions are rethrown.
 Future<void> createUser({required AuthMethod method, String? emailAddress, String? password}) async {
   try {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -42,13 +35,15 @@ Future<void> createUser({required AuthMethod method, String? emailAddress, Strin
         break;
     }
 
-    // Ensuring the user is logged in before making the call
+    // Ensure that the user is logged in before making the call
     user ??= (await auth.signInAnonymously()).user;
+
+    debugPrint('Authenticated with UID, ${user?.uid}');
 
     // TODO if anonymous login is used, provide a mechanism for transferring to regular login
 
     HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('createUser');
-    final results = await callable();
+    final HttpsCallableResult results = await callable.call();
     debugPrint(results.data['result']); // { result: "User with UID xxx added." }
   } catch (e) {
     debugPrint('Failed to execute createUser function with exception, $e');
