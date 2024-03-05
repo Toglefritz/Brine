@@ -21,6 +21,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   # Provides additional icons beyond the Material icons
   font_awesome_flutter: ^10.7.0
+  # Protects backend resources
+  firebase_app_check: ^0.2.1+15
   # Enables the use of Firebase services
   firebase_core: ^2.25.5
   # Firebase Auth services

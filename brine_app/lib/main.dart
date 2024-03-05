@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 import 'firebase_options.dart';
 import 'brine_app.dart';
@@ -17,16 +18,15 @@ Future<void> main() async {
   );
 
   // Initialize Firebase AppCheck
-  // TODO register AppCheck for iOS
-/*  if (kDebugMode) {
+  if (kDebugMode) {
     await FirebaseAppCheck.instance.activate(
       // Set androidProvider to `AndroidProvider.debug`
       androidProvider: AndroidProvider.debug,
-      // TODO enable debug token for iOS
+      appleProvider: AppleProvider.debug,
     );
   } else {
     await FirebaseAppCheck.instance.activate();
-  }*/
+  }
 
   // In debug mode, use the Firebase local emulator
   if (kDebugMode) {
