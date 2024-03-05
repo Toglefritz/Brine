@@ -117,6 +117,9 @@ async function verifyIdToken(req) {
   }
 }
 
+/// A function that triggers when a new user is created.
+exports.createUserFile = functions.auth.user().onCreate((user) => createUser(user));
+
 
 /// Calls the 'createUser' Firebase Cloud Function to create a new user 
 /// document in Firestore.
@@ -136,14 +139,8 @@ async function verifyIdToken(req) {
 /// ```
 ///
 /// The function does not return a value.
-exports.createUser = onCall(async (data, context) => {
-  // Check that the user is authenticated.
-  if (!context.auth) {
-      // Throwing an HttpsError so that the client gets error details.
-      throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
-  }
-
-  const uid = context.auth.uid;
+async function createUser(user) {
+  const uid = user.uid;
 
   try {
       // Create a new document in the "users" collection with the user's UID.
@@ -158,7 +155,7 @@ exports.createUser = onCall(async (data, context) => {
       console.error('Error adding user to Firestore: ', error);
       throw new functions.https.HttpsError('unknown', 'Failed to create user.');
   }
-});
+};
 
 
 /*
@@ -187,7 +184,6 @@ exports.getUserDevices = onCall(async (data, context) => {
       // Get the list of devices from the user document
       const devices = userDocSnapshot.get("devices");
 
-      // Return the list of devices
       return {
           devices: devices
       };
