@@ -20,7 +20,6 @@ Future<void> main() async {
   // Initialize Firebase AppCheck
   if (kDebugMode) {
     await FirebaseAppCheck.instance.activate(
-      // Set androidProvider to `AndroidProvider.debug`
       androidProvider: AndroidProvider.debug,
       appleProvider: AppleProvider.debug,
     );
@@ -34,6 +33,7 @@ Future<void> main() async {
       FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
       await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
       FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+
       debugPrint('Using Firebase emulator suite');
     } catch (e) {
       debugPrint('Firebase emulator initialization failed with exception, $e');
