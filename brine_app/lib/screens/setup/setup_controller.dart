@@ -2,13 +2,12 @@ import 'package:brine/screens/setup/setup_route.dart';
 import 'package:brine/screens/setup/setup_view.dart';
 import 'package:brine/screens/softener_monitor/softener_monitor_route.dart';
 import 'package:brine/screens/welcome/welcome_route.dart';
-import 'package:brine/services/firebase/get_device.dart';
-import 'package:brine/services/firebase/get_user_devices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/firebase/authentication/sign_out.dart';
-import '../../services/firebase/models/brine_device.dart';
+import '../../services/firebase/authentication/authentication_service.dart';
+import '../../services/firebase/device_management/device_management_service.dart';
+import '../../services/firebase/device_management/models/brine_device.dart';
 
 /// Controller for [SoftenerMonitorRoute].
 class SetupController extends State<SetupRoute> {
@@ -45,7 +44,7 @@ class SetupController extends State<SetupRoute> {
           builder: (BuildContext context) => const WelcomeRoute(),
         ),
       );
-      signOut();
+      AuthenticationService.signOut();
     }
     // If there is at least one device on the account, go to the [SoftenerMonitorRoute].
     else {
@@ -72,10 +71,10 @@ class SetupController extends State<SetupRoute> {
 
     try {
       // Get the device's on the user's account
-      List<String> deviceIdList = await getUserDevices();
+      List<String> deviceIdList = await DeviceManagementService.getUserDevices();
 
       for (String deviceId in deviceIdList) {
-        BrineDevice device = await getDevice(deviceId);
+        BrineDevice device = await DeviceManagementService.getDevice(deviceId);
         deviceList.add(device);
       }
     } catch (e) {

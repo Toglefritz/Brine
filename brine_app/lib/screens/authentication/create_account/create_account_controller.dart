@@ -1,10 +1,10 @@
 import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
 import 'package:brine/screens/setup/setup_route.dart';
-import 'package:brine/services/firebase/authentication/create_user.dart';
+import 'package:brine/services/firebase/authentication/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../services/firebase/authentication/auth_methods.dart';
+import '../../../services/firebase/authentication/models/auth_methods.dart';
 import '../../../values/regex.dart';
 import 'create_account_route.dart';
 import 'create_account_view.dart';
@@ -58,7 +58,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
     if (createAccountFormKey.currentState!.validate()) {
       try {
-        await createUser(
+        await AuthenticationService.createUser(
           method: AuthMethod.basicAuth,
           emailAddress: usernameFieldController.text,
           password: passwordFieldController.text,
@@ -207,14 +207,14 @@ class CreateAccountController extends State<CreateAccountRoute> {
   Future<void> handleGoogleCreateAccount() async {
     // TODO tag
 
-    createUser(method: AuthMethod.google);
+    AuthenticationService.createUser(method: AuthMethod.google);
   }
 
   /// Handles taps on the Apple sign in button.
   Future<void> handleAppleCreateAccount() async {
     // TODO tag
 
-    createUser(method: AuthMethod.apple);
+    AuthenticationService.createUser(method: AuthMethod.apple);
   }
 
   @override
