@@ -1,7 +1,7 @@
-import 'package:brine/screens/authentication/login/login_route.dart';
 import 'package:flutter/material.dart';
 
 import '../create_account/create_account_route.dart';
+import '../login/login_route.dart';
 import 'onboarding_route.dart';
 import 'onboarding_view.dart';
 
@@ -9,10 +9,11 @@ import 'onboarding_view.dart';
 class OnboardingController extends State<OnboardingRoute> {
   /// Handles taps on the login button.
   void handleLoginTap() {
-    // TODO Analytics tag
+    // TODO(Toglefritz): Analytics tag
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (BuildContext context) => const LoginRoute(),
       ),
     );
@@ -20,9 +21,11 @@ class OnboardingController extends State<OnboardingRoute> {
 
   /// Handles taps on the create an account button.
   void handleCreateAccountTap() {
+    // TODO(Toglefritz): Analytics tag
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (BuildContext context) => const CreateAccountRoute(),
       ),
     );

@@ -15,7 +15,7 @@ import 'models/brine_device.dart';
 class DeviceManagementService {
   /// The base URL for all endpoints used by this service.
   static String baseUrl =
-      kDebugMode ? 'http://127.0.0.1:5001/brine-3b212/us-central1' : ''; // TODO update prod endpoint
+      kDebugMode ? 'http://127.0.0.1:5001/brine-3b212/us-central1' : ''; // TODO(Toglefritz): update prod endpoint
 
 /*  /// Retrieves the list of devices for the authenticated user's account by calling the `getUserDevices` Firebase
   /// callable function.
@@ -69,8 +69,8 @@ class DeviceManagementService {
       // Check the response status code
       if (response.statusCode == 200) {
         // Parse the response body
-        final Map<String, dynamic> devicesJson = json.decode(response.body);
-        List<String> devices = List<String>.from(devicesJson['devices']);
+        final Map<String, dynamic> devicesJson = json.decode(response.body) as Map<String, dynamic>;
+        final List<String> devices = List<String>.from(devicesJson['devices'] as List<String>);
 
         return devices;
       } else {
@@ -80,7 +80,7 @@ class DeviceManagementService {
     } catch (e) {
       // Handle any exceptions
       debugPrint('Failed to get user devices with exception, $e');
-      throw Exception('Error getting devices: ${e.toString()}');
+      throw Exception('Error getting devices: $e');
     }
   }
 
@@ -96,17 +96,17 @@ class DeviceManagementService {
   ///
   /// It throws an error if there is an issue while calling the Firebase function, such as an unauthenticated user or
   /// lack of access to the specified device.
-  static Future<BrineDevice> getDevice(String deviceId) async {
+  static Future<BrineDevice> getDeviceLevels(String deviceId) async {
     try {
       // Create a reference to the 'getDeviceLevels' callable function
-      HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getDeviceLevels');
+      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getDeviceLevels');
 
       // Call the function with the device ID as an argument
-      final response = await callable.call(<String, dynamic>{'deviceId': deviceId});
+      final HttpsCallableResult<Map<String, dynamic>> response = await callable.call(<String, dynamic>{'deviceId': deviceId});
 
       // Get the salt level and battery level from the response
-      double saltLevel = response.data['salt_level'].toDouble();
-      double batteryLevel = response.data['battery_level'].toDouble();
+      final double saltLevel = response.data['salt_level'] as double;
+      final double batteryLevel = response.data['battery_level'] as double;
 
       // Return the battery level and salt level as a map
       return BrineDevice(

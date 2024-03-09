@@ -1,13 +1,13 @@
-import 'package:brine/screens/setup/setup_route.dart';
-import 'package:brine/screens/setup/setup_view.dart';
-import 'package:brine/screens/softener_monitor/softener_monitor_route.dart';
-import 'package:brine/screens/welcome/welcome_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/firebase/authentication/authentication_service.dart';
-import '../../services/firebase/device_management/device_management_service.dart';
-import '../../services/firebase/device_management/models/brine_device.dart';
+import '../../services/authentication/authentication_service.dart';
+import '../../services/device_management/device_management_service.dart';
+import '../../services/device_management/models/brine_device.dart';
+import '../softener_monitor/softener_monitor_route.dart';
+import '../welcome/welcome_route.dart';
+import 'setup_route.dart';
+import 'setup_view.dart';
 
 /// Controller for [SoftenerMonitorRoute].
 class SetupController extends State<SetupRoute> {
@@ -21,6 +21,8 @@ class SetupController extends State<SetupRoute> {
 
   /// Performs the setup necessary to proceed to the next route. This involves getting a list of the user's devices,
   /// assuming any have been added to the user's account, getting the details for each device, and handling errors
+  // TODO(Toglefritz): create AddDeviceRoute
+  // ignore: comment_references
   /// related to these processes. If the user has no devices on their account, the app proceeds to the [AddDeviceRoute].
   /// Otherwise, the app goes to the [SoftenerMonitorRoute].
   Future<void> performSetup() async {
@@ -31,28 +33,29 @@ class SetupController extends State<SetupRoute> {
     } catch (e) {
       debugPrint('Failed to perform setup with exception, $e');
 
-      // TODO handle error
+      // TODO(Toglefritz): handle error
     }
 
     // If there are no devices on the account, go to the [WelcomeRoute]
     if (deviceList == null || deviceList.isEmpty) {
       if (!mounted) return;
 
-      Navigator.pushReplacement(
+      await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
+        MaterialPageRoute<void>(
           builder: (BuildContext context) => const WelcomeRoute(),
         ),
       );
-      AuthenticationService.signOut();
+
+      await AuthenticationService.signOut();
     }
     // If there is at least one device on the account, go to the [SoftenerMonitorRoute].
     else {
       // Go to the water softener monitor route
       if (mounted) {
-        Navigator.pushReplacement(
+        await Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
             builder: (BuildContext context) => SoftenerMonitorRoute(
               devices: deviceList!,
             ),
@@ -67,14 +70,14 @@ class SetupController extends State<SetupRoute> {
   Future<List<BrineDevice>> _getDevices() async {
     debugPrint('Getting devices for user, ${FirebaseAuth.instance.currentUser?.uid}');
 
-    List<BrineDevice> deviceList = [];
+    final List<BrineDevice> deviceList = [];
 
     try {
       // Get the device's on the user's account
-      List<String> deviceIdList = await DeviceManagementService.getUserDevicesHttp();
+      final List<String> deviceIdList = await DeviceManagementService.getUserDevicesHttp();
 
-      for (String deviceId in deviceIdList) {
-        BrineDevice device = await DeviceManagementService.getDevice(deviceId);
+      for (final String deviceId in deviceIdList) {
+        final BrineDevice device = await DeviceManagementService.getDeviceLevels(deviceId);
         deviceList.add(device);
       }
     } catch (e) {

@@ -41,7 +41,7 @@ class BorderlessField extends StatelessWidget {
 
   /// A function used to validate the [BorderlessField]'s entry when the surrounding [Form] is validated. Returns a
   /// string value if a validation error occurs, or null if validation is successful.
-  final Function(String?) validator;
+  final String? Function(String?) validator;
 
   /// Determines if a validation error was returned by the [validator].
   final bool errorState;

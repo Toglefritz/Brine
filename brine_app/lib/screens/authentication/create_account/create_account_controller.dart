@@ -1,10 +1,10 @@
-import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
+import '../onboarding/onboarding_route.dart';
 import 'package:brine/screens/setup/setup_route.dart';
-import 'package:brine/services/firebase/authentication/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../services/firebase/authentication/models/auth_methods.dart';
+import '../../../services/authentication/authentication_service.dart';
+import '../../../services/authentication/models/auth_methods.dart';
 import '../../../values/regex.dart';
 import 'create_account_route.dart';
 import 'create_account_view.dart';
@@ -106,9 +106,9 @@ class CreateAccountController extends State<CreateAccountRoute> {
       debugPrint('Successfully created account, ${FirebaseAuth.instance.currentUser?.uid}');
 
       if (mounted) {
-        Navigator.pushReplacement(
+        await Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
             builder: (BuildContext context) => const SetupRoute(),
           ),
         );
@@ -197,7 +197,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
   void handleBackTap() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (BuildContext context) => const OnboardingRoute(),
       ),
     );
@@ -205,16 +205,16 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
   /// Handles taps on the Google sign in button.
   Future<void> handleGoogleCreateAccount() async {
-    // TODO tag
+    // TODO(Toglefritz): tag
 
-    AuthenticationService.createUser(method: AuthMethod.google);
+    await AuthenticationService.createUser(method: AuthMethod.google);
   }
 
   /// Handles taps on the Apple sign in button.
   Future<void> handleAppleCreateAccount() async {
-    // TODO tag
+    // TODO(Toglefritz): tag
 
-    AuthenticationService.createUser(method: AuthMethod.apple);
+    await AuthenticationService.createUser(method: AuthMethod.apple);
   }
 
   @override

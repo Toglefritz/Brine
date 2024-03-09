@@ -5,6 +5,8 @@
 The companion app for the Brine Monitor, an IoT device that monitors the amount of salt remaining
 in a water softener.
 
+[![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
+
 # Hello :wave:
 
 Do you ever forget to refill the salt in your water softener? Yes you do. It is probably a safe

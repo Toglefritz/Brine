@@ -1,9 +1,9 @@
 import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
 import 'package:brine/screens/setup/setup_route.dart';
-import 'package:brine/services/firebase/authentication/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../services/authentication/authentication_service.dart';
 import '../../../values/regex.dart';
 import 'login_route.dart';
 import 'login_view.dart';
@@ -97,9 +97,9 @@ class LoginController extends State<LoginRoute> {
         'Successfully authenticated user, ${FirebaseAuth.instance.currentUser?.uid}');
 
     if (mounted) {
-      Navigator.pushReplacement(
+      await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
+        MaterialPageRoute<void>(
           builder: (BuildContext context) => const SetupRoute(),
         ),
       );
@@ -176,7 +176,7 @@ class LoginController extends State<LoginRoute> {
   void handleBackTap() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (BuildContext context) => const OnboardingRoute(),
       ),
     );
@@ -190,9 +190,9 @@ class LoginController extends State<LoginRoute> {
       debugPrint('Successfully authenticated user, ${user?.uid}');
 
       if (mounted) {
-        Navigator.pushReplacement(
+        await Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
             builder: (BuildContext context) => const SetupRoute(),
           ),
         );
