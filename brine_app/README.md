@@ -22,10 +22,14 @@ your hands and hair well-moisturized, your laundry machine effective, and spots 
 
 The application has two main workflows. First, the app implements a provisioning process used to 
 add a Brine device to the user's account. This process consists of communicating with a target 
-Brine device via Bluetooth, connecting that device to a WiFi network, and performing an API call 
-necessary to associate the Brine device to the user's account. 
+Brine device via Bluetooth Low Energy, connecting that device to a WiFi network, and performing an 
+API call necessary to associate the Brine device to the user's account. 
 
-Second
+Second, the app displays information about one or more Brine devices on a user's account on a 
+"dashboard" screen, which includes the most recently reported salt and battery level for the 
+device, as well as information about the device itself. The app will facilitate the delivery 
+of push notifications when the battery and/or salt level on one of the Brine devices for a user
+are low.
 
 # Firebase Local Emulator Notes
 
