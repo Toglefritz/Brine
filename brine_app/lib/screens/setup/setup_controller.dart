@@ -71,7 +71,7 @@ class SetupController extends State<SetupRoute> {
 
     try {
       // Get the device's on the user's account
-      List<String> deviceIdList = await DeviceManagementService.getUserDevices();
+      List<String> deviceIdList = await DeviceManagementService.getUserDevicesHttp();
 
       for (String deviceId in deviceIdList) {
         BrineDevice device = await DeviceManagementService.getDevice(deviceId);

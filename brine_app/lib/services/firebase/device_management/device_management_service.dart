@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
 
 import 'models/brine_device.dart';
 
@@ -9,7 +13,11 @@ import 'models/brine_device.dart';
 /// utilizes Firebase Functions to communicate with the backend for retrieving device information such as device IDs,
 /// and levels of salt and battery.
 class DeviceManagementService {
-  /// Retrieves the list of devices for the authenticated user's account by calling the `getUserDevices` Firebase
+  /// The base URL for all endpoints used by this service.
+  static String baseUrl =
+      kDebugMode ? 'http://127.0.0.1:5001/brine-3b212/us-central1' : ''; // TODO update prod endpoint
+
+/*  /// Retrieves the list of devices for the authenticated user's account by calling the `getUserDevices` Firebase
   /// callable function.
   ///
   /// This function returns a [Future<List<String>>] containing the device IDs for the authenticated user. It throws an
@@ -20,7 +28,7 @@ class DeviceManagementService {
       HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getUserDevices');
 
       // Call the function
-      final response = await callable.call();
+      final HttpsCallableResult response = await callable.call();
 
       // Get the list of devices from the response
       List<String> devices = List<String>.from(response.data['devices']);
@@ -31,6 +39,48 @@ class DeviceManagementService {
       debugPrint('Error getting user devices: $e');
 
       rethrow;
+    }
+  }*/
+
+  /// Calls the getUserDevicesHttp endpoint to retrieve the list of devices for the current user.
+  /// Assumes the user is already authenticated with Firebase Auth.
+  /// Returns a list of devices or throws an exception if an error occurs.
+  static Future<List<String>> getUserDevicesHttp() async {
+    try {
+      // Get the current user
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User is not authenticated');
+      }
+
+      // Get the user's ID token
+      final String? idToken = await user.getIdToken();
+
+      // Define the endpoint URL
+      const String endpoint = '/getUserDevicesHttp';
+
+      // Make an authenticated HTTP request to the endpoint
+      final Response response = await get(
+        Uri.parse(baseUrl + endpoint),
+        // Include the ID token in the Authorization header
+        headers: {'Authorization': 'Bearer $idToken'},
+      );
+
+      // Check the response status code
+      if (response.statusCode == 200) {
+        // Parse the response body
+        final Map<String, dynamic> devicesJson = json.decode(response.body);
+        List<String> devices = List<String>.from(devicesJson['devices']);
+
+        return devices;
+      } else {
+        // Handle errors or unexpected status codes
+        throw Exception('Failed to load devices: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      // Handle any exceptions
+      debugPrint('Failed to get user devices with exception, $e');
+      throw Exception('Error getting devices: ${e.toString()}');
     }
   }
 

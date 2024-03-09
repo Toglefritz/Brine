@@ -14,7 +14,7 @@ dependencies:
   # Used to access Firestore
   cloud_firestore: ^4.15.6
   # Used to call Firebase callable functions
-  cloud_functions: ^4.6.6
+  cloud_functions: ^4.6.7
   # Creates Material color schemes based on a platform's implementation of dynamic color
   dynamic_color: ^1.6.9
   # Used to display SVG assets
@@ -22,9 +22,9 @@ dependencies:
   # Provides additional icons beyond the Material icons
   font_awesome_flutter: ^10.7.0
   # Protects backend resources
-  firebase_app_check: ^0.2.1+15
+  firebase_app_check: ^0.2.1+16
   # Enables the use of Firebase services
-  firebase_core: ^2.25.5
+  firebase_core: ^2.26.0
   # Firebase Auth services
   firebase_auth: ^4.17.6
   # Used to get Google Fonts font styles
@@ -38,8 +38,13 @@ dependencies:
   # Used to define localizable strings
   flutter_localizations:
     sdk: flutter
+  # API for making REST API requests
+  http: ^1.2.1
   # Used for internationalization
   intl: ^0.18.1
+
+dependency_overrides:
+  web: ^0.5.0
 
 dev_dependencies:
   flutter_test:
