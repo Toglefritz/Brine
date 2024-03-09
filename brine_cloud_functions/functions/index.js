@@ -121,15 +121,13 @@ async function verifyIdToken(req) {
 exports.createUserFile = functions.auth.user().onCreate((user) => createUser(user));
 
 
-/// Calls the 'createUser' Firebase Cloud Function to create a new user 
-/// document in Firestore.
+/// Calls the 'createUser' Firebase Cloud Function to create a new user  document in Firestore.
 ///
-/// This function requires the client to be authenticated. If the client is 
-/// not authenticated, it will automatically authenticate anonymously.
+/// This function requires the client to be authenticated. If the client is  not authenticated, it will automatically 
+/// authenticate anonymously.
 ///
-/// The authenticated user's UID is used as both the document ID and the uid 
-/// field value in the document in Firestore. An empty devices array is also 
-/// added to the document.
+/// The authenticated user's UID is used as both the document ID and the uid  field value in the document in Firestore. 
+/// An empty devices array is also added to the document.
 ///
 /// If an error occurs during the process, the error code and message are printed.
 ///
@@ -157,41 +155,45 @@ async function createUser(user) {
   }
 };
 
-
-/*
- * This function checks if the user is authenticated and then retrieves the user document from the users collection in Firestore. 
- * If the user document exists, it gets the list of devices and returns it as a response. If there's an error or the user is not 
- * authenticated, the function throws an appropriate error message.
-*/
-exports.getUserDevices = onCall(async (data, context) => {
-  // Check if the user is authenticated
-  if (!context.auth) {
-      throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
-  }
-
-  // Get the user's UID from the context
-  const userUid = context.auth.uid;
-
-  try {
+/**
+ * This function is triggered by HTTP requests and checks if the user is authenticated 
+ * by examining the Authorization header for a valid Firebase Auth ID token.
+ * It retrieves the user document from the Firestore "users" collection.
+ * If the user document exists, it extracts the list of devices and returns it in the response.
+ * If the user is not authenticated or any other error occurs, it returns an appropriate error message.
+ */
+exports.getUserDevicesHttp = functions.https.onRequest(async (req, res) => {
+    // Check for the Authorization header
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+  
+    // Extract the Firebase Auth ID token
+    const idToken = req.headers.authorization.split('Bearer ')[1];
+  
+    try {
+      // Verify the ID token and get the UID
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const userUid = decodedToken.uid;
+  
       // Get the user document from Firestore
-      const userDocRef = admin.firestore().collection("users").doc(userUid);
+      const userDocRef = admin.firestore().collection('users').doc(userUid);
       const userDocSnapshot = await userDocRef.get();
-
+  
       if (!userDocSnapshot.exists) {
-          throw new functions.https.HttpsError("not-found", "User not found");
+        res.status(404).send('User not found');
+        return;
       }
-
+  
       // Get the list of devices from the user document
-      const devices = userDocSnapshot.get("devices");
-
-      return {
-          devices: devices
-      };
-  } catch (error) {
-      console.error("Error getting user devices:", error);
-      throw new functions.https.HttpsError("internal", "An error occurred while getting user devices");
-  }
-});
+      const devices = userDocSnapshot.get('devices');
+      res.status(200).send({ devices: devices });
+    } catch (error) {
+      console.error('Error verifying Firebase ID token:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
 
 /**
@@ -260,83 +262,73 @@ exports.updateDeviceLevels = onRequest(async (req, res) => {
   }
 });
 
-
 /**
- * This Firebase callable function retrieves the salt level and battery level for the
- * specified IoT device associated with the authenticated user. The Firestore structure
- * consists of a "users" collection that stores user documents with an array of associated
- * device IDs, and a "devices" collection that stores device documents with device ID,
- * salt level, and battery level.
+ * This function is triggered by HTTP requests. It retrieves the salt level and battery level for the
+ * specified IoT device associated with the authenticated user. The Firestore structure consists of a
+ * "users" collection that stores user documents with an array of associated device IDs, and a "devices"
+ * collection that stores device documents with device ID, salt level, and battery level.
  *
- * The function checks if the user is authenticated and has access to the specified device.
- * If the user has access, it retrieves the device document from the "devices" collection
- * and returns the salt level and battery level.
+ * The function checks if the user is authenticated by examining the Authorization header for a valid
+ * Firebase Auth ID token and verifies access to the specified device. If the user has access, it retrieves
+ * the device document from the "devices" collection and returns the salt level and battery level.
  *
- * @param {Object} data - The data object passed by the client, containing the device ID.
- * @param {Object} context - The context object containing information about the user and the function call.
- * @returns {Object} - An object containing the battery level and salt level for the specified IoT device.
- * @throws {HttpsError} - Throws an error if the user is unauthenticated, the device ID is not provided, the user or device is not found, or the user does not have access to the specified device.
- *
- * Example usage (client-side):
- *
- * const getDeviceLevels = firebase.functions().httpsCallable('getDeviceLevels');
- * getDeviceLevels({ deviceId: 'vast_teal_elephant' })
- *   .then((result) => {
- *     console.log('Battery Level:', result.data.battery_level);
- *     console.log('Salt Level:', result.data.salt_level);
- *   })
- *   .catch((error) => {
- *     console.error('Error getting device levels:', error);
- *   });
+ * @throws {HttpsError} - Throws an error if the user is unauthenticated, the device ID is not provided,
+ * the user or device is not found, or the user does not have access to the specified device.
  */
-exports.getDeviceLevels = onCall(async (data, context) => {
-  // Check if the user is authenticated
-  if (!context.auth) {
-      throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
-  }
-
-  // Get the user's UID and device ID from the request
-  const userUid = context.auth.uid;
-  const deviceId = data.deviceId;
-
-  if (!deviceId) {
-      throw new functions.https.HttpsError("invalid-argument", "Device ID must be provided");
-  }
-
-  try {
+exports.getDeviceLevelsHttp = functions.https.onRequest(async (req, res) => {
+    // Check for the Authorization header and extract the Firebase Auth ID token
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+    const idToken = req.headers.authorization.split('Bearer ')[1];
+  
+    // Parse the request body to get the device ID
+    const deviceId = req.body.deviceId;
+    if (!deviceId) {
+      res.status(400).send('Device ID must be provided');
+      return;
+    }
+  
+    try {
+      // Verify the ID token and get the UID
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const userUid = decodedToken.uid;
+  
       // Get the user document from Firestore
       const userDocRef = admin.firestore().collection("users").doc(userUid);
       const userDocSnapshot = await userDocRef.get();
-
       if (!userDocSnapshot.exists) {
-          throw new functions.https.HttpsError("not-found", "User not found");
+        res.status(404).send('User not found');
+        return;
       }
-
+  
       // Check if the user has access to the specified device
       const userDevices = userDocSnapshot.get("devices");
       if (!userDevices.includes(deviceId)) {
-          throw new functions.https.HttpsError("permission-denied", "User does not have access to the specified device");
+        res.status(403).send('User does not have access to the specified device');
+        return;
       }
-
+  
       // Get the device document from Firestore
       const deviceDocRef = admin.firestore().collection("devices").doc(deviceId);
       const deviceDocSnapshot = await deviceDocRef.get();
-
       if (!deviceDocSnapshot.exists) {
-          throw new functions.https.HttpsError("not-found", "Device not found");
+        res.status(404).send('Device not found');
+        return;
       }
-
+  
       // Get the battery level and salt level from the device document
       const batteryLevel = deviceDocSnapshot.get("battery_level");
       const saltLevel = deviceDocSnapshot.get("salt_level");
-
-      // Return the battery level and salt level
-      return {
-          battery_level: batteryLevel,
-          salt_level: saltLevel
-      };
-  } catch (error) {
+  
+      // Return the battery level and salt level as JSON
+      res.status(200).json({
+        battery_level: batteryLevel,
+        salt_level: saltLevel
+      });
+    } catch (error) {
       console.error("Error getting device levels:", error);
-      throw new functions.https.HttpsError("internal", "An error occurred while getting device levels");
-  }
-});
+      res.status(500).send('Internal Server Error');
+    }
+  });
