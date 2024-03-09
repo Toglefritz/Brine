@@ -14,6 +14,7 @@ class BrineDevice {
   /// The timestamp when the levels were last retrieved.
   final DateTime retrievalTimestamp;
 
+  /// Creates an instance of [BrineDevice].
   BrineDevice({
     required this.deviceId,
     required this.saltLevel,

@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
@@ -45,6 +45,7 @@ class DeviceManagementService {
   /// Calls the getUserDevicesHttp endpoint to retrieve the list of devices for the current user.
   /// Assumes the user is already authenticated with Firebase Auth.
   /// Returns a list of devices or throws an exception if an error occurs.
+  // TODO(Toglefritz): update this method to call the getDeviceLevels function and return a list of BrineDevice instead
   static Future<List<String>> getUserDevicesHttp() async {
     try {
       // Get the current user
@@ -67,10 +68,10 @@ class DeviceManagementService {
       );
 
       // Check the response status code
-      if (response.statusCode == 200) {
+      if (response.statusCode == HttpStatus.ok) {
         // Parse the response body
         final Map<String, dynamic> devicesJson = json.decode(response.body) as Map<String, dynamic>;
-        final List<String> devices = List<String>.from(devicesJson['devices'] as List<String>);
+        final List<String> devices = List<String>.from(devicesJson['devices'] as List<dynamic>);
 
         return devices;
       } else {
@@ -90,7 +91,7 @@ class DeviceManagementService {
   /// The Firestore structure consists of a "users" collection that stores user documents with an array of associated
   /// device IDs, and a "devices" collection that stores device documents with device ID, salt level, and battery level.
   ///
-  /// This function returns a [Future<[BrineDevice]>] containing the battery level and salt level for the specified
+  /// This function returns a [Future<BrineDevice>] containing the battery level and salt level for the specified
   /// IoT device, along with the device ID and a timestamp for when the salt and battery levels were last retrieved,
   /// which is the time when this function was last called.
   ///
@@ -98,23 +99,47 @@ class DeviceManagementService {
   /// lack of access to the specified device.
   static Future<BrineDevice> getDeviceLevels(String deviceId) async {
     try {
-      // Create a reference to the 'getDeviceLevels' callable function
-      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getDeviceLevels');
+      // Get the current user
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User is not authenticated');
+      }
 
-      // Call the function with the device ID as an argument
-      final HttpsCallableResult<Map<String, dynamic>> response = await callable.call(<String, dynamic>{'deviceId': deviceId});
+      // Get the user's ID token
+      final String? idToken = await user.getIdToken();
 
-      // Get the salt level and battery level from the response
-      final double saltLevel = response.data['salt_level'] as double;
-      final double batteryLevel = response.data['battery_level'] as double;
+      // Define the endpoint URL
+      const String endpoint = '/getDeviceLevelsHttp';
 
-      // Return the battery level and salt level as a map
-      return BrineDevice(
-        deviceId: deviceId,
-        saltLevel: saltLevel,
-        batteryLevel: batteryLevel,
-        retrievalTimestamp: DateTime.now(),
+      // Make an HTTP GET request to the endpoint
+      final Response response = await post(
+        Uri.parse(baseUrl + endpoint),
+        // Include the ID token in the Authorization header
+        headers: {'Authorization': 'Bearer $idToken'},
+        body: {
+          'deviceId': deviceId,
+        },
       );
+
+      if (response.statusCode == HttpStatus.ok) {
+        // Parse the JSON response
+        final Map<String, dynamic> data = json.decode(response.body) as Map<String, dynamic>;
+
+        final double saltLevel =
+            data['salt_level'] is int ? (data['salt_level'] as int).toDouble() : data['salt_level'] as double;
+        final double batteryLevel =
+            data['battery_level'] is int ? (data['battery_level'] as int).toDouble() : data['battery_level'] as double;
+
+        // Construct and return the BrineDevice object
+        return BrineDevice(
+          deviceId: deviceId,
+          saltLevel: saltLevel,
+          batteryLevel: batteryLevel,
+          retrievalTimestamp: DateTime.now(),
+        );
+      } else {
+        throw Exception('Failed to load device levels: ${response.reasonPhrase}');
+      }
     } catch (e) {
       debugPrint('Error getting device levels: $e');
 
