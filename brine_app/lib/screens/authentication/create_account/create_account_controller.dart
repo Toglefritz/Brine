@@ -1,11 +1,11 @@
-import '../onboarding/onboarding_route.dart';
-import 'package:brine/screens/setup/setup_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../services/authentication/authentication_service.dart';
 import '../../../services/authentication/models/auth_methods.dart';
 import '../../../values/regex.dart';
+import '../../setup/setup_route.dart';
+import '../onboarding/onboarding_route.dart';
 import 'create_account_route.dart';
 import 'create_account_view.dart';
 

@@ -9,3 +9,4 @@ linter:
       prefer_relative_imports: true
       lines_longer_than_80_chars: false
       avoid_escaping_inner_quotes: false
+      sort_pub_dependencies: false

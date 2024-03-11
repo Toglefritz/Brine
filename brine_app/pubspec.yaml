@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   # Used to access Firestore
   cloud_firestore: ^4.15.6
   # Used to call Firebase callable functions
@@ -31,8 +32,6 @@ dependencies:
   google_fonts: ^6.1.0
   # Allows authentication using a Google account
   google_sign_in: ^6.2.1
-  # Automates setting the app icons
-  flutter_launcher_icons: ^0.13.1
   # Provides loading widgets
   flutter_spinkit: ^5.2.0
   # Used to define localizable strings
@@ -49,9 +48,9 @@ dependency_overrides:
   web: ^0.5.0
 
 dev_dependencies:
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
@@ -60,11 +59,3 @@ flutter:
   assets:
     - assets/
     - assets/icons/
-
-flutter_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/icons/brine_round.png"
-  remove_alpha_ios: true
-  adaptive_icon_background: #ffffff
-  adaptive_icon_foreground: "assets/icons/brine_round.png"

@@ -1,10 +1,10 @@
-import 'package:brine/screens/authentication/onboarding/onboarding_route.dart';
-import 'package:brine/screens/setup/setup_route.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import '../../../services/authentication/authentication_service.dart';
 import '../../../values/regex.dart';
+import '../../setup/setup_route.dart';
+import '../onboarding/onboarding_route.dart';
 import 'login_route.dart';
 import 'login_view.dart';
 
@@ -109,7 +109,7 @@ class LoginController extends State<LoginRoute> {
 
   /// Logs into a Firebase account using a username and password combination.
   ///
-  /// Various exceptions can be thrown from the [FirebaseAuth] [signInWithEmailAndPassword] method that indicate
+  /// Various exceptions can be thrown from the [FirebaseAuth] `signInWithEmailAndPassword` method that indicate
   /// different problems with the login. The codes from these exceptions are used to set the
   /// [loginUsernameExceptionError] and [loginPasswordExceptionError] fields. These show up in the UI the same way
   /// as form validation errors.
@@ -204,7 +204,7 @@ class LoginController extends State<LoginRoute> {
 
   /// Handles taps on the Apple sign in button.
   void handleAppleLogin() {
-    // TODO do login with Apple
+    // TODO(Toglefritz): do login with Apple
   }
 
   @override
