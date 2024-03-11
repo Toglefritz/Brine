@@ -1,13 +1,13 @@
-import 'package:brine/theme/insets.dart';
 import 'package:flutter/material.dart';
 
-import '../../../theme/color_library.dart';
+import '../../../theme/insets.dart';
 
 /// An [ElevatedButton] with a circular shape and a "+" icon in the center.
 class AddDeviceButton extends StatelessWidget {
+  /// Creates an instance of [AddDeviceButton].
   const AddDeviceButton({
-    super.key,
     required this.onPressed,
+    super.key,
   });
 
   /// The action to perform when the button is pressed.
@@ -18,12 +18,12 @@ class AddDeviceButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(ColorLibrary.primaryLight),
+        backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColorLight),
         shape: MaterialStateProperty.all<CircleBorder>(const CircleBorder()),
         side: MaterialStateProperty.all(
-          const BorderSide(
-            width: 3.0,
-            color: ColorLibrary.primaryDefault,
+          BorderSide(
+            width: 3,
+            color: Theme.of(context).primaryColorDark,
           ),
         ),
         padding: MaterialStateProperty.all(
@@ -32,9 +32,9 @@ class AddDeviceButton extends StatelessWidget {
           ),
         ),
       ),
-      child: const Icon(
+      child: Icon(
         Icons.add,
-        color: ColorLibrary.primaryDefault,
+        color: Theme.of(context).primaryColorDark,
         size: 64,
       ),
     );

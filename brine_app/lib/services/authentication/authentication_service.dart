@@ -32,7 +32,6 @@ class AuthenticationService {
     }
   }
 
-
   /// Creates a new user via Firebase Authentication.
   ///
   /// If an error occurs during the process, the error code and message are printed. Exceptions are rethrown.
@@ -42,8 +41,10 @@ class AuthenticationService {
 
       switch (method) {
         case AuthMethod.basicAuth:
-          assert(emailAddress != null && password != null,
-          'For authenticating with basic auth, the email and password must be provided');
+          assert(
+            emailAddress != null && password != null,
+            'For authenticating with basic auth, the email and password must be provided',
+          );
 
           user = await createBasicAuthAccount(emailAddress: emailAddress!, password: password!);
           break;
@@ -51,7 +52,7 @@ class AuthenticationService {
           user = await signInWithGoogle();
           break;
         case AuthMethod.apple:
-        // TODO: Handle this case.
+          // TODO(Toglefritz): Handle this case.
           break;
       }
 
@@ -75,11 +76,11 @@ class AuthenticationService {
   /// If the user is successfully authenticated, this function returns the authenticated `User`. If the user is not
   /// successfully authenticated, it returns `null`.
   static Future<User?> signInWithGoogle() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+    final FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
     if (kIsWeb) {
-      GoogleAuthProvider authProvider = GoogleAuthProvider();
+      final GoogleAuthProvider authProvider = GoogleAuthProvider();
 
       try {
         final UserCredential userCredential = await auth.signInWithPopup(authProvider);
@@ -107,14 +108,14 @@ class AuthenticationService {
           user = userCredential.user;
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
-            // TODO ...
+            // TODO(Toglefritz): ...
             rethrow;
           } else if (e.code == 'invalid-credential') {
-            // TODO ...
+            // TODO(Toglefritz): ...
             rethrow;
           }
         } catch (e) {
-          // TODO ...
+          // TODO(Toglefritz): ...
           rethrow;
         }
       }

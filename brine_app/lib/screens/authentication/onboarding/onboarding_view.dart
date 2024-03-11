@@ -1,20 +1,23 @@
-import 'package:brine/theme/insets.dart';
-import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import '../../../values/image_asset.dart';
 import '../../../components/light_button.dart';
+import '../../../theme/insets.dart';
+import '../../../values/image_asset.dart';
 import 'components/onboarding_legal_prompt.dart';
 import 'onboarding_controller.dart';
+import 'onboarding_route.dart';
 
 /// View for [OnboardingRoute].
 class OnboardingView extends StatelessWidget {
-  final OnboardingController state;
 
-  const OnboardingView(this.state, {Key? key}) : super(key: key);
+  /// Creates an instance of [OnboardingView].
+  const OnboardingView(this.state, {super.key});
+
+  /// A controller for this view.
+  final OnboardingController state;
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +42,12 @@ class OnboardingView extends StatelessWidget {
                       AppLocalizations.of(context)!.brine,
                       style: GoogleFonts.bungee().copyWith(
                         fontSize: 52,
-                        color: ColorLibrary.primaryDefault,
+                        color: Theme.of(context).primaryColorDark,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  // TODO replace with vector
+                  // TODO(Toglefritz): replace with vector
                   Image.asset(
                     ImageAsset.logoTransparentBackground,
                     width: 200,

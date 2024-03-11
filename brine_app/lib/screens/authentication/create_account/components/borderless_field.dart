@@ -1,8 +1,8 @@
-import 'package:brine/theme/insets.dart';
-import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../theme/color_library.dart';
+import '../../../../theme/insets.dart';
 import '../../../../values/regex.dart';
 
 /// A [TextFormField] without a border, underline, background, or other styling.
@@ -21,14 +21,14 @@ class BorderlessField extends StatelessWidget {
   /// returned by errors other than the [validator]. Typically, these errors result from actions performed after the
   /// surrounding [Form] is submitted.
   const BorderlessField({
-    Key? key,
     required this.hint,
-    this.obscureText,
     required this.controller,
     required this.validator,
     required this.errorState,
+    super.key,
+    this.obscureText,
     this.additionalError,
-  }) : super(key: key);
+  });
 
   /// The hint text displayed in the [InputDecoration] widget.
   final String hint;
@@ -60,7 +60,7 @@ class BorderlessField extends StatelessWidget {
         hintText: hint,
         border: InputBorder.none,
         hintStyle: TextStyle(
-          color: ColorLibrary.primaryDefault.withOpacity(0.5),
+          color: Theme.of(context).primaryColorDark.withOpacity(0.5),
         ),
         suffixIcon: errorState
             ? GestureDetector(
@@ -83,12 +83,12 @@ class BorderlessField extends StatelessWidget {
         ),
         errorText: additionalError,
       ),
-      cursorColor: ColorLibrary.primaryDefault,
-      cursorRadius: const Radius.circular(5.0),
-      style: const TextStyle(
-        color: ColorLibrary.primaryDefault,
+      cursorColor: Theme.of(context).primaryColorDark,
+      cursorRadius: const Radius.circular(5),
+      style: TextStyle(
+        color: Theme.of(context).primaryColorDark,
       ),
-      validator: (value) => validator(value),
+      validator: validator,
     );
   }
 }

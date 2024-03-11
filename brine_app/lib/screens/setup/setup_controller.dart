@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/authentication/authentication_service.dart';
 import '../../services/device_management/device_management_service.dart';
 import '../../services/device_management/models/brine_device.dart';
 import '../softener_monitor/softener_monitor_route.dart';
@@ -46,8 +45,6 @@ class SetupController extends State<SetupRoute> {
           builder: (BuildContext context) => const WelcomeRoute(),
         ),
       );
-
-      await AuthenticationService.signOut();
     }
     // If there is at least one device on the account, go to the [SoftenerMonitorRoute].
     else {

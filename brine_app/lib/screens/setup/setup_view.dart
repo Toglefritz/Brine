@@ -1,15 +1,17 @@
-import 'package:brine/screens/setup/setup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../../theme/color_library.dart';
+import '../softener_monitor/softener_monitor_route.dart';
+import 'setup_controller.dart';
 
 /// View for [SoftenerMonitorRoute].
 class SetupView extends StatelessWidget {
-  final SetupController state;
+  /// Creates an instance of [SetupView].
+  const SetupView(this.state, {super.key});
 
-  const SetupView(this.state, {Key? key}) : super(key: key);
+  /// A controller for this view.
+  final SetupController state;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +19,12 @@ class SetupView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SpinKitWave(
-              color: ColorLibrary.primaryDefault,
+              color: Theme.of(context).primaryColorDark,
             ),
           ],
         ),

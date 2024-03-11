@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../theme/color_library.dart';
 import '../../../theme/insets.dart';
 import '../onboarding/components/onboarding_legal_prompt.dart';
 
@@ -36,14 +35,14 @@ class AuthenticationPage extends StatelessWidget {
               leadingWidth: 100,
               leading: TextButton.icon(
                 onPressed: backOnTap,
-                icon: const Icon(
+                icon: Icon(
                   Icons.chevron_left,
-                  color: ColorLibrary.primaryDefault,
+                  color: Theme.of(context).primaryColorDark,
                 ),
                 label: Text(
                   AppLocalizations.of(context)!.back.toUpperCase(),
-                  style: const TextStyle(
-                    color: ColorLibrary.primaryDefault,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
                   ),
                 ),
               ),

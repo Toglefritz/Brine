@@ -1,23 +1,26 @@
-import 'package:brine/models/device.dart';
-import 'package:brine/theme/insets.dart';
-import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../../components/light_button.dart';
+import '../../../models/device.dart';
+import '../../../theme/insets.dart';
 import '../components/authentication_page.dart';
 import '../components/dark_onboarding_button.dart';
-import '../../../components/light_button.dart';
 import '../components/onboarding_field.dart';
 import 'login_controller.dart';
+import 'login_route.dart';
 
 /// View for [LoginRoute].
 class LoginView extends StatelessWidget {
-  final LoginController state;
 
-  const LoginView(this.state, {Key? key}) : super(key: key);
+  /// Creates an instance of [LoginView].
+  const LoginView(this.state, {super.key});
+
+  /// A controller for this view.
+  final LoginController state;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class LoginView extends StatelessWidget {
                 AppLocalizations.of(context)!.login,
                 style: GoogleFonts.bungee().copyWith(
                   fontSize: 52,
-                  color: ColorLibrary.primaryDefault,
+                  color: Theme.of(context).primaryColorDark,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -78,15 +81,15 @@ class LoginView extends StatelessWidget {
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(
+        Padding(
+          padding: const EdgeInsets.symmetric(
             vertical: Insets.large,
             horizontal: Insets.xLarge,
           ),
           child: Divider(
             thickness: 2,
             height: Insets.large,
-            color: ColorLibrary.primaryDefault,
+            color: Theme.of(context).primaryColorDark,
           ),
         ),
         Column(

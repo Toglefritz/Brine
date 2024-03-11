@@ -11,6 +11,7 @@
   "login": "login",
   "loginWithApple": "login with Apple",
   "loginWithGoogle": "login with Google",
+  "logout": "Logout",
   "onboardingLegalPrompt1": "Please take a look at our ",
   "onboardingLegalPrompt2": " before using this app.",
   "password": "Password",

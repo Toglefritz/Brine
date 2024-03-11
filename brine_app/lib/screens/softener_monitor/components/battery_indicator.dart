@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../theme/color_library.dart';
-
 /// Displays an icon to indicate the remaining battery life on the Brine monitor.
 class BatteryIndicator extends StatelessWidget {
+  /// Creates an instance of [BatteryIndicator].
   const BatteryIndicator({
-    super.key,
     required this.batteryLife,
+    super.key,
   });
 
   /// The percentage of battery life remaining on the device.
@@ -37,7 +36,7 @@ class BatteryIndicator extends StatelessWidget {
       quarterTurns: 1,
       child: Icon(
         getBatteryIndicator(),
-        color: ColorLibrary.primaryDefault,
+        color: Theme.of(context).primaryColorDark,
         size: 56,
       ),
     );

@@ -1,19 +1,21 @@
-import 'package:brine/components/light_button.dart';
-import 'package:brine/theme/insets.dart';
-import 'package:brine/screens/welcome/welcome_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme/color_library.dart';
+import '../../components/light_button.dart';
+import '../../theme/insets.dart';
 import 'components/add_device_button.dart';
+import 'welcome_controller.dart';
+import 'welcome_route.dart';
 
 /// View for [WelcomeRoute].
 class WelcomeView extends StatelessWidget {
-  final WelcomeController state;
+  /// Creates an instance of [WelcomeView].
+  const WelcomeView(this.state, {super.key});
 
-  const WelcomeView(this.state, {Key? key}) : super(key: key);
+  /// A controller for this view.
+  final WelcomeController state;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,23 @@ class WelcomeView extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) => state.onLogout(),
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem<String>(
+                  value: AppLocalizations.of(context)!.logout,
+                  child: Text(AppLocalizations.of(context)!.logout),
+                ),
+              ];
+            },
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).primaryColorDark,
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Center(
@@ -36,7 +55,7 @@ class WelcomeView extends StatelessWidget {
                   AppLocalizations.of(context)!.addADevice,
                   style: GoogleFonts.bungee().copyWith(
                     fontSize: 52,
-                    color: ColorLibrary.primaryDefault,
+                    color: Theme.of(context).primaryColorDark,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -49,8 +68,8 @@ class WelcomeView extends StatelessWidget {
                 child: Text(
                   AppLocalizations.of(context)!.addDeviceInvitation,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: ColorLibrary.primaryDefault,
-                  ),
+                        color: Theme.of(context).primaryColorDark,
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -67,8 +86,8 @@ class WelcomeView extends StatelessWidget {
                     Text(
                       AppLocalizations.of(context)!.salesPrompt,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: ColorLibrary.primaryDefault,
-                      ),
+                            color: Theme.of(context).primaryColorDark,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                     Padding(

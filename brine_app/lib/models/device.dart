@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 
 /// Syntactic sugar for different characteristics of the host device.
+// ignore_for_file: public_member_api_docs
 class Device {
   // Device size
   static bool get isDesktop => !isWeb && (isWindows || isLinux || isMacOS);

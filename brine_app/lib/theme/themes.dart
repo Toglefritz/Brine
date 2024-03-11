@@ -11,6 +11,8 @@ const TextTheme defaultTextTheme = TextTheme(
 final ThemeData lightThemeData = ThemeData(
   brightness: Brightness.light,
   primaryColor: const Color(0xFFEDA200),
+  primaryColorDark: const Color(0xFF222222),
+  primaryColorLight: const Color(0xE1FFFFFF),
   useMaterial3: true,
   scaffoldBackgroundColor: const Color(0xFFffE0A3),
   textTheme: defaultTextTheme,
@@ -20,6 +22,7 @@ final ThemeData lightThemeData = ThemeData(
 final ThemeData darkThemeData = ThemeData(
   brightness: Brightness.dark,
   primaryColor: const Color(0xFFEDA200),
+  primaryColorLight: const Color(0xFFffE0A3),
   useMaterial3: true,
   textTheme: defaultTextTheme,
 );

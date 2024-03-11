@@ -1,6 +1,7 @@
-import 'package:brine/theme/insets.dart';
-import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
+
+import '../screens/authentication/onboarding/onboarding_view.dart';
+import '../theme/insets.dart';
 
 /// A button appearing on the [OnboardingView].
 class LightButton extends StatelessWidget {
@@ -12,12 +13,12 @@ class LightButton extends StatelessWidget {
   /// icon can be optionally displayed on the left side of the button by providing [IconData] to the [icon] field.
   /// If this field is null, no icon is displayed on the button.
   const LightButton({
-    Key? key,
     required this.text,
     required this.onPressed,
+    super.key,
     this.width,
     this.icon,
-  }) : super(key: key);
+  });
 
   /// The text displayed on the button.
   final String text;
@@ -40,11 +41,11 @@ class LightButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          side: const BorderSide(
-            width: 3.0,
-            color: ColorLibrary.primaryDefault,
+          side: BorderSide(
+            width: 3,
+            color: Theme.of(context).primaryColorDark,
           ),
-          backgroundColor: ColorLibrary.primaryLight,
+          backgroundColor: Theme.of(context).primaryColorLight,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +55,7 @@ class LightButton extends StatelessWidget {
                 padding: const EdgeInsets.all(Insets.small),
                 child: Icon(
                   icon,
-                  color: ColorLibrary.primaryDefault,
+                  color: Theme.of(context).primaryColorDark,
                   size: 24,
                 ),
               ),
@@ -70,9 +71,9 @@ class LightButton extends StatelessWidget {
                   child: Text(
                     text.toUpperCase(),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color: ColorLibrary.primaryDefault,
+                      color: Theme.of(context).primaryColorDark,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

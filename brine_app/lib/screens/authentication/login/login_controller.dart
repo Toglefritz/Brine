@@ -94,7 +94,8 @@ class LoginController extends State<LoginRoute> {
     });
 
     debugPrint(
-        'Successfully authenticated user, ${FirebaseAuth.instance.currentUser?.uid}');
+      'Successfully authenticated user, ${FirebaseAuth.instance.currentUser?.uid}',
+    );
 
     if (mounted) {
       await Navigator.pushReplacement(
@@ -112,11 +113,10 @@ class LoginController extends State<LoginRoute> {
   /// different problems with the login. The codes from these exceptions are used to set the
   /// [loginUsernameExceptionError] and [loginPasswordExceptionError] fields. These show up in the UI the same way
   /// as form validation errors.
-  Future<UserCredential?> login(
-      {required String emailAddress, required String password}) async {
+  Future<UserCredential?> login({required String emailAddress, required String password}) async {
     try {
-      final UserCredential credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: emailAddress, password: password);
+      final UserCredential credential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailAddress, password: password);
 
       return credential;
     } on FirebaseAuthException catch (e) {
@@ -185,7 +185,7 @@ class LoginController extends State<LoginRoute> {
   /// Handles taps on the Google sign in button.
   Future<void> handleGoogleLogin() async {
     try {
-      User? user = await AuthenticationService.signInWithGoogle();
+      final User? user = await AuthenticationService.signInWithGoogle();
 
       debugPrint('Successfully authenticated user, ${user?.uid}');
 

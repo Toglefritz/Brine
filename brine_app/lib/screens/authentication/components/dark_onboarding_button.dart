@@ -1,6 +1,7 @@
-import 'package:brine/theme/insets.dart';
-import 'package:brine/theme/color_library.dart';
 import 'package:flutter/material.dart';
+
+import '../../../theme/insets.dart';
+import '../onboarding/onboarding_view.dart';
 
 /// A button appearing on the [OnboardingView] with a dark background.
 class DarkOnboardingButton extends StatelessWidget {
@@ -13,12 +14,12 @@ class DarkOnboardingButton extends StatelessWidget {
   /// set to true to indicate that an asynchronous process is in progress. If [loading] is set to true, the [onPressed]
   /// action is not called and a [CircularProgressIndicator] is shown on the left side of the button.
   const DarkOnboardingButton({
-    Key? key,
     required this.text,
     required this.onPressed,
+    super.key,
     this.width,
     this.loading,
-  }) : super(key: key);
+  });
 
   /// The text displayed on the button.
   final String text;
@@ -41,10 +42,10 @@ class DarkOnboardingButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: loading == false ? onPressed : null,
         style: OutlinedButton.styleFrom(
-          backgroundColor: ColorLibrary.primaryDefault,
-          side: const BorderSide(
-            width: 4.0,
-            color: ColorLibrary.primaryDefault,
+          backgroundColor: Theme.of(context).primaryColorDark,
+          side: BorderSide(
+            width: 4,
+            color: Theme.of(context).primaryColorDark,
           ),
         ),
         child: Padding(
@@ -53,7 +54,7 @@ class DarkOnboardingButton extends StatelessWidget {
           ),
           child: Row(
             children: [
-              if (loading == true)
+              if (loading ?? false)
                 const Padding(
                   padding: EdgeInsets.only(left: Insets.small),
                   child: SizedBox(
@@ -67,7 +68,7 @@ class DarkOnboardingButton extends StatelessWidget {
                 ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(right: loading == true ? Insets.small + 16 : 0),
+                  padding: EdgeInsets.only(right: loading ?? false ? Insets.small + 16 : 0),
                   child: Text(
                     text.toUpperCase(),
                     textAlign: TextAlign.center,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 /// assuming any have been added to the user's account, getting the details for each device, and handling errors
 /// related to these processes.
 class SetupRoute extends StatefulWidget {
+  /// Creates an instance of [SetupRoute].
   const SetupRoute({super.key});
 
   @override

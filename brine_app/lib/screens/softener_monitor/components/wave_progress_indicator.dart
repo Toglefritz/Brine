@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 /// with a wave animation. It takes a [progressPercent] parameter which determines
 /// how much of the progress indicator is filled.
 class WaveProgressIndicator extends StatefulWidget {
+  /// Create an instance of [WaveProgressIndicator].
   const WaveProgressIndicator({
-    super.key,
     required this.progressPercent,
     required this.fillColor,
+    super.key,
   });
 
   /// The percentage of progress to be displayed by the progress indicator. This value should be between 0.0 and 1.0,
@@ -43,6 +44,7 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
     )..repeat();
 
     // Create a linear animation for the wave
+    // ignore_for_file: prefer_int_literals
     _waveAnimation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _waveController, curve: Curves.linear),
     );
@@ -107,6 +109,7 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
 /// It takes [progressPercent] which is the progress level and [waveAnimationValue]
 /// which is the current value of the wave animation, to draw the wave.
 class WavePainter extends CustomPainter {
+  /// Creates an instance of [WavePainter].
   WavePainter({
     required this.progressPercent,
     required this.waveAnimationValue,
@@ -138,24 +141,25 @@ class WavePainter extends CustomPainter {
     path.moveTo(0, size.height);
     for (int i = 0; i <= size.width.toInt(); i++) {
       // Calculate the sine wave for current position
-      double wave = amplitudeFactor * sin((i / size.width) * 2 * pi + 2 * pi * waveAnimationValue);
+      final double wave = amplitudeFactor * sin((i / size.width) * 2 * pi + 2 * pi * waveAnimationValue);
 
       // Calculate the height that should not be filled by the progress indicator
-      double unfilledHeight = size.height * (1 - progressPercent);
+      final double unfilledHeight = size.height * (1 - progressPercent);
 
       // Calculate the total height for the current position, taking into account the wave
-      double totalHeight = wave + unfilledHeight;
+      final double totalHeight = wave + unfilledHeight;
 
       // Calculate the Y position for the current X position in the wave
-      double yPos = size.height - totalHeight;
+      final double yPos = size.height - totalHeight;
 
       // Add the point to the path
       path.lineTo(i.toDouble(), yPos);
     }
 
     // Close the path and draw it on the canvas
-    path.lineTo(size.width, size.height);
-    path.close();
+    path
+      ..lineTo(size.width, size.height)
+      ..close();
     canvas.drawPath(path, paint);
   }
 

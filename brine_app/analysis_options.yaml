@@ -8,3 +8,4 @@ linter:
       always_use_package_imports: false
       prefer_relative_imports: true
       lines_longer_than_80_chars: false
+      avoid_escaping_inner_quotes: false

@@ -1,4 +1,3 @@
-import 'package:brine/theme/color_library.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,17 +7,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class OnboardingLegalPrompt extends StatelessWidget {
   /// Creates an [OnboardingLegalPrompt].
   const OnboardingLegalPrompt({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// Handles taps on the privacy policy link.
   void handleTermsAndConditionsTap() {
-    // TODO open terms and conditions
+    // TODO(Toglefritz): open terms and conditions
   }
 
   /// Handles taps on the privacy policy link.
   void handlePrivacyPolicyTap() {
-    // TODO open privacy policy
+    // TODO(Toglefritz): open privacy policy
   }
 
   @override
@@ -26,8 +25,8 @@ class OnboardingLegalPrompt extends StatelessWidget {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: const TextStyle(
-          color: ColorLibrary.primaryDefault,
+        style: TextStyle(
+          color: Theme.of(context).primaryColorDark,
         ),
         text: AppLocalizations.of(context)!.onboardingLegalPrompt1,
         children: <TextSpan>[

@@ -1,8 +1,9 @@
-import 'package:brine/theme/insets.dart';
-import 'package:brine/theme/color_library.dart';
-import 'package:brine/values/regex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../../../theme/color_library.dart';
+import '../../../theme/insets.dart';
+import '../../../values/regex.dart';
 
 /// A bordered text input field.
 class OnboardingField extends StatelessWidget {
@@ -21,14 +22,14 @@ class OnboardingField extends StatelessWidget {
   /// returned by errors other than the [validator]. Typically, these errors result from actions performed after the
   /// surrounding [Form] is submitted.
   const OnboardingField({
-    Key? key,
     required this.hint,
-    this.obscureText,
     required this.controller,
     required this.validator,
     required this.errorState,
+    super.key,
+    this.obscureText,
     this.additionalError,
-  }) : super(key: key);
+  });
 
   /// The hint text displayed in the [InputDecoration] widget.
   final String hint;
@@ -52,11 +53,11 @@ class OnboardingField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// The default border used for all states of the [OnboardingField].
-    OutlineInputBorder defaultBorder = OutlineInputBorder(
+    final OutlineInputBorder defaultBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(30),
-      borderSide: const BorderSide(
-        width: 3.0,
-        color: ColorLibrary.primaryDefault,
+      borderSide: BorderSide(
+        width: 3,
+        color: Theme.of(context).primaryColorDark,
       ),
     );
 
@@ -68,7 +69,7 @@ class OnboardingField extends StatelessWidget {
         inputFormatters: [FilteringTextInputFormatter(RegEx.authenticationFieldsCharset, allow: true)],
         decoration: InputDecoration(
           filled: true,
-          fillColor: ColorLibrary.primaryLight,
+          fillColor: Theme.of(context).primaryColorLight,
           contentPadding: const EdgeInsets.all(Insets.small),
           enabledBorder: defaultBorder,
           focusedBorder: defaultBorder,
@@ -78,7 +79,7 @@ class OnboardingField extends StatelessWidget {
           border: defaultBorder,
           hintText: hint,
           hintStyle: TextStyle(
-            color: ColorLibrary.primaryDefault.withOpacity(0.5),
+            color: Theme.of(context).primaryColorDark.withOpacity(0.5),
           ),
           suffixIcon: errorState
               ? GestureDetector(
@@ -101,12 +102,12 @@ class OnboardingField extends StatelessWidget {
           ),
           errorText: additionalError,
         ),
-        cursorColor: ColorLibrary.primaryDefault,
-        cursorRadius: const Radius.circular(5.0),
-        style: const TextStyle(
-          color: ColorLibrary.primaryDefault,
+        cursorColor: Theme.of(context).primaryColorDark,
+        cursorRadius: const Radius.circular(5),
+        style: TextStyle(
+          color: Theme.of(context).primaryColorDark,
         ),
-        validator: (value) => validator(value),
+        validator: validator,
       ),
     );
   }

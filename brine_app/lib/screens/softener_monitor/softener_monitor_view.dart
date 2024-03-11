@@ -1,27 +1,68 @@
-import 'package:brine/screens/softener_monitor/softener_monitor_controller.dart';
-import 'package:brine/theme/insets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme/color_library.dart';
+import '../../theme/insets.dart';
 import 'components/battery_indicator.dart';
 import 'components/wave_progress_indicator.dart';
+import 'softener_monitor_controller.dart';
+import 'softener_monitor_route.dart';
 
 /// View for [SoftenerMonitorRoute].
-// TODO implement option for selecting device
+// TODO(Toglefritz): implement option for selecting device
 class SoftenerMonitorView extends StatelessWidget {
+  /// Creates an instance of [SoftenerMonitorView].
+  const SoftenerMonitorView(this.state, {super.key});
+
+  /// A controller for this view.
   final SoftenerMonitorController state;
 
-  const SoftenerMonitorView(this.state, {Key? key}) : super(key: key);
+  /// Returns a value to use for the top padding for the text element used to display the remaining level of salt in
+  /// the appliance. This padding allows the text element to move down the page with the salt level indicator,
+  /// stopping at a certain point representing the lowest position the text will occupy on the screen.
+  EdgeInsets _getLabelTopPadding(BuildContext context) {
+    // Get the level of salt in the appliance.
+    final double saltLevel = state.widget.devices[0].saltLevel;
+
+    // Get the height of the screen
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // If the salt level is above 40%, the label will follow the salt level indicator down the screen.
+    if (saltLevel > 0.4) {
+      return EdgeInsets.only(top: screenHeight * (1 - saltLevel));
+    }
+    // If the salt level is below 40%, the label will be displayed near the top of the page.
+    else {
+      return const EdgeInsets.only(top: Insets.medium);
+    }
+  }
+
+  /// Returns the text color to use for the text indicating the level of salt in the appliance. This color depends
+  /// on whether or not the text is drawn on top of the salt level indicator and also on the current theme
+  /// [Brightness].
+  Color _getTextColor(BuildContext context) {
+    // Get the level of salt in the appliance.
+    final double saltLevel = state.widget.devices[0].saltLevel;
+
+    // If the salt level is above 40%, the label will be drawn on top of the salt level indicator widget.
+    if (saltLevel > 0.4) {
+      return Theme.of(context).primaryColorDark;
+    }
+    // If the salt level is below 40%, the label will be displayed near the top of the screen, on the
+    // Scaffold background color. If using a dark Brightness, the label text should be lightly colored.
+    else if (Theme.of(context).brightness == Brightness.dark) {
+      return Theme.of(context).primaryColorLight;
+    }
+    // Otherwise, if the salt level is below 40% and the Brightness is light, return a dark color.
+    else {
+      return Theme.of(context).primaryColorDark;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -39,16 +80,13 @@ class SoftenerMonitorView extends StatelessWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Insets.medium,
-                    ),
+                    padding: _getLabelTopPadding(context),
                     child: Text(
                       '${(state.widget.devices[0].saltLevel * 100).toInt()}%',
                       style: GoogleFonts.bungee().copyWith(
                         fontSize: 52,
-                        color: ColorLibrary.primaryDefault,
+                        color: _getTextColor(context),
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                   Padding(
@@ -58,7 +96,7 @@ class SoftenerMonitorView extends StatelessWidget {
                     child: Text(
                       AppLocalizations.of(context)!.saltRemaining.toUpperCase(),
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            color: ColorLibrary.primaryDefault,
+                            color: _getTextColor(context),
                           ),
                       textAlign: TextAlign.center,
                     ),
