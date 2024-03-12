@@ -1,4 +1,4 @@
-const admin = require('./../adminInit.js');
+const admin = require('../adminInit.cjs');
 
 /**
  * Calls the 'createUser' Firebase Cloud Function to create a new user  document in Firestore.

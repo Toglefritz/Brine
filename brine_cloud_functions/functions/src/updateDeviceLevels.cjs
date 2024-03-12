@@ -1,4 +1,4 @@
-const admin = require('./../adminInit.js');
+const admin = require('../adminInit.cjs');
 
 /**
  * This function updates the battery level and salt level of a device in a Firestore document.

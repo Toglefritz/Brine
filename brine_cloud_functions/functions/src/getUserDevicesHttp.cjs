@@ -1,4 +1,4 @@
-const admin = require('./../adminInit.js');
+const admin = require('../adminInit.cjs');
 
 /**
  * This function is triggered by HTTP requests and checks if the user is authenticated 
