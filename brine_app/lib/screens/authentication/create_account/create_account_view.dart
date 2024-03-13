@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../components/light_button.dart';
+import '../../../extensions/brightness_extensions.dart';
 import '../../../models/device.dart';
 import '../../../theme/insets.dart';
 import '../components/authentication_page.dart';
@@ -25,7 +26,7 @@ class CreateAccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    SystemChrome.setSystemUIOverlayStyle(Theme.of(context).brightness.oppositeSystemOverlayStyle());
 
     return AuthenticationPage(
       backOnTap: state.handleBackTap,

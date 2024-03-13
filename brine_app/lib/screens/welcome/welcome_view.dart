@@ -22,7 +22,9 @@ class WelcomeView extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? Theme.of(context).primaryColor
+          : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
@@ -32,7 +34,10 @@ class WelcomeView extends StatelessWidget {
               return [
                 PopupMenuItem<String>(
                   value: AppLocalizations.of(context)!.logout,
-                  child: Text(AppLocalizations.of(context)!.logout),
+                  child: Text(
+                    AppLocalizations.of(context)!.logout,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ];
             },

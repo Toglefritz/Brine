@@ -42,7 +42,9 @@ class DarkOnboardingButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: loading == false ? onPressed : null,
         style: OutlinedButton.styleFrom(
-          backgroundColor: Theme.of(context).primaryColorDark,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Theme.of(context).primaryColorDark
+              : Colors.transparent,
           side: BorderSide(
             width: 4,
             color: Theme.of(context).primaryColorDark,
@@ -55,13 +57,13 @@ class DarkOnboardingButton extends StatelessWidget {
           child: Row(
             children: [
               if (loading ?? false)
-                const Padding(
-                  padding: EdgeInsets.only(left: Insets.small),
+                Padding(
+                  padding: const EdgeInsets.only(left: Insets.small),
                   child: SizedBox(
                     width: 16,
                     height: 16,
                     child: CircularProgressIndicator(
-                      color: Colors.white,
+                      color: Theme.of(context).primaryColorLight,
                       strokeWidth: 3,
                     ),
                   ),

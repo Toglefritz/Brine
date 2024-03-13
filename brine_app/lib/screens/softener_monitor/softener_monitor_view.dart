@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../extensions/brightness_extensions.dart';
 import '../../theme/insets.dart';
+import '../../theme/themes.dart';
 import 'components/battery_indicator.dart';
 import 'components/wave_progress_indicator.dart';
 import 'softener_monitor_controller.dart';
@@ -28,8 +31,8 @@ class SoftenerMonitorView extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // If the salt level is above 40%, the label will follow the salt level indicator down the screen.
-    if (saltLevel > 0.4) {
-      return EdgeInsets.only(top: screenHeight * (1 - saltLevel));
+    if (saltLevel > 0.70) {
+      return EdgeInsets.only(top: screenHeight * (1 - saltLevel) - Insets.medium);
     }
     // If the salt level is below 40%, the label will be displayed near the top of the page.
     else {
@@ -44,16 +47,12 @@ class SoftenerMonitorView extends StatelessWidget {
     // Get the level of salt in the appliance.
     final double saltLevel = state.widget.devices[0].saltLevel;
 
-    // If the salt level is above 40%, the label will be drawn on top of the salt level indicator widget.
-    if (saltLevel > 0.4) {
-      return Theme.of(context).primaryColorDark;
+    // If the salt level is above 70%, the label will be drawn on top of the salt level indicator widget.
+    if (saltLevel > 0.70) {
+      return const Color(0xFF212121);
     }
-    // If the salt level is below 40%, the label will be displayed near the top of the screen, on the
+    // If the salt level is below 70%, the label will be displayed near the top of the screen, on the
     // Scaffold background color. If using a dark Brightness, the label text should be lightly colored.
-    else if (Theme.of(context).brightness == Brightness.dark) {
-      return Theme.of(context).primaryColorLight;
-    }
-    // Otherwise, if the salt level is below 40% and the Brightness is light, return a dark color.
     else {
       return Theme.of(context).primaryColorDark;
     }
@@ -63,6 +62,34 @@ class SoftenerMonitorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? const Color(0xFFFFE0A3)
+          : Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? const Color(0xFFFFE0A3)
+            : Theme.of(context).scaffoldBackgroundColor,
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) => state.onLogout(),
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem<String>(
+                  value: AppLocalizations.of(context)!.logout,
+                  child: Text(
+                    AppLocalizations.of(context)!.logout,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ];
+            },
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).primaryColorDark,
+            ),
+          ),
+        ],
+      ),
       body: Stack(
         alignment: Alignment.center,
         children: [

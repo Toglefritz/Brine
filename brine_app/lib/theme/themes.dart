@@ -10,19 +10,21 @@ const TextTheme defaultTextTheme = TextTheme(
 /// Default light theme data.
 final ThemeData lightThemeData = ThemeData(
   brightness: Brightness.light,
-  primaryColor: const Color(0xFFEDA200),
-  primaryColorDark: const Color(0xFF222222),
-  primaryColorLight: const Color(0xE1FFFFFF),
   useMaterial3: true,
-  scaffoldBackgroundColor: const Color(0xFFffE0A3),
+  primaryColor: const Color(0xFFEDA200),
+  primaryColorLight: const Color(0xFFFFFFFF),
+  primaryColorDark: const Color(0xFF212121),
+  scaffoldBackgroundColor: const Color(0xFFEDA200),
   textTheme: defaultTextTheme,
 );
 
 /// Default dark theme data.
 final ThemeData darkThemeData = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: const Color(0xFFEDA200),
-  primaryColorLight: const Color(0xFFffE0A3),
   useMaterial3: true,
+  primaryColor: const Color(0xFFEDA200),
+  primaryColorLight: const Color(0xFF212121),
+  primaryColorDark: const Color(0xFFFFFFFF),
+  scaffoldBackgroundColor: const Color(0xFF212121),
   textTheme: defaultTextTheme,
 );

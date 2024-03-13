@@ -36,7 +36,7 @@ class BatteryIndicator extends StatelessWidget {
       quarterTurns: 1,
       child: Icon(
         getBatteryIndicator(),
-        color: Theme.of(context).primaryColorDark,
+        color: const Color(0xFF212121),
         size: 56,
       ),
     );

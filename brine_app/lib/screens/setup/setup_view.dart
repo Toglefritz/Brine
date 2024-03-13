@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../../extensions/brightness_extensions.dart';
 import '../softener_monitor/softener_monitor_route.dart';
 import 'setup_controller.dart';
 
@@ -15,7 +16,7 @@ class SetupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    SystemChrome.setSystemUIOverlayStyle(Theme.of(context).brightness.oppositeSystemOverlayStyle());
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
