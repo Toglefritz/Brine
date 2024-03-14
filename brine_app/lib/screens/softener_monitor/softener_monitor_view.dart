@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../extensions/brightness_extensions.dart';
 import '../../theme/insets.dart';
-import '../../theme/themes.dart';
 import 'components/battery_indicator.dart';
 import 'components/wave_progress_indicator.dart';
 import 'softener_monitor_controller.dart';
