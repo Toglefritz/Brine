@@ -16,8 +16,6 @@ dependencies:
   cloud_firestore: ^4.15.6
   # Used to call Firebase callable functions
   cloud_functions: ^4.6.7
-  # Creates Material color schemes based on a platform's implementation of dynamic color
-  dynamic_color: ^1.6.9
   # Used to display SVG assets
   flutter_svg: ^2.0.10+1
   # Provides additional icons beyond the Material icons
