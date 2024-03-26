@@ -1,0 +1,29 @@
+# `/include` Directory Overview
+
+The `/include` directory plays a crucial role in the overall architecture and organization of this project, especially designed for managing and developing firmware for an IoT device using modular I2C components and other functionalities. This directory is intended to house global header files (.h) that define interfaces, utility classes, and shared resources which are central to the application's functionality. Below is a detailed explanation of its purpose and contents.
+
+## Purpose
+
+- **Global Accessibility**: The `/include` directory is meant to store header files that need to be accessible across multiple components or modules of the project. This ensures that common interfaces, utility functions, and configuration settings can be included and used throughout the project without duplication.
+
+- **Shared Resources**: It serves as a central location for definitions and declarations that represent shared resources, such as debugging services, device managers, and other utilities that provide foundational services to various parts of the application.
+
+- **Project Organization**: Including a dedicated directory for global includes helps maintain a clean and organized project structure, making it easier for developers to navigate the codebase and understand the relationships between different parts of the project.
+
+## Contents
+
+- **DeviceManager.h**: Defines the `DeviceManager` class that manages instances of all device classes used in the project. It is responsible for initializing and providing access to the device instances, ensuring they are easily accessible wherever needed in the application.
+
+- **DebugService.h**: Contains the definition of the `DebugService` class, a utility for enabling and managing debug output across the project. It allows for conditional compilation of debug statements, ensuring that debug code can be easily enabled or disabled for the entire project.
+
+- **Global Definitions**: Any global definitions and configurations that need to be shared across the project, such as constants, enums, or macro definitions, can also be placed here. This ensures that there is a single source of truth for such definitions, reducing the risk of inconsistencies.
+
+## Best Practices
+
+- **Minimal Dependencies**: Header files in the `/include` directory should keep their dependencies to a minimum to avoid circular dependencies and compilation issues. Forward declarations and other techniques can be used to manage dependencies gracefully.
+
+- **Guard Against Multiple Inclusions**: Use header guards or `#pragma once` in each header file to prevent multiple inclusions of the same header, which could lead to compilation errors.
+
+- **Clear and Concise Documentation**: Each header file should be accompanied by clear and concise documentation that explains its purpose, the functionality it provides, and how it fits into the overall project architecture. This is crucial for maintaining the codebase and facilitating collaboration among developers.
+
+By adhering to these principles, the `/include` directory serves as a cornerstone for building a modular, scalable, and maintainable codebase for the IoT device project.
