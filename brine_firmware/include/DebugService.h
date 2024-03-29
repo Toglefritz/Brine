@@ -32,8 +32,11 @@
  *    is particularly useful for transitioning between development and production builds.
  *
  * 2. **Printing Debug Messages:**
- *    DebugService::debugPrint("Message"); // Prints a single line without a newline character.
- *    DebugService::debugPrintln("Message with newline"); // Prints a message followed by a newline character.
+ *    // Get the DebugService instance. This will initialize the Serial connection.
+*     DebugService& debugService = DebugService::getInstance();
+
+ *    debugService.debugPrint("Message"); // Prints a single line without a newline character.
+ *    debugService.debugPrintln("Message with newline"); // Prints a message followed by a newline character.
  *
  * By centralizing debug output management, the DebugService class significantly enhances the maintainability and
  * readability of the firmware codebase. It provides a flexible and efficient mechanism for developers to include
@@ -51,25 +54,63 @@ public:
   /**
    * @brief The DEBUG flag controls whether debug messages are printed to Serial.
    */
-  static const bool DEBUG;
+  static const bool DEBUG = true; // Set to false to disable debug output
 
   /**
-   * @brief Prints a debug message to the Serial port if DEBUG is true.
-   * @param message The message to print.
+   * @brief Get the singleton instance of DebugService.
+   * This will initialize the Serial connection if it hasn't been done yet.
    */
-  static void debugPrint(const String &message);
+  static DebugService &getInstance()
+  {
+    static DebugService instance; // Guaranteed to be destroyed, instantiated on first use.
+
+    return instance;
+  }
 
   /**
-   * @brief Prints a debug message with a newline to the Serial port if DEBUG is true.
+   * @brief Prints a debug message to the serial port.
    * @param message The message to print.
    */
-  static void debugPrintln(const String &message);
+  void debugPrint(const String &message)
+  {
+    if (DEBUG)
+    {
+      Serial.print(message);
+    }
+  }
+
+  /**
+   * @brief Prints a debug message to the serial port, followed by a newline.
+   * @param message The message to print.
+   */
+  void debugPrintln(const String &message)
+  {
+    if (DEBUG)
+    {
+      Serial.println(message);
+    }
+  }
 
 private:
   /**
    * @brief Constructor is private to prevent instantiation.
+   * Initializes the Serial connection.
    */
-  DebugService();
+  DebugService()
+  {
+    Serial.begin(9600);
+    while (!Serial)
+    {
+      ; // wait for serial port to connect. Needed for native USB port only
+    }
+  }
+
+  // C++ 03
+  // ========
+  // Ensures that the following are unacceptable, otherwise it is possible
+  // to accidentally get copies of this singleton appearing.
+  DebugService(DebugService const &);   // Don't Implement
+  void operator=(DebugService const &); // Don't implement
 };
 
 #endif
