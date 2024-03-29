@@ -12,10 +12,13 @@
  * allows for the conditional compilation of debug messages, making it easy to enable or disable debug output globally
  * without modifying individual print statements throughout the codebase.
  *
- * The service defines a static DEBUG flag that controls whether messages are actually sent to the Serial port. This
- * approach ensures that debug output can be easily enabled for development and testing phases but can be disabled for
- * production releases to conserve memory and processing resources, and to avoid exposing potentially sensitive
- * information.
+ * The service defines a static DEBUG flag that controls whether messages are actually sent to the Serial port. The
+ * value of this flag is determined by the DEBUG_MODE macro defined in the PlatformIO build system. If the DEBUG_MODE
+ * macro is set to a non-zero value in the build flags (i.e., -D DEBUG_MODE=1), DEBUG will be true. Otherwise, DEBUG
+ * will be false. This approach ensures that debug output can be easily enabled or disabled at compile time, which is
+ * particularly useful for switching between development/testing and production phases. By controlling the DEBUG flag
+ * in this way, we can conserve memory and processing resources in production releases, and avoid exposing potentially
+ * sensitive information.
  *
  * Key Features:
  * - **Conditional Debug Output:** The service uses the DEBUG flag to determine whether to print debug messages,
@@ -53,8 +56,22 @@ class DebugService
 public:
   /**
    * @brief The DEBUG flag controls whether debug messages are printed to Serial.
+   * 
+   * This flag is set based on the DEBUG_MODE macro, which is defined in the 
+   * PlatformIO build system. If the DEBUG_MODE macro is set to a non-zero value 
+   * in the build flags (i.e., -D DEBUG_MODE=1), DEBUG will be true. Otherwise, 
+   * DEBUG will be false.
+   *
+   * This allows control over debug mode at compile time. By setting the 
+   * DEBUG_MODE macro in the build system, you can enable or disable debug mode 
+   * without changing the code.
    */
-  static const bool DEBUG = true; // Set to false to disable debug output
+  static const bool DEBUG =
+  #if DEBUG_MODE
+        true;
+  #else
+        false;
+  #endif
 
   /**
    * @brief Get the singleton instance of DebugService.
@@ -98,10 +115,13 @@ private:
    */
   DebugService()
   {
-    Serial.begin(9600);
-    while (!Serial)
+    if (DEBUG)
     {
-      ; // wait for serial port to connect. Needed for native USB port only
+      Serial.begin(9600);
+      while (!Serial)
+      {
+        ; // wait for serial port to connect. Needed for native USB port only
+      }
     }
   }
 

@@ -1,18 +1,16 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+#include "DebugService.h"
+
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  // Get the DebugService instance. This will initialize the Serial connection.
+  DebugService& debugService = DebugService::getInstance();
+
+  // Use the debugService to print messages
+  debugService.debugPrintln("Setup complete");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
