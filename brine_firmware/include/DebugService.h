@@ -122,6 +122,9 @@ private:
       {
         ; // wait for serial port to connect. Needed for native USB port only
       }
+
+      debugPrintln("");
+      debugPrintln("DebugService initialized.");
     }
   }
 

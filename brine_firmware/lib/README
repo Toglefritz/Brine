@@ -14,11 +14,11 @@ The `/lib` directory is a fundamental component of the project's structure, desi
 
 The directory typically contains subdirectories for each library or module, which in turn contain the source files (`.cpp`, `.c`) and header files (`.h`) for that library. Example libraries/modules might include:
 
-- **QwiicButton**: Contains the driver for interfacing with the Qwiic Button module, encapsulating all the functionality needed to interact with the button.
+- **I2CButton**: Contains the driver for interfacing with the Qwiic Button module, encapsulating all the functionality needed to interact with the button.
 
-- **QwiicCrypto**: Provides the functionality to communicate with and utilize the Qwiic ATECC508A cryptographic coprocessor module.
+- **I2CCrypto**: Provides the functionality to communicate with and utilize the Qwiic ATECC508A cryptographic coprocessor module.
 
-- **QwiicDistanceSensor**: Houses the code required for interfacing with the Qwiic VL53L1X distance sensor, providing an API for measuring distances.
+- **I2CDistanceSensor**: Houses the code required for interfacing with the Qwiic VL53L1X distance sensor, providing an API for measuring distances.
 
 - **FirebaseModule**: A library that encapsulates the functionality required for interacting with Firebase, offering a simplified interface for database operations.
 
