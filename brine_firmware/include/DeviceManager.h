@@ -2,6 +2,7 @@
 #define DEVICEMANAGER_H
 
 #include "../lib/I2CButton/I2CButton.h"
+#include <I2CLED.h>
 
 /**
  * @class DeviceManager
@@ -18,6 +19,12 @@
 class DeviceManager
 {
 public:
+    // Static instance of the I2CButton
+    static I2CButton button;
+
+    // Static instance of I2CLED
+    static I2CLED led;
+
     /**
      * @brief Initializes the devices used in the application.
      *
@@ -31,11 +38,12 @@ public:
 
         // Initialize the I2CButton with the provided callback function
         button.getInstance().begin(buttonCallback);
+
+        // Initialize the I2CLED
+        led.getInstance().begin();
     };
 
 private:
-    static I2CButton button;
-
     // Constructor made private to prevent instantiation
     DeviceManager();
 };
