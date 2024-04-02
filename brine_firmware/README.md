@@ -32,6 +32,20 @@ Each service in the firmware is responsible for a specific piece of functionalit
 
 The firmware also includes power management functionality to ensure the device spends most of its time in a deep sleep state, waking up only to perform measurements and communicate with the backend services. This approach maximizes battery life and ensures the device can operate for extended periods without requiring a battery change.
 
+```mermaid
+graph LR
+    A[main.cpp] --> B[Button Service]
+    A --> C[LED Service]
+    A --> D[Distance Sensor Service]
+    A --> E[Cryptographic Coprocessor Service]
+    A --> F[Battery Monitor Service]
+    B --> G[Button Hardware]
+    C --> H[LED Hardware]
+    D --> I[Distance Sensor Hardware]
+    E --> J[Cryptographic Coprocessor Hardware]
+    F --> K[Battery Monitor Hardware]
+```
+
 ## Getting Started
 
 To start working with the Brine device firmware, follow these steps:
