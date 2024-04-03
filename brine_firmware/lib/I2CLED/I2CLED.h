@@ -69,7 +69,7 @@ private:
      *
      * This is a value between 0 (off) and 255 (full brightness).
      */
-    int brightness = 128 /* 50% brightness */;
+    int brightness = 12; // ~5% brightness
 
     /**
      * @brief A reference to the DebugService singleton.
