@@ -1,3 +1,12 @@
+/*
+*  This test file tests the I2CLED class. The I2CLED class is a singleton class that controls an LED connected to an
+*  I2C bus. The I2CLED class has two methods: turnOn() and turnOff(). The turnOn() method turns the LED on, and the
+*  turnOff() method turns the LED off. This test file tests the functionality of the I2CLED class by turning the LED on
+*  and off and asking the user to verify that the LED is on and off.
+*
+*  Run this test with the command `pio test -e test_led -f test_I2CLED.cpp`.
+*/
+
 // Include necessary libraries and headers
 #include <Arduino.h>
 #include <I2CLED.h>
