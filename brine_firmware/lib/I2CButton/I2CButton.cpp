@@ -22,9 +22,8 @@ bool I2CButton::begin(void (*buttonHandler)())
     if (button.begin() == false)
     {
         debugService.debugPrintln("I2CButton failed to initialize. Freezing.");
-        // TODO(Toglefritz): Implement a better way to handle this error.
-        while (1)
-            ;
+    
+        return false;
     }
     debugService.debugPrintln("I2CButton initialized.");
 

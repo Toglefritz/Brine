@@ -11,7 +11,6 @@
 // Include necessary libraries and headers
 #include <Arduino.h>
 #include <I2CButton.h>
-#include "TestI2CButton.h"
 
 // The start time of the sketch, which is used to create a timeout condition for the test that is used as a
 // failure condition.
@@ -20,54 +19,73 @@ unsigned long startTime = millis();
 // Determines if the button was pressed.
 bool buttonPressed = false;
 
-// Test function
-//
-// This function tests the functionality of the I2CButton class. This function is used as a callback when the button is
-// pressed. The buton uses an interrupt to call this function. Therefore, if this function is called, both the button
-// and the interrupt are working correctly.
-void testButton()
-{
+// A timeout duration for the test, in milliseconds.
+unsigned long timeoutDuration = 30000;
+
+// Determines if the test has timed out due to the button not being pressed.
+bool testTimedOut = false;
+
+/**
+ * @brief The button handler function.
+ * 
+ * This function is called when the button is pressed. It sets the `buttonPressed` variable to true, indicating that the
+ * button was pressed.
+ */
+void buttonHandler() {
     buttonPressed = true;
 
-    // If the response is 'y', print a success message
-    Serial.println("Button was pressed. Button press test passed.");
-
-    // End the Unity test framework
-    UNITY_END();
+    // End the test with a success message.
+    TEST_PASS();
 }
 
-void test_function_testLedControl(void)
+/**
+ * @brief Test the initialization of the button.
+ * 
+ * This function tests whether the button initializes correctly by calling the `begin` method of the `I2CButton` class.
+ * It asserts that the `begin` method returns true, indicating a successful initialization.
+ */
+void test_button_initialization()
 {
-    TestI2CButton testI2CButton(testButton);
-    testI2CButton.testButton();
+    // Test that the button initializes correctly
+    TEST_ASSERT_TRUE(I2CButton::getInstance().begin(buttonHandler));
 }
 
-// Function to check if one minute has passed since the start time. If one minute has passed, and the button was not
-// pressed, the test has failed.
+/**
+ * @brief Test the button press functionality.
+ * 
+ * This function is used to test the button press functionality. It displays a message
+ * instructing the user to press the button in order to pass the test.
+ */
+void test_button_press()
+{
+    TEST_IGNORE_MESSAGE("This test is interactive. Please press the button.");
+}
+
+/**
+ * Checks if one minute has passed since the start time and the button has not been pressed.
+ * If one minute has passed and the button has not been pressed, the Unity test framework is ended
+ * with a failure message.
+ */
 void checkOneMinutePassed()
 {
     // If one minute has passed since the start time
-    if (millis() - startTime >= 60000 && !buttonPressed)
+    if (millis() - startTime >= timeoutDuration && !buttonPressed)
     {
         // Reset the start time
         startTime = millis();
 
-        // Print a message to indicate that the test has failed
-        Serial.println("One minute has passed without button press. Test failed.");
+        // Set the timeout flag
+        testTimedOut = true;
 
-        // TODO(Toglefritz): Fail the test
         // End the Unity test framework
-        UNITY_END();
+        TEST_FAIL_MESSAGE("The button was not pressed within the test timeout. Test failed.");
     }
 }
 
 void setup()
 {
-    // Initialize the Serial object
-    Serial.begin(115200);
-
-    // Allow some time for the serial port to initialize
-    delay(5000);
+    // Join the I2C bus
+    Wire.begin();
 
     // Start the Unity test framework
     UNITY_BEGIN();
@@ -75,10 +93,18 @@ void setup()
     // Record the current time used for a test timeout
     startTime = millis();
 
-    RUN_TEST(test_function_testLedControl);
+    RUN_TEST(test_button_initialization);
+    RUN_TEST(test_button_press);
 }
 
 void loop()
 {
     checkOneMinutePassed();
+
+    // Check if either the button has been pressed or the timeout has occurred
+    if (buttonPressed || testTimedOut)
+    {
+        // End the Unity test framework
+        UNITY_END();
+    }
 }

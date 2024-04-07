@@ -11,16 +11,6 @@
 DistanceSensor sensor;
 
 /**
- * @brief Set up function for the test case.
- * 
- * This function is called before each test case to set up any necessary resources or configurations.
- * In this case, it initializes the sensor.
- */
-void setUp(void) {
-    sensor.init();
-}
-
-/**
  * @brief Test case for sensor initialization.
  * 
  * This test verifies that the sensor initializes correctly.
