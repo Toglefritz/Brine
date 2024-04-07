@@ -17,7 +17,7 @@ DistanceSensor sensor;
  */
 void test_sensor_initialization(void) {
     // Test that the sensor initializes correctly
-    TEST_ASSERT_TRUE(sensor.init());
+    TEST_ASSERT_TRUE(sensor.begin());
 }
 
 /**

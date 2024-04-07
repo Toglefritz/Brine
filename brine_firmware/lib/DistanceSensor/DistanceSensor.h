@@ -29,7 +29,7 @@ public:
      *
      * Returns true if the sensor was successfully initialized, and false otherwise.
      */
-    bool init();
+    bool begin();
 
     /**
      * @brief Starts a distance measurement.

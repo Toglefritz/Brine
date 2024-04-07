@@ -10,7 +10,7 @@ DistanceSensor::DistanceSensor() : sensor() {}
  * Begins I2C communication and checks the sensor's initial status.
  * If initialization fails, it enters an infinite loop after logging the error.
  */
-bool DistanceSensor::init() {
+bool DistanceSensor::begin() {
     // Join the I2C bus
     Wire.begin();
 

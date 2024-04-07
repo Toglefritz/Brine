@@ -3,6 +3,7 @@
 
 #include "../lib/I2CButton/I2CButton.h"
 #include <I2CLED.h>
+#include <DistanceSensor.h>
 
 /**
  * @class DeviceManager
@@ -25,6 +26,9 @@ public:
     // Static instance of I2CLED
     static I2CLED led;
 
+    // Static instance of the DistanceSensor
+    static DistanceSensor distanceSensor;
+
     /**
      * @brief Initializes the devices used in the application.
      *
@@ -41,6 +45,9 @@ public:
 
         // Initialize the I2CLED
         led.getInstance().begin();
+
+        // Initialize the DistanceSensor
+        distanceSensor.begin();
     };
 
 private:
