@@ -46,15 +46,19 @@ public:
      * @brief Turns the LED on.
      *
      * This method turns the LED on at the current brightness level.
+     * 
+     * @return bool - Returns true if the LED was turned on successfully, false otherwise.
      */
-    void turnOn();
+    bool turnOn();
 
     /**
      * @brief Turns the LED off.
      *
      * This method turns the LED off.
+     * 
+     * @return bool - Returns true if the LED was turned off successfully, false otherwise.
      */
-    void turnOff();
+    bool turnOff();
 
 private:
     /**

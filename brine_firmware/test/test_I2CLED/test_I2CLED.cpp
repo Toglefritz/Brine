@@ -1,5 +1,6 @@
 #include <unity.h>
-#include "TestI2CLED.h"
+#include <Wire.h>
+#include <I2CLED.h>
 
 /*
  *  This test file tests the I2CLED class. The I2CLED class is a singleton class that controls an LED connected to an
@@ -10,10 +11,26 @@
  *  Run this test with the command `pio test --filter test_I2CLED`.
  */
 
-void test_function_testLedControl(void)
+void test_led_initialization(void)
 {
-    TestI2CLED testI2CLED;
-    testI2CLED.testLedControl();
+    // Test that the LED initializes correctly
+    TEST_ASSERT_TRUE(I2CLED::getInstance().begin());
+}
+
+void test_led_turn_on(void)
+{
+    // Test that the LED turns on correctly
+    I2CLED::getInstance().turnOn();
+
+    TEST_ASSERT_TRUE(I2CLED::getInstance().turnOn());
+}
+
+void test_led_turn_off(void)
+{
+    // Test that the LED turns off correctly
+    I2CLED::getInstance().turnOff();
+
+    TEST_ASSERT_TRUE(I2CLED::getInstance().turnOff());
 }
 
 /**
@@ -25,16 +42,16 @@ void test_function_testLedControl(void)
  */
 void setup()
 {
-    // Initialize the Serial object
-    Serial.begin(115200);
-
-    // Allow some time for the serial port to initialize
-    delay(5000);
+    // Join the I2C bus
+    Wire.begin();
 
     // Start the Unity test framework
     UNITY_BEGIN();
 
-    RUN_TEST(test_function_testLedControl);
+    RUN_TEST(test_led_initialization);
+    RUN_TEST(test_led_turn_on);
+    delay(1000); // Short delay allowing human tester to more easily verify LED state visually
+    RUN_TEST(test_led_turn_off);
 
     // End the Unity test framework
     UNITY_END();

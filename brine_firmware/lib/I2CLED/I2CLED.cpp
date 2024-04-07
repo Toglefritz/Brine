@@ -35,10 +35,10 @@ bool I2CLED::begin()
  * 
  * This method turns the LED on at the current brightness level.
  */
-void I2CLED::turnOn() {
+bool I2CLED::turnOn() {
     debugService.debugPrintln("Turning LED on.");
 
-    led.LEDon(brightness);
+    return led.LEDon(brightness);
 }
 
 /**
@@ -46,8 +46,8 @@ void I2CLED::turnOn() {
  * 
  * This method turns the LED off.
  */
-void I2CLED::turnOff() {
+bool I2CLED::turnOff() {
     debugService.debugPrintln("Turning LED off.");
 
-    led.LEDoff();
+    return led.LEDoff();
 }
