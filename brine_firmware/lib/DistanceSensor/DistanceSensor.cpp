@@ -10,19 +10,21 @@ DistanceSensor::DistanceSensor() : sensor() {}
  * Begins I2C communication and checks the sensor's initial status.
  * If initialization fails, it enters an infinite loop after logging the error.
  */
-void DistanceSensor::init() {
+bool DistanceSensor::init() {
     // Join the I2C bus
     Wire.begin();
 
     // Initialize the sensor
-    int status = sensor.begin();
+    bool status = sensor.begin();
 
     // Check if the sensor failed to initialize
     if (status != 0) {
         DebugService::getInstance().debugPrint("Sensor failed to initialize with status ");
         DebugService::getInstance().debugPrintln(String(status));
-        while (1); // Infinite loop on failure to initialize
-        // TODO(Toglefritz): Handle error
+        
+        return false;
+    } else {
+        return true;
     }
 }
 
@@ -31,6 +33,19 @@ void DistanceSensor::init() {
  */
 void DistanceSensor::startMeasurement() {
     sensor.startRanging();
+}
+
+/**
+ * @brief Retrieves the range status of the sensor.
+ *
+ * @return The range status can be any of the following:
+ *  - 0: No error
+ *  - 1: Signal fail
+ *  - 2: Sigma fail
+ *  - 7: Wrapped target fail
+ */
+int DistanceSensor::getRangeStatus() {
+    return sensor.getRangeStatus();
 }
 
 /**
