@@ -12,8 +12,6 @@ The `/include` directory plays a crucial role in the overall architecture and or
 
 ## Contents
 
-- **DeviceManager.h**: Defines the `DeviceManager` class that manages instances of all device classes used in the project. It is responsible for initializing and providing access to the device instances, ensuring they are easily accessible wherever needed in the application.
-
 - **DebugService.h**: Contains the definition of the `DebugService` class, a utility for enabling and managing debug output across the project. It allows for conditional compilation of debug statements, ensuring that debug code can be easily enabled or disabled for the entire project.
 
 - **Global Definitions**: Any global definitions and configurations that need to be shared across the project, such as constants, enums, or macro definitions, can also be placed here. This ensures that there is a single source of truth for such definitions, reducing the risk of inconsistencies.

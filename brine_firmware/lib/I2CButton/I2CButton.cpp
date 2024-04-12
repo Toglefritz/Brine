@@ -21,7 +21,7 @@ bool I2CButton::begin(void (*buttonHandler)())
     // check if button will acknowledge over I2C
     if (button.begin() == false)
     {
-        debugService.debugPrintln("I2CButton failed to initialize. Freezing.");
+        debugService.debugPrintln("I2CButton failed to initialize.");
     
         return false;
     }

@@ -1,4 +1,5 @@
 #include "BLEModule.h"
+#include <WiFi.h>
 
 BLEModule::BLEModule() {}
 
@@ -38,7 +39,12 @@ void BLEModule::end() {
  * @return True if the advertisement was started successfully, false otherwise.
  */
 bool BLEModule::advertise() {
-    // TODO(Toglefritz): Add advertisement configuration
+    // Set the name of the device, which is the word "Brine" followed by the last 4 digits of the MAC address.
+    String macAddress = WiFi.macAddress();
+    String deviceName = "Brine " + macAddress.substring(9, 14);
+    deviceName.replace(":", "");
+
+    BLE.setLocalName(deviceName.c_str());
 
     if(!BLE.advertise()) {
         debugService.debugPrintln("Starting advertisement failed");
