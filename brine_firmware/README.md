@@ -112,3 +112,14 @@ class ClassName {
     // class body
 }
 ```
+
+## Bluetooth Communication
+
+Brine devices utilize Bluetooth communication for the provisioning process. This technology allows for seamless and efficient communication between client devices, such as the companion Brine mobile app, and Brine IoT devices.
+
+All Brine devices use the same UUID (Universally Unique Identifier) for their primary services. This UUID is a unique string of characters that identifies the services provided by the Brine device. It can be used as a filter by client devices when performing a scan for nearby Brine devices. The UUID for Brine devices is as follows:
+
+> 6272696E-6573-616C-746D-6F6E69746F72
+
+
+In addition to the primary service UUID, Brine devices also use the same UUID values for their BLE (Bluetooth Low Energy) characteristics. These characteristics are attributes that define the behavior of the Brine device. The UUIDs for these characteristics allow client devices to identify and interact with the correct characteristics on the Brine device.

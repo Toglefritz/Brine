@@ -3,11 +3,15 @@
 
 BLEModule::BLEModule() {}
 
+// The UUIDs of the primary service and the characteristic.
+const char* PRIMARY_SERVICE_UUID = "6272696e-6573-616c-746d-6f6e69746f72";
+const char* CHARACTERISTIC_UUID = "2f339202-178a-47ba-8a53-fa78187ab206";
+
 /**
  * @brief Initializes the BLE module.
  * 
- * This function initializes the BLE module and checks if it starts successfully.
- * If the BLE module fails to start, an error message is printed and the function returns false.
+ * This function initializes the BLE module, sets up the primary service and its characteristic, and starts the BLE 
+ * server. If the BLE module fails to start, an error message is printed and the function returns false.
  * 
  * @return True if the BLE module starts successfully, false otherwise.
  */
@@ -17,6 +21,21 @@ bool BLEModule::begin() {
     
         return false;
     }
+
+    // Create a new service
+    BLEService primaryService = BLEService(PRIMARY_SERVICE_UUID);
+
+    // Define the properties for the characteristic within the primary service
+    uint8_t properties = BLERead | BLEWrite | BLENotify;    
+
+    // Add a characteristic to the service
+    BLECharacteristic primaryCharacteristic = BLECharacteristic(CHARACTERISTIC_UUID, properties, "");
+    primaryService.addCharacteristic(primaryCharacteristic);
+
+    // Add the service to the BLE server
+    BLE.addService(primaryService);
+
+    debugService.debugPrintln("BLE module started");
 
     return true;
 }
@@ -43,6 +62,9 @@ bool BLEModule::advertise() {
     String macAddress = WiFi.macAddress();
     String deviceName = "Brine " + macAddress.substring(9, 14);
     deviceName.replace(":", "");
+
+    // Set the UUID of the primary service
+    BLE.setAdvertisedServiceUuid(PRIMARY_SERVICE_UUID);
 
     BLE.setLocalName(deviceName.c_str());
 

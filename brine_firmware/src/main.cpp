@@ -46,7 +46,7 @@ void initializeBluetooth() {
         return;
     }
 
-    DebugService::getInstance().debugPrintln("Started advertising over BLE.");
+    DebugService::getInstance().debugPrintln("Started advertising over BLE");
 }
 
 /**
@@ -65,6 +65,15 @@ void startProvisioning() {
 
     // Set the start time of the provisioning process.
     provisioningStartTime = millis();
+}
+
+void stopProvisioning() {
+    // End the BLE module
+    BLEModule::getInstance().end();
+
+    // Reset the provisioning start time and button pressed flags.
+    provisioningStartTime = 0;
+    buttonPressed = false;
 }
 
 void setup() {
@@ -86,15 +95,16 @@ void loop() {
     // Start the provisioning process if the button was pressed and the provisioning process has not already started.
     if (buttonPressed && provisioningStartTime == 0) {
         startProvisioning();
+
+        // Set the provisioning start time to the current time.
         provisioningStartTime = millis();
     }
-    // If more than three minutes have passed since the provisioning process started, turn off provisioning.
+    // If more than three minutes has passed since the provisioning process started, turn off provisioning.
     // TODO(Toglefritz): also check for provisioning activity
     else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000) {
         DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");
 
-        provisioningStartTime = 0;
-        buttonPressed = false;
+        stopProvisioning();
     }
 
    // TODO(Toglefritz): Add additional loop functionality
