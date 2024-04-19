@@ -60,6 +60,19 @@ public:
      */
     bool turnOff();
 
+    /**
+     * @brief Changes the state of the LED if the interval has passed.
+     *
+     * This method accepts the current time, in terms of milliseconds since the program started, and an interval.
+     * If the interval has passed since the last time the LED was changed, the LED will be turned on or off. The 
+     * last time the LED was changed is tracked internally by this class.
+     * 
+     * @param currentMillis The current time in milliseconds.
+     * @param interval The interval at which to blink the LED.
+     * @return bool - Returns true if the LED was blinked successfully, false otherwise.
+     */
+   bool blink(unsigned long currentMillis);
+
 private:
     /**
      * @brief Construct a new I2CLED object.
@@ -88,6 +101,20 @@ private:
      * This object represents the physical LED connected via I2C.
      */
     QwiicButton led;
+
+    /**
+     * @brief A flag indicating if the LED is currently on.
+     *
+     * This flag is used to track the state of the LED.
+     */
+    bool isOn = false;
+
+    /**
+     * @brief The last time the LED was changed, in terms of milliseconds since the program started.
+     *
+     * This is used to track the last time the LED was turned on or off.
+     */
+    unsigned long lastChange = 0;
 
     /**
      * @brief Delete the copy constructor.

@@ -5,6 +5,7 @@
 #include <Wire.h>
 #include <I2CButton.h>
 #include <ProvisioningManager.h>
+#include <I2CLED.h>
 
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
 // when the provisioning process been running for three minutes or more.
@@ -19,32 +20,37 @@ unsigned long provisioningStartTime = 0;
  *
  * This function is called when the button interrupt is triggered.
  * It sets the `buttonPressed` flag to true.
- * 
+ *
  * @note This function should be kept as short as possible to prevent blocking the main loop and
  * causing the ESP32 to reset due to a watchdog timeout.
  */
-void IRAM_ATTR button_isr() {
+void IRAM_ATTR button_isr()
+{
     buttonPressed = true;
 }
 
-void setup() {
-  // Join the I2C bus
-  Wire.begin();
+void setup()
+{
+    // Join the I2C bus
+    Wire.begin();
 
-  // Initialize the button service, setting the buttonCallback function as the callback for button presses.
-  I2CButton::getInstance().begin(button_isr);
+    // Initialize the button service, setting the buttonCallback function as the callback for button presses.
+    I2CButton::getInstance().begin(button_isr);
 
-  // TODO(Toglefritz): Add additional setup
+    // Initialize the LED service.
+    I2CLED::getInstance().begin();
 
-  // Use the debugService to print messages.
-  DebugService::getInstance().debugPrintln("Brine monitor setup complete.");
+    // Use the debugService to print messages.
+    DebugService::getInstance().debugPrintln("Brine monitor setup complete.");
 
-  // TODO(Toglefritz): Get and send information to Brine backend
+    // TODO(Toglefritz): Get and send information to Brine backend
 }
 
-void loop() {
+void loop()
+{
     // Start the provisioning process if the button was pressed and the provisioning process has not already started.
-    if (buttonPressed && provisioningStartTime == 0) {
+    if (buttonPressed && provisioningStartTime == 0)
+    {
         ProvisioningManager::getInstance().startProvisioning();
 
         // Set the provisioning start time to the current time.
@@ -52,7 +58,8 @@ void loop() {
     }
     // If more than three minutes has passed since the provisioning process started, turn off provisioning.
     // TODO(Toglefritz): also check for provisioning activity
-    else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000) {
+    else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000)
+    {
         DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");
 
         ProvisioningManager::getInstance().stopProvisioning();
@@ -61,6 +68,11 @@ void loop() {
         provisioningStartTime = 0;
         buttonPressed = false;
     }
+    // If the provisioning process is currently running, blink the LED.
+    else if (provisioningStartTime != 0)
+    {
+        I2CLED::getInstance().blink(millis());
+    }
 
-   // TODO(Toglefritz): Add additional loop functionality
+    // TODO(Toglefritz): Add additional loop functionality
 }

@@ -38,6 +38,9 @@ bool I2CLED::begin()
 bool I2CLED::turnOn() {
     debugService.debugPrintln("Turning LED on.");
 
+    isOn = true;
+    lastChange = millis();
+
     return led.LEDon(brightness);
 }
 
@@ -49,5 +52,20 @@ bool I2CLED::turnOn() {
 bool I2CLED::turnOff() {
     debugService.debugPrintln("Turning LED off.");
 
+    isOn = false;
+    lastChange = millis();
+
     return led.LEDoff();
+}
+
+bool I2CLED::blink(unsigned long currentMillis) {
+    if (currentMillis - lastChange >= 500) {
+        if (isOn) {
+            return turnOff();
+        } else {
+            return turnOn();
+        }
+    }
+
+    return true;
 }
