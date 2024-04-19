@@ -4,6 +4,7 @@
 #include <BLEModule.h>
 #include <Wire.h>
 #include <I2CButton.h>
+#include <ProvisioningManager.h>
 
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
 // when the provisioning process been running for three minutes or more.
@@ -26,56 +27,6 @@ void IRAM_ATTR button_isr() {
     buttonPressed = true;
 }
 
-/**
- * @brief Initializes Bluetooth communication, which is used during the provisioning process.
-*/
-void initializeBluetooth() {
-    // Initialize the BLEModule
-    bool bleBeginSuccess = BLEModule::getInstance().begin();
-
-    if (!bleBeginSuccess) {
-        DebugService::getInstance().debugPrintln("Failed to initialize BLE module.");
-        return;
-    }
-
-    // Begin advertising over BLE
-    bool bleAdvertiseSuccess = BLEModule::getInstance().advertise();
-
-    if (!bleAdvertiseSuccess) {
-        DebugService::getInstance().debugPrintln("Failed to start advertising.");
-        return;
-    }
-
-    DebugService::getInstance().debugPrintln("Started advertising over BLE");
-}
-
-/**
- * @brief Starts the provisioning process.
- * 
- * This function is called when the button is pressed to initiate the provisioning process.
- * It wakes up the ESP32 from deep sleep and initializes the Bluetooth system.
- */
-void startProvisioning() {
-    DebugService::getInstance().debugPrintln("Button pressed. Starting provisioning process.");
-
-    // TODO(Toglefritz): Wake up the ESP32 from deep sleep.
-
-    // Initialize the Bluetooth system.
-    initializeBluetooth();
-
-    // Set the start time of the provisioning process.
-    provisioningStartTime = millis();
-}
-
-void stopProvisioning() {
-    // End the BLE module
-    BLEModule::getInstance().end();
-
-    // Reset the provisioning start time and button pressed flags.
-    provisioningStartTime = 0;
-    buttonPressed = false;
-}
-
 void setup() {
   // Join the I2C bus
   Wire.begin();
@@ -94,7 +45,7 @@ void setup() {
 void loop() {
     // Start the provisioning process if the button was pressed and the provisioning process has not already started.
     if (buttonPressed && provisioningStartTime == 0) {
-        startProvisioning();
+        ProvisioningManager::getInstance().startProvisioning();
 
         // Set the provisioning start time to the current time.
         provisioningStartTime = millis();
@@ -104,7 +55,11 @@ void loop() {
     else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000) {
         DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");
 
-        stopProvisioning();
+        ProvisioningManager::getInstance().stopProvisioning();
+
+        // Reset the provisioning start time and button pressed flags.
+        provisioningStartTime = 0;
+        buttonPressed = false;
     }
 
    // TODO(Toglefritz): Add additional loop functionality
