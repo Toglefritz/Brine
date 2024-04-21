@@ -28,10 +28,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,7 +46,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  /// Firebase options for Android.
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC6Er8QPJGPl5PZy-9unKz95YnGcK8_IH0',
     appId: '1:431909607108:android:f445d8bb684be5ed081b91',
@@ -59,7 +55,8 @@ class DefaultFirebaseOptions {
     storageBucket: 'brine-3b212.appspot.com',
   );
 
-  /// Firebase options for iOS.
+  /// Firebase options for Android.
+
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC8Jp6ChQT_YiGZYcXIVbecMwZgzxMT3EM',
     appId: '1:431909607108:ios:b460491fabbdbbe7081b91',
@@ -70,4 +67,18 @@ class DefaultFirebaseOptions {
     iosClientId: '431909607108-fm71ojb002kpajjshvbiq339al6425m3.apps.googleusercontent.com',
     iosBundleId: 'com.splendidendeavors.brine',
   );
+
+  /// Firebase options for iOS.
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyC8Jp6ChQT_YiGZYcXIVbecMwZgzxMT3EM',
+    appId: '1:431909607108:ios:418bcfcdb8a0557c081b91',
+    messagingSenderId: '431909607108',
+    projectId: 'brine-3b212',
+    databaseURL: 'https://brine-3b212-default-rtdb.firebaseio.com',
+    storageBucket: 'brine-3b212.appspot.com',
+    iosClientId: '431909607108-u6giq99kb5qbjp0g4radkkvsmt2b8b2j.apps.googleusercontent.com',
+    iosBundleId: 'com.splendidendeavors.brineApp',
+  );
+
 }
