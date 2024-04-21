@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     }
   }
 
+  /// Firebase configuration for Android.
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC6Er8QPJGPl5PZy-9unKz95YnGcK8_IH0',
     appId: '1:431909607108:android:f445d8bb684be5ed081b91',
@@ -55,8 +56,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'brine-3b212.appspot.com',
   );
 
-  /// Firebase options for Android.
-
+  /// Firebase options for iOS.
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC8Jp6ChQT_YiGZYcXIVbecMwZgzxMT3EM',
     appId: '1:431909607108:ios:b460491fabbdbbe7081b91',
@@ -68,8 +68,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.splendidendeavors.brine',
   );
 
-  /// Firebase options for iOS.
-
+  /// Firebase options for MacOS.
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyC8Jp6ChQT_YiGZYcXIVbecMwZgzxMT3EM',
     appId: '1:431909607108:ios:418bcfcdb8a0557c081b91',
@@ -80,5 +79,4 @@ class DefaultFirebaseOptions {
     iosClientId: '431909607108-u6giq99kb5qbjp0g4radkkvsmt2b8b2j.apps.googleusercontent.com',
     iosBundleId: 'com.splendidendeavors.brineApp',
   );
-
 }

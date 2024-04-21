@@ -21,39 +21,48 @@ class OnboardingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(Theme.of(context).brightness.oppositeSystemOverlayStyle());
+    SystemChrome.setSystemUIOverlayStyle(
+      Theme.of(context).brightness.oppositeSystemOverlayStyle(),
+    );
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Insets.large,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Insets.large,
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.brine,
+                          style: GoogleFonts.bungee().copyWith(
+                            fontSize: 52,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      // TODO(Toglefritz): replace with vector
+                      Image.asset(
+                        Theme.of(context).brightness == Brightness.light
+                            ? ImageAsset.logoTransparentBackground
+                            : ImageAsset.logoTransparentBackgroundInverse,
+                        width: 200,
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.brine,
-                    style: GoogleFonts.bungee().copyWith(
-                      fontSize: 52,
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                // TODO(Toglefritz): replace with vector
-                Image.asset(
-                  Theme.of(context).brightness == Brightness.light
-                      ? ImageAsset.logoTransparentBackground
-                      : ImageAsset.logoTransparentBackgroundInverse,
-                  width: 200,
-                ),
-              ],
+                ],
+              ),
             ),
-            Expanded(
+            SliverFillRemaining(
+              hasScrollBody: false,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -70,12 +79,12 @@ class OnboardingView extends StatelessWidget {
                     onPressed: state.handleCreateAccountTap,
                     text: AppLocalizations.of(context)!.createAnAccount,
                   ),
+                  const Padding(
+                    padding: EdgeInsets.all(Insets.medium),
+                    child: OnboardingLegalPrompt(),
+                  ),
                 ],
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(Insets.medium),
-              child: OnboardingLegalPrompt(),
             ),
           ],
         ),
