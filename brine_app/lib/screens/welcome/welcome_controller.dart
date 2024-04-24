@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/authentication/authentication_service.dart';
 import '../authentication/onboarding/onboarding_route.dart';
+import '../scan/scan_route.dart';
 import 'components/add_device_button.dart';
 import 'welcome_route.dart';
 import 'welcome_view.dart';
@@ -12,11 +13,16 @@ class WelcomeController extends State<WelcomeRoute> {
   final FocusNode buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
 
   /// Handles taps on the [AddDeviceButton] button located on the [WelcomeView].
-  void onAddDevicePressed() {
-    // TODO(Toglefritz): implementation
+  Future<void> onAddDevicePressed() async {
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const ScanRoute(),
+      ),
+    );
   }
 
-  /// Handles taps on the button allowing a user to order Brine
+  /// Handles taps on the button allowing a user to order Brine.
   void onOrderButtonPressed() {
     // TODO(Toglefritz): implementation
   }

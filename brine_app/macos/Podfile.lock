@@ -733,6 +733,8 @@ PODS:
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - FirebaseMessagingInterop (10.22.0)
   - FirebaseSharedSwift (10.22.0)
+  - flutter_splendid_ble (0.0.1):
+    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - google_sign_in_ios (0.0.1):
     - Flutter
@@ -846,6 +848,7 @@ DEPENDENCIES:
   - firebase_app_check (from `Flutter/ephemeral/.symlinks/plugins/firebase_app_check/macos`)
   - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
   - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
+  - flutter_splendid_ble (from `Flutter/ephemeral/.symlinks/plugins/flutter_splendid_ble/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - google_sign_in_ios (from `Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
@@ -890,6 +893,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos
   firebase_core:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
+  flutter_splendid_ble:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_splendid_ble/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   google_sign_in_ios:
@@ -920,6 +925,7 @@ SPEC CHECKSUMS:
   FirebaseFunctions: e1250e790106ecaeb6b1aba4c4bc0afe6ae80ede
   FirebaseMessagingInterop: d0b1a0e097a2a3af04ac9eae597779493dd061f3
   FirebaseSharedSwift: 48076404e6e52372290d15a07d2ed1d2f1754023
+  flutter_splendid_ble: 3d354bf348111185422aa57d61af061aed2efdd6
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   google_sign_in_ios: 989eea5abe94af62050782714daf920be883d4a2
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842

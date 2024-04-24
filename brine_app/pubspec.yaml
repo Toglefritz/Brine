@@ -16,6 +16,8 @@ dependencies:
   cloud_firestore: ^4.15.6
   # Used to call Firebase callable functions
   cloud_functions: ^4.6.7
+  # Flutter plugin for interacting with BLE devices
+  flutter_splendid_ble: ^0.8.0
   # Used to display SVG assets
   flutter_svg: ^2.0.10+1
   # Provides additional icons beyond the Material icons

@@ -8,7 +8,7 @@ import '../welcome/welcome_route.dart';
 import 'setup_route.dart';
 import 'setup_view.dart';
 
-/// Controller for [SoftenerMonitorRoute].
+/// Controller for the [SetupRoute].
 class SetupController extends State<SetupRoute> {
   @override
   void initState() {

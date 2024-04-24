@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../extensions/brightness_extensions.dart';
-import '../softener_monitor/softener_monitor_route.dart';
 import 'setup_controller.dart';
+import 'setup_route.dart';
 
-/// View for [SoftenerMonitorRoute].
+/// View for the [SetupRoute].
 class SetupView extends StatelessWidget {
   /// Creates an instance of [SetupView].
   const SetupView(this.state, {super.key});
