@@ -58,6 +58,7 @@ class CreateAccountView extends StatelessWidget {
                 child: OnboardingField(
                   hint: AppLocalizations.of(context)!.username,
                   controller: state.usernameFieldController,
+                  keyboardType: TextInputType.emailAddress,
                   validator: state.validateUsernameField,
                   errorState: state.usernameFieldError,
                   additionalError: state.createAccountUsernameExceptionError,
@@ -130,7 +131,7 @@ class CreateAccountView extends StatelessWidget {
           ),
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
               padding: const EdgeInsets.only(

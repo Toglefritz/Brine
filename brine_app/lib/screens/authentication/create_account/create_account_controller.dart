@@ -80,6 +80,28 @@ class CreateAccountController extends State<CreateAccountRoute> {
           });
 
           return;
+        } else if (e.code == 'network-request-failed') {
+          setState(() {
+            createAccountUsernameExceptionError = 'A network error occurred. Please try again.';
+            createAccountPasswordExceptionError = 'A network error occurred. Please try again.';
+            usernameFieldError = true;
+            passwordFieldError = true;
+            creatingAccount = false;
+          });
+
+          return;
+        } else {
+          setState(() {
+            createAccountUsernameExceptionError =
+                'An unknown error occurred. Not good. Please try again a bit later as this is probably our fault.';
+            createAccountPasswordExceptionError =
+                'An unknown error occurred. Not good. Please try again a bit later as this is probably our fault.';
+            usernameFieldError = true;
+            passwordFieldError = true;
+            creatingAccount = false;
+          });
+
+          return;
         }
       } catch (e) {
         setState(() {

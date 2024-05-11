@@ -26,8 +26,8 @@ class BrineApp extends StatelessWidget {
       home: Scaffold(
         body: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-            if (snapshot.hasData) {
+          builder: (BuildContext context, AsyncSnapshot<User?> authStateSnapshot) {
+            if (authStateSnapshot.hasData) {
               return const SetupRoute();
             }
             return const OnboardingRoute();

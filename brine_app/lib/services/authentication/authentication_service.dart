@@ -13,7 +13,7 @@ class AuthenticationService {
   ///
   /// As part of creating a password-based account with Firebase Auth, a [FirebaseAuthException] can be thrown if
   /// issues with the provided username or password are discovered.
-  static Future<User?> createBasicAuthAccount({required String emailAddress, required String password}) async {
+  static Future<User?> _createBasicAuthAccount({required String emailAddress, required String password}) async {
     try {
       final UserCredential credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress,
@@ -46,7 +46,7 @@ class AuthenticationService {
             'For authenticating with basic auth, the email and password must be provided',
           );
 
-          user = await createBasicAuthAccount(emailAddress: emailAddress!, password: password!);
+          user = await _createBasicAuthAccount(emailAddress: emailAddress!, password: password!);
           break;
         case AuthMethod.google:
           user = await signInWithGoogle();

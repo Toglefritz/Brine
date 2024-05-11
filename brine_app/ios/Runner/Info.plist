@@ -61,5 +61,7 @@
     	</dict>
     </array>
     <!-- End of the Google Sign-in Section -->
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>This app uses Bluetooth to set up to your devices.</string>
 </dict>
 </plist>

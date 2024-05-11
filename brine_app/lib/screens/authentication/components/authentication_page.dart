@@ -23,33 +23,37 @@ class AuthenticationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              systemOverlayStyle: SystemUiOverlayStyle.dark,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leadingWidth: 100,
-              leading: TextButton.icon(
-                onPressed: backOnTap,
-                icon: Icon(
-                  Icons.chevron_left,
-                  color: Theme.of(context).primaryColorDark,
-                ),
-                label: Text(
-                  AppLocalizations.of(context)!.back.toUpperCase(),
-                  style: TextStyle(
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: Scaffold(
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                systemOverlayStyle: SystemUiOverlayStyle.dark,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leadingWidth: 100,
+                leading: TextButton.icon(
+                  onPressed: backOnTap,
+                  icon: Icon(
+                    Icons.chevron_left,
                     color: Theme.of(context).primaryColorDark,
+                  ),
+                  label: Text(
+                    AppLocalizations.of(context)!.back.toUpperCase(),
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorDark,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SliverList.list(
-              children: [
-                ...content,
-                const Column(
+              SliverList.list(
+                children: content,
+              ),
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
@@ -60,9 +64,9 @@ class AuthenticationPage extends StatelessWidget {
                     ),
                   ],
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -728,6 +728,8 @@ PODS:
   - FirebaseMessagingInterop (10.22.0)
   - FirebaseSharedSwift (10.22.0)
   - Flutter (1.0.0)
+  - flutter_splendid_ble (0.0.1):
+    - Flutter
   - google_sign_in_ios (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -842,6 +844,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
+  - flutter_splendid_ble (from `.symlinks/plugins/flutter_splendid_ble/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
 
@@ -888,6 +891,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
+  flutter_splendid_ble:
+    :path: ".symlinks/plugins/flutter_splendid_ble/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   path_provider_foundation:
@@ -917,6 +922,7 @@ SPEC CHECKSUMS:
   FirebaseMessagingInterop: d0b1a0e097a2a3af04ac9eae597779493dd061f3
   FirebaseSharedSwift: 48076404e6e52372290d15a07d2ed1d2f1754023
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_splendid_ble: cc42af57896fbf378eca9cedff58dfbfb70f9395
   google_sign_in_ios: 989eea5abe94af62050782714daf920be883d4a2
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152

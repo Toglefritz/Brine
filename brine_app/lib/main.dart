@@ -30,9 +30,15 @@ Future<void> main() async {
   // In debug mode, use the Firebase local emulator
   if (kDebugMode) {
     try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-      FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+      // The IP address of the machine running the Firebase emulator suite. Use "localhost" if running the emulator
+      // suite on the same machine as the app. Otherwise, use the IP address of the machine running the emulator suite.
+      // The emulator suite can be started with the command `firebase emulators:start`.
+      // The IP address of the machine running the emulator suite will be displayed in the terminal.
+      const String devMachineIP = '192.168.86.28';
+
+      FirebaseFirestore.instance.useFirestoreEmulator(devMachineIP, 8080);
+      await FirebaseAuth.instance.useAuthEmulator(devMachineIP, 9099);
+      FirebaseFunctions.instance.useFunctionsEmulator(devMachineIP, 5001);
 
       debugPrint('Using Firebase emulator suite');
     } catch (e) {

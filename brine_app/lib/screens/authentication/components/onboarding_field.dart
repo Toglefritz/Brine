@@ -27,6 +27,7 @@ class OnboardingField extends StatelessWidget {
     required this.validator,
     required this.errorState,
     super.key,
+    this.keyboardType,
     this.obscureText,
     this.additionalError,
   });
@@ -39,6 +40,9 @@ class OnboardingField extends StatelessWidget {
 
   /// A [TextEditingController] for the text input field.
   final TextEditingController controller;
+
+  /// The type of keyboard to use for the text input field.
+  final TextInputType? keyboardType;
 
   /// A function used to validate the [OnboardingField]'s entry when the surrounding [Form] is validated. Returns a
   /// string value if a validation error occurs, or null if validation is successful.
@@ -65,6 +69,7 @@ class OnboardingField extends StatelessWidget {
       width: 350,
       child: TextFormField(
         controller: controller,
+        keyboardType: keyboardType ?? TextInputType.text,
         obscureText: obscureText ?? false,
         inputFormatters: [FilteringTextInputFormatter(RegEx.authenticationFieldsCharset, allow: true)],
         decoration: InputDecoration(
