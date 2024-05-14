@@ -127,14 +127,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
       debugPrint('Successfully created account, ${FirebaseAuth.instance.currentUser?.uid}');
 
-      if (mounted) {
-        await Navigator.pushReplacement(
-          context,
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => const SetupRoute(),
-          ),
-        );
-      }
+      _navigateToSetup();
     }
   }
 
@@ -230,6 +223,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
     // TODO(Toglefritz): tag
 
     await AuthenticationService.createUser(method: AuthMethod.google);
+
+    _navigateToSetup();
   }
 
   /// Handles taps on the Apple sign in button.
@@ -237,6 +232,18 @@ class CreateAccountController extends State<CreateAccountRoute> {
     // TODO(Toglefritz): tag
 
     await AuthenticationService.createUser(method: AuthMethod.apple);
+
+    _navigateToSetup();
+  }
+
+  /// Navigates to the setup route following a successful account creation.
+  void _navigateToSetup() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const SetupRoute(),
+      ),
+    );
   }
 
   @override

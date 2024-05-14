@@ -19,14 +19,14 @@ class WelcomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Theme.of(context).primaryColor
           : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).scaffoldBackgroundColor,
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) => state.onLogout(),
@@ -50,65 +50,70 @@ class WelcomeView extends StatelessWidget {
       ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Insets.medium,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.addADevice,
-                  style: GoogleFonts.bungee().copyWith(
-                    fontSize: 52,
-                    color: Theme.of(context).primaryColorDark,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: Insets.medium,
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Insets.medium,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Insets.large,
-                  horizontal: Insets.xLarge,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.addDeviceInvitation,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: Insets.medium),
-                child: AddDeviceButton(
-                  onPressed: state.onAddDevicePressed,
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.salesPrompt,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                      textAlign: TextAlign.center,
+                  child: Text(
+                    AppLocalizations.of(context)!.addADevice,
+                    style: GoogleFonts.bungee().copyWith(
+                      fontSize: 52,
+                      color: Theme.of(context).primaryColorDark,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: Insets.xSmall,
-                        bottom: Insets.medium,
-                      ),
-                      child: LightButton(
-                        text: AppLocalizations.of(context)!.getOneNow,
-                        onPressed: state.onOrderButtonPressed,
-                      ),
-                    ),
-                  ],
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Insets.large,
+                    horizontal: Insets.xLarge,
+                  ),
+                  child: Text(
+                    AppLocalizations.of(context)!.addDeviceInvitation,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: Insets.medium),
+                  child: AddDeviceButton(
+                    onPressed: state.onAddDevicePressed,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.salesPrompt,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: Insets.xSmall,
+                          bottom: Insets.medium,
+                        ),
+                        child: LightButton(
+                          text: AppLocalizations.of(context)!.getOneNow,
+                          onPressed: state.onOrderButtonPressed,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
