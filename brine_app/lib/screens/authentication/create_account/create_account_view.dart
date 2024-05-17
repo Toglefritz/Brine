@@ -17,7 +17,6 @@ import 'create_account_route.dart';
 
 /// View for [CreateAccountRoute].
 class CreateAccountView extends StatelessWidget {
-
   /// Creates an instance of [CreateAccountView].
   const CreateAccountView(this.state, {super.key});
 
@@ -78,7 +77,7 @@ class CreateAccountView extends StatelessWidget {
                             width: 3,
                             color: Theme.of(context).primaryColorDark,
                           ),
-                          color:Theme.of(context).primaryColorLight,
+                          color: Theme.of(context).primaryColorLight,
                         ),
                       ),
                       Padding(
@@ -143,7 +142,7 @@ class CreateAccountView extends StatelessWidget {
                 icon: FontAwesomeIcons.google,
               ),
             ),
-            if (Device.isIOS)
+            if (Device.isIOS || Device.isMacOS)
               LightButton(
                 onPressed: state.handleAppleCreateAccount,
                 text: AppLocalizations.of(context)!.signUpWithApple,

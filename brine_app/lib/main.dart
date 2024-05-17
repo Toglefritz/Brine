@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'brine_app.dart';
 import 'firebase_options.dart';
 
+/// The entry point of the application.
+///
+/// The [main] function initializes Firebase and Firebase AppCheck before running the [BrineApp] widget. If the app is
+/// running in debug mode, the Firebase local emulator suite is used.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -34,7 +38,7 @@ Future<void> main() async {
       // suite on the same machine as the app. Otherwise, use the IP address of the machine running the emulator suite.
       // The emulator suite can be started with the command `firebase emulators:start`.
       // The IP address of the machine running the emulator suite will be displayed in the terminal.
-      const String devMachineIP = '192.168.86.28';
+      const String devMachineIP = 'localhost';//'192.168.86.28';
 
       FirebaseFirestore.instance.useFirestoreEmulator(devMachineIP, 8080);
       await FirebaseAuth.instance.useAuthEmulator(devMachineIP, 9099);

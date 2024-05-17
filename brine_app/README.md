@@ -31,6 +31,25 @@ device, as well as information about the device itself. The app will facilitate 
 of push notifications when the battery and/or salt level on one of the Brine devices for a user
 are low.
 
+## Provisioning Flow (draft)
+
+The diagram below shows the provisioning flow for a Brine device.
+
+> Some details in this flow are still being implemented and may change over time.
+
+```mermaid
+graph TD
+    A[User starts provisioning flow in app] --> B[User presses setup button on Brine device]
+    B --> C[App finds Brine device over BLE]
+    C --> D[App connects, pairs, and bonds to Brine]
+    D --> E[App obtains information from Brine device]
+    E --> F[App associates Brine device to user's account]
+    F --> G[User provides height of their water softener]
+    G --> H[Water softener height is sent to Brine device]
+    H --> I[App guides user through installing Brine in their water softener]
+    I --> J[Brine device makes initial measurement of salt level in appliance]
+```
+
 # Firebase Local Emulator Notes
 
 Development can be done against the Firebase local emulator rather than the live Firebase 

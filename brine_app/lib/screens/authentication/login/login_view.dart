@@ -106,7 +106,7 @@ class LoginView extends StatelessWidget {
                 icon: FontAwesomeIcons.google,
               ),
             ),
-            if (Device.isIOS)
+            if (Device.isIOS || Device.isMacOS)
               LightButton(
                 onPressed: state.handleAppleLogin,
                 text: AppLocalizations.of(context)!.loginWithApple,
