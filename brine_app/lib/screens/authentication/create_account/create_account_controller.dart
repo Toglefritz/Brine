@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
+import '../../../services/analytics/analytics.dart';
 import '../../../services/authentication/authentication_service.dart';
 import '../../../services/authentication/models/auth_methods.dart';
 import '../../../values/regex.dart';
@@ -65,6 +69,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
         );
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
+          Analytics.trackEvent(eventName: 'weak_password');
+
           setState(() {
             passwordFieldError = true;
             createAccountPasswordExceptionError = 'The password provided is too weak.';
@@ -73,6 +79,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
           return;
         } else if (e.code == 'email-already-in-use') {
+          Analytics.trackEvent(eventName: 'email-already-in-use');
+
           setState(() {
             usernameFieldError = true;
             createAccountUsernameExceptionError = 'An account already exists using that email.';
@@ -81,6 +89,12 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
           return;
         } else if (e.code == 'network-request-failed') {
+          Analytics.trackEvent(eventName: 'network-request-failed');
+          unawaited(
+            FirebaseCrashlytics.instance
+                .recordError('Account creation with basic auth failed with exception, $e', StackTrace.current),
+          );
+
           setState(() {
             createAccountUsernameExceptionError = 'A network error occurred. Please try again.';
             createAccountPasswordExceptionError = 'A network error occurred. Please try again.';
@@ -91,6 +105,12 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
           return;
         } else {
+          Analytics.trackEvent(eventName: 'unknown_error');
+          unawaited(
+            FirebaseCrashlytics.instance
+                .recordError('Account creation with basic auth failed with exception, $e', StackTrace.current),
+          );
+
           setState(() {
             createAccountUsernameExceptionError =
                 'An unknown error occurred. Not good. Please try again a bit later as this is probably our fault.';
@@ -103,7 +123,12 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
           return;
         }
-      } catch (e) {
+      } catch (e, s) {
+        Analytics.trackEvent(eventName: 'unknown_error');
+        unawaited(
+          FirebaseCrashlytics.instance.recordError('Account creation with basic auth failed with exception, $e', s),
+        );
+
         setState(() {
           createAccountUsernameExceptionError =
               'An unknown error occurred. Not good. Please try again a bit later as this is probably our fault.';
@@ -127,6 +152,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
       debugPrint('Successfully created account, ${FirebaseAuth.instance.currentUser?.uid}');
 
+      Analytics.trackSignUp(AuthMethod.basicAuth);
+
       _navigateToSetup();
     }
   }
@@ -134,6 +161,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
   /// Validates the username field.
   String? validateUsernameField(String? value) {
     if (value == null || value.isEmpty) {
+      Analytics.trackEvent(eventName: 'account_creation_empty_username');
+
       setState(() {
         usernameFieldError = true;
         creatingAccount = false;
@@ -141,6 +170,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
       return 'Oops. Enter a username, please.';
     } else if (!RegEx.emailAddress.hasMatch(value)) {
+      Analytics.trackEvent(eventName: 'account_creation_invalid_email_address');
+
       setState(() {
         usernameFieldError = true;
         creatingAccount = false;
@@ -162,11 +193,15 @@ class CreateAccountController extends State<CreateAccountRoute> {
   // for both password field.
   String? validatePasswordField(String? value) {
     if (value == null || value.isEmpty) {
+      Analytics.trackEvent(eventName: 'account_creation_empty_password');
+
       setState(() {
         passwordFieldError = true;
         creatingAccount = false;
       });
     } else if (value.length < 6) {
+      Analytics.trackEvent(eventName: 'account_creation_password_too_short');
+
       setState(() {
         passwordFieldError = true;
         creatingAccount = false;
@@ -209,7 +244,9 @@ class CreateAccountController extends State<CreateAccountRoute> {
   }
 
   /// Handles taps on the back button.
-  void handleBackTap() {
+  void onBackTap() {
+    Analytics.trackEvent(eventName: 'account_creation_back_tap');
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
@@ -220,18 +257,20 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
   /// Handles taps on the Google sign in button.
   Future<void> handleGoogleCreateAccount() async {
-    // TODO(Toglefritz): tag
-
+    // TODO(Toglefritz): catch exceptions
     await AuthenticationService.createUser(method: AuthMethod.google);
+
+    Analytics.trackSignUp(AuthMethod.google);
 
     _navigateToSetup();
   }
 
   /// Handles taps on the Apple sign in button.
   Future<void> handleAppleCreateAccount() async {
-    // TODO(Toglefritz): tag
-
+    // TODO(Toglefritz): catch exceptions
     await AuthenticationService.createUser(method: AuthMethod.apple);
+
+    Analytics.trackSignUp(AuthMethod.apple);
 
     _navigateToSetup();
   }

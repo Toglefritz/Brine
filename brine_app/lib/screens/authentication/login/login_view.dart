@@ -28,7 +28,7 @@ class LoginView extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(Theme.of(context).brightness.oppositeSystemOverlayStyle());
 
     return AuthenticationPage(
-      backOnTap: state.handleBackTap,
+      backOnTap: state.onBackTap,
       content: <Widget>[
         Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -10,3 +10,4 @@ linter:
       lines_longer_than_80_chars: false
       avoid_escaping_inner_quotes: false
       sort_pub_dependencies: false
+      avoid_print: true

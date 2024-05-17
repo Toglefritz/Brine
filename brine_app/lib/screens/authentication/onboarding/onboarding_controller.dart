@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../services/analytics/analytics.dart';
 import '../create_account/create_account_route.dart';
 import '../login/login_route.dart';
 import 'onboarding_route.dart';
@@ -9,7 +10,7 @@ import 'onboarding_view.dart';
 class OnboardingController extends State<OnboardingRoute> {
   /// Handles taps on the login button.
   void handleLoginTap() {
-    // TODO(Toglefritz): Analytics tag
+    Analytics.trackEvent(eventName: 'onboarding_login_tap');
 
     Navigator.pushReplacement(
       context,
@@ -21,7 +22,7 @@ class OnboardingController extends State<OnboardingRoute> {
 
   /// Handles taps on the create an account button.
   void handleCreateAccountTap() {
-    // TODO(Toglefritz): Analytics tag
+    Analytics.trackEvent(eventName: 'onboarding_create_account_tap');
 
     Navigator.pushReplacement(
       context,

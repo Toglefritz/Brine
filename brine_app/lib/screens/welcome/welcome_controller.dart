@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../services/analytics/analytics.dart';
 import '../../services/authentication/authentication_service.dart';
 import '../authentication/onboarding/onboarding_route.dart';
 import '../scan/scan_route.dart';
@@ -24,12 +25,14 @@ class WelcomeController extends State<WelcomeRoute> {
 
   /// Handles taps on the button allowing a user to order Brine.
   void onOrderButtonPressed() {
+    Analytics.trackEvent(eventName: 'order_brine_tap');
+
     // TODO(Toglefritz): implementation
   }
 
   /// Handles taps on the "logout" button.
   Future<void> onLogout() async {
-    // TODO(Toglefritz): analytics tag
+    Analytics.trackEvent(eventName: 'logout_tap');
 
     await AuthenticationService.signOut();
 

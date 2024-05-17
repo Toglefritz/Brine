@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
+import '../../../services/analytics/analytics.dart';
 import '../../../services/authentication/authentication_service.dart';
 import '../../../values/regex.dart';
 import '../../setup/setup_route.dart';
@@ -56,8 +60,13 @@ class LoginController extends State<LoginRoute> {
           emailAddress: usernameFieldController.text,
           password: passwordFieldController.text,
         );
-      } on FirebaseAuthException catch (e) {
+      } on FirebaseAuthException catch (e, s) {
         if (e.code == 'user-not-found') {
+          Analytics.trackEvent(eventName: 'user-not-found');
+          unawaited(
+            FirebaseCrashlytics.instance.recordError('Authentication with basic auth failed with exception, $e', s),
+          );
+
           setState(() {
             usernameFieldError = true;
             loginUsernameExceptionError = 'No user found with that email.';
@@ -66,6 +75,11 @@ class LoginController extends State<LoginRoute> {
 
           return;
         } else if (e.code == 'wrong-password') {
+          Analytics.trackEvent(eventName: 'wrong-password');
+          unawaited(
+            FirebaseCrashlytics.instance.recordError('Authentication with basic auth failed with exception, $e', s),
+          );
+
           setState(() {
             passwordFieldError = true;
             loginPasswordExceptionError = 'That password wasn\'t quite right.';
@@ -74,6 +88,11 @@ class LoginController extends State<LoginRoute> {
 
           return;
         } else if (e.code == 'user-disabled') {
+          Analytics.trackEvent(eventName: 'user-disabled');
+          unawaited(
+            FirebaseCrashlytics.instance.recordError('Authentication with basic auth failed with exception, $e', s),
+          );
+
           setState(() {
             passwordFieldError = true;
             loginUsernameExceptionError = 'Your account is currently disabled.';
@@ -96,6 +115,8 @@ class LoginController extends State<LoginRoute> {
     debugPrint(
       'Successfully authenticated user, ${FirebaseAuth.instance.currentUser?.uid}',
     );
+
+    Analytics.trackLogin();
 
     if (mounted) {
       await Navigator.pushReplacement(
@@ -129,12 +150,16 @@ class LoginController extends State<LoginRoute> {
   /// Validates the username field.
   String? validateUsernameField(String? value) {
     if (value == null || value.isEmpty) {
+      Analytics.trackEvent(eventName: 'login_empty_username');
+
       setState(() {
         usernameFieldError = true;
       });
 
       return 'Oh no! Please enter a username.';
     } else if (!RegEx.emailAddress.hasMatch(value)) {
+      Analytics.trackEvent(eventName: 'login_invalid_email_address');
+
       setState(() {
         usernameFieldError = true;
       });
@@ -152,12 +177,16 @@ class LoginController extends State<LoginRoute> {
   /// Validates the password field.
   String? validatePasswordField(String? value) {
     if (value == null || value.isEmpty) {
+      Analytics.trackEvent(eventName: 'login_empty_password');
+
       setState(() {
         passwordFieldError = true;
       });
 
       return 'Please enter a password.';
     } else if (value.length < 6) {
+      Analytics.trackEvent(eventName: 'login_password_too_short');
+
       setState(() {
         passwordFieldError = true;
       });
@@ -173,7 +202,9 @@ class LoginController extends State<LoginRoute> {
   }
 
   /// Handles taps on the back button.
-  void handleBackTap() {
+  void onBackTap() {
+    Analytics.trackEvent(eventName: 'login_back_tap');
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
@@ -197,14 +228,16 @@ class LoginController extends State<LoginRoute> {
           ),
         );
       }
-    } catch (e) {
+    } catch (e, s) {
       debugPrint('Failed to sign in with Google with exception, $e');
+
+      unawaited(FirebaseCrashlytics.instance.recordError('Failed to sign in with Google with exception, $e', s));
     }
   }
 
   /// Handles taps on the Apple sign in button.
   void handleAppleLogin() {
-    // TODO(Toglefritz): do login with Apple
+    // TODO(Toglefritz): do login with Apple, with tagging too, please
   }
 
   @override

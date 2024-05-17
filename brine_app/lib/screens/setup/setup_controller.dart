@@ -32,7 +32,7 @@ class SetupController extends State<SetupRoute> {
     } catch (e) {
       debugPrint('Failed to perform setup with exception, $e');
 
-      // TODO(Toglefritz): handle error
+      // TODO(Toglefritz): handle error, also sending info to Firebase would be good
     }
 
     // If there are no devices on the account, go to the [WelcomeRoute]

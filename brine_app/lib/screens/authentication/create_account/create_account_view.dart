@@ -28,7 +28,7 @@ class CreateAccountView extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(Theme.of(context).brightness.oppositeSystemOverlayStyle());
 
     return AuthenticationPage(
-      backOnTap: state.handleBackTap,
+      backOnTap: state.onBackTap,
       content: [
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
