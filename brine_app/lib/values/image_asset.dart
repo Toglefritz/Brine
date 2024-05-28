@@ -1,9 +1,17 @@
 /// Provides image assets used throughout the app.
 // ignore_for_file: public_member_api_docs
-class ImageAsset {
-  static String pathPrefix = 'assets/icons/';
+enum ImageAsset {
+  logoTransparentBackground('icons/brine_transparent_background.png'),
+  logoTransparentBackgroundInverse('icons/brine_transparent_background_inverse.png');
 
+  const ImageAsset(this.relativePath);
 
-  static String logoTransparentBackground = '${pathPrefix}brine_transparent_background.png';
-  static String logoTransparentBackgroundInverse = '${pathPrefix}brine_transparent_background_inverse.png';
+  /// The path to the image asset, relative to the [_pathPrefix].
+  final String relativePath;
+
+  /// The base path for all image assets.
+  final String _pathPrefix = 'assets/';
+
+  /// Returns the full path to the image asset.
+  String get path => '$_pathPrefix$relativePath';
 }

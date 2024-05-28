@@ -52,8 +52,8 @@ class OnboardingView extends StatelessWidget {
                       // TODO(Toglefritz): replace with vector
                       Image.asset(
                         Theme.of(context).brightness == Brightness.light
-                            ? ImageAsset.logoTransparentBackground
-                            : ImageAsset.logoTransparentBackgroundInverse,
+                            ? ImageAsset.logoTransparentBackground.path
+                            : ImageAsset.logoTransparentBackgroundInverse.path,
                         width: 200,
                       ),
                     ],
