@@ -88,13 +88,13 @@ class OnboardingField extends StatelessWidget {
           ),
           suffixIcon: errorState
               ? GestureDetector(
-                  child: const Padding(
-                    padding: EdgeInsets.only(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
                       right: Insets.small,
                     ),
                     child: Icon(
                       Icons.error_outline_outlined,
-                      color: ColorLibrary.error,
+                      color: Theme.of(context).extension<ColorLibrary>()?.error,
                     ),
                   ),
                 )
