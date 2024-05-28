@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_splendid_ble/flutter_splendid_ble.dart';
-import 'package:flutter_splendid_ble/models/ble_device.dart';
-import 'package:flutter_splendid_ble/models/scan_filter.dart';
+import 'package:flutter_splendid_ble/central/models/scan_filter.dart';
+import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
+import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import 'scan_route.dart';
 import 'scan_view.dart';
 
 /// Controller for the [ScanRoute].
 class ScanController extends State<ScanRoute> {
-  /// An instance of the [FlutterSplendidBle] service used for the Bluetooth scanning process.
-  final FlutterSplendidBle _ble = FlutterSplendidBle();
+  /// An instance of the [SplendidBle] service used for the Bluetooth scanning process.
+  final SplendidBle _ble = SplendidBle();
 
   /// A [StreamSubscription] allowing the controller to listen for newly discovered BLE devices.
   late StreamSubscription<BleDevice> _discoveredDeviceSubscription;
@@ -38,9 +38,11 @@ class ScanController extends State<ScanRoute> {
   // TODO(Toglefritz): implement ability to filter out devices
   // TODO(Toglefritz): implement a screen with instructions for starting advertisement on the Brine device
   Future<void> _startScan() async {
+    debugPrint('Starting scan');
+
     // Start the scan
     _discoveredDeviceSubscription = _ble.startScan(
-      filters: <ScanFilter>[
+    filters: <ScanFilter>[
         ScanFilter(
           serviceUuids: ['6272696e-6573-616c-746d-6f6e69746f72'],
         ),
@@ -52,10 +54,12 @@ class ScanController extends State<ScanRoute> {
     _scanTimeout = Timer(const Duration(seconds: 8), _stopScan);
   }
 
-  /// Receives [BleDevice] instances from the [FlutterSplendidBle] service that represent BLE devices discovered during
+  /// Receives [BleDevice] instances from the [SplendidBle] service that represent BLE devices discovered during
   /// the scan. Since the scan is filtered to only show devices with the Brine service UUID, this method will only be
   /// called when Brine devices are discovered.
   void _onDeviceDiscovered(BleDevice device) {
+    debugPrint('Discovered device: ${device.name}');
+
     // Cancel the timeout timer.
     _scanTimeout.cancel();
 

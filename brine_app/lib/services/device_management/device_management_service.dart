@@ -69,6 +69,8 @@ class DeviceManagementService {
 
       // Check the response status code
       if (response.statusCode == HttpStatus.ok) {
+       debugPrint('Successfully got user devices: ${response.body}');
+
         // Parse the response body
         final Map<String, dynamic> devicesJson = json.decode(response.body) as Map<String, dynamic>;
         final List<String> devices = List<String>.from(devicesJson['devices'] as List<dynamic>);

@@ -13,25 +13,25 @@ dependencies:
     sdk: flutter
 
   # Used to access Firestore
-  cloud_firestore: ^4.17.3
+  cloud_firestore: ^4.17.4
   # Used to call Firebase callable functions
-  cloud_functions: ^4.7.4
+  cloud_functions: ^4.7.5
   # Flutter plugin for interacting with BLE devices
-  flutter_splendid_ble: ^0.8.0
+  flutter_splendid_ble: ^0.10.0
   # Used to display SVG assets
   flutter_svg: ^2.0.10+1
   # Provides additional icons beyond the Material icons
   font_awesome_flutter: ^10.7.0
   # Used to track user interactions, app usage, and events
-  firebase_analytics: ^10.10.5
+  firebase_analytics: ^10.10.6
   # Protects backend resources
-  firebase_app_check: ^0.2.2+5
+  firebase_app_check: ^0.2.2+6
   # Enables the use of Firebase services
-  firebase_core: ^2.26.0
+  firebase_core: ^2.31.1
   # Reports errors to the Firebase console
-  firebase_crashlytics: ^3.5.5
+  firebase_crashlytics: ^3.5.6
   # Firebase Auth services
-  firebase_auth: ^4.19.5
+  firebase_auth: ^4.19.6
   # Used to get Google Fonts font styles
   google_fonts: ^6.2.1
   # Allows authentication using a Google account
