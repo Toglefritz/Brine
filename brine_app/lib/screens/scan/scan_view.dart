@@ -15,6 +15,17 @@ class ScanView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.cancel_outlined,
+              color: Theme.of(context).primaryColorDark,
+            ),
+            onPressed: state.onCancelScan,
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
