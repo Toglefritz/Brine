@@ -18,6 +18,9 @@ final ThemeData lightThemeData = ThemeData(
   primaryColorDark: const Color(0xFF212121),
   scaffoldBackgroundColor: const Color(0xFFEDA200),
   textTheme: defaultTextTheme,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Color(0xFFEDA200),
+  ),
 ).copyWith(
   extensions: <ThemeExtension<dynamic>>[
     const ColorLibrary(
@@ -35,6 +38,9 @@ final ThemeData darkThemeData = ThemeData(
   primaryColorDark: const Color(0xFFFFFFFF),
   scaffoldBackgroundColor: const Color(0xFF212121),
   textTheme: defaultTextTheme,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Color(0xFF212121),
+  ),
 ).copyWith(
   extensions: <ThemeExtension<dynamic>>[
     const ColorLibrary(

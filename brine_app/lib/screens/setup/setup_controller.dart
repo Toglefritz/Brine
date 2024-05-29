@@ -13,18 +13,16 @@ class SetupController extends State<SetupRoute> {
   @override
   void initState() {
     // Perform setup for app usage
-    performSetup();
+    _performSetup();
 
     super.initState();
   }
 
   /// Performs the setup necessary to proceed to the next route. This involves getting a list of the user's devices,
   /// assuming any have been added to the user's account, getting the details for each device, and handling errors
-  // TODO(Toglefritz): create AddDeviceRoute
-  // ignore: comment_references
-  /// related to these processes. If the user has no devices on their account, the app proceeds to the [AddDeviceRoute].
+  /// related to these processes. If the user has no devices on their account, the app proceeds to the [WelcomeRoute].
   /// Otherwise, the app goes to the [SoftenerMonitorRoute].
-  Future<void> performSetup() async {
+  Future<void> _performSetup() async {
     List<BrineDevice>? deviceList;
 
     try {

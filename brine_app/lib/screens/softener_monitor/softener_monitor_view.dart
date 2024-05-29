@@ -63,9 +63,6 @@ class SoftenerMonitorView extends StatelessWidget {
           ? const Color(0xFFFFE0A3)
           : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).brightness == Brightness.light
-            ? const Color(0xFFFFE0A3)
-            : Theme.of(context).primaryColorLight,
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) => state.onLogout(),
