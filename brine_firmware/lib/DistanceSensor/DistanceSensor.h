@@ -1,8 +1,8 @@
 #ifndef DISTANCE_SENSOR_H
 #define DISTANCE_SENSOR_H
 
-#include <Wire.h>
 #include <SparkFun_VL53L1X.h>
+#include <Wire.h>
 
 /**
  * @class DistanceSensor
@@ -11,9 +11,8 @@
  * This class encapsulates functions for initializing the sensor, starting
  * a distance measurement, and retrieving the distance measurement data.
  */
-class DistanceSensor
-{
-public:
+class DistanceSensor {
+  public:
     /**
      * @brief Constructor for DistanceSensor.
      *
@@ -27,7 +26,8 @@ public:
      * Sets up the sensor for operation, including beginning communication
      * over I2C and checking the sensor's initial status.
      *
-     * Returns true if the sensor was successfully initialized, and false otherwise.
+     * Returns true if the sensor was successfully initialized, and false
+     * otherwise.
      */
     bool begin();
 
@@ -39,7 +39,8 @@ public:
     void startMeasurement();
 
     /**
-     * @brief Returnsn a range status indicating the operational status of the sensor.
+     * @brief Returnsn a range status indicating the operational status of the
+     * sensor.
      *
      * @return The range status can be any of the following:
      *  - 0: No error
@@ -59,7 +60,7 @@ public:
      */
     int getDistance();
 
-private:
+  private:
     SFEVL53L1X sensor; /// Instance of the sensor class.
 };
 

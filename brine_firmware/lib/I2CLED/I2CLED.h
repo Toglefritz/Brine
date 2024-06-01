@@ -12,22 +12,22 @@
  * This singleton class provides functionality to interact with an I2C LED.
  * It includes methods to initialize the LED and turn it on or off.
  *
- * The LED is part of the Qwiic Button, which is a tactile button with an integrated LED. However, this class, and
- * the I2CButton class, treat the LED as a separate entity for ease of use and the ability to integrate different
+ * The LED is part of the Qwiic Button, which is a tactile button with an
+ * integrated LED. However, this class, and the I2CButton class, treat the LED
+ * as a separate entity for ease of use and the ability to integrate different
  * hardware in the future.
  */
-class I2CLED
-{
-public:
+class I2CLED {
+  public:
     /**
      * @brief Get the I2CLED instance.
      *
-     * This method provides access to the singleton instance of the I2CLED class.
+     * This method provides access to the singleton instance of the I2CLED
+     * class.
      *
      * @return I2CLED& - The singleton instance of the I2CLED class.
      */
-    static I2CLED &getInstance()
-    {
+    static I2CLED &getInstance() {
         static I2CLED instance;
 
         return instance;
@@ -38,7 +38,8 @@ public:
      *
      * This method initializes the I2CLED.
      *
-     * @return bool - Returns true if the initialization was successful, false otherwise.
+     * @return bool - Returns true if the initialization was successful, false
+     * otherwise.
      */
     bool begin();
 
@@ -46,8 +47,9 @@ public:
      * @brief Turns the LED on.
      *
      * This method turns the LED on at the current brightness level.
-     * 
-     * @return bool - Returns true if the LED was turned on successfully, false otherwise.
+     *
+     * @return bool - Returns true if the LED was turned on successfully, false
+     * otherwise.
      */
     bool turnOn();
 
@@ -55,25 +57,28 @@ public:
      * @brief Turns the LED off.
      *
      * This method turns the LED off.
-     * 
-     * @return bool - Returns true if the LED was turned off successfully, false otherwise.
+     *
+     * @return bool - Returns true if the LED was turned off successfully, false
+     * otherwise.
      */
     bool turnOff();
 
     /**
      * @brief Changes the state of the LED if the interval has passed.
      *
-     * This method accepts the current time, in terms of milliseconds since the program started, and an interval.
-     * If the interval has passed since the last time the LED was changed, the LED will be turned on or off. The 
-     * last time the LED was changed is tracked internally by this class.
-     * 
+     * This method accepts the current time, in terms of milliseconds since the
+     * program started, and an interval. If the interval has passed since the
+     * last time the LED was changed, the LED will be turned on or off. The last
+     * time the LED was changed is tracked internally by this class.
+     *
      * @param currentMillis The current time in milliseconds.
      * @param interval The interval at which to blink the LED.
-     * @return bool - Returns true if the LED was blinked successfully, false otherwise.
+     * @return bool - Returns true if the LED was blinked successfully, false
+     * otherwise.
      */
-   bool blink(unsigned long currentMillis);
+    bool blink(unsigned long currentMillis);
 
-private:
+  private:
     /**
      * @brief Construct a new I2CLED object.
      *
@@ -96,7 +101,8 @@ private:
     DebugService &debugService = DebugService::getInstance();
 
     /**
-     * @brief The QwiicButton object representing the physical LED inside the tactile button.
+     * @brief The QwiicButton object representing the physical LED inside the
+     * tactile button.
      *
      * This object represents the physical LED connected via I2C.
      */
@@ -110,7 +116,8 @@ private:
     bool isOn = false;
 
     /**
-     * @brief The last time the LED was changed, in terms of milliseconds since the program started.
+     * @brief The last time the LED was changed, in terms of milliseconds since
+     * the program started.
      *
      * This is used to track the last time the LED was turned on or off.
      */

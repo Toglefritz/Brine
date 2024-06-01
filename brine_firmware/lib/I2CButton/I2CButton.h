@@ -12,18 +12,17 @@
  * This singleton class provides functionality to interact with an I2C button.
  * It includes methods to initialize the button and to check its state.
  */
-class I2CButton
-{
-public:
+class I2CButton {
+  public:
     /**
      * @brief Get the I2CButton instance.
      *
-     * This method provides access to the singleton instance of the I2CButton class.
+     * This method provides access to the singleton instance of the I2CButton
+     * class.
      *
      * @return I2CButton& - The singleton instance of the I2CButton class.
      */
-    static I2CButton &getInstance()
-    {
+    static I2CButton &getInstance() {
         static I2CButton instance;
         return instance;
     }
@@ -31,10 +30,13 @@ public:
     /**
      * @brief Initialize the I2CButton.
      *
-     * This method initializes the I2CButton and sets the callback function to be called when the button is pressed.
+     * This method initializes the I2CButton and sets the callback function to
+     * be called when the button is pressed.
      *
-     * @param callback - A pointer to the function to be called when the button is pressed.
-     * @return bool - Returns true if the initialization was successful, false otherwise.
+     * @param callback - A pointer to the function to be called when the button
+     * is pressed.
+     * @return bool - Returns true if the initialization was successful, false
+     * otherwise.
      */
     bool begin(void (*callback)());
 
@@ -45,7 +47,7 @@ public:
      */
     void clearEventBits();
 
-private:
+  private:
     /**
      * @brief Construct a new I2CButton object.
      *

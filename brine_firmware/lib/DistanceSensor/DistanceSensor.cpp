@@ -1,5 +1,5 @@
 #include "DistanceSensor.h"
-#include "DebugService.h"  // For debugging output
+#include "DebugService.h" // For debugging output
 
 // Constructor
 DistanceSensor::DistanceSensor() : sensor() {}
@@ -19,9 +19,10 @@ bool DistanceSensor::begin() {
 
     // Check if the sensor failed to initialize
     if (status != 0) {
-        DebugService::getInstance().debugPrint("Sensor failed to initialize with status ");
+        DebugService::getInstance().debugPrint(
+            "Sensor failed to initialize with status ");
         DebugService::getInstance().debugPrintln(String(status));
-        
+
         return false;
     } else {
         return true;
@@ -31,9 +32,7 @@ bool DistanceSensor::begin() {
 /**
  * @brief Starts the ranging process to measure distance.
  */
-void DistanceSensor::startMeasurement() {
-    sensor.startRanging();
-}
+void DistanceSensor::startMeasurement() { sensor.startRanging(); }
 
 /**
  * @brief Retrieves the range status of the sensor.
@@ -44,9 +43,7 @@ void DistanceSensor::startMeasurement() {
  *  - 2: Sigma fail
  *  - 7: Wrapped target fail
  */
-int DistanceSensor::getRangeStatus() {
-    return sensor.getRangeStatus();
-}
+int DistanceSensor::getRangeStatus() { return sensor.getRangeStatus(); }
 
 /**
  * @brief Retrieves the current distance measurement.

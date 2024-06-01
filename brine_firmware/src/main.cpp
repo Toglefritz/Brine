@@ -26,9 +26,7 @@ unsigned long provisioningStartTime = 0;
  * @note This function should be kept as short as possible to prevent blocking
  * the main loop and causing the ESP32 to reset due to a watchdog timeout.
  */
-void IRAM_ATTR button_isr() {
-    buttonPressed = true;
-}
+void IRAM_ATTR button_isr() { buttonPressed = true; }
 
 void setup() {
     // Join the I2C bus
@@ -60,8 +58,7 @@ void loop() {
     // started, turn off provisioning.
     // TODO(Toglefritz): also check for provisioning activity
     else if (provisioningStartTime != 0 &&
-             millis() - provisioningStartTime >= 180000)
-    {
+             millis() - provisioningStartTime >= 180000) {
         DebugService::getInstance().debugPrintln(
             "Provisioning process timed out. Turning off provisioning.");
 

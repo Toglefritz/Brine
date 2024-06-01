@@ -1,9 +1,10 @@
-#include <unity.h>
 #include "DistanceSensor.h"
+#include <unity.h>
 
 /*
- *  Test file for the DistanceSensor class. This test file tests the functionality of the VLX53L1X distance sensor 
- *  by verifying that it initializes correctly and is able to obtain a distance reading. 
+ *  Test file for the DistanceSensor class. This test file tests the
+ * functionality of the VLX53L1X distance sensor by verifying that it
+ * initializes correctly and is able to obtain a distance reading.
  *
  *  Run this test with the command `pio test --filter test_DistanceSensor`.
  */
@@ -12,7 +13,7 @@ DistanceSensor sensor;
 
 /**
  * @brief Test case for sensor initialization.
- * 
+ *
  * This test verifies that the sensor initializes correctly.
  */
 void test_sensor_initialization(void) {
@@ -22,7 +23,7 @@ void test_sensor_initialization(void) {
 
 /**
  * @brief Test the startMeasurement function of the DistanceSensor class.
- * 
+ *
  * This test verifies that the sensor starts the measurement correctly and
  * obtains a valid range status.
  */
@@ -35,9 +36,10 @@ void test_start_measurement(void) {
 
 /**
  * @brief Test case for the get_distance function.
- * 
- * This test verifies that the distance sensor is able to correctly measure the distance.
- * It starts the measurement, gets the distance, and checks that the distance is non-negative.
+ *
+ * This test verifies that the distance sensor is able to correctly measure the
+ * distance. It starts the measurement, gets the distance, and checks that the
+ * distance is non-negative.
  */
 void test_get_distance(void) {
     // Test that the sensor gets distance correctly
@@ -50,9 +52,10 @@ void test_get_distance(void) {
 
 /**
  * @brief Initializes the test suite and runs the test cases.
- * 
- * This function is called once at the beginning of the test suite. It initializes the Unity test framework
- * and runs the test cases defined in the suite.
+ *
+ * This function is called once at the beginning of the test suite. It
+ * initializes the Unity test framework and runs the test cases defined in the
+ * suite.
  */
 void setup() {
     UNITY_BEGIN();
