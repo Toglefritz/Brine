@@ -38,16 +38,28 @@ The diagram below shows the provisioning flow for a Brine device.
 > Some details in this flow are still being implemented and may change over time.
 
 ```mermaid
-graph TD
-    A[User starts provisioning flow in app] --> B[User presses setup button on Brine device]
-    B --> C[App finds Brine device over BLE]
-    C --> D[App connects, pairs, and bonds to Brine]
-    D --> E[App obtains information from Brine device]
-    E --> F[App associates Brine device to user's account]
-    F --> G[User provides height of their water softener]
-    G --> H[Water softener height is sent to Brine device]
-    H --> I[App guides user through installing Brine in their water softener]
-    I --> J[Brine device makes initial measurement of salt level in appliance]
+sequenceDiagram
+    participant User
+    participant MobileApp
+    participant BrineDevice
+    participant Backend
+
+    User ->> BrineDevice: Press button to initiate device activation
+    BrineDevice ->> MobileApp: Start BLE advertising
+    MobileApp ->> MobileApp: Scan for BLE devices
+    MobileApp ->> BrineDevice: Discover Brine device
+    MobileApp ->> BrineDevice: Perform BLE pairing and bonding
+    MobileApp ->> BrineDevice: Retrieve device ID
+    MobileApp ->> Backend: Send device ID and user ID
+    Backend ->> Backend: Associate device with user account
+    User ->> MobileApp: Provide WiFi credentials
+    MobileApp ->> BrineDevice: Send WiFi credentials over BLE
+    BrineDevice ->> BrineDevice: Connect to WiFi network
+    BrineDevice ->> MobileApp: Report WiFi connection success
+    BrineDevice ->> Backend: Send public key to cloud
+    Backend ->> Backend: Verify device identity
+    Backend ->> Backend: Store device public key
+    MobileApp ->> User: Notify provisioning completion
 ```
 
 # Firebase Local Emulator Notes

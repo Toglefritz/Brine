@@ -13,6 +13,9 @@ class BrineApp extends StatelessWidget {
   /// Creates an instance of [BrineApp].
   const BrineApp({super.key});
 
+  /// A key used for the [Navigator] provided by the [MaterialApp] widget.
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,6 +25,7 @@ class BrineApp extends StatelessWidget {
       darkTheme: darkThemeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      navigatorKey: navigatorKey,
       home: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: StreamBuilder<User?>(

@@ -8,6 +8,7 @@ import 'package:flutter_splendid_ble/shared/models/bluetooth_permission_status.d
 import 'package:flutter_splendid_ble/shared/models/bluetooth_status.dart';
 
 import '../../services/analytics/analytics.dart';
+import '../device_confirmation/device_confirmation_route.dart';
 import '../setup/setup_route.dart';
 import 'scan_route.dart';
 import 'scan_view.dart';
@@ -135,14 +136,25 @@ class ScanController extends State<ScanRoute> {
   void _onDeviceDiscovered(BleDevice device) {
     debugPrint('Discovered Brine device, ${device.name}');
 
-    // Cancel the timeout timer.
-    _scanTimeout.cancel();
+    // Double check that the device has a name that contains Brine. This is not a robust security feature, just a
+    // simple tool that avoids issues if another BLE device within range happened to use the same UUID as Brine devices.
+    if ((device.name?.isNotEmpty ?? false) && (device.name?.contains('Brine') ?? false)) {
+      // Cancel the timeout timer.
+      _scanTimeout.cancel();
 
-    // Stop the scan.
-    _stopScan();
+      // Stop the scan.
+      _stopScan();
 
-    // Navigate to the next screen.
-    // TODO(Toglefritz): implement
+      // Navigate to the next screen.
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => DeviceConfirmationRoute(
+            device: device,
+          ),
+        ),
+      );
+    }
   }
 
   /// Handles taps on the "cancel" button used to stop the scan and return to the setup route so the account can be

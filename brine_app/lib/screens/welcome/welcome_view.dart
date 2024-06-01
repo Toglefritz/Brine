@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/light_button.dart';
+import '../../components/main_app_bar.dart';
 import '../../theme/insets.dart';
 import 'components/add_device_button.dart';
 import 'welcome_controller.dart';
@@ -19,28 +20,7 @@ class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) => state.onLogout(),
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: AppLocalizations.of(context)!.logout,
-                  child: Text(
-                    AppLocalizations.of(context)!.logout,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ];
-            },
-            icon: Icon(
-              Icons.more_vert,
-              color: Theme.of(context).primaryColorDark,
-            ),
-          ),
-        ],
-      ),
+      appBar: const MainAppBar(),
       body: SafeArea(
         child: Center(
           child: Padding(
