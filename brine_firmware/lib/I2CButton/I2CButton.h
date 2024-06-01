@@ -38,7 +38,12 @@ public:
      */
     bool begin(void (*callback)());
 
-    // TODO(Toglefritz): Implement a method to return a boolean indicating if the button was pressed in the last three minutes
+    /**
+     * @brief Clears the event bits, including the pressed and clicked bits.
+     *
+     * This method can be used to reset the button state.
+     */
+    void clearEventBits();
 
 private:
     /**

@@ -18,22 +18,29 @@ bool I2CButton::begin(void (*buttonHandler)())
     pinMode(interruptPin, INPUT);
     attachInterrupt(digitalPinToInterrupt(interruptPin), buttonHandler, FALLING);
 
-    // check if button will acknowledge over I2C
+    // Check if button will acknowledge over I2C.
     if (button.begin() == false)
     {
-        debugService.debugPrintln("I2CButton failed to initialize.");
+        debugService.debugPrintln("I2CButton failed to initialize. Device did not acknowledge.");
     
         return false;
     }
+
     debugService.debugPrintln("I2CButton initialized.");
 
-    // Configure the interrupt pin to go low when we press the button.
-    button.enablePressedInterrupt();
-
-    // Configure the interrupt pin to go low when we click the button.
+    // Configure the interrupt pin to go low when the button is clicked.
     button.enableClickedInterrupt();
 
     button.clearEventBits();
 
     return true;
+}
+
+/**
+ * @brief Clears the event bits, including the pressed and clicked bits.
+ *
+ * This method can be used to reset the button state.
+ */
+void I2CButton::clearEventBits() {
+    button.clearEventBits();
 }
