@@ -271,10 +271,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_splendid_ble
-      sha256: "7d27989ce825bf65e335952b86b1342bb7a1a113eb25df9664da9322335bbe29"
+      sha256: a5f731e6557b75df0badcbfade239abe8637369df14e529bffb7ad0ce1f41458
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.0"
+    version: "0.11.0"
   flutter_svg:
     dependency: "direct main"
     description:

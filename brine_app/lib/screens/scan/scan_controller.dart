@@ -109,7 +109,7 @@ class ScanController extends State<ScanRoute> {
   ///
   /// Speaking of the timeout, the scan will run for a maximum of 8 seconds. If a Brine device is not found within this
   /// time period, the scan will be stopped and the user will be notified that no devices were found.
-  // TODO(Toglefritz): implement ability to filter out devices
+  // TODO(Toglefritz): implement ability to filter out devices (e.g. ones that are already on the account)
   // TODO(Toglefritz): implement a screen with instructions for starting advertisement on the Brine device
   Future<void> _startScan() async {
     debugPrint('Starting scan');
@@ -133,13 +133,13 @@ class ScanController extends State<ScanRoute> {
   /// called when Brine devices are discovered.
   // TODO(Toglefritz): stop scanning once Brine device is found
   void _onDeviceDiscovered(BleDevice device) {
-    debugPrint('Discovered device: ${device.name}');
+    debugPrint('Discovered Brine device, ${device.name}');
 
     // Cancel the timeout timer.
-    //_scanTimeout.cancel();
+    _scanTimeout.cancel();
 
     // Stop the scan.
-    //_stopScan();
+    _stopScan();
 
     // Navigate to the next screen.
     // TODO(Toglefritz): implement
@@ -173,6 +173,9 @@ class ScanController extends State<ScanRoute> {
   void dispose() {
     // Stop the scan.
     _stopScan();
+
+    // Cancel the scan timeout timer.
+    _scanTimeout.cancel();
 
     // Cancel the Bluetooth status stream.
     _bluetoothStatusStream?.cancel();
