@@ -136,9 +136,14 @@ class ScanController extends State<ScanRoute> {
   void _onDeviceDiscovered(BleDevice device) {
     debugPrint('Discovered Brine device, ${device.name}');
 
-    // Double check that the device has a name that contains Brine. This is not a robust security feature, just a
-    // simple tool that avoids issues if another BLE device within range happened to use the same UUID as Brine devices.
-    if ((device.name?.isNotEmpty ?? false) && (device.name?.contains('Brine') ?? false)) {
+    // Check if the discovered device is among the excluded devices
+    final bool isExcluded =
+        widget.excludedDevices?.where((excludedDevice) => excludedDevice.address == device.address).isNotEmpty ?? false;
+
+    // Check that the discovered device is not excluded. If it is, ignore the device. If it is not excluded, double
+    // check that the device has a name that contains Brine. This is not a robust security feature, just a simple tool
+    // that avoids issues if another BLE device within range happened to use the same UUID as Brine devices.
+    if (!isExcluded && (device.name?.isNotEmpty ?? false) && (device.name?.contains('Brine') ?? false)) {
       // Cancel the timeout timer.
       _scanTimeout.cancel();
 
@@ -151,6 +156,7 @@ class ScanController extends State<ScanRoute> {
         MaterialPageRoute<void>(
           builder: (BuildContext context) => DeviceConfirmationRoute(
             device: device,
+            excludedDevices: widget.excludedDevices,
           ),
         ),
       );

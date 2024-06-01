@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
+import '../../services/analytics/analytics.dart';
+import '../scan/scan_route.dart';
 import 'device_confirmation_route.dart';
 import 'device_confirmation_view.dart';
 
@@ -11,7 +14,9 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
   /// one the user intends to provision. This confirmation allows the provisioning process to continue to the next
   /// step.
   void onContinuePressed() {
+    Analytics.trackEvent(eventName: 'device_confirmation_denied');
 
+    // TODO(Toglefritz): navigate
   }
 
   /// Handles taps on the "Choose Another" button.
@@ -19,11 +24,26 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
   /// The "choose another" button in the [DeviceConfirmationView] is used to deny that the targeted Brine module is
   /// the correct one for provisioning. This denial causes the provisioning process to go back to the Bluetooth scan
   /// so a different Brine module can be selected. The module that is currently targeted is excluded from the next
-  /// Bluetooth search.
+  /// Bluetooth search, along with any other devices where were excluded previously.
   void onChooseAnotherPressed() {
+    Analytics.trackEvent(eventName: 'device_confirmation_denied');
 
+    // Add the discovered, but rejected, device to the list of excluded devices.
+    final List<BleDevice> deviceExclusionList = [
+      ...widget.excludedDevices,
+      widget.device,
+    ];
+
+    // Go back to the scan route.
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => ScanRoute(
+          excludedDevices: deviceExclusionList,
+        ),
+      ),
+    );
   }
-
 
   @override
   Widget build(BuildContext context) => DeviceConfirmationView(this);

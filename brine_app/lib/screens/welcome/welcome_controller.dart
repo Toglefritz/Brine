@@ -16,7 +16,9 @@ class WelcomeController extends State<WelcomeRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const ScanRoute(),
+        builder: (BuildContext context) => const ScanRoute(
+          excludedDevices: [],  // By definition, there are no excluded devices from this route
+        ),
       ),
     );
   }

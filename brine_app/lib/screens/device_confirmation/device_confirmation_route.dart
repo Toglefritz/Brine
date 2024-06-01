@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
-import '../../services/device_management/models/brine_device.dart';
+import '../scan/scan_route.dart';
 import 'device_confirmation_controller.dart';
 
 /// Displays a page showing information about a Brine device that was detected during the Bluetooth scanning process.
@@ -11,12 +11,17 @@ class DeviceConfirmationRoute extends StatefulWidget {
   /// Creates and instance of [DeviceConfirmationRoute].
   const DeviceConfirmationRoute({
     required this.device,
+    required this.excludedDevices,
     super.key,
   });
 
   /// The [BleDevice] detected by the Bluetooth scan that the user can confirm or deny is the one they wish to
   /// provision.
   final BleDevice device;
+
+  /// A list of devices that were previously excluded from the Bluetooth scan. If the [device] is also excluded,
+  /// it will be added to this prior list and the updated list passed back to the [ScanRoute].
+  final List<BleDevice> excludedDevices;
 
   @override
   State<DeviceConfirmationRoute> createState() => DeviceConfirmationController();
