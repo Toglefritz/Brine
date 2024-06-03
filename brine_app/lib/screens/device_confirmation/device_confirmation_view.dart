@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/light_button.dart';
-import '../../components/main_app_bar.dart';
 import '../../theme/insets.dart';
 import 'device_confirmation_controller.dart';
 import 'device_confirmation_route.dart';
@@ -19,7 +18,6 @@ class DeviceConfirmationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainAppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(

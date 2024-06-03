@@ -138,7 +138,7 @@ class ScanController extends State<ScanRoute> {
 
     // Check if the discovered device is among the excluded devices
     final bool isExcluded =
-        widget.excludedDevices?.where((excludedDevice) => excludedDevice.address == device.address).isNotEmpty ?? false;
+        widget.excludedDevices.where((excludedDevice) => excludedDevice.address == device.address).isNotEmpty;
 
     // Check that the discovered device is not excluded. If it is, ignore the device. If it is not excluded, double
     // check that the device has a name that contains Brine. This is not a robust security feature, just a simple tool

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import '../../services/analytics/analytics.dart';
+import '../device_connection/device_connection_route.dart';
 import '../scan/scan_route.dart';
 import 'device_confirmation_route.dart';
 import 'device_confirmation_view.dart';
@@ -16,7 +17,15 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
   void onContinuePressed() {
     Analytics.trackEvent(eventName: 'device_confirmation_denied');
 
-    // TODO(Toglefritz): navigate
+    // Proceed with the selected device.
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => DeviceConnectionRoute(
+          device: widget.device,
+        ),
+      ),
+    );
   }
 
   /// Handles taps on the "Choose Another" button.
