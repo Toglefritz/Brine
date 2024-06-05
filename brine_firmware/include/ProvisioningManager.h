@@ -38,14 +38,52 @@ public:
     void stopProvisioning()
     {
         // End the BLE module
-        BLEModule::getInstance().end();
+        bleModule.end();
     }
 
 private:
+    // Instance of BLEModule
+    BLEModule bleModule;
+
+
     /**
      * @brief Private constructor to enforce singleton pattern.
      */
-    ProvisioningManager() {};
+    ProvisioningManager()
+    {
+        // Register BLE callbacks
+        bleModule.setConnectionCallback([](BLEServer* pServer) {
+            DebugService::getInstance().debugPrintln("Device connected");
+            // Handle BLE connection event
+        });
+
+        bleModule.setDisconnectionCallback([](BLEServer* pServer) {
+            DebugService::getInstance().debugPrintln("Device disconnected");
+            // Handle BLE disconnection event
+        });
+
+        bleModule.setWriteCallback([](BLECharacteristic* pCharacteristic) {
+            std::string value = pCharacteristic->getValue();
+            DebugService::getInstance().debugPrintln("Characteristic written: " + String(value.c_str()));
+            // Handle BLE characteristic write event
+        });
+
+        bleModule.setReadCallback([](BLECharacteristic* pCharacteristic) {
+            DebugService::getInstance().debugPrintln("Characteristic read");
+            // Handle BLE characteristic read event
+        });
+
+        bleModule.setDescriptorWriteCallback([](BLEDescriptor* pDescriptor) {
+            uint8_t* data = pDescriptor->getValue();
+            if (data[0] == 0x01) {
+                DebugService::getInstance().debugPrintln("Notifications enabled");
+            } else if (data[0] == 0x00) {
+                DebugService::getInstance().debugPrintln("Notifications disabled");
+            }
+            // Handle BLE descriptor write event
+        });
+    }
+
 
     /**
      * @brief Initializes Bluetooth communication, which is used during the provisioning process.
@@ -53,7 +91,7 @@ private:
     void initializeBluetooth()
     {
         // Initialize the BLEModule
-        bool bleBeginSuccess = BLEModule::getInstance().begin();
+        bool bleBeginSuccess = bleModule.begin();
 
         if (!bleBeginSuccess)
         {
@@ -62,7 +100,7 @@ private:
         }
 
         // Begin advertising over BLE
-        bool bleAdvertiseSuccess = BLEModule::getInstance().advertise();
+        bool bleAdvertiseSuccess = bleModule.advertise();
 
         if (!bleAdvertiseSuccess)
         {
