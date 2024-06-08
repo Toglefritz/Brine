@@ -35,8 +35,6 @@ bool I2CLED::begin() {
  * This method turns the LED on at the current brightness level.
  */
 bool I2CLED::turnOn() {
-    debugService.debugPrintln("Turning LED on.");
-
     isOn = true;
     lastChange = millis();
 
@@ -49,8 +47,6 @@ bool I2CLED::turnOn() {
  * This method turns the LED off.
  */
 bool I2CLED::turnOff() {
-    debugService.debugPrintln("Turning LED off.");
-
     isOn = false;
     lastChange = millis();
 
