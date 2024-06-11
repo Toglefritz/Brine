@@ -232,6 +232,12 @@ void BLEModule::end() {
  * @return True if the advertisement was started successfully, false otherwise.
  */
 bool BLEModule::advertise() {
+    // Configure advertising parameters
+    BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+
+    // Add primary service UUID to the advertising data
+    pAdvertising->addServiceUUID(PRIMARY_SERVICE_UUID);
+    
     // Start advertising
     pServer->getAdvertising()->start();
 
