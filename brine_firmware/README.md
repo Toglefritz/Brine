@@ -46,6 +46,10 @@ graph LR
     F --> K[Battery Monitor Hardware]
 ```
 
+### Device IDs
+
+
+
 ## Getting Started
 
 To start working with the Brine device firmware, follow these steps:
@@ -121,5 +125,48 @@ All Brine devices use the same UUID (Universally Unique Identifier) for their pr
 
 > 6272696E-6573-616C-746D-6F6E69746F72
 
-
 In addition to the primary service UUID, Brine devices also use the same UUID values for their BLE (Bluetooth Low Energy) characteristics. These characteristics are attributes that define the behavior of the Brine device. The UUIDs for these characteristics allow client devices to identify and interact with the correct characteristics on the Brine device.
+
+### Bluetooth API Overview
+
+The Bluetooth API implemented in the IoT device firmware allows for communication with a central device (such as a Flutter app) using a JSON-based protocol. This section provides an overview of the structure of the API, including the format for commands and responses, and details how the firmware processes these communications.
+
+### Command Structure
+
+Commands are received from the central device and are represented as JSON objects. Each command must include a command field specifying the type of command being issued.
+
+**Example Command**
+
+To request the device ID from the IoT device, the following JSON command is sent:
+
+```json
+{
+    "command": "get_device_id"
+}
+```
+
+### Response Structure
+
+Responses are sent from the IoT device to the central device in reply to commands. Each response is represented as a JSON object and includes a response field specifying the type of response.
+
+**Success Responses**
+
+A successful response to the get_device_id command will include the device ID:
+
+```json
+{
+    "response": "device_id",
+    "device_id": "vast_teal_elephant"
+}
+```
+
+**Error Responses**
+
+If an error occurs or an unknown command is received, an error response is sent:
+
+```json
+{
+    "response": "error",
+    "message": "Unknown command"
+}
+```
