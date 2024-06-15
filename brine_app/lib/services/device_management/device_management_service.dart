@@ -18,9 +18,35 @@ class DeviceManagementService {
   static String baseUrl =
       kDebugMode ? 'http://127.0.0.1:5001/brine-3b212/us-central1' : ''; // TODO(Toglefritz): update prod endpoint
 
-  /// Calls the *addDeviceToAccount* endpoint to add a new device to the authenticated user's account. Assumes the user
-  /// is already authenticated with Firebase Auth.
-  static Future<void> addDeviceToAccount(String deviceId) async {
+  /// Calls the *addDeviceToAccount* endpoint to add a new device to the authenticated user's account. The Firebase
+  /// backend will also create a record for the Brine device in the "devices" collection if one does not already exist.
+  ///
+  /// In the Brine Firestore database, each user has a document in the "users" collection that contains an array of
+  /// device IDs associated with that user. By the time this function is called, the app assumes that the user has
+  /// already created an account so a record wll already exist for their user ID in the "users" collection. For example,
+  ///
+  /// ```json
+  /// {
+  ///  "uid": "1234567890",
+  ///  "devices": ["vast_teal_elephant",]
+  ///  }
+  ///  ```
+  ///
+  /// Information about the devices themselves is stored in the "devices" collection. The device ID of each device
+  /// ties these two collections together. For example,
+  ///
+  /// ```json
+  /// {
+  /// "device_id": "vast_teal_elephant",
+  /// "name": "7b67",
+  /// "salt_level": 0.5,
+  /// "battery_level": 0.8
+  /// }
+  /// ```
+  ///
+  /// The [addDeviceToAccount] function takes a [deviceId] and [deviceName] as parameters. The [deviceId] is the unique
+  /// identifier for the Brine device, and the [deviceName] is a value derived from the device's BLE advertisement data.
+  static Future<void> addDeviceToAccount({required String deviceId, required String deviceName}) async {
     try {
       // Get the current user
       final User? user = FirebaseAuth.instance.currentUser;
@@ -41,6 +67,7 @@ class DeviceManagementService {
         headers: {'Authorization': 'Bearer $idToken'},
         body: {
           'deviceId': deviceId,
+          'deviceName': deviceName.toLowerCase(),
         },
       );
 
@@ -49,14 +76,14 @@ class DeviceManagementService {
         debugPrint('Successfully added the Brine monitor with device ID, $deviceId, to the user\'s account');
 
         return;
-      } else {
-        // Handle errors or unexpected status codes
-        throw Exception('Failed to load devices: ${response.reasonPhrase}');
+      }
+      // A non-200 status code was returned.
+      else {
+        throw Exception('Account association failed with reason phrase, ${response.reasonPhrase}');
       }
     } catch (e) {
-      // Handle any exceptions
-      debugPrint('Failed to get user devices with exception, $e');
-      throw Exception('Error getting devices: $e');
+      debugPrint('Failed to associate the device with exception, $e');
+      throw Exception('Failed to associate the device with exception, $e');
     }
   }
 

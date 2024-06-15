@@ -153,7 +153,10 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => AssociationRoute(deviceId: response.deviceId),
+          builder: (context) => AssociationRoute(
+            deviceName: widget.device.name?.substring(6) ?? widget.device.address,
+            deviceId: response.deviceId,
+          ),
         ),
       );
     }

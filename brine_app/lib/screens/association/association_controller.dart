@@ -17,8 +17,11 @@ class AssociationController extends State<AssociationRoute> {
   /// Attempt to associate the Brine device with the user's account.
   void _associateDevice() {
     try {
-      DeviceManagementService.addDeviceToAccount(widget.deviceId);
-    } catch(e) {
+      DeviceManagementService.addDeviceToAccount(
+        deviceId: widget.deviceId,
+        deviceName: widget.deviceName,
+      );
+    } catch (e) {
       debugPrint('Failed to associate device with exception, $e');
 
       // TODO(Toglefritz): Handle the failure to add the device to the account.
