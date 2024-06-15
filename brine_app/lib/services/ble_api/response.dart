@@ -1,5 +1,6 @@
 import 'device_response.dart';
 import 'error_response.dart';
+import 'response_type.dart';
 
 /// An abstract class representing a response from the Brine device.
 ///
@@ -20,18 +21,21 @@ abstract class Response {
   ///
   /// Throws an [Exception] if the response type is unknown.
   factory Response.fromJson(Map<String, dynamic> json) {
-    switch (json['response']) {
-      case 'device_id':
-        return DeviceIdResponse.fromJson(json);
-      case 'error':
-        return ErrorResponse.fromJson(json);
-      default:
-        throw Exception('Unknown response type');
+    final String? responseKey = json['response'] as String?;
+
+    if (responseKey == null) {
+      throw Exception('Response type not found in JSON');
+    } else if (responseKey == ResponseType.deviceId.responseKey) {
+      return DeviceIdResponse.fromJson(json);
+    } else if (responseKey == ResponseType.error.responseKey) {
+      return ErrorResponse.fromJson(json);
+    } else {
+      throw Exception('Unknown response type: $responseKey');
     }
   }
 
   /// The type of response. This identifies the specific type of response being represented.
-  final String responseType;
+  final ResponseType responseType;
 
   /// Converts the response to a JSON-serializable map.
   ///

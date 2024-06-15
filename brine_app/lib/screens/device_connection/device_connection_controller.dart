@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_splendid_ble/central/models/ble_characteristic.dart';
@@ -10,6 +11,9 @@ import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import '../../services/ble_api/command.dart';
 import '../../services/ble_api/command_type.dart';
+import '../../services/ble_api/device_response.dart';
+import '../../services/ble_api/response.dart';
+import '../association/association_route.dart';
 import 'device_connection_route.dart';
 import 'device_connection_view.dart';
 
@@ -100,7 +104,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
           _onCharacteristicChanged,
         );
 
-    // After the characteristic subscription is established, get the Brine monitor's device ID
+    // After the characteristic subscription is established, get the Brine monitor's device ID.
     _getDeviceId(characteristic);
   }
 
@@ -110,7 +114,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// "vast_teal_elephant.' The Bluetooth API used by Brine monitors include a command allowing the app to retrieve
   /// this device ID. This is necessary because the device ID is included in the account association process.
   Future<void> _getDeviceId(BleCharacteristic characteristic) async {
-    // Get the command for requesting the device ID
+    // Get the command for requesting the device ID.
     final Command deviceIdCommand = Command(commandType: CommandType.getDeviceId);
     final String commandString = deviceIdCommand.toJsonString();
 
@@ -128,10 +132,31 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// In this controller, the only command sent by the app is the one used to request the device ID. Therefore,
   /// the only value this callback expects to receive is the one containing the requested device ID value.
   void _onCharacteristicChanged(BleCharacteristicValue value) {
-    debugPrint('Received characteristic value update: ${value.valueString}');
+    // Obtain a Response object from the characteristic value.
+    final dynamic characteristicValue = json.decode(value.valueString);
 
-    // TODO(Toglefritz): check that the value is for the device ID
-    // TODO(Toglefritz): device ID in hand, move to the next screen
+    // Verify that the response is a JSON object as expected.
+    if (characteristicValue is! Map<String, dynamic>) {
+      debugPrint('Received unexpected characteristic value: $characteristicValue');
+
+      // TODO(Toglefritz): Handle this error condition
+    }
+
+    // Get a Response object from the characteristic value.
+    final Response response = Response.fromJson(characteristicValue as Map<String, dynamic>);
+
+    // Check that the characteristic value contains the device ID.
+    if (response is DeviceIdResponse) {
+      debugPrint('Received device ID: ${response.deviceId}');
+
+      // Navigate to the AssociationRoute and provide the device ID.
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => AssociationRoute(deviceId: response.deviceId),
+        ),
+      );
+    }
   }
 
   @override

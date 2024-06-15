@@ -1,7 +1,6 @@
 /// Represents a Brine monitor device and includes the salt and battery levels obtained from the device, along with a
 /// timestamp of when the levels were last retrieved.
 class BrineDevice {
-
   /// Creates an instance of [BrineDevice].
   BrineDevice({
     required this.deviceId,
@@ -12,8 +11,7 @@ class BrineDevice {
   /// A unique identifier for the device.
   final String deviceId;
 
-  /// The percentage of the maximum salt fill level remaining in the water
-  /// softener.
+  /// The percentage of the maximum salt fill level remaining in the water softener.
   final double saltLevel;
 
   /// The percentage of battery life remaining on the Brine monitor.

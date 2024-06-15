@@ -1,11 +1,12 @@
 import 'response.dart';
+import 'response_type.dart';
 
 /// A class representing a response containing the device ID.
 class DeviceIdResponse extends Response {
   /// Creates an instance of [DeviceIdResponse] with the provided [deviceId].
   ///
   /// The [deviceId] parameter specifies the device ID returned by the Brine device.
-  DeviceIdResponse(this.deviceId) : super('device_id');
+  DeviceIdResponse(this.deviceId) : super(ResponseType.deviceId);
 
   /// Factory constructor to create a [DeviceIdResponse] object from a JSON map.
   ///

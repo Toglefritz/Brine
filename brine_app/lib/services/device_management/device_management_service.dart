@@ -10,41 +10,58 @@ import 'models/brine_device.dart';
 /// A service class for managing Brine IoT devices.
 ///
 /// This class provides static methods to interact with devices associated with the authenticated user's account. It
-/// utilizes Firebase Functions to communicate with the backend for retrieving device information such as device IDs,
-/// and levels of salt and battery.
+/// utilizes Firebase Functions to communicate with the backend for adding devices to the user's account, retrieving
+/// device information such as device IDs, and levels of salt and battery. All of this information about the devices
+/// is stored in Firestore.
 class DeviceManagementService {
   /// The base URL for all endpoints used by this service.
   static String baseUrl =
       kDebugMode ? 'http://127.0.0.1:5001/brine-3b212/us-central1' : ''; // TODO(Toglefritz): update prod endpoint
 
-/*  /// Retrieves the list of devices for the authenticated user's account by calling the `getUserDevices` Firebase
-  /// callable function.
-  ///
-  /// This function returns a [Future<List<String>>] containing the device IDs for the authenticated user. It throws an
-  /// error if there is an issue while calling the Firebase function, such as an unauthenticated user.
-  static Future<List<String>> getUserDevices() async {
+  /// Calls the *addDeviceToAccount* endpoint to add a new device to the authenticated user's account. Assumes the user
+  /// is already authenticated with Firebase Auth.
+  static Future<void> addDeviceToAccount(String deviceId) async {
     try {
-      // Create a reference to the 'getUserDevices' callable function
-      HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getUserDevices');
+      // Get the current user
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User is not authenticated');
+      }
 
-      // Call the function
-      final HttpsCallableResult response = await callable.call();
+      // Get the user's ID token
+      final String? idToken = await user.getIdToken();
 
-      // Get the list of devices from the response
-      List<String> devices = List<String>.from(response.data['devices']);
+      // Define the endpoint URL
+      const String endpoint = '/addDeviceToUser';
 
-      // Return the list of devices
-      return devices;
+      // Make an authenticated HTTP request to the endpoint
+      final Response response = await post(
+        Uri.parse(baseUrl + endpoint),
+        // Include the ID token in the Authorization header
+        headers: {'Authorization': 'Bearer $idToken'},
+        body: {
+          'deviceId': deviceId,
+        },
+      );
+
+      // Check the response status code
+      if (response.statusCode == HttpStatus.ok) {
+        debugPrint('Successfully added the Brine monitor with device ID, $deviceId, to the user\'s account');
+
+        return;
+      } else {
+        // Handle errors or unexpected status codes
+        throw Exception('Failed to load devices: ${response.reasonPhrase}');
+      }
     } catch (e) {
-      debugPrint('Error getting user devices: $e');
-
-      rethrow;
+      // Handle any exceptions
+      debugPrint('Failed to get user devices with exception, $e');
+      throw Exception('Error getting devices: $e');
     }
-  }*/
+  }
 
-  /// Calls the getUserDevicesHttp endpoint to retrieve the list of devices for the current user.
-  /// Assumes the user is already authenticated with Firebase Auth.
-  /// Returns a list of devices or throws an exception if an error occurs.
+  /// Calls the *getUserDevicesHttp* endpoint to retrieve the list of devices for the current user. Assumes the user
+  /// is already authenticated with Firebase Auth. Returns a list of devices or throws an exception if an error occurs.
   // TODO(Toglefritz): update this method to call the getDeviceLevels function and return a list of BrineDevice instead
   static Future<List<String>> getUserDevicesHttp() async {
     try {
@@ -69,7 +86,7 @@ class DeviceManagementService {
 
       // Check the response status code
       if (response.statusCode == HttpStatus.ok) {
-       debugPrint('Successfully got user devices: ${response.body}');
+        debugPrint('Successfully got user devices: ${response.body}');
 
         // Parse the response body
         final Map<String, dynamic> devicesJson = json.decode(response.body) as Map<String, dynamic>;

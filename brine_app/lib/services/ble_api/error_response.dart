@@ -1,3 +1,5 @@
+import 'package:brine/services/ble_api/response_type.dart';
+
 import 'response.dart';
 
 /// A class representing an error response.
@@ -5,7 +7,7 @@ class ErrorResponse extends Response {
   /// Creates an instance of [ErrorResponse] with the provided [message].
   ///
   /// The [message] parameter specifies the error message returned by the Brine device.
-  ErrorResponse(this.message) : super('error');
+  ErrorResponse(this.message) : super(ResponseType.error);
 
   /// Factory constructor to create an [ErrorResponse] object from a JSON map.
   ///
