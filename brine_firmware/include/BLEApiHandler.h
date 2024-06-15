@@ -53,7 +53,7 @@ public:
    */
   String handleCommand(const String &jsonCommand) {
     // Parse the JSON command
-    StaticJsonDocument<256> doc;
+    JsonDocument doc;
     DeserializationError error = deserializeJson(doc, jsonCommand);
 
     if (error) {
@@ -81,12 +81,16 @@ private:
    * @return String The JSON response string containing the device ID.
    */
   String handleGetDeviceId() {
-    StaticJsonDocument<256> responseDoc;
+    JsonDocument responseDoc;
     responseDoc["response"] = "device_id";
     responseDoc["device_id"] = DEVICE_ID; // Use the defined DEVICE_ID
 
     String jsonResponse;
+
     serializeJson(responseDoc, jsonResponse);
+
+    DebugService::getInstance().debugPrint("Returning response with device ID, ");
+    DebugService::getInstance().debugPrintln(jsonResponse);
 
     return jsonResponse;
   }
@@ -98,7 +102,7 @@ private:
    * @return String The JSON error response string.
    */
   String createErrorResponse(const char *errorMessage) {
-    StaticJsonDocument<256> errorDoc;
+    JsonDocument errorDoc;
     errorDoc["response"] = "error";
     errorDoc["message"] = errorMessage;
 
