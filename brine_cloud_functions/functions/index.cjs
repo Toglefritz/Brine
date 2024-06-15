@@ -44,3 +44,11 @@ const { getDeviceLevelsHttp } = require('./src/getDeviceLevelsHttp.cjs');
 exports.getDeviceLevelsHttp = functions.https.onRequest(async (req, res) => {
     getDeviceLevelsHttp(req, res);
 });
+
+// Import the `addDeviceToUser` function.
+const { addDeviceToUser } = require('./src/addDeviceToUser.cjs');
+
+// Call the `addDeviceToUser` function as an HTTP request.
+exports.addDeviceToUser = functions.https.onRequest(async (req, res) => {
+    addDeviceToUser(req, res);
+});
