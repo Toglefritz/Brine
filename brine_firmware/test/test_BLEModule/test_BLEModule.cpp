@@ -17,7 +17,7 @@
  * It verifies if the BLE module starts successfully.
  */
 void test_ble_module_begin(void) {
-    BLEModule &bleModule = BLEModule::getInstance();
+    BLEModule bleModule;
 
     bool beginResult = bleModule.begin();
 
@@ -30,7 +30,7 @@ void test_ble_module_begin(void) {
  * This function tests the `advertise` function of the BLEModule class.
  */
 void test_ble_module_advertise(void) {
-    BLEModule &bleModule = BLEModule::getInstance();
+    BLEModule bleModule;
 
     bool advertiseResult = bleModule.advertise();
 
@@ -49,6 +49,7 @@ void setup() {
 
     RUN_TEST(test_ble_module_begin);
     RUN_TEST(test_ble_module_advertise);
+
 
     UNITY_END();
 }
