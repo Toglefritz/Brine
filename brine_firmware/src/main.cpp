@@ -7,7 +7,7 @@
 #include <BLEModule.h>
 #include <I2CButton.h>
 #include <I2CLED.h>
-#include <ProvisioningManager.h>
+#include <DeviceConfigurationManager.h>
 #include <Wire.h>
 
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
@@ -58,19 +58,19 @@ BLEApiHandler apiHandler;
  */
 void startProvisioning() {
   // Initialize provisioning manager
-  ProvisioningManager &provManager = ProvisioningManager::getInstance();
+  DeviceConfigurationManager &deviceConfigManager = DeviceConfigurationManager::getInstance();
 
   // Set external callbacks
-  provManager.setExternalConnectionCallback([](BLEServer *pServer) {
+  deviceConfigManager.setExternalConnectionCallback([](BLEServer *pServer) {
     // Set the flag to indicate that a client is connected.
     clientConnected = true;
   });
 
-  provManager.setExternalDisconnectionCallback([](BLEServer *pServer) {
+  deviceConfigManager.setExternalDisconnectionCallback([](BLEServer *pServer) {
     // When a client is disconnected, stop the provisioning process early.
     DebugService::getInstance().debugPrintln("Client disconnected. Stopping provisioning process.");
 
-    ProvisioningManager::getInstance().stopProvisioning();
+    DeviceConfigurationManager::getInstance().stopProvisioning();
 
     // Turn off the LED in case it was on at the time of the timeout.
     I2CLED::getInstance().turnOff();
@@ -82,7 +82,7 @@ void startProvisioning() {
   });
 
   // Set the write callback for handling characteristic write events.
-  provManager.setExternalWriteCallback([](BLECharacteristic *pCharacteristic) {
+  deviceConfigManager.setExternalWriteCallback([&deviceConfigManager](BLECharacteristic *pCharacteristic) {
     std::string value = pCharacteristic->getValue();
     DebugService::getInstance().debugPrint("Characteristic, ");
     DebugService::getInstance().debugPrint(pCharacteristic->getUUID().toString().c_str());
@@ -91,19 +91,18 @@ void startProvisioning() {
 
     // Handle the JSON command using BLEApiHandler
     String jsonResponse = apiHandler.handleCommand(String(value.c_str()));
-    pCharacteristic->setValue(jsonResponse.c_str());
-    pCharacteristic->notify();
+    deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str());
   });
 
   // Set the read callback for handling characteristic read events.
-  provManager.setExternalReadCallback([](BLECharacteristic *pCharacteristic) {
+  deviceConfigManager.setExternalReadCallback([](BLECharacteristic *pCharacteristic) {
     DebugService::getInstance().debugPrintln("Main: Characteristic read");
 
     // Handle read event in main
   });
 
   // Set the descriptor write callback for handling descriptor write events.
-  provManager.setExternalDescriptorWriteCallback([](BLEDescriptor *pDescriptor) {
+  deviceConfigManager.setExternalDescriptorWriteCallback([](BLEDescriptor *pDescriptor) {
     uint8_t *data = pDescriptor->getValue();
     if (data[0] == 0x01) {
       DebugService::getInstance().debugPrintln("Main: Notifications enabled");
@@ -114,7 +113,7 @@ void startProvisioning() {
   });
 
   // Start the provisioning process.
-  provManager.startProvisioning();
+  deviceConfigManager.startProvisioning();
 
   // Set the provisioning start time to the current time.
   provisioningStartTime = millis();
@@ -154,7 +153,7 @@ void loop() {
   else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000) {
     DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");
 
-    ProvisioningManager::getInstance().stopProvisioning();
+    DeviceConfigurationManager::getInstance().stopProvisioning();
 
     // Turn off the LED in case it was on at the time of the timeout.
     I2CLED::getInstance().turnOff();

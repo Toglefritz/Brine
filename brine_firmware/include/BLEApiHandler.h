@@ -3,6 +3,7 @@
 
 #include "DebugService.h"
 #include <ArduinoJson.h>
+#include <WiFi.h>
 
 /**
  * @class BLEApiHandler
@@ -65,13 +66,18 @@ public:
     // Extract the command
     const char *command = doc["command"];
 
-    // The command, "get_device_id", returns the device ID of the IoT device.
+    // The command, "get_device_id," returns the device ID of the IoT device.
     if (strcmp(command, "get_device_id") == 0) {
       return handleGetDeviceId();
     }
-
-    // Handle unknown command
-    return createErrorResponse("Unknown command");
+    // The command, "scan," returns a list of available WiFi networks.
+    else if (strcmp(command, "scan") == 0) {
+      return handleScanWifiNetworks();
+    }
+    // The command is not recognized
+    else {
+      return createErrorResponse("Unknown command");
+    }
   }
 
 private:
@@ -96,6 +102,43 @@ private:
   }
 
   /**
+   * @brief Scans for WiFi networks and returns a list of networks as a JSON string.
+   *
+   * This method scans for available WiFi networks and constructs a JSON array
+   * with objects representing each network. Each object includes the SSID and RSSI
+   * (signal strength) of the network.
+   *
+   * @return String The JSON response string containing the list of WiFi networks.
+   */
+  String handleScanWifiNetworks() {
+    int numberOfNetworks = WiFi.scanNetworks();
+
+    JsonDocument networksDoc;
+    JsonArray responseArray = networksDoc.to<JsonArray>();
+
+    for (int i = 0; i < numberOfNetworks; i++) {
+      JsonObject networkObj = responseArray.add<JsonObject>();
+      networkObj["ssid"] = WiFi.SSID(i);
+      networkObj["rssi"] = WiFi.RSSI(i);
+    }
+
+    // Create a JSON response with a response" key set to "scan" and an array of networks as the value of the "networks"
+    // key.
+    JsonDocument responseDoc;
+
+    responseDoc["response"] = "scan";
+    responseDoc["networks"] = responseArray;
+
+    String jsonResponse;
+    serializeJson(responseDoc, jsonResponse);
+
+    DebugService::getInstance().debugPrint("Returning WiFi scan results, ");
+    DebugService::getInstance().debugPrintln(jsonResponse);
+
+    return jsonResponse;
+  }
+
+  /**
    * @brief Creates an error response JSON string.
    *
    * @param errorMessage The error message to include in the response.
@@ -108,6 +151,7 @@ private:
 
     String errorResponse;
     serializeJson(errorDoc, errorResponse);
+    
     return errorResponse;
   }
 };
