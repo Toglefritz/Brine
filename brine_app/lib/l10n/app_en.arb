@@ -1,35 +1,134 @@
 {
   "addADevice": "Add a device",
+  "@addADevice": {
+    "description": "Text for a button that allows the user to add a device to their account."
+  },
   "addDeviceInvitation": "Get started by linking your Brine device to the app.",
+  "@addDeviceInvitation": {
+    "description": "Text inviting the user to link their Brine device to the app."
+  },
   "and": " and ",
+  "@and": {
+    "description": "Text used to separate two items in a list."
+  },
   "associatingDevice": "Associating to account...",
+  "@associatingDevice": {
+    "description": "Text displayed while the app is associating a device to the user's account."
+  },
   "back": "back",
+  "@back": {
+    "description": "Text for a button that allows the user to navigate back to the previous screen."
+  },
   "brine": "Brine",
+  "@brine": {
+    "description": "The name of the app and the product."
+  },
   "chooseAnother": "Choose another",
+  "@chooseAnother": {
+    "description": "Text for a button allowing the user to select a different Brine device from the Bluetooth scan"
+  },
   "confirmPassword": "Confirm password",
+  "@confirmPassword": {
+    "description": "Label for the field where the user must confirm their password."
+  },
   "connecting": "Establishing connection...",
+  "@connecting": {
+    "description": "Text displayed while the app is establishing a Bluetooth connection to a device."
+  },
   "continueText": "Continue",
+  "@continueText": {
+    "description": "Text for a button that allows the user to continue to the next screen or to continue with a process."
+  },
   "createAccount": "create account",
-  "createAnAccount": "create an account",
+  "@createAccount": {
+    "description": "Text for a button that allows the user to create an account."
+  },
   "detectedDeviceConfirmation": "Is this the device you wish to add?",
+  "@detectedDeviceConfirmation": {
+    "description": "Text asking the user to confirm that the detected device is the one they wish to add."
+  },
   "deviceDetected": "Device detected",
+  "@deviceDetected": {
+    "description": "Text displayed when the app detects a Brine device."
+  },
   "getOneNow": "Get one now",
+  "@getOneNow": {
+    "description": "Text for a button that allows the user to purchase a Brine device."
+  },
   "login": "login",
+  "@login": {
+    "description": "Text for a button that allows the user to log in to their account."
+  },
   "loginWithApple": "login with Apple",
+  "@loginWithApple": {
+    "description": "Text for a button that allows the user to log in with their Apple account."
+  },
   "loginWithGoogle": "login with Google",
+  "@loginWithGoogle": {
+    "description": "Text for a button that allows the user to log in with their Google account."
+  },
   "logout": "Logout",
+  "@logout": {
+    "description": "Text for a button that allows the user to log out of their account."
+  },
+  "noNetworksDetected": "No networks detected",
+  "@noNetworksDetected": {
+    "description": "Error text displayed when the Brine device does not detect any WiFi networks."
+  },
   "onboardingLegalPrompt1": "Please take a look at our ",
+  "@onboardingLegalPrompt1": {
+    "description": "The first part of a prompt asking the user to review the app's legal agreements before using the app"
+  },
   "onboardingLegalPrompt2": " before using this app.",
+  "@onboardingLegalPrompt2": {
+    "description": "The second part of a prompt asking the user to review the app's legal agreements before using the app"
+  },
   "password": "Password",
+  "@password": {
+    "description": "Label for the field where the user must enter their password."
+  },
   "privacyPolicy": "privacy policy",
+  "@privacyPolicy": {
+    "description": "Text for a button that allows the user to view the privacy policy."
+  },
   "saltRemaining": "Salt Remaining",
+  "@saltRemaining": {
+    "description": "Label for the amount of salt remaining in the water softener."
+  },
   "scanningMessage": "Scanning for devices...",
+  "@scanningMessage": {
+    "description": "Text displayed while the app is scanning for Brine devices."
+  },
   "signUpWithApple": "sign up with Apple",
+  "@signUpWithApple": {
+    "description": "Text for a button that allows the user to sign up with their Apple account."
+  },
   "signUpWithGoogle": "sign up with Google",
+  "@signUpWithGoogle": {
+    "description": "Text for a button that allows the user to sign up with their Google account."
+  },
   "salesPrompt": "Don't have a Brine device?",
+  "@salesPrompt": {
+    "description": "Marketing prompt text inviting the user to purchase a Brine device."
+  },
   "submit": "Submit",
+  "@submit": {
+    "description": "Text for a button that allows the user to submit a form."
+  },
   "termsOfService": "terms of service",
+  "@termsOfService": {
+    "description": "Text for a button that allows the user to view the terms of service."
+  },
   "username": "Username (email)",
+  "@username": {
+    "description": "Label for the field where the user must enter their username."
+  },
   "wifiSetup": "WiFi Setup",
-  "wifiSetupInstructions": "Select the WiFi network to which your Brine monitor should connect."
+  "@wifiSetup": {
+    "description": "Title for the screen where the user can set up the WiFi connection for their Brine device."
+  },
+  "wifiSetupInstructions": "Select the WiFi network to which your Brine monitor should connect.",
+  "@wifiSetupInstructions": {
+    "description": "Instructions for the user to select the WiFi network to which their Brine device should connect."
+  }
 }

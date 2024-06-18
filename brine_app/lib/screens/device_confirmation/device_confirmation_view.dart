@@ -21,7 +21,7 @@ class DeviceConfirmationView extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: Insets.medium,
+            vertical: Insets.small,
           ),
           child: CustomScrollView(
             slivers: [

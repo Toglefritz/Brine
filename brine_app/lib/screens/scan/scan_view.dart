@@ -37,7 +37,7 @@ class ScanView extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(
-                Insets.medium,
+                Insets.small,
               ),
               child: Text(
                 AppLocalizations.of(context)!.scanningMessage,

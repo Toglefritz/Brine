@@ -77,7 +77,7 @@ class OnboardingView extends StatelessWidget {
                   ),
                   LightButton(
                     onPressed: state.handleCreateAccountTap,
-                    text: AppLocalizations.of(context)!.createAnAccount,
+                    text: AppLocalizations.of(context)!.createAccount,
                   ),
                   const Padding(
                     padding: EdgeInsets.all(Insets.medium),
