@@ -2,7 +2,10 @@
 enum CommandType {
   /// Requests that the Brine provide its device ID. The device ID of a Brine device has the form,
   /// <adjective>_<adjective>_<noun>, for example, "vast_teal_elephant."
-  getDeviceId(value: 'get_device_id', responseKey: 'device_id');
+  getDeviceId(value: 'get_device_id', responseKey: 'device_id'),
+
+  /// Instructs the Brine device to scan for WiFi networks and send the SSID and RSSI of each network to the app.
+  scan(value: 'scan', responseKey: 'networks');
 
   /// Creates an instance of [CommandType].
   const CommandType({

@@ -3,6 +3,9 @@ enum ResponseType {
   /// A response containing the device ID.
   deviceId,
 
+  /// A response containing a list of WiFi networks discovered by the Brine device.
+  networks,
+
   /// An error response.
   error;
 
@@ -12,6 +15,8 @@ enum ResponseType {
     switch (this) {
       case ResponseType.deviceId:
         return 'device_id';
+      case ResponseType.networks:
+        return 'networks';
       case ResponseType.error:
         return 'error';
     }

@@ -1,3 +1,4 @@
+import '../../extensions/json.dart';
 import 'device_response.dart';
 import 'error_response.dart';
 import 'response_type.dart';
@@ -20,7 +21,7 @@ abstract class Response {
   /// of the appropriate subclass.
   ///
   /// Throws an [Exception] if the response type is unknown.
-  factory Response.fromJson(Map<String, dynamic> json) {
+  factory Response.fromJson(JSON json) {
     final String? responseKey = json['response'] as String?;
 
     if (responseKey == null) {

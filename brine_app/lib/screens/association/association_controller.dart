@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../services/device_management/device_management_service.dart';
+import '../wifi_setup/wifi_setup_route.dart';
 import 'association_route.dart';
 import 'association_view.dart';
 
@@ -9,15 +10,15 @@ class AssociationController extends State<AssociationRoute> {
   @override
   void initState() {
     // Associate the Brine device to the user's account.
-    _associateDevice();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _associateDevice());
 
     super.initState();
   }
 
   /// Attempt to associate the Brine device with the user's account.
-  void _associateDevice() {
+  Future<void> _associateDevice() async {
     try {
-      DeviceManagementService.addDeviceToAccount(
+      await DeviceManagementService.addDeviceToAccount(
         deviceId: widget.deviceId,
         deviceName: widget.deviceName,
       );
@@ -26,6 +27,18 @@ class AssociationController extends State<AssociationRoute> {
 
       // TODO(Toglefritz): Handle the failure to add the device to the account.
     }
+
+    // With the device successfully associated, navigate to the next screen.
+    if (!mounted) return;
+
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => WiFiSetupRoute(
+          bleCommunicationManager: widget.bleCommunicationManager,
+        ),
+      ),
+    );
   }
 
   @override

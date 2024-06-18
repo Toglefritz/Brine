@@ -29,5 +29,7 @@
   "salesPrompt": "Don't have a Brine device?",
   "submit": "Submit",
   "termsOfService": "terms of service",
-  "username": "Username (email)"
+  "username": "Username (email)",
+  "wifiSetup": "WiFi Setup",
+  "wifiSetupInstructions": "Select the WiFi network to which your Brine monitor should connect."
 }

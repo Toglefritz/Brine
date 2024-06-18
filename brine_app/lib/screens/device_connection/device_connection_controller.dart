@@ -1,18 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_splendid_ble/central/models/ble_characteristic.dart';
-import 'package:flutter_splendid_ble/central/models/ble_characteristic_value.dart';
 import 'package:flutter_splendid_ble/central/models/ble_connection_state.dart';
 import 'package:flutter_splendid_ble/central/models/ble_service.dart';
 import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
-import '../../services/ble_api/command.dart';
-import '../../services/ble_api/command_type.dart';
-import '../../services/ble_api/device_response.dart';
-import '../../services/ble_api/response.dart';
+import '../../extensions/json.dart';
+import '../../services/ble/ble_communication_manager.dart';
+import '../../services/ble/command.dart';
+import '../../services/ble/command_type.dart';
+import '../../services/ble/device_response.dart';
+import '../../services/ble/response.dart';
 import '../association/association_route.dart';
 import 'device_connection_route.dart';
 import 'device_connection_view.dart';
@@ -28,19 +28,25 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// A [StreamSubscription] used to listen for discovered services.
   StreamSubscription<List<BleService>>? _servicesDiscoveredStream;
 
-  /// A [StreamSubscription] used to listen for updates in the value of a characteristic.
-  StreamSubscription<BleCharacteristicValue>? _characteristicValueListener;
+  /// An instance of [BleCommunicationManager] that will be created by this controller after a connection has been
+  /// established with the Brine device and service discovery has been performed. This instance will be passed to
+  /// subsequent steps in the provisioning process so they can use the centrally-established characteristic
+  /// subscription.
+  late BleCommunicationManager? _bleCommunicationManager;
 
   @override
   void initState() {
-    // Start the process of connecting to the provided BleDevice.
-    _connectToDevice();
+    // Start the process of connecting to the provided BleDevice. This is done after the build method is complete
+    // because the controller needs to have access to the context in order to navigate to the next route.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _connectToDevice());
 
     super.initState();
   }
 
   /// Attempt to connect to the [BleDevice] that is targeted for provisioning.
   void _connectToDevice() {
+    debugPrint('Connecting to device: ${widget.device.address}');
+
     try {
       _connectionStream = _ble.connect(deviceAddress: widget.device.address).listen(
             _onConnectionStateUpdate,
@@ -72,6 +78,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Discovers services and characteristics from the Brine monitor.
   void _discoverServices() {
+    debugPrint('Discovering services');
+
     _servicesDiscoveredStream = _ble.discoverServices(widget.device.address).listen(
           _onServiceDiscovered,
         );
@@ -93,16 +101,17 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     // Get the single characteristic available from the Brine monitor.
     final BleCharacteristic characteristic = services.first.characteristics.first;
 
-    // Subscribe to the single characteristic available from Brine devices so that the app can respond to value
-    // updates after it sends write requests.
-    _subscribeToCharacteristic(characteristic);
+    // Create a BleCommunicationManager instance to handle communication with the Brine device.
+    _createBleCommunicationManager(characteristic);
   }
 
   /// Subscribes to the single characteristic available from Brine devices.
-  void _subscribeToCharacteristic(BleCharacteristic characteristic) {
-    _characteristicValueListener = characteristic.subscribe().listen(
-          _onCharacteristicChanged,
-        );
+  void _createBleCommunicationManager(BleCharacteristic characteristic) {
+    // Create a BleCommunicationManager instance to handle communication with the Brine device.
+    _bleCommunicationManager = BleCommunicationManager(characteristic: characteristic);
+
+    // Register a callback for changes in the value of the characteristic.
+    _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);
 
     // After the characteristic subscription is established, get the Brine monitor's device ID.
     _getDeviceId(characteristic);
@@ -111,15 +120,17 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// Retrieves a device ID for the Brine device.
   ///
   /// Each Brine device has a unique device ID of the form <adjective>_<adjective>_<noun>, for example,
-  /// "vast_teal_elephant.' The Bluetooth API used by Brine monitors include a command allowing the app to retrieve
+  /// "vast_teal_elephant." The Bluetooth API used by Brine monitors include a command allowing the app to retrieve
   /// this device ID. This is necessary because the device ID is included in the account association process.
   Future<void> _getDeviceId(BleCharacteristic characteristic) async {
+    debugPrint('Requesting device ID');
+
     // Get the command for requesting the device ID.
     final Command deviceIdCommand = Command(commandType: CommandType.getDeviceId);
     final String commandString = deviceIdCommand.toJsonString();
 
     try {
-      await characteristic.writeValue(value: commandString);
+      await _bleCommunicationManager!.writeValue(value: commandString);
     } catch (e) {
       debugPrint('Failed to request device ID with exception, $e');
 
@@ -131,31 +142,22 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   ///
   /// In this controller, the only command sent by the app is the one used to request the device ID. Therefore,
   /// the only value this callback expects to receive is the one containing the requested device ID value.
-  void _onCharacteristicChanged(BleCharacteristicValue value) {
-    // Obtain a Response object from the characteristic value.
-    final dynamic characteristicValue = json.decode(value.valueString);
-
-    // Verify that the response is a JSON object as expected.
-    if (characteristicValue is! Map<String, dynamic>) {
-      debugPrint('Received unexpected characteristic value: $characteristicValue');
-
-      // TODO(Toglefritz): Handle this error condition
-    }
-
+  Future<void> _onCharacteristicChanged(JSON value) async {
     // Get a Response object from the characteristic value.
-    final Response response = Response.fromJson(characteristicValue as Map<String, dynamic>);
+    final Response response = Response.fromJson(value);
 
     // Check that the characteristic value contains the device ID.
     if (response is DeviceIdResponse) {
       debugPrint('Received device ID: ${response.deviceId}');
 
       // Navigate to the AssociationRoute and provide the device ID.
-      Navigator.pushReplacement(
+      await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
           builder: (context) => AssociationRoute(
             deviceName: widget.device.name?.substring(6) ?? widget.device.address,
             deviceId: response.deviceId,
+            bleCommunicationManager: _bleCommunicationManager!,
           ),
         ),
       );
@@ -173,8 +175,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     // Cancel the service discovery stream.
     _servicesDiscoveredStream?.cancel();
 
-    // Cancel the characteristic subscription stream.
-    _characteristicValueListener?.cancel();
+    // Unregister the callback for changes in the value of the characteristic.
+    _bleCommunicationManager?.unregisterCallback(_onCharacteristicChanged);
 
     super.dispose();
   }

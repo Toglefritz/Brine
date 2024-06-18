@@ -1,6 +1,5 @@
-import 'package:brine/services/ble_api/response_type.dart';
-
 import 'response.dart';
+import 'response_type.dart';
 
 /// A class representing an error response.
 class ErrorResponse extends Response {
