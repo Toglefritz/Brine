@@ -5,7 +5,10 @@ enum CommandType {
   getDeviceId(value: 'get_device_id', responseKey: 'device_id'),
 
   /// Instructs the Brine device to scan for WiFi networks and send the SSID and RSSI of each network to the app.
-  scan(value: 'scan', responseKey: 'networks');
+  scan(value: 'scan', responseKey: 'networks'),
+
+  /// Provides the SSID and password of a WiFi network to which the Brine device should connect.
+  wifiConnect(value: 'wifi_connect', responseKey: 'wifi_connection_status');
 
   /// Creates an instance of [CommandType].
   const CommandType({

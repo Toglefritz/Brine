@@ -21,8 +21,8 @@ class BrineApp extends StatelessWidget {
     return MaterialApp(
       title: 'Brine',
       debugShowCheckedModeBanner: false,
-      theme: lightThemeData,
-      darkTheme: darkThemeData,
+      theme: BrineAppTheme.lightThemeData,
+      darkTheme: BrineAppTheme.darkThemeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorKey: navigatorKey,

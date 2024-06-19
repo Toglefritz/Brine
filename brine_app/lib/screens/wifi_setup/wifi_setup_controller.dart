@@ -12,6 +12,13 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
   /// A list of WiFi networks detected by the Brine device.
   List<WiFiNetwork>? networks;
 
+  /// A collective controller for all of the WiFi network password fields. Since only one password can be submitted,
+  /// this controller is used across all of the password fields.
+  final TextEditingController passwordFieldController = TextEditingController();
+
+  /// The index of the currently expanded [ExpansionPanel]. If no panel is expanded, this value is -1.
+  int expandedIndex = -1;
+
   @override
   void initState() {
     // Send a command to the Brine device to scan for available WiFi networks. This is done after the build method is
@@ -58,6 +65,49 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
     setState(() {
       networks = networkList.map((dynamic network) => WiFiNetwork.fromJson(network as JSON)).toList();
     });
+  }
+
+  /// Handles taps on the network [ExpansionPanel]s to expand or collapse them.
+  void onExpansionPanelToggled({required int index, required bool isExpanded}) {
+    if(isExpanded) {
+      setState(() {
+        expandedIndex = index;
+      });
+    } else {
+      setState(() {
+        expandedIndex = -1;
+      });
+    }
+  }
+
+  /// Handles submission of the password for a WiFi network selected from the list of networks.
+  void onConnectToNetwork(WiFiNetwork network) {
+    // Get the password from the password field controller.
+    final String password = passwordFieldController.text;
+
+    // Get the SSID of the selected network.
+    final String ssid = network.ssid;
+
+    // Send a command to the Brine device to connect to the selected WiFi network.
+    final Command connectCommand = Command(
+      commandType: CommandType.wifiConnect,
+    );
+    final String commandString = connectCommand.toJsonString(
+      parameters: {
+        'ssid': ssid,
+        'password': password,
+      },
+    );
+
+    try {
+      widget.bleCommunicationManager.writeValue(value: commandString);
+    } catch (e) {
+      debugPrint('Failed to send connect command with exception, $e');
+
+      // TODO(Toglefritz): Handle the failure to send the connect command.
+    }
+
+    // TODO(Toglefritz): Navigate to the next screen
   }
 
   @override

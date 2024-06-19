@@ -102,6 +102,7 @@ class BleCommunicationManager {
   /// Sends a write request to the characteristic with the given [value].
   ///
   /// If errors occur during the write operation, they will be caught and rethrown.
+  // TODO(Toglefritz): Encrypt the write value before sending the command.
   Future<void> writeValue({required String value}) async {
     try {
       await characteristic.writeValue(value: value);

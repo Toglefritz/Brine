@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../../extensions/json.dart';
 import 'command_type.dart';
 
 /// Represents a command sent to the Brine BLE device.
@@ -22,16 +23,17 @@ class Command {
   final CommandType commandType;
 
   /// Converts the command to a JSON-serializable map.
-  Map<String, dynamic> _toJson() {
+  Map<String, dynamic> _toJson({JSON? parameters}) {
     final Map<String, dynamic> json = {
       'command': commandType.value,
+      'parameters': parameters ?? '{}',
     };
 
     return json;
   }
 
   /// Converts the command to a serialized JSON string.
-  String toJsonString() {
+  String toJsonString({JSON? parameters}) {
     // Convert the command to JSON.
     final Map<String, dynamic> json = _toJson();
 
