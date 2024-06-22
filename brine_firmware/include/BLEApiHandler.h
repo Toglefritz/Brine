@@ -4,6 +4,7 @@
 #include "DebugService.h"
 #include <ArduinoJson.h>
 #include <WiFi.h>
+#include "DeviceName.h"
 
 /**
  * @class BLEApiHandler
@@ -174,6 +175,12 @@ private:
   String handleWifiConnect(const char *ssid, const char *password) {
     DebugService::getInstance().debugPrint("Connecting to WiFi network: ");
     DebugService::getInstance().debugPrintln(ssid);
+
+    // Set the hostname for the Brine device.
+    String deviceName = DeviceName::getDeviceName();
+    // Replace the spaces in the device name with underscores.
+    deviceName.replace(" ", "_");
+    WiFi.setHostname(deviceName.c_str());
 
     // Connect to the specified WiFi network
     WiFi.begin(ssid, password);

@@ -136,6 +136,14 @@ void setup() {
   DebugService::getInstance().debugPrint("Device ID: ");
   DebugService::getInstance().debugPrintln(deviceId);
 
+  // Print the MAC address of the device for debugging purposes.
+  DebugService::getInstance().debugPrint("MAC address: ");
+  DebugService::getInstance().debugPrintln(WiFi.macAddress());
+
+  // Print the devie name for debugging purposes.
+  DebugService::getInstance().debugPrint("Device name: ");
+  DebugService::getInstance().debugPrintln(DeviceName::getDeviceName());
+
   // TODO(Toglefritz): Get and send information to Brine backend
 }
 

@@ -114,16 +114,6 @@ class BLEModule {
     BLEReadCallback readCallback; /**< The read callback function. */
     BLEDescriptorWriteCallback descriptorWriteCallback; /**< The descriptor write callback function. */
 
-    /**
-     * @brief Retrieves the name of the device.
-     *
-     * This function retrieves the name of the device. The name is the word,
-     * "Brine" followed by the last 4 digits of the MAC address of the device.
-     *
-     * @return The name of the device.
-     */
-    String getDeviceName();
-
     friend class ServerCallbacks;
     friend class Callbacks;
     friend class DescriptorCallbacks;

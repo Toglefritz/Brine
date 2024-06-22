@@ -1,4 +1,5 @@
 #include "BLEModule.h"
+#include <DeviceName.h>
 
 BLEModule::BLEModule() {}
 
@@ -9,24 +10,6 @@ BLEServer *pServer;
 // The UUIDs of the primary service and the characteristic.
 const char *PRIMARY_SERVICE_UUID = "6272696e-6573-616c-746d-6f6e69746f72";
 const char *CHARACTERISTIC_UUID = "2f339202-178a-47ba-8a53-fa78187ab206";
-
- /**
- * @brief Retrieves the name of the device.
- * 
- * This function retrieves the name of the device. The name is the word, "Brine" 
- * followed by the last 4 digits of the MAC address of the device.
- * 
- * @return The name of the device.
- */
-String BLEModule::getDeviceName() {
-    // Set the name of the device, which is the word "Brine" followed by the
-    // last 4 digits of the MAC address.
-    String macAddress = WiFi.macAddress();
-    String deviceName = "Brine " + macAddress.substring(9, 14);
-    deviceName.replace(":", "");
-
-    return deviceName;
-}
 
 /**
  * @class ServerCallbacks
@@ -137,7 +120,7 @@ void BLEModule::setCharacteristicValue(BLECharacteristic* pCharacteristic, const
  */
 bool BLEModule::begin() {
     // Create the BLE Device
-    BLEDevice::init(getDeviceName().c_str());
+    BLEDevice::init(DeviceName::getDeviceName().c_str());
 
     // Configure BLE Security settings
     BLESecurity *pSecurity = new BLESecurity();
