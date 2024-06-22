@@ -5,6 +5,8 @@
 #include <ArduinoJson.h>
 #include <WiFi.h>
 #include "DeviceName.h"
+#include <set>
+#include <string>
 
 /**
  * @class BLEApiHandler
@@ -128,19 +130,22 @@ private:
     JsonDocument networksDoc;
     JsonArray responseArray = networksDoc.to<JsonArray>();
 
-    for (int i = 0; i < numberOfNetworks; i++) {
-      // Check if the network is already in the list. This prevents mesh networks from being listed multiple times
-      // for each node.
-      for (int j = 0; j < i; j++) {
-        if (WiFi.SSID(i) == WiFi.SSID(j)) {
-          break;
-        }
-      } 
+    // Set to store unique SSIDs
+    std::set<String> uniqueSSIDs;
 
-      // Add the new network to the list.
-      JsonObject networkObj = responseArray.add<JsonObject>();
-      networkObj["ssid"] = WiFi.SSID(i);
-      networkObj["rssi"] = WiFi.RSSI(i);
+    for (int i = 0; i < numberOfNetworks; i++) {
+        String ssid = WiFi.SSID(i);
+
+        // Check if the SSID is already in the set
+        if (uniqueSSIDs.find(ssid) == uniqueSSIDs.end()) {
+            // Add the new SSID to the set
+            uniqueSSIDs.insert(ssid);
+
+            // Add the new network to the JSON array
+            JsonObject networkObj = responseArray.add<JsonObject>();
+            networkObj["ssid"] = ssid;
+            networkObj["rssi"] = WiFi.RSSI(i);
+        }
     }
 
     // Create a JSON response with a response" key set to "scan" and an array of networks as the value of the "networks"
