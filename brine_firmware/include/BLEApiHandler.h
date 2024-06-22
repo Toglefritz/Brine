@@ -2,9 +2,8 @@
 #define BLEAPIHANDLER_H
 
 #include "DebugService.h"
+#include "WiFiService.h"
 #include <ArduinoJson.h>
-#include <WiFi.h>
-#include "DeviceName.h"
 #include <set>
 #include <string>
 
@@ -46,6 +45,15 @@
  * @endcode
  */
 class BLEApiHandler {
+private:
+  /**
+   * @brief Pointer to the WiFiService instance.
+   *
+   * The WiFiService instance is used to interact with the WiFi module on the ESP32. The WiFiService class provides
+   * methods for scanning for available networks and connecting to a specific network.
+   */
+  WiFiService *wifiService;
+
 public:
   BLEApiHandler() {}
 
@@ -125,48 +133,28 @@ private:
    * @return String The JSON response string containing the list of WiFi networks.
    */
   String handleScanWifiNetworks() {
-    int numberOfNetworks = WiFi.scanNetworks();
+    // Get a list of available WiFi networks as a JSON array.
+    JsonDocument responseArray = WiFiService::scanForNetworks();
 
-    JsonDocument networksDoc;
-    JsonArray responseArray = networksDoc.to<JsonArray>();
-
-    // Set to store unique SSIDs
-    std::set<String> uniqueSSIDs;
-
-    for (int i = 0; i < numberOfNetworks; i++) {
-        String ssid = WiFi.SSID(i);
-
-        // Check if the SSID is already in the set
-        if (uniqueSSIDs.find(ssid) == uniqueSSIDs.end()) {
-            // Add the new SSID to the set
-            uniqueSSIDs.insert(ssid);
-
-            // Add the new network to the JSON array
-            JsonObject networkObj = responseArray.add<JsonObject>();
-            networkObj["ssid"] = ssid;
-            networkObj["rssi"] = WiFi.RSSI(i);
-        }
-    }
-
-    // Create a JSON response with a response" key set to "scan" and an array of networks as the value of the "networks"
-    // key.
+    // Create a JSON response object with the array of networks.
     JsonDocument responseDoc;
-
     responseDoc["response"] = "scan";
     responseDoc["networks"] = responseArray;
 
+    // Serialize the JSON response to a string.
     String jsonResponse;
     serializeJson(responseDoc, jsonResponse);
 
     DebugService::getInstance().debugPrint("Returning WiFi scan results, ");
     DebugService::getInstance().debugPrintln(jsonResponse);
 
+    // Return the JSON response string.
     return jsonResponse;
   }
 
   /**
    * @brief Connects to a WiFi network using the provided SSID and password.
-   * 
+   *
    * This method attempts to connect to the specified WiFi network using the provided SSID and password. The method
    * waits for the connection to be established and returns a JSON response indicating the connection status. The
    * connection process includes a timeout to prevent the device from waiting indefinitely for a connection. If
@@ -181,24 +169,11 @@ private:
     DebugService::getInstance().debugPrint("Connecting to WiFi network: ");
     DebugService::getInstance().debugPrintln(ssid);
 
-    // Set the hostname for the Brine device.
-    String deviceName = DeviceName::getDeviceName();
-    // Replace the spaces in the device name with underscores.
-    deviceName.replace(" ", "_");
-    WiFi.setHostname(deviceName.c_str());
-
-    // Connect to the specified WiFi network
-    WiFi.begin(ssid, password);
-
-    // Wait for the connection to be established
-    int timeout = 10; // Timeout in seconds
-    while (WiFi.status() != WL_CONNECTED && timeout > 0) {
-      delay(1000);
-      timeout--;
-    }
-
+    // Connect to the specified WiFi network.
+    bool connected = WiFiService::connectToNetwork(ssid, password);
+    
     // Check if the connection was successful
-    if (WiFi.status() == WL_CONNECTED) {
+    if (connected) {
       DebugService::getInstance().debugPrint("Connected to WiFi network: ");
       DebugService::getInstance().debugPrintln(ssid);
 
@@ -247,7 +222,7 @@ private:
 
     String errorResponse;
     serializeJson(errorDoc, errorResponse);
-    
+
     return errorResponse;
   }
 };

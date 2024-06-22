@@ -36,21 +36,20 @@ void IRAM_ATTR button_isr() { buttonPressed = true; }
 BLEApiHandler apiHandler;
 
 /**
- * @brief Initializes the provisioning manager and sets up Bluetooth callbacks.
+ * @brief Initializes the device configuration manager and sets up Bluetooth callbacks.
  *
- * This function initializes the `ProvisioningManager` singleton instance and sets up the external Bluetooth event
- * callbacks for connection, disconnection, characteristic read, characteristic write, and descriptor write events.
- * These callbacks are used to handle the respective events within the main application logic. After configuring the
- * callbacks, the provisioning process is started by calling the `startProvisioning` method of the
- * `ProvisioningManager` instance.
+ * This function initializes the `DeviceConfigurationManager` singleton instance and sets up the external Bluetooth 
+ * event callbacks for connection, disconnection, characteristic read, characteristic write, and descriptor write 
+ * events. These callbacks are used to handle the respective events within the main application logic. After 
+ * configuring the callbacks, the provisioning process is started by calling the `startProvisioning` method of the
+ * `DeviceConfigurationManager` instance.
  *
  * The function also sets the provisioning start time to the current time (in milliseconds), which can be used for
  * timeout management or other time-based operations during the provisioning process.
  *
  * The callbacks are set up as follows:
  *  - Connection callback: Logs a message and handles the connection event.
- *  - Disconnection callback: Logs a message and handles the disconnection
- * event.
+ *  - Disconnection callback: Logs a message and handles the disconnection event.
  *  - Write callback: Logs the written value and handles the write event.
  *  - Read callback: Logs a message and handles the read event.
  *  - Descriptor write callback: Logs whether notifications have been enabled or disabled and handles the descriptor
