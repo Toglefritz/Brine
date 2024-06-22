@@ -74,6 +74,17 @@ public:
     else if (strcmp(command, "scan") == 0) {
       return handleScanWifiNetworks();
     }
+    // The command "wifi_connect" provides the SSID and password for a network to which the device should connect
+    // in the parameters provided with this command. The parameters use the "ssid" and "password" keys.
+    else if (strcmp(command, "wifi_connect") == 0) {
+      // Get the parameters for the WiFi connection
+      JsonObject parameters = doc["parameters"].as<JsonObject>();
+
+      const char *ssid = parameters["ssid"];
+      const char *password = parameters["password"];
+
+      return handleWifiConnect(ssid, password);
+    }
     // The command is not recognized
     else {
       return createErrorResponse("Unknown command");
@@ -117,6 +128,15 @@ private:
     JsonArray responseArray = networksDoc.to<JsonArray>();
 
     for (int i = 0; i < numberOfNetworks; i++) {
+      // Check if the network is already in the list. This prevents mesh networks from being listed multiple times
+      // for each node.
+      for (int j = 0; j < i; j++) {
+        if (WiFi.SSID(i) == WiFi.SSID(j)) {
+          break;
+        }
+      } 
+
+      // Add the new network to the list.
       JsonObject networkObj = responseArray.add<JsonObject>();
       networkObj["ssid"] = WiFi.SSID(i);
       networkObj["rssi"] = WiFi.RSSI(i);
@@ -136,6 +156,70 @@ private:
     DebugService::getInstance().debugPrintln(jsonResponse);
 
     return jsonResponse;
+  }
+
+  /**
+   * @brief Connects to a WiFi network using the provided SSID and password.
+   * 
+   * This method attempts to connect to the specified WiFi network using the provided SSID and password. The method
+   * waits for the connection to be established and returns a JSON response indicating the connection status. The
+   * connection process includes a timeout to prevent the device from waiting indefinitely for a connection. If
+   * the connection is successful, the response includes the SSID of the connected network. If the connection fails,
+   * the response includes an error message indicating the reason for the failure.
+   *
+   * @param ssid The SSID of the WiFi network to connect to.
+   * @param password The password for the WiFi network.
+   * @return String The JSON response string indicating the connection status.
+   */
+  String handleWifiConnect(const char *ssid, const char *password) {
+    DebugService::getInstance().debugPrint("Connecting to WiFi network: ");
+    DebugService::getInstance().debugPrintln(ssid);
+
+    // Connect to the specified WiFi network
+    WiFi.begin(ssid, password);
+
+    // Wait for the connection to be established
+    int timeout = 10; // Timeout in seconds
+    while (WiFi.status() != WL_CONNECTED && timeout > 0) {
+      delay(1000);
+      timeout--;
+    }
+
+    // Check if the connection was successful
+    if (WiFi.status() == WL_CONNECTED) {
+      DebugService::getInstance().debugPrint("Connected to WiFi network: ");
+      DebugService::getInstance().debugPrintln(ssid);
+
+      // Create a JSON response indicating successful connection.
+      JsonDocument responseDoc;
+      responseDoc["response"] = "wifi_connected";
+      responseDoc["ssid"] = ssid;
+
+      String jsonResponse;
+      serializeJson(responseDoc, jsonResponse);
+
+      return jsonResponse;
+    } else {
+      DebugService::getInstance().debugPrint("Failed to connect to WiFi network: ");
+      DebugService::getInstance().debugPrintln(ssid);
+
+      // Create a JSON response indicating the reason for the failure.
+      JsonDocument errorResponseDoc;
+      errorResponseDoc["response"] = "wifi_connect_error";
+
+      if (WiFi.status() == WL_NO_SSID_AVAIL) {
+        errorResponseDoc["message"] = "SSID not found";
+      } else if (WiFi.status() == WL_CONNECT_FAILED) {
+        errorResponseDoc["message"] = "Connection failed";
+      } else {
+        errorResponseDoc["message"] = "Unknown error";
+      }
+
+      String errorResponse;
+      serializeJson(errorResponseDoc, errorResponse);
+
+      return errorResponse;
+    }
   }
 
   /**

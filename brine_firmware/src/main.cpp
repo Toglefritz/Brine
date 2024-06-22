@@ -84,10 +84,6 @@ void startProvisioning() {
   // Set the write callback for handling characteristic write events.
   deviceConfigManager.setExternalWriteCallback([&deviceConfigManager](BLECharacteristic *pCharacteristic) {
     std::string value = pCharacteristic->getValue();
-    DebugService::getInstance().debugPrint("Characteristic, ");
-    DebugService::getInstance().debugPrint(pCharacteristic->getUUID().toString().c_str());
-    DebugService::getInstance().debugPrint(", written: ");
-    DebugService::getInstance().debugPrintln(value.c_str());
 
     // Handle the JSON command using BLEApiHandler
     String jsonResponse = apiHandler.handleCommand(String(value.c_str()));
