@@ -37,6 +37,11 @@ class Command {
     // Convert the command to JSON.
     final Map<String, dynamic> json = _toJson();
 
+    // If they were provided, add the parameters to the JSON.
+    if (parameters != null) {
+      json['parameters'] = parameters;
+    }
+
     // Serialize the JSON into a string.
     final String serializedJson = jsonEncode(json);
 

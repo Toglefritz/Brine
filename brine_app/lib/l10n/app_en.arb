@@ -19,6 +19,10 @@
   "@back": {
     "description": "Text for a button that allows the user to navigate back to the previous screen."
   },
+  "bleConnecting": "Establishing connection...",
+  "@bleConnecting": {
+    "description": "Text displayed while the app is establishing a Bluetooth connection to a device."
+  },
   "brine": "Brine",
   "@brine": {
     "description": "The name of the app and the product."
@@ -30,10 +34,6 @@
   "confirmPassword": "Confirm password",
   "@confirmPassword": {
     "description": "Label for the field where the user must confirm their password."
-  },
-  "connecting": "Establishing connection...",
-  "@connecting": {
-    "description": "Text displayed while the app is establishing a Bluetooth connection to a device."
   },
   "continueText": "Continue",
   "@continueText": {
@@ -127,6 +127,10 @@
   "@wifiSetup": {
     "description": "Title for the screen where the user can set up the WiFi connection for their Brine device."
   },
+  "wifiConnecting": "Connecting to WiFi...",
+    "@wifiConnecting": {
+        "description": "Text displayed while the Brine monitor is connecting to a WiFi network."
+    },
   "wifiSetupInstructions": "Select the WiFi network to which your Brine monitor should connect.",
   "@wifiSetupInstructions": {
     "description": "Instructions for the user to select the WiFi network to which their Brine device should connect."

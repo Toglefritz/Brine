@@ -6,6 +6,12 @@ enum ResponseType {
   /// A response containing a list of WiFi networks discovered by the Brine device.
   networks,
 
+  /// A response indicating that the Brine device successfully connected to a WiFi network.
+  wifiConnected,
+
+  /// A response indicating that the Brine device encountered a failure while attempting to connect to a WiFi network.
+  wifiConnectError,
+
   /// An error response.
   error;
 
@@ -17,6 +23,10 @@ enum ResponseType {
         return 'device_id';
       case ResponseType.networks:
         return 'networks';
+      case ResponseType.wifiConnected:
+        return 'wifi_connected';
+      case ResponseType.wifiConnectError:
+        return 'wifi_connect_error';
       case ResponseType.error:
         return 'error';
     }

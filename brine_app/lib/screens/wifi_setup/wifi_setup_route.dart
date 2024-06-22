@@ -20,7 +20,7 @@ class WiFiSetupRoute extends StatefulWidget {
     super.key,
   });
 
-  /// A [BleCommunicationManager] instance that manages the communication between the app and the Brine [device].
+  /// A [BleCommunicationManager] instance that manages the communication between the app and the Brine device.
   final BleCommunicationManager bleCommunicationManager;
 
   @override

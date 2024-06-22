@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../extensions/json.dart';
 import '../../services/ble/command.dart';
 import '../../services/ble/command_type.dart';
+import '../wifi_connection/wifi_connection_route.dart';
 import 'models/wifi_network.dart';
 import 'wifi_setup_route.dart';
 import 'wifi_setup_view.dart';
@@ -81,35 +82,37 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
   }
 
   /// Handles submission of the password for a WiFi network selected from the list of networks.
-  void onConnectToNetwork(WiFiNetwork network) {
-    // Get the password from the password field controller.
-    final String password = passwordFieldController.text;
-
+  ///
+  /// This function simply navigates to the next screen in the setup process, providing the SSID and password for the
+  /// selected network to the next screen.
+  Future<void> onConnectToNetwork(WiFiNetwork network) async {
     // Get the SSID of the selected network.
     final String ssid = network.ssid;
 
-    // Send a command to the Brine device to connect to the selected WiFi network.
-    final Command connectCommand = Command(
-      commandType: CommandType.wifiConnect,
+    // Get the password from the password field controller.
+    final String password = passwordFieldController.text;
+
+    // Navigate to the WiFi connection screen, providing the SSID and password of the selected network.
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => WiFiConnectionRoute(
+          bleCommunicationManager: widget.bleCommunicationManager,
+          ssid: ssid,
+          password: password,
+        ),
+      ),
     );
-    final String commandString = connectCommand.toJsonString(
-      parameters: {
-        'ssid': ssid,
-        'password': password,
-      },
-    );
-
-    try {
-      widget.bleCommunicationManager.writeValue(value: commandString);
-    } catch (e) {
-      debugPrint('Failed to send connect command with exception, $e');
-
-      // TODO(Toglefritz): Handle the failure to send the connect command.
-    }
-
-    // TODO(Toglefritz): Navigate to the next screen
   }
 
   @override
   Widget build(BuildContext context) => WiFiSetupView(this);
+
+  @override
+  void dispose() {
+    // Unregister the callback for changes in the value of the characteristic.
+    widget.bleCommunicationManager.unregisterCallback(_onScanCompleted);
+
+    super.dispose();
+  }
 }
