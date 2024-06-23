@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
+import 'firebase_emulators.dart';
 import 'models/brine_device.dart';
 
 /// A service class for managing Brine IoT devices.
@@ -14,9 +15,11 @@ import 'models/brine_device.dart';
 /// device information such as device IDs, and levels of salt and battery. All of this information about the devices
 /// is stored in Firestore.
 class DeviceManagementService {
+  static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : '';  // TODO(Toglefritz): update prod host
+
   /// The base URL for all endpoints used by this service.
   static String baseUrl =
-      kDebugMode ? 'http://127.0.0.1:5001/brine-3b212/us-central1' : ''; // TODO(Toglefritz): update prod endpoint
+      kDebugMode ? 'http://$_cloudFunctionsHost:5001/brine-3b212/us-central1' : ''; // TODO(Toglefritz): update prod endpoint
 
   /// Calls the *addDeviceToAccount* endpoint to add a new device to the authenticated user's account. The Firebase
   /// backend will also create a record for the Brine device in the "devices" collection if one does not already exist.
