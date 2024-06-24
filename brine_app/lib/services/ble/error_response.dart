@@ -6,7 +6,7 @@ class ErrorResponse extends Response {
   /// Creates an instance of [ErrorResponse] with the provided [message].
   ///
   /// The [message] parameter specifies the error message returned by the Brine device.
-  ErrorResponse(this.message) : super(ResponseType.error);
+  ErrorResponse(this.message) : super(responseType: ResponseType.error);
 
   /// Factory constructor to create an [ErrorResponse] object from a JSON map.
   ///

@@ -6,7 +6,7 @@ class DeviceIdResponse extends Response {
   /// Creates an instance of [DeviceIdResponse] with the provided [deviceId].
   ///
   /// The [deviceId] parameter specifies the device ID returned by the Brine device.
-  DeviceIdResponse(this.deviceId) : super(ResponseType.deviceId);
+  DeviceIdResponse(this.deviceId) : super(responseType: ResponseType.deviceId);
 
   /// Factory constructor to create a [DeviceIdResponse] object from a JSON map.
   ///

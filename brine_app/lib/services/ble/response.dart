@@ -1,7 +1,8 @@
 import '../../extensions/json.dart';
-import 'device_response.dart';
+import 'device_id_response.dart';
 import 'error_response.dart';
 import 'response_type.dart';
+import 'wifi_connected_response.dart';
 
 /// An abstract class representing a response from the Brine device.
 ///
@@ -12,7 +13,9 @@ abstract class Response {
   /// Creates an instance of [Response] with the provided [responseType].
   ///
   /// The [responseType] parameter specifies the type of response being created.
-  Response(this.responseType);
+  Response({
+    required this.responseType,
+  });
 
   /// Factory constructor to create a [Response] object from a JSON map.
   ///
@@ -22,12 +25,15 @@ abstract class Response {
   ///
   /// Throws an [Exception] if the response type is unknown.
   factory Response.fromJson(JSON json) {
+    // Extract the response from the JSON object.
     final String? responseKey = json['response'] as String?;
 
     if (responseKey == null) {
       throw Exception('Response type not found in JSON');
     } else if (responseKey == ResponseType.deviceId.responseKey) {
       return DeviceIdResponse.fromJson(json);
+    } else if (responseKey == ResponseType.wifiConnected.responseKey) {
+      return WiFiConnectedResponse.fromJson(json);
     } else if (responseKey == ResponseType.error.responseKey) {
       return ErrorResponse.fromJson(json);
     } else {

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../extensions/json.dart';
 import '../../services/ble/command.dart';
 import '../../services/ble/command_type.dart';
+import '../../services/ble/response.dart';
+import '../../services/ble/response_type.dart';
+import '../brine_installation/brine_installation_route.dart';
 import 'wifi_connection_route.dart';
 import 'wifi_connection_view.dart';
 
@@ -68,10 +71,31 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
   ///   "message": "<error message>"
   /// }
   /// ```
-  void _onWiFiConnectCompleted(JSON value) {
+  Future<void> _onWiFiConnectCompleted(JSON value) async {
     debugPrint('WiFi connect response: $value');
 
-    // TODO(Toglefritz): handle the response from the Brine device.
+    // Get a Response object from the JSON response.
+    final Response response = Response.fromJson(value);
+
+    // If the response indicates that the Brine device successfully connected to the WiFi network, navigate to the
+    // Brine installation screen.
+    if (response.responseType == ResponseType.wifiConnected) {
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => BrineInstallationRoute(
+            bleCommunicationManager: widget.bleCommunicationManager,
+          ),
+        ),
+      );
+    }
+    // If the response indicates that the Brine device failed to connect to the WiFi network, display an error message
+    // to the user.
+    else {
+      debugPrint('WiFi connection failed with message: ${value['message']}');
+
+      // TODO(Toglefritz): Handle the failure to connect to the WiFi network.
+    }
   }
 
   @override

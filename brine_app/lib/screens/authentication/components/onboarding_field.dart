@@ -60,7 +60,7 @@ class OnboardingField extends StatelessWidget {
     final OutlineInputBorder defaultBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(30),
       borderSide: BorderSide(
-        width: 3,
+        width: 2,
         color: Theme.of(context).primaryColorDark,
       ),
     );

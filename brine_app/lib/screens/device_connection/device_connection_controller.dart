@@ -11,7 +11,7 @@ import '../../extensions/json.dart';
 import '../../services/ble/ble_communication_manager.dart';
 import '../../services/ble/command.dart';
 import '../../services/ble/command_type.dart';
-import '../../services/ble/device_response.dart';
+import '../../services/ble/device_id_response.dart';
 import '../../services/ble/response.dart';
 import '../association/association_route.dart';
 import 'device_connection_route.dart';

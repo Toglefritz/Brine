@@ -55,6 +55,10 @@
   "@getOneNow": {
     "description": "Text for a button that allows the user to purchase a Brine device."
   },
+  "installationTitle": "Install Brine",
+  "@installationTitle": {
+    "description": "Title for the screen presenting the installation instructions for the Brine device."
+  },
   "login": "login",
   "@login": {
     "description": "Text for a button that allows the user to log in to their account."
@@ -128,9 +132,9 @@
     "description": "Title for the screen where the user can set up the WiFi connection for their Brine device."
   },
   "wifiConnecting": "Connecting to WiFi...",
-    "@wifiConnecting": {
-        "description": "Text displayed while the Brine monitor is connecting to a WiFi network."
-    },
+  "@wifiConnecting": {
+    "description": "Text displayed while the Brine monitor is connecting to a WiFi network."
+  },
   "wifiSetupInstructions": "Select the WiFi network to which your Brine monitor should connect.",
   "@wifiSetupInstructions": {
     "description": "Instructions for the user to select the WiFi network to which their Brine device should connect."
