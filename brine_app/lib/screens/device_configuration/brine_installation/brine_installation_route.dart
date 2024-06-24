@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../services/ble/ble_communication_manager.dart';
+import '../../../services/ble/ble_communication_manager.dart';
 import 'brine_installation_controller.dart';
 
 /// This route route presents instructions to the user for installing a Brine device in their water softener. This is

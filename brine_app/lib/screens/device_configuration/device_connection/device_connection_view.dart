@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../../theme/insets.dart';
-import 'wifi_connection_controller.dart';
-import 'wifi_connection_route.dart';
+import '../../../theme/insets.dart';
+import 'device_connection_controller.dart';
+import 'device_connection_route.dart';
 
-/// View for [WiFiConnectionRoute].
-class WiFiConnectionView extends StatelessWidget {
-  /// Creates an instance of [WiFiConnectionView].
-  const WiFiConnectionView(this.state, {super.key});
+/// View for the [DeviceConnectionRoute].
+class DeviceConnectionView extends StatelessWidget {
+  /// Creates an instance of [DeviceConnectionView].
+  const DeviceConnectionView(this.state, {super.key});
 
   /// A controller for this view.
-  final WiFiConnectionController state;
+  final DeviceConnectionController state;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +29,10 @@ class WiFiConnectionView extends StatelessWidget {
                 Insets.medium,
               ),
               child: Text(
-                AppLocalizations.of(context)!.wifiConnecting,
+                AppLocalizations.of(context)!.bleConnecting,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).primaryColorDark,
-                    ),
+                  color: Theme.of(context).primaryColorDark,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),

@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme/insets.dart';
+import '../../../theme/insets.dart';
 import 'models/wifi_network.dart';
 import 'wifi_setup_controller.dart';
 import 'wifi_setup_route.dart';
@@ -119,9 +119,12 @@ class WiFiSetupView extends StatelessWidget {
                                     controller: state.passwordFieldController,
                                     decoration: InputDecoration(
                                       labelText: AppLocalizations.of(context)!.password,
-                                      suffixIcon: GestureDetector(
-                                        onTap: () => state.onConnectToNetwork(network),
-                                        child: const Icon(Icons.send_outlined),
+                                      suffixIcon: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: GestureDetector(
+                                          onTap: () => state.onConnectToNetwork(network),
+                                          child: const Icon(Icons.send_outlined),
+                                        ),
                                       ),
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(color: Theme.of(context).primaryColorDark),

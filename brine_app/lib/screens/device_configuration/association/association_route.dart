@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../services/ble/ble_communication_manager.dart';
+import '../../../services/ble/ble_communication_manager.dart';
 import 'association_controller.dart';
 
 /// Associates the Brine device with the app.

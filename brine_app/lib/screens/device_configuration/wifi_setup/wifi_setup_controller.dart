@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../extensions/json.dart';
-import '../../services/ble/command.dart';
-import '../../services/ble/command_type.dart';
+import '../../../extensions/json.dart';
+import '../../../services/ble/command.dart';
+import '../../../services/ble/command_type.dart';
 import '../wifi_connection/wifi_connection_route.dart';
 import 'models/wifi_network.dart';
 import 'wifi_setup_route.dart';

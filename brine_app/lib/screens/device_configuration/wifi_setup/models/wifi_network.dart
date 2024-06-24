@@ -1,4 +1,4 @@
-import '../../../extensions/json.dart';
+import '../../../../extensions/json.dart';
 import '../wifi_setup_route.dart';
 
 /// Represents a WiFi network detected by the Brine device, information about which is sent to the app by the

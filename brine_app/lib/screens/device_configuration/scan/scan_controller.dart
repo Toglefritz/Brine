@@ -7,9 +7,9 @@ import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 import 'package:flutter_splendid_ble/shared/models/bluetooth_permission_status.dart';
 import 'package:flutter_splendid_ble/shared/models/bluetooth_status.dart';
 
-import '../../services/analytics/analytics.dart';
+import '../../../services/analytics/analytics.dart';
+import '../../setup/setup_route.dart';
 import '../device_confirmation/device_confirmation_route.dart';
-import '../setup/setup_route.dart';
 import 'scan_route.dart';
 import 'scan_view.dart';
 

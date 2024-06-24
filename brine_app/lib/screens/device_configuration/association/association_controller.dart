@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../services/device_management/device_management_service.dart';
+import '../../../services/device_management/device_management_service.dart';
 import '../wifi_setup/wifi_setup_route.dart';
 import 'association_route.dart';
 import 'association_view.dart';
