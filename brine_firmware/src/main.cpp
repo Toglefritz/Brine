@@ -5,9 +5,9 @@
 #include "DebugService.h"
 #include <BLEApiHandler.h>
 #include <BLEModule.h>
+#include <DeviceConfigurationManager.h>
 #include <I2CButton.h>
 #include <I2CLED.h>
-#include <DeviceConfigurationManager.h>
 #include <Wire.h>
 
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
@@ -38,9 +38,9 @@ BLEApiHandler apiHandler;
 /**
  * @brief Initializes the device configuration manager and sets up Bluetooth callbacks.
  *
- * This function initializes the `DeviceConfigurationManager` singleton instance and sets up the external Bluetooth 
- * event callbacks for connection, disconnection, characteristic read, characteristic write, and descriptor write 
- * events. These callbacks are used to handle the respective events within the main application logic. After 
+ * This function initializes the `DeviceConfigurationManager` singleton instance and sets up the external Bluetooth
+ * event callbacks for connection, disconnection, characteristic read, characteristic write, and descriptor write
+ * events. These callbacks are used to handle the respective events within the main application logic. After
  * configuring the callbacks, the provisioning process is started by calling the `startProvisioning` method of the
  * `DeviceConfigurationManager` instance.
  *
@@ -61,6 +61,9 @@ void startProvisioning() {
 
   // Set external callbacks
   deviceConfigManager.setExternalConnectionCallback([](BLEServer *pServer) {
+    // Turn on the LED.
+    I2CLED::getInstance().turnOn();
+
     // Set the flag to indicate that a client is connected.
     clientConnected = true;
   });
@@ -143,17 +146,20 @@ void setup() {
   DebugService::getInstance().debugPrint("Device name: ");
   DebugService::getInstance().debugPrintln(DeviceName::getDeviceName());
 
+  // TODO(Toglefritz): Check if WiFi credentials are saved and connect to the network if they are.
+
   // TODO(Toglefritz): Get and send information to Brine backend
 }
 
 void loop() {
   // Start the provisioning process if the button was pressed and the provisioning process has not already started.
   if (buttonPressed && provisioningStartTime == 0) {
+    // Start the provisioning process.
     startProvisioning();
   }
-  // If more than three minutes has passed since the provisioning process started, turn off provisioning.
-  // TODO(Toglefritz): also check for provisioning activity
-  else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000) {
+  // If more than three minutes has passed since the provisioning process started, and a client is not connected, 
+  // turn off provisioning process.
+  else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000 && !clientConnected) {
     DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");
 
     DeviceConfigurationManager::getInstance().stopProvisioning();
@@ -171,9 +177,5 @@ void loop() {
   // If the provisioning process is currently running, but a client is not connected yet, blink the LED.
   else if (provisioningStartTime != 0 && !clientConnected) {
     I2CLED::getInstance().blink(millis());
-  }
-  // If the provisioning process is currently running, and a client is connected, turn on the LED.
-  else if (provisioningStartTime != 0 && clientConnected) {
-    I2CLED::getInstance().turnOn();
   }
 }
