@@ -19,10 +19,12 @@ const admin = require('../adminInit.cjs');
  * ties these two collections together. For example,
  * 
  * {
- *     "deviceId": "vast_teal_elephant",
+ *     "device_id": "vast_teal_elephant",
  *     "name": "7b67",
  *     "battery_level": 0.7,
- *     "salt_level": 0.4
+ *     "salt_level": 0.4,
+ *     "appliance_height": 1000,
+ *     "last_updated": "2021-09-01T12:00:00Z"
  * }
  * 
  * After retrieving a list of devices on the user's account, the app also retrieves the details of each device before
@@ -101,13 +103,16 @@ async function addDeviceToUser(req, res) {
         const deviceDocRef = admin.firestore().collection('devices').doc(deviceId);
         const deviceDocSnapshot = await deviceDocRef.get();
 
-        // If the device does not exist, create a new record for it
+        // If the device does not exist, create a new record for it. The battery level, salt level, and appliance 
+        // height are all set to -1 initially to indicate that they are unknown.
         if (!deviceDocSnapshot.exists) {
             await deviceDocRef.set({
-                deviceId: deviceId,
+                device_id: deviceId,
                 name: deviceName,
                 battery_level: -1,  // -1 indicates unknown battery level
-                salt_level: -1    // -1 indicates unknown salt level
+                salt_level: -1,    // -1 indicates unknown salt level
+                appliance_height: -1,  // -1 indicates unknown appliance height
+                last_updated: new Date().toISOString(),
             });
 
             // Return a success message
