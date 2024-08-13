@@ -1,17 +1,7 @@
 const admin = require('./adminInit.cjs');
 
 const { onRequest } = require("firebase-functions/v2/https");
-const { onCall } = require("firebase-functions/v2/https");
 const functions = require('firebase-functions');
-
-// Import the `addLead` function.
-require('./src/addLead.cjs');
-const { addLead } = require('./src/addLead.cjs');
-
-// Call the `addLead` function as a Firebase Callable Function.
-exports.addLead = onCall(async (data) => {
-    addLead(data);
-});
 
 // Import the `createUser` function.
 const { createUser } = require('./src/createUser.cjs');
