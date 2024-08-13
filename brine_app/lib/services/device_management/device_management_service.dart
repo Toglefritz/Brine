@@ -90,6 +90,51 @@ class DeviceManagementService {
     }
   }
 
+  /// In order to calculate the salt level in the water softener in terms of a percentage, the Brine system needs to
+  /// know the height of the water softener. This allows the distance measurements from the Brine device to be
+  /// translated into a percentage of remaining salt in the water softener. This function sends the height of the
+  /// water softener to the Firestore backend where it is stored and used in the calculation.
+  static Future<void> updateApplianceHeight({required String deviceId, required int height}) async {
+    try {
+      // Get the current user
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User is not authenticated');
+      }
+
+      // Get the user's ID token
+      final String? idToken = await user.getIdToken();
+
+      // Define the endpoint URL
+      const String endpoint = '/updateApplianceHeight';
+
+      // Make an authenticated HTTP request to the endpoint
+      final Response response = await patch(
+        Uri.parse(baseUrl + endpoint),
+        // Include the ID token in the Authorization header
+        headers: {'Authorization': 'Bearer $idToken'},
+        body: {
+          'device_id': deviceId,
+          'appliance_height': height.toString(),
+        },
+      );
+
+      // Check the response status code
+      if (response.statusCode == HttpStatus.ok) {
+        debugPrint('Successfully set the appliance height to $height');
+
+        return;
+      }
+      // A non-200 status code was returned.
+      else {
+        throw Exception('Setting appliance height failed with reason phrase, ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      debugPrint('Failed to set appliance height with exception, $e');
+      throw Exception('Failed to set appliance height with exception, $e');
+    }
+  }
+
   /// Calls the *getUserDevicesHttp* endpoint to retrieve the list of devices for the current user. Assumes the user
   /// is already authenticated with Firebase Auth. Returns a list of devices or throws an exception if an error occurs.
   // TODO(Toglefritz): update this method to call the getDeviceLevels function and return a list of BrineDevice instead

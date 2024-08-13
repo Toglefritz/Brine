@@ -42,7 +42,7 @@ class LightButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           side: BorderSide(
-            width: 3,
+            width: 1,
             color: Theme.of(context).primaryColorDark,
           ),
           backgroundColor: Theme.of(context).primaryColorLight,

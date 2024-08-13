@@ -36,6 +36,7 @@ class AssociationController extends State<AssociationRoute> {
       MaterialPageRoute<void>(
         builder: (context) => WiFiSetupRoute(
           bleCommunicationManager: widget.bleCommunicationManager,
+          deviceId: widget.deviceId,
         ),
       ),
     );

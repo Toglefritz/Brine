@@ -85,6 +85,7 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
         MaterialPageRoute<void>(
           builder: (BuildContext context) => BrineInstallationRoute(
             bleCommunicationManager: widget.bleCommunicationManager,
+            deviceId: widget.deviceId,
           ),
         ),
       );

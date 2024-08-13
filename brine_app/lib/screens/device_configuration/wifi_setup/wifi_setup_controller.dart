@@ -100,6 +100,7 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
           bleCommunicationManager: widget.bleCommunicationManager,
           ssid: ssid,
           password: password,
+          deviceId: widget.deviceId,
         ),
       ),
     );

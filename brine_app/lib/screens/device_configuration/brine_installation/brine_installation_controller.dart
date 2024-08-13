@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../appliance_measurement/appliance_measurement_route.dart';
 import 'brine_installation_route.dart';
 import 'brine_installation_view.dart';
 
@@ -13,10 +14,18 @@ class BrineInstallationController extends State<BrineInstallationRoute> {
   }
 
   /// Handles taps on the button used by the user to confirm they have completed installation of the Brine device.
-  void onContinue() {
+  Future<void> onContinue() async {
     // TODO(Toglefritz): add analytics call
 
-    // TODO(Toglefritz): navigate to next route
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => ApplianceMeasurementRoute(
+          deviceId: widget.deviceId,
+          bleCommunicationManager: widget.bleCommunicationManager,
+        ),
+      ),
+    );
   }
 
   @override

@@ -16,7 +16,7 @@ class BrineAppTheme {
     brightness: Brightness.light,
     useMaterial3: true,
     primaryColor: const Color(0xFFEDA200),
-    primaryColorLight: const Color(0xFFFFFFFF),
+    primaryColorLight: Colors.white,
     primaryColorDark: const Color(0xFF212121),
     scaffoldBackgroundColor: const Color(0xFFEDA200),
     textTheme: _defaultTextTheme,
@@ -27,6 +27,10 @@ class BrineAppTheme {
       cursorColor: Color(0xFFEDA200),
       selectionColor: Color(0xFFEDA200),
       selectionHandleColor: Color(0xFFEDA200),
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      hoverColor: Color(0xFF212121),
+      focusColor: Color(0xFF212121),
     ),
   ).copyWith(
     extensions: <ThemeExtension<dynamic>>[
@@ -52,6 +56,10 @@ class BrineAppTheme {
       cursorColor: Color(0xFFEDA200),
       selectionColor: Color(0xFFEDA200),
       selectionHandleColor: Color(0xFFEDA200),
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      hoverColor: Colors.white,
+      focusColor: Colors.white,
     ),
   ).copyWith(
     extensions: <ThemeExtension<dynamic>>[

@@ -19,6 +19,7 @@ class WiFiConnectionRoute extends StatefulWidget {
     required this.bleCommunicationManager,
     required this.ssid,
     required this.password,
+    required this.deviceId,
     super.key,
   });
 
@@ -34,6 +35,9 @@ class WiFiConnectionRoute extends StatefulWidget {
   /// with the [ssid] to the Brine monitor. The Brine monitor will attempt to connect to this network and return a
   /// response indicating the success or failure of this connection attempt.
   final String password;
+
+  /// The Brine BLE device that is the target of the provisioning flow.
+  final String deviceId;
 
   @override
   State<WiFiConnectionRoute> createState() => WiFiConnectionController();

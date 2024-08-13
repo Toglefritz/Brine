@@ -17,11 +17,15 @@ class WiFiSetupRoute extends StatefulWidget {
   /// Creates and instance of [WiFiSetupRoute].
   const WiFiSetupRoute({
     required this.bleCommunicationManager,
+    required this.deviceId,
     super.key,
   });
 
   /// A [BleCommunicationManager] instance that manages the communication between the app and the Brine device.
   final BleCommunicationManager bleCommunicationManager;
+
+  /// The Brine BLE device that is the target of the provisioning flow.
+  final String deviceId;
 
   @override
   State<WiFiSetupRoute> createState() => WiFiSetupController();

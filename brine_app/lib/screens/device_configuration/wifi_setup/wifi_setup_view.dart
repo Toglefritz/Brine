@@ -119,11 +119,19 @@ class WiFiSetupView extends StatelessWidget {
                                     controller: state.passwordFieldController,
                                     decoration: InputDecoration(
                                       labelText: AppLocalizations.of(context)!.password,
-                                      suffixIcon: MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: GestureDetector(
-                                          onTap: () => state.onConnectToNetwork(network),
-                                          child: const Icon(Icons.send_outlined),
+                                      labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                            color: Theme.of(context).primaryColorDark,
+                                          ),
+                                      suffixIcon: Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: Insets.small,
+                                        ),
+                                        child: MouseRegion(
+                                          cursor: SystemMouseCursors.click,
+                                          child: GestureDetector(
+                                            onTap: () => state.onConnectToNetwork(network),
+                                            child: const Icon(Icons.send_outlined),
+                                          ),
                                         ),
                                       ),
                                       border: OutlineInputBorder(

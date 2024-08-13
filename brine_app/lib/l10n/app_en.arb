@@ -55,6 +55,10 @@
   "@getOneNow": {
     "description": "Text for a button that allows the user to purchase a Brine device."
   },
+  "heightMeasurementTitle": "Height Measurement",
+  "@heightMeasurementTitle": {
+    "description": "Title for the screen where the user can measure the height of their water softener."
+  },
   "installationTitle": "Install Brine",
   "@installationTitle": {
     "description": "Title for the screen presenting the installation instructions for the Brine device."
@@ -115,6 +119,10 @@
   "@salesPrompt": {
     "description": "Marketing prompt text inviting the user to purchase a Brine device."
   },
+  "saveText": "Save",
+  "@saveText": {
+    "description": "Text for a button that allows the user to save changes."
+  },
   "submit": "Submit",
   "@submit": {
     "description": "Text for a button that allows the user to submit a form."
@@ -126,6 +134,10 @@
   "username": "Username (email)",
   "@username": {
     "description": "Label for the field where the user must enter their username."
+  },
+  "waterSoftenerHeight": "Water softener height",
+  "@waterSoftenerHeight": {
+    "description": "Label for field used to collect the height of the water softener."
   },
   "wifiSetup": "WiFi Setup",
   "@wifiSetup": {
