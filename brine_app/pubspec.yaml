@@ -13,25 +13,25 @@ dependencies:
     sdk: flutter
 
   # Used to access Firestore
-  cloud_firestore: ^4.17.4
+  cloud_firestore: ^5.2.1
   # Used to call Firebase callable functions
-  cloud_functions: ^4.7.5
+  cloud_functions: ^5.0.4
   # Flutter plugin for interacting with BLE devices
-  flutter_splendid_ble: ^0.11.0
+  flutter_splendid_ble: ^0.11.3
   # Used to display SVG assets
   flutter_svg: ^2.0.10+1
   # Provides additional icons beyond the Material icons
   font_awesome_flutter: ^10.7.0
   # Used to track user interactions, app usage, and events
-  firebase_analytics: ^10.10.6
+  firebase_analytics: ^11.2.1
   # Protects backend resources
-  firebase_app_check: ^0.2.2+6
+  firebase_app_check: ^0.3.0+4
   # Enables the use of Firebase services
-  firebase_core: ^2.31.1
+  firebase_core: ^3.3.0
   # Reports errors to the Firebase console
-  firebase_crashlytics: ^3.5.6
+  firebase_crashlytics: ^4.0.4
   # Firebase Auth services
-  firebase_auth: ^4.19.6
+  firebase_auth: ^5.1.4
   # Used to get Google Fonts font styles
   google_fonts: ^6.2.1
   # Allows authentication using a Google account
@@ -42,11 +42,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   # API for making REST API requests
-  http: ^1.2.1
+  http: ^1.2.2
   # Used for internationalization
   intl: ^0.19.0
-  # Lint rules for Dart and Flutter used internally at Very Good Ventures
-  very_good_analysis: ^5.1.0
 
 dependency_overrides:
   web: ^0.5.0
@@ -55,6 +53,8 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
+  # Lint rules for Dart and Flutter used internally at Very Good Ventures
+  very_good_analysis: ^6.0.0
 
 flutter:
   uses-material-design: true

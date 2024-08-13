@@ -1,4 +1,3 @@
-import 'package:brine/services/device_management/firebase_emulators.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -7,9 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'brine_app.dart';
 import 'firebase_options.dart';
+import 'services/device_management/firebase_emulators.dart';
 
 /// The entry point of the application.
 ///
