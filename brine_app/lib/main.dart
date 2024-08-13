@@ -32,8 +32,12 @@ Future<void> main() async {
     await FirebaseAppCheck.instance.activate();
   }
 
+  // Get the use_emulator boolean from the `flutter run` command to determine if the Firebase Emulator Suite should
+  // be used. The `fromEnvironment` method returns false by default if the argument is not passed.
+  const bool useFirebaseEmulator = bool.fromEnvironment('USE_FIREBASE_EMULATOR');
+
   // In debug mode, use the Firebase local emulator.
-  if (kDebugMode) {
+  if (kDebugMode && useFirebaseEmulator) {
     try {
       FirebaseFirestore.instance.useFirestoreEmulator(devMachineIP, 8080);
       await FirebaseAuth.instance.useAuthEmulator(devMachineIP, 9099);
