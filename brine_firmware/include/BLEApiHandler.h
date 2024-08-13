@@ -2,6 +2,7 @@
 #define BLEAPIHANDLER_H
 
 #include "DebugService.h"
+#include "FirebaseService.h"
 #include "WiFiService.h"
 #include <ArduinoJson.h>
 #include <set>
@@ -11,15 +12,19 @@
  * @class BLEApiHandler
  * @brief A class to handle JSON-based API commands over BLE.
  *
- * The BLEApiHandler class is responsible for parsing and processing JSON commands
- * received over Bluetooth Low Energy (BLE) and generating appropriate JSON responses.
- * This class enables the IoT device to communicate with a central device using a
- * structured JSON-based protocol, allowing for flexible and extensible command handling.
+ * The BLEApiHandler class is responsible for parsing and processing JSON commands received over Bluetooth Low Energy 
+ * (BLE) and generating appropriate JSON responses. This class enables the IoT device to communicate with a central 
+ * device using a structured JSON-based protocol, allowing for flexible and extensible command handling.
+ * 
+ * Depending upon the command received, the BLEApiHandler class can perform various operations such as retrieving the
+ * device ID, scanning for available WiFi networks, connecting to a specific WiFi network, and more. To accomplish
+ * these tasks, this class interacts with different service classes such as `WiFiService`, `FirebaseService`, and
+ * 'DeviceName' to perform the required operations.
  *
  * @details
- * The BLEApiHandler class processes incoming JSON commands and generates responses
- * based on the requested operations. The primary function of the class is to handle
- * specific commands and return JSON responses that the central device can interpret.
+ * The `BLEApiHandler` class processes incoming JSON commands and generates responses based on the requested operations. 
+ * The primary function of the class is to handle specific commands and return JSON responses that the central device 
+ * can interpret.
  *
  * Example JSON command format:
  * @code
@@ -53,6 +58,14 @@ private:
    * methods for scanning for available networks and connecting to a specific network.
    */
   WiFiService *wifiService;
+
+  /**
+   * @brief Pointer to the FirebaseService instance.
+   *
+   * The FirebaseService instance is used to interact with the Firebase backend. The FirebaseService class provides
+   * methods for uploading sensor data to Firebase using HTTP POST requests.
+   */
+  FirebaseService *firebaseService;
 
 public:
   BLEApiHandler() {}
@@ -171,7 +184,7 @@ private:
 
     // Connect to the specified WiFi network.
     bool connected = WiFiService::connectToNetwork(ssid, password);
-    
+
     // Check if the connection was successful
     if (connected) {
       DebugService::getInstance().debugPrint("Connected to WiFi network: ");
@@ -186,7 +199,9 @@ private:
       serializeJson(responseDoc, jsonResponse);
 
       return jsonResponse;
-    } else {
+    }
+    // If the connection failed, return an error response.
+    else {
       DebugService::getInstance().debugPrint("Failed to connect to WiFi network: ");
       DebugService::getInstance().debugPrintln(ssid);
 
