@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'screens/authentication/onboarding/onboarding_route.dart';
 import 'screens/setup/setup_route.dart';
-import 'theme/themes.dart';
+import 'theme/brine_app_theme.dart';
 
 /// The entry point of the application.
 ///
