@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'brine_app.dart';
 import 'firebase_options.dart';
-import 'services/device_management/firebase_emulators.dart';
+import 'services/firebase_emulator/dev_machine_ip.dart';
 
 /// The entry point of the application.
 ///

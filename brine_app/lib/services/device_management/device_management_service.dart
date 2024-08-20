@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
-import 'firebase_emulators.dart';
+import '../firebase_emulator/dev_machine_ip.dart';
 import 'models/brine_device.dart';
 
 /// A service class for managing Brine IoT devices.
