@@ -1,44 +1,118 @@
-const admin = require('./adminInit.cjs');
+/**
+ * @file index.cjs
+ * @brief Entry point for Firebase Cloud Functions.
+ *
+ * This file defines a series of HTTP endpoints for the Firebase Cloud Functions. Each endpoint calls a corresponding 
+ * function that encapsulates the business logic for that endpoint. The separate function files are used to modularize 
+ * and organize the code, making it easier to manage and maintain.
+ *
+ * @note The function files contain the actual implementation of the logic, 
+ * keeping this file clean and focused on defining the endpoints.
+ */
 
+// Import the Firebase configuration and initialize the Firebase Admin SDK.
+const admin = require('./config/adminInit.cjs');
+
+// Import the Firebase Functions modules.
 const { onRequest } = require("firebase-functions/v2/https");
 const functions = require('firebase-functions');
 
-// Import the `createUser` function.
-const { createUser } = require('./src/createUser.cjs');
+// Imort the authentication middleware function that verifies the Firebase ID token.
+const authenticate = require('./middleware/authMiddleware.cjs');
 
-/// A function that triggers when a new user is created.
+// Import the functions that handle the business logic for each endpoint. Each of these imported files contains one or
+// more functions that implements the logic for the corresponding endpoint.
+const { createUser } = require('./src/createUser.cjs');
+const { getUserDevices } = require('./src/getUserDevices.cjs');
+const { updateDeviceLevels } = require('./src/updateDeviceLevels.cjs');
+const { getDeviceLevels } = require('./src/getDeviceLevels.cjs');
+const { addDeviceToUser } = require('./src/addDeviceToUser.cjs');
+const { updateApplianceHeight } = require('./src/updateApplianceHeight.cjs');
+
+/**
+ * @brief Cloud Function that is triggered when a new user is created.
+ * 
+ * This function is triggered automatically when a new user is created using  Firebase Authentication. It creates a new
+ * document in the "users" collection in Firestore to store the user's information.
+ * 
+ * @param {Object} user The user object containing the user's information.
+ */
 exports.createUserDocument = functions.auth.user().onCreate((user) => {
     createUser(user);
 });
 
-// Import the `getUserDevicesHttp` function.
-const { getUserDevicesHttp } = require('./src/getUserDevicesHttp.cjs');
-
-// Call the `getUserDevicesHttp` function as an HTTP request.
-exports.getUserDevicesHttp = functions.https.onRequest(async (req, res) => {
-    getUserDevicesHttp(req, res);
+/**
+ * @brief Endpoint used to add a device to the user's account.
+ * 
+ * This endpoint is called by the mobile app during the provisioning process to add a new device to the user's account. 
+ * The function creates a new document in the "devices" collection and adds the device ID to the user's list of devices 
+ * in the "users" collection.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.addDeviceToUser = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        addDeviceToUser(req, res);
+    });
 });
 
-// Import the `updateDeviceLevels` function.
-const { updateDeviceLevels } = require('./src/updateDeviceLevels.cjs');
+/**
+ * @brief Endpoint used to get a list of Brine devices on the user's account.
+ * 
+ * This endpoint is called by the mobile app to retrieve a list of devices that are associated with the user's account. 
+ * The function retrieves the list of devices from the Firestore database and returns it as a JSON response.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.getUserDevices = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        getUserDevices(req, res);
+    });
+});
 
-// Call the `updateDeviceLevels` function as an HTTP request.
+/**
+ * @brief Endpoint used to update the levels of a device.
+ * 
+ * This endpoint is called by the IoT device to update the salt and battery levels for the device in the Firestore 
+ * database. The function receives the device ID and the new levels in the request body, updates the document in
+ * the "devices" collection, and sends a success response.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
 exports.updateDeviceLevels = onRequest(async (req, res) => {
     updateDeviceLevels(req, res);
 });
 
-// Import the `getDeviceLevelsHttp` function.
-const { getDeviceLevelsHttp } = require('./src/getDeviceLevelsHttp.cjs');
-
-// Call the `getDeviceLevelsHttp` as an HTTP request.
-exports.getDeviceLevelsHttp = functions.https.onRequest(async (req, res) => {
-    getDeviceLevelsHttp(req, res);
+/**
+ * @brief Endpoint used to get the levels of a device.
+ * 
+ * This endpoint is called by the mobile app to retrieve the salt and battery levels for a specific device. The 
+ * function retrieves the device document from the Firestore database and returns the levels as a JSON response.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.getDeviceLevels = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        getDeviceLevels(req, res);
+    });
 });
 
-// Import the `addDeviceToUser` function.
-const { addDeviceToUser } = require('./src/addDeviceToUser.cjs');
-
-// Call the `addDeviceToUser` function as an HTTP request.
-exports.addDeviceToUser = functions.https.onRequest(async (req, res) => {
-    addDeviceToUser(req, res);
+/**
+ * @brief Endpoint used to update the appliance height for a device.
+ * 
+ * This endpoint is called by the mobile app to update the appliance height for a water softener equipped with a Brine
+ * monitor. The function receives the device ID and the new height in the request body, updates the document in the
+ * "devices" collection, and sends a success response.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.updateApplianceHeight = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        updateApplianceHeight(req, res);
+    });
 });

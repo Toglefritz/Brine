@@ -1,6 +1,6 @@
-const admin = require('../adminInit.cjs');
-
 /**
+ * @brief Updates the appliance height for a water softener equipped with a Brine monitor.
+ * 
  * This function updates the appliance height for a water softener equipped with a Brine monitor in a Firestore 
  * document. The function expects a PATCH request containing the device ID of the Brine device for which the host
  * appliance height, and the new height of the appliance in millimeters. The request body should contain a JSON object 
@@ -29,42 +29,74 @@ const admin = require('../adminInit.cjs');
  * }
  */
 async function updateApplianceHeight(req, res) {
-    // Check if the request method is PATCH. A PATCH request is used for this function because it is updating a 
-    // specific field of the resource.
-    if (req.method !== 'PATCH') {
-        res.status(400).send('Please send a PATCH request.');
+    // Get the user ID from the request, which was attached by the authenticate middleware.
+    const userUid = req.user.uid;
+
+    // Parse the request body to get the device ID
+    const deviceId = req.query.deviceId;
+    if (!deviceId) {
+        res.status(400).send('Device ID must be provided');
         return;
     }
 
-    // Verify the Firebase ID token in the Authorization header.
-    try {
-        await verifyIdToken(req);
-    } catch (error) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
-
-    // Get the parameters from the request
-    const deviceId = req.body.device_id;
+    // Extract the appliance height from the request body
     const applianceHeight = req.body.appliance_height;
 
-    // Note: The last updated timestamp is not updated with this request because that field is intended to express 
-    // when the battery and salt levels were last updated. The appliance height is not expected to change frequently.
-
-    // Validate the input data
-    if (!deviceId || typeof applianceHeight === 'undefined') {
-        res.status(400).send('Device ID and appliance height are required.');
+    // Check if the appliance height is provided
+    if (!applianceHeight) {
+        res.status(400).send('Appliance height must be provided');
         return;
     }
 
-    // Update the Firestore document
     try {
-        await admin.firestore().collection('devices').doc(deviceId).update({
-            'appliance_height': applianceHeight,
-        });
-        res.status(200).send({ result: 'Appliance height updated successfully.' });
+        // Get the user document from Firestore.
+        const userDocRef = admin.firestore().collection("users").doc(userUid);
+        const userDocSnapshot = await userDocRef.get();
+
+        // Check if the user document exists.
+        if (!userDocSnapshot.exists) {
+            res.status(404).send('User not found');
+
+            return;
+        }
+
+        // Check if the user has access to the specified device by checking if the device ID is in the user's list of 
+        // devices.
+        const userDevices = userDocSnapshot.get("devices");
+        if (!userDevices.includes(deviceId)) {
+            res.status(403).send('User does not have access to the specified device');
+
+            return;
+        }
+
+        // Get the device document from Firestore
+        const deviceDocRef = admin.firestore().collection("devices").doc(deviceId);
+        const deviceDocSnapshot = await deviceDocRef.get();
+
+        // Check if the device document exists.
+        if (!deviceDocSnapshot.exists) {
+            res.status(404).send('Device not found');
+
+            return;
+        }
+
+        // Update the appliance height in the device document
+        try {
+            // Update the appliance height in the device document
+            await deviceDocRef.update({ appliance_height: applianceHeight });
+
+            // Return a success message
+            res.status(200).json({ result: 'Appliance height updated successfully' });
+        }
+        catch (error) {
+            // If an error occurs, log it and return an internal server error.
+            console.error("Error updating appliance height:", error);
+            res.status(500).send('Internal Server Errorr');
+        }
     } catch (error) {
-        res.status(500).send({ error: 'An error occurred while updating the appliance height.' });
+        // If an error occurs, log it and return an internal server error.
+        console.error("Error getting device levels:", error);
+        res.status(500).send('Internal Server Error');
     }
 }
 

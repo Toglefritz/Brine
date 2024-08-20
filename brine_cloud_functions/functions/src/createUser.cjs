@@ -1,4 +1,4 @@
-const admin = require('../adminInit.cjs');
+const admin = require('../config/adminInit.cjs');
 
 /**
  * Calls the 'createUser' Firebase Cloud Function to create a new user  document in Firestore.
@@ -10,6 +10,7 @@ const admin = require('../adminInit.cjs');
  * An empty devices array is also added to the document.
  */
 async function createUser(user) {
+    // Get the user's UID from the user object.
     const uid = user.uid;
 
     try {

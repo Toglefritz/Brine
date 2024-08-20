@@ -1,4 +1,4 @@
-const admin = require('../adminInit.cjs');
+const admin = require('../config/adminInit.cjs');
 
 /**
  * This function updates the battery level and salt level of a device in a Firestore document. The function expects a 
@@ -16,7 +16,6 @@ const admin = require('../adminInit.cjs');
  * Example usage:
  *
  * POST /updateDeviceLevels HTTP/1.1
- * Host: REGION-YOUR_PROJECT_ID.cloudfunctions.net
  * Content-Type: application/json
  *
  * {
@@ -26,13 +25,6 @@ const admin = require('../adminInit.cjs');
  * }
  */
 async function updateDeviceLevels(req, res) {
-    // Check if the request method is POST. A POST request is used for this function because it is
-    // seen as creating a new state for the resource.
-    if (req.method !== 'POST') {
-        res.status(400).send('Please send a POST request.');
-        return;
-    }
-
     // TODO(Toglefritz): Perform an authentication check using the public key for the Brine device
     // to verify that the request is coming from the same device for which the levels are being updated.
 
@@ -57,9 +49,9 @@ async function updateDeviceLevels(req, res) {
             'salt_level': saltLevel,
             'last_updated': lastUpdated,
         });
-        res.status(200).send({ result: 'Device levels updated successfully.' });
+        res.status(200).send('Device levels updated successfully.');
     } catch (error) {
-        res.status(500).send({ error: 'An error occurred while updating the device levels.' });
+        res.status(500).send('An error occurred while updating the device levels.');
     }
 }
 

@@ -1,7 +1,7 @@
-const admin = require('../adminInit.cjs');
+const admin = require('../config/adminInit.cjs');
 
 /**
- * Adds a device to the user's list of devices and creates a record for the device itself.
+ * @brief Adds a device to the user's list of devices and creates a record for the device itself.
  * 
  * In the Brine Firestore database, each user has a document in the "users" collection with a list of devices that 
  * are associated to their account. For example,
@@ -37,45 +37,47 @@ const admin = require('../adminInit.cjs');
  * token in the Authorization header to get the UID of the user. It then retrieves the user document from Firestore and
  * adds the device to the list of devices. Finally, checks if the device already exists in the "devices" collection and
  * creates a new record if it doesn't.
+ *
+ *
+ * Example usage:
+ * 
+ * POST /addDeviceToUser
+ * {
+ *  "deviceId": "vast_teal_elephant",
+ *  "deviceName": "7b67"
+ * }
  */
 async function addDeviceToUser(req, res) {
-    // Check for the Authorization header
-    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
-        console.error('Authorization header not found');
-        res.status(401).send('Unauthorized');
-
-        return;
-    }
-
-    // Extract the Firebase Auth ID token, verify it, and get the UID
-    var decodedToken = null;
-    try {
-        // Get the ID token from the Authorization header
-        const idToken = req.headers.authorization.split('Bearer ')[1];
-
-        // Verify the ID token and get the UID
-        decodedToken = await admin.auth().verifyIdToken(idToken);
-    } catch (error) {
-        console.error('Error verifying Firebase ID token:', error);
-        res.status(401).send('Unauthorized');
-    }
+    // Get the user ID from the request, which was attached by the authenticate 
+    // middleware.
+    const userUid = req.user.uid;
 
     // Extract the device ID and device name from the request
     const deviceId = req.body.deviceId;
     const deviceName = req.body.deviceName;
+
+    // Check if the device ID and device name are provided.
     if (!deviceId) {
         console.error('Device ID is required');
         res.status(400).send('Device ID is required');
+
+        return;
     } else if (!deviceName) {
         console.error('Device name is required');
         res.status(400).send('Device name is required');
+
+        return;
     }
 
-    // Add the device to the user's list of devices
-    try {
-        // Get the user UID from the token
-        const userUid = decodedToken.uid;
+    // Check if userUid is a valid non-empty string
+    if (!userUid || typeof userUid !== 'string') {
+        res.status(400).send('The user UID is missing or invalid.');
 
+        return;
+    }
+
+    // Step 1: Add the device to the user's list of devices.
+    try {
         // Get the user document from Firestore
         const userDocRef = admin.firestore().collection('users').doc(userUid);
         const userDocSnapshot = await userDocRef.get();
@@ -88,22 +90,36 @@ async function addDeviceToUser(req, res) {
             return;
         }
 
-        // Add the device to the user's list of devices
+        // Get the existing list of devices from the user document.
         const devices = userDocSnapshot.get('devices') || [];
-        devices.push(deviceId);
-        await userDocRef.update({ devices: devices });
+
+        // Check if the device is already in the user's list of devices. If it is, return a success message.
+        if (devices.includes(deviceId)) {
+            console.log('Device already added to user');
+
+            // Simply continue to the next step if the device is already in the list.
+        }
+        // Othereise, add the device to the list of devices.
+        else {
+            devices.push(deviceId);
+            await userDocRef.update({ devices: devices });
+        }
     } catch (error) {
+        // If an error occurs, log it and return an internal server error.
         console.error('Error adding device to user:', error);
         res.status(500).send('Internal Server Error');
+
+        return;
     }
 
-    // Check if the device already exists in the "devices" collection
+
+    // Step 2: Create a record for the device in the "devices" collection.
     try {
         // Get the device document from Firestore
         const deviceDocRef = admin.firestore().collection('devices').doc(deviceId);
         const deviceDocSnapshot = await deviceDocRef.get();
 
-        // If the device does not exist, create a new record for it. The battery level, salt level, and appliance 
+        // If the device does not exist, create a new record for it. The battery level, salt level, and appliance
         // height are all set to -1 initially to indicate that they are unknown.
         if (!deviceDocSnapshot.exists) {
             await deviceDocRef.set({
@@ -118,15 +134,22 @@ async function addDeviceToUser(req, res) {
             // Return a success message
             console.log('Device added successfully and record created in devices collection');
             res.status(200).send('Device added successfully');
+
+            return;
         }
-        // If the device already exists, return a success message
+        // If the device already exists, return a success message, allowing the function to complete gracefully.
         else {
             console.log('Device already exists');
             res.status(200).send('Device added successfully with existing record in devices collection');
+
+            return;
         }
     } catch (error) {
+        // If an error occurs, log it and return an internal server error.
         console.error('Error adding device to devices collection:', error);
         res.status(500).send('Internal Server Error');
+
+        return;
     }
 }
 
