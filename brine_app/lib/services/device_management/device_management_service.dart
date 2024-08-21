@@ -15,6 +15,12 @@ import 'models/brine_device.dart';
 /// device information such as device IDs, and levels of salt and battery. All of this information about the devices
 /// is stored in Firestore.
 class DeviceManagementService {
+  /// The Firebase Auth [User] object representing the current user.
+  final User user;
+
+  /// Creates an instance of the [DeviceManagementService] class with the specified [user].
+  DeviceManagementService({required this.user});
+
   static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : '';  // TODO(Toglefritz): update prod host
 
   /// The base URL for all endpoints used by this service.
@@ -49,14 +55,8 @@ class DeviceManagementService {
   ///
   /// The [addDeviceToAccount] function takes a [deviceId] and [deviceName] as parameters. The [deviceId] is the unique
   /// identifier for the Brine device, and the [deviceName] is a value derived from the device's BLE advertisement data.
-  static Future<void> addDeviceToAccount({required String deviceId, required String deviceName}) async {
+  Future<void> addDeviceToAccount({required String deviceId, required String deviceName}) async {
     try {
-      // Get the current user
-      final User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception('User is not authenticated');
-      }
-
       // Get the user's ID token
       final String? idToken = await user.getIdToken();
 
@@ -86,6 +86,7 @@ class DeviceManagementService {
       }
     } catch (e) {
       debugPrint('Failed to associate the device with exception, $e');
+
       throw Exception('Failed to associate the device with exception, $e');
     }
   }
@@ -94,14 +95,8 @@ class DeviceManagementService {
   /// know the height of the water softener. This allows the distance measurements from the Brine device to be
   /// translated into a percentage of remaining salt in the water softener. This function sends the height of the
   /// water softener to the Firestore backend where it is stored and used in the calculation.
-  static Future<void> updateApplianceHeight({required String deviceId, required int height}) async {
+  Future<void> updateApplianceHeight({required String deviceId, required int height}) async {
     try {
-      // Get the current user
-      final User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception('User is not authenticated');
-      }
-
       // Get the user's ID token
       final String? idToken = await user.getIdToken();
 
@@ -138,14 +133,8 @@ class DeviceManagementService {
   /// Calls the *getUserDevicesHttp* endpoint to retrieve the list of devices for the current user. Assumes the user
   /// is already authenticated with Firebase Auth. Returns a list of devices or throws an exception if an error occurs.
   // TODO(Toglefritz): update this method to call the getDeviceLevels function and return a list of BrineDevice instead
-  static Future<List<String>> getUserDevicesHttp() async {
+  Future<List<String>> getUserDevices() async {
     try {
-      // Get the current user
-      final User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception('User is not authenticated');
-      }
-
       // Get the user's ID token
       final String? idToken = await user.getIdToken();
 
@@ -161,21 +150,21 @@ class DeviceManagementService {
 
       // Check the response status code
       if (response.statusCode == HttpStatus.ok) {
-        debugPrint('Successfully got user devices: ${response.body}');
+        debugPrint('Successfully got user deviceIds: ${response.body}');
 
         // Parse the response body
         final Map<String, dynamic> devicesJson = json.decode(response.body) as Map<String, dynamic>;
-        final List<String> devices = List<String>.from(devicesJson['devices'] as List<dynamic>);
+        final List<String> deviceIds = List<String>.from(devicesJson['deviceIds'] as List<dynamic>);
 
-        return devices;
+        return deviceIds;
       } else {
         // Handle errors or unexpected status codes
-        throw Exception('Failed to load devices: ${response.reasonPhrase}');
+        throw Exception('Failed to load deviceIds: ${response.reasonPhrase}');
       }
     } catch (e) {
       // Handle any exceptions
-      debugPrint('Failed to get user devices with exception, $e');
-      throw Exception('Error getting devices: $e');
+      debugPrint('Failed to get user deviceIds with exception, $e');
+      throw Exception('Error getting deviceIds: $e');
     }
   }
 
@@ -191,14 +180,8 @@ class DeviceManagementService {
   ///
   /// It throws an error if there is an issue while calling the Firebase function, such as an unauthenticated user or
   /// lack of access to the specified device.
-  static Future<BrineDevice> getDeviceLevels(String deviceId) async {
+  Future<BrineDevice> getDeviceLevels(String deviceId) async {
     try {
-      // Get the current user
-      final User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception('User is not authenticated');
-      }
-
       // Get the user's ID token
       final String? idToken = await user.getIdToken();
 
@@ -219,18 +202,8 @@ class DeviceManagementService {
         // Parse the JSON response
         final Map<String, dynamic> data = json.decode(response.body) as Map<String, dynamic>;
 
-        final double saltLevel =
-            data['salt_level'] is int ? (data['salt_level'] as int).toDouble() : data['salt_level'] as double;
-        final double batteryLevel =
-            data['battery_level'] is int ? (data['battery_level'] as int).toDouble() : data['battery_level'] as double;
-
         // Construct and return the BrineDevice object
-        return BrineDevice(
-          deviceId: deviceId,
-          saltLevel: saltLevel,
-          batteryLevel: batteryLevel,
-          retrievalTimestamp: DateTime.now(),
-        );
+        return BrineDevice.fromJson(data);
       } else {
         throw Exception('Failed to load device levels: ${response.reasonPhrase}');
       }

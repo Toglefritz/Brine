@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../services/device_management/device_management_service.dart';
@@ -18,7 +19,11 @@ class AssociationController extends State<AssociationRoute> {
   /// Attempt to associate the Brine device with the user's account.
   Future<void> _associateDevice() async {
     try {
-      await DeviceManagementService.addDeviceToAccount(
+      // Get the current user.
+      final User user = FirebaseAuth.instance.currentUser!;
+
+      // Add the device to the user's account.
+      await DeviceManagementService(user: user).addDeviceToAccount(
         deviceId: widget.deviceId,
         deviceName: widget.deviceName,
       );

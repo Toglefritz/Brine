@@ -68,11 +68,18 @@ class SetupController extends State<SetupRoute> {
     final List<BrineDevice> deviceList = [];
 
     try {
-      // Get the device's on the user's account
-      final List<String> deviceIdList = await DeviceManagementService.getUserDevicesHttp();
+      // Get the current user.
+      final User user = FirebaseAuth.instance.currentUser!;
 
+      // Get an instance of the device management service for the current user.
+      final DeviceManagementService deviceManagementService = DeviceManagementService(user: user);
+
+      // Get the device's on the user's account.
+      final List<String> deviceIdList = await deviceManagementService.getUserDevices();
+
+      // Get the salt and battery levels for each device.
       for (final String deviceId in deviceIdList) {
-        final BrineDevice device = await DeviceManagementService.getDeviceLevels(deviceId);
+        final BrineDevice device = await deviceManagementService.getDeviceLevels(deviceId);
         deviceList.add(device);
       }
     } catch (e) {

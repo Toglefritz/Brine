@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/unit_of_measurement.dart';
@@ -41,7 +42,11 @@ class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
       // Convert the height to the millimeters to match the output unit of the distance sensor.
       final int height = _convertToMillimeters(rawHeight);
 
-      DeviceManagementService.updateApplianceHeight(
+      // Get the current user.
+      final User user = FirebaseAuth.instance.currentUser!;
+
+      // Update the appliance height in the database.
+      DeviceManagementService(user: user).updateApplianceHeight(
         deviceId: widget.deviceId,
         height: height,
       );
