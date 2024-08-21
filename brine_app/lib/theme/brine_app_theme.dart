@@ -58,8 +58,7 @@ class BrineAppTheme {
       selectionHandleColor: Color(0xFFEDA200),
     ),
     inputDecorationTheme: const InputDecorationTheme(
-      hoverColor: Colors.white,
-      focusColor: Colors.white,
+      focusColor: Colors.white10,
     ),
   ).copyWith(
     extensions: <ThemeExtension<dynamic>>[
