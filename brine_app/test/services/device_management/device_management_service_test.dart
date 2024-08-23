@@ -21,6 +21,7 @@ void main() {
   group('DeviceManagementService', () {
     /// This group contains tests for the `addDeviceToAccount` method.
     group('addDeviceToAccount', () {
+      /// This test verifies that the `addDeviceToAccount` method successfully adds the device to the user account.
       test('should successfully add the device to the user account', () async {
         // Set up the mock response body.
         final Map<String, dynamic> responseBody = {
@@ -64,6 +65,7 @@ void main() {
 
     /// This group contains tests for the `updateApplianceHeight` method.
     group('updateApplianceHeight', () {
+      /// This test verifies that the `updateApplianceHeight` method successfully updates the appliance height.
       test('should successfully update the appliance height', () async {
         // Set up the mock response body.
         final Map<String, dynamic> responseBody = {
@@ -107,6 +109,7 @@ void main() {
 
     /// This group contains tests for the `getUserDevices` method.
     group('getUserDevices', () {
+      /// This test verifies that the `getUserDevices` method successfully retrieves the user's devices.
       test('should successfully retrieve the user\'s devices', () async {
         // Set up the mock response body.
         final Map<String, dynamic> responseBody = {
@@ -150,6 +153,7 @@ void main() {
 
     /// This group contains tests for the `getDeviceLevels` method.
     group('getDeviceLevels', () {
+      /// This test verifies that the `getDeviceLevels` method successfully retrieves the device levels.
       test('should successfully retrieve the device levels', () async {
         // Set up the mock response body.
         final Map<String, dynamic> responseBody = {
