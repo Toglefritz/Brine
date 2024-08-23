@@ -1,4 +1,4 @@
-import '../../extensions/json.dart';
+import '../../../extensions/json.dart';
 import 'device_id_response.dart';
 import 'error_response.dart';
 import 'response_type.dart';

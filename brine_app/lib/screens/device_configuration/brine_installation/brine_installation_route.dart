@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/ble/ble_communication_manager.dart';
+import '../../../services/ble/ble_communication_service.dart';
 import 'brine_installation_controller.dart';
 
 /// This route route presents instructions to the user for installing a Brine device in their water softener. This is
@@ -15,8 +15,8 @@ class BrineInstallationRoute extends StatefulWidget {
     super.key,
   });
 
-  /// A [BleCommunicationManager] instance that manages the communication between the app and the Brine device.
-  final BleCommunicationManager bleCommunicationManager;
+  /// A [BleCommunicationService] instance that manages the communication between the app and the Brine device.
+  final BleCommunicationService bleCommunicationManager;
 
   /// The Brine BLE device that is the target of the provisioning flow.
   final String deviceId;

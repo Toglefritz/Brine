@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/ble/ble_communication_manager.dart';
+import '../../../services/ble/ble_communication_service.dart';
 import 'wifi_connection_controller.dart';
 
 /// This route accepts the SSID and password of a WiFi network to which the Brine monitor should connect and
@@ -23,8 +23,8 @@ class WiFiConnectionRoute extends StatefulWidget {
     super.key,
   });
 
-  /// A [BleCommunicationManager] instance that manages the communication between the app and the Brine device.
-  final BleCommunicationManager bleCommunicationManager;
+  /// A [BleCommunicationService] instance that manages the communication between the app and the Brine device.
+  final BleCommunicationService bleCommunicationManager;
 
   /// The SSID of the network to which the Brine monitor should connect. This route will send this SSID, along with
   /// the [password] to the Brine monitor. The Brine monitor will attempt to connect to this network and return a

@@ -37,9 +37,9 @@ import '../../extensions/json.dart';
 /// requiring manual read requests to be sent after each write request to check the status of the Brine device, because
 /// race conditions in which the app will not know when the Brine device has finished processing a command can be
 /// avoided.
-class BleCommunicationManager {
-  /// Creates an instance of [BleCommunicationManager] and subscribes to the characteristic of the Brine device.
-  BleCommunicationManager({required this.characteristic}) {
+class BleCommunicationService {
+  /// Creates an instance of [BleCommunicationService] and subscribes to the characteristic of the Brine device.
+  BleCommunicationService({required this.characteristic}) {
     // Subscribe to the characteristic so that the app can receive updates from the Brine device.
     _subscribeToCharacteristic();
   }

@@ -8,11 +8,11 @@ import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import '../../../extensions/json.dart';
-import '../../../services/ble/ble_communication_manager.dart';
-import '../../../services/ble/command.dart';
-import '../../../services/ble/command_type.dart';
-import '../../../services/ble/device_id_response.dart';
-import '../../../services/ble/response.dart';
+import '../../../services/ble/ble_communication_service.dart';
+import '../../../services/ble/models/command.dart';
+import '../../../services/ble/models/command_type.dart';
+import '../../../services/ble/models/device_id_response.dart';
+import '../../../services/ble/models/response.dart';
 import '../association/association_route.dart';
 import 'device_connection_route.dart';
 import 'device_connection_view.dart';
@@ -28,11 +28,11 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// A [StreamSubscription] used to listen for discovered services.
   StreamSubscription<List<BleService>>? _servicesDiscoveredStream;
 
-  /// An instance of [BleCommunicationManager] that will be created by this controller after a connection has been
+  /// An instance of [BleCommunicationService] that will be created by this controller after a connection has been
   /// established with the Brine device and service discovery has been performed. This instance will be passed to
   /// subsequent steps in the provisioning process so they can use the centrally-established characteristic
   /// subscription.
-  late BleCommunicationManager? _bleCommunicationManager;
+  late BleCommunicationService? _bleCommunicationManager;
 
   @override
   void initState() {
@@ -108,7 +108,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// Subscribes to the single characteristic available from Brine devices.
   void _createBleCommunicationManager(BleCharacteristic characteristic) {
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
-    _bleCommunicationManager = BleCommunicationManager(characteristic: characteristic);
+    _bleCommunicationManager = BleCommunicationService(characteristic: characteristic);
 
     // Register a callback for changes in the value of the characteristic.
     _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);

@@ -57,13 +57,13 @@ class DarkOnboardingButton extends StatelessWidget {
           child: Row(
             children: [
               if (loading ?? false)
-                Padding(
-                  padding: const EdgeInsets.only(left: Insets.small),
+                const Padding(
+                  padding: EdgeInsets.only(left: Insets.small),
                   child: SizedBox(
                     width: 16,
                     height: 16,
                     child: CircularProgressIndicator(
-                      color: Theme.of(context).primaryColorLight,
+                      color: Colors.white,
                       strokeWidth: 3,
                     ),
                   ),

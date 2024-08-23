@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/ble/ble_communication_manager.dart';
+import '../../../services/ble/ble_communication_service.dart';
 import 'wifi_setup_controller.dart';
 
 /// Sends a command to the Brine monitor to have it perform a scan for available WiFi networks. Then displays a list of
@@ -21,8 +21,8 @@ class WiFiSetupRoute extends StatefulWidget {
     super.key,
   });
 
-  /// A [BleCommunicationManager] instance that manages the communication between the app and the Brine device.
-  final BleCommunicationManager bleCommunicationManager;
+  /// A [BleCommunicationService] instance that manages the communication between the app and the Brine device.
+  final BleCommunicationService bleCommunicationManager;
 
   /// The Brine BLE device that is the target of the provisioning flow.
   final String deviceId;

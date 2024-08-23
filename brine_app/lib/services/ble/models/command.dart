@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../extensions/json.dart';
+import '../../../extensions/json.dart';
 import 'command_type.dart';
 
 /// Represents a command sent to the Brine BLE device.
