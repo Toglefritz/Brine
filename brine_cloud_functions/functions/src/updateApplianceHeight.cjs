@@ -1,3 +1,5 @@
+const admin = require('../config/adminInit.cjs');
+
 /**
  * @brief Updates the appliance height for a water softener equipped with a Brine monitor.
  * 
@@ -33,14 +35,14 @@ async function updateApplianceHeight(req, res) {
     const userUid = req.user.uid;
 
     // Parse the request body to get the device ID
-    const deviceId = req.query.deviceId;
+    const deviceId = req.body.deviceId;
     if (!deviceId) {
         res.status(400).send('Device ID must be provided');
         return;
     }
 
     // Extract the appliance height from the request body
-    const applianceHeight = req.body.appliance_height;
+    const applianceHeight = req.body.applianceHeight;
 
     // Check if the appliance height is provided
     if (!applianceHeight) {
@@ -86,7 +88,7 @@ async function updateApplianceHeight(req, res) {
             await deviceDocRef.update({ appliance_height: applianceHeight });
 
             // Return a success message
-            res.status(200).json({ result: 'Appliance height updated successfully' });
+            res.status(200).json('Appliance height updated successfully');
         }
         catch (error) {
             // If an error occurs, log it and return an internal server error.
