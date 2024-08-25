@@ -55,11 +55,13 @@ const { getAuth } = require('firebase-admin/auth');
  */
 const authenticate = async (req, res, next) => {
   // If this function is running in the Firebase Emulator Suite, skip
-  // authentication.
-  if (process.env.FUNCTIONS_EMULATOR === 'true') {
+  // authentication if the Authorization header is missing. This allows the
+  // user ID to be passed in a header for testing purposes.
+  if (process.env.FUNCTIONS_EMULATOR === 'true' && !req.headers.authorization) {
     // When running in the emulator, the user ID is expected to be passed
     // in a header for testing purposes.
     if (req.headers['x-user-id']) {
+      // Attach the user ID to the request object.
       req.user = { uid: req.headers['x-user-id'] };
     }
 
@@ -88,6 +90,10 @@ const authenticate = async (req, res, next) => {
       // If the userId is provided and does not match the one in the token,
       return res.status(403).json({ message: 'Forbidden (userId mismatch)' });
     }
+
+    // Attach the user ID to the request object.
+    console.log('Authenticated user:', uid);
+    req.user = { uid: uid };
 
     next();
   } catch (error) {

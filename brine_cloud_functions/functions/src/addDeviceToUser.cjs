@@ -56,6 +56,8 @@ async function addDeviceToUser(req, res) {
     const deviceId = req.body.deviceId;
     const deviceName = req.body.deviceName;
 
+    console.log('Adding device to user', userUid, ':', deviceId, ';', deviceName);
+
     // Check if the device ID and device name are provided.
     if (!deviceId) {
         console.error('Device ID is required');
@@ -71,6 +73,7 @@ async function addDeviceToUser(req, res) {
 
     // Check if userUid is a valid non-empty string
     if (!userUid || typeof userUid !== 'string') {
+        console.error('The user UID is missing or invalid.');
         res.status(400).send('The user UID is missing or invalid.');
 
         return;
@@ -78,6 +81,8 @@ async function addDeviceToUser(req, res) {
 
     // Step 1: Add the device to the user's list of devices.
     try {
+        console.log('Adding device to user:', deviceId);
+
         // Get the user document from Firestore
         const userDocRef = admin.firestore().collection('users').doc(userUid);
         const userDocSnapshot = await userDocRef.get();
@@ -103,10 +108,12 @@ async function addDeviceToUser(req, res) {
         else {
             devices.push(deviceId);
             await userDocRef.update({ devices: devices });
+            console.log('Device added to user');
         }
     } catch (error) {
         // If an error occurs, log it and return an internal server error.
         console.error('Error adding device to user:', error);
+        
         res.status(500).send('Internal Server Error');
 
         return;
