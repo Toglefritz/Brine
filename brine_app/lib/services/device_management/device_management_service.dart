@@ -109,8 +109,8 @@ class DeviceManagementService {
         // Include the ID token in the Authorization header
         headers: {'Authorization': 'Bearer $idToken'},
         body: {
-          'device_id': deviceId,
-          'appliance_height': height.toString(),
+          'deviceId': deviceId,
+          'applianceHeight': height.toString(),
         },
       );
 

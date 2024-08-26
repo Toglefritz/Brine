@@ -12,6 +12,7 @@ import '../../setup/setup_route.dart';
 import '../device_confirmation/device_confirmation_route.dart';
 import 'scan_route.dart';
 import 'scan_view.dart';
+import 'scan_view_none_found.dart';
 
 /// Controller for the [ScanRoute].
 class ScanController extends State<ScanRoute> {
@@ -39,6 +40,9 @@ class ScanController extends State<ScanRoute> {
 
   /// A [Timer] used to implement a timeout for the scanning process.
   late Timer _scanTimeout;
+
+  /// Determines if the scan timeout was reached.
+  bool _scanTimeoutReached = false;
 
   @override
   void initState() {
@@ -126,13 +130,15 @@ class ScanController extends State<ScanRoute> {
 
     // Start a timer to create a timeout for the scan. If a Brine device is not found within the timeout period, the
     // timer will be cancelled.
-    _scanTimeout = Timer(const Duration(seconds: 8), _stopScan);
+    _scanTimeout = Timer(
+      const Duration(seconds: 8),
+      () => _stopScan(scanTimeout: true),
+    );
   }
 
   /// Receives [BleDevice] instances from the [SplendidBle] service that represent BLE devices discovered during
   /// the scan. Since the scan is filtered to only show devices with the Brine service UUID, this method will only be
   /// called when Brine devices are discovered.
-  // TODO(Toglefritz): stop scanning once Brine device is found
   void _onDeviceDiscovered(BleDevice device) {
     debugPrint('Discovered Brine device, ${device.name}');
 
@@ -178,14 +184,35 @@ class ScanController extends State<ScanRoute> {
     );
   }
 
+  /// Handles taps on the "try again" button used to restart the scan.
+  // TODO(Toglefritz): Go back to the instructions about how to start advertisement on the Brine device instead
+  void onTryAgain() {
+    Analytics.trackEvent(eventName: 'scan_try_again_tap');
+
+    setState(() {
+      _scanTimeoutReached = false;
+    });
+
+    _startScan();
+  }
+
   /// Stops the scan for nearby BLE devices.
-  void _stopScan() {
+  void _stopScan({bool? scanTimeout}) {
     _ble.stopScan();
     _discoveredDeviceSubscription?.cancel();
+
+    // If the scan was stopped due to a timeout, show a message to the user.
+    if (scanTimeout ?? false) {
+      debugPrint('Scan timed out');
+
+      setState(() {
+        _scanTimeoutReached = true;
+      });
+    }
   }
 
   @override
-  Widget build(BuildContext context) => ScanView(this);
+  Widget build(BuildContext context) => _scanTimeoutReached ? ScanViewNoneFound(this) : ScanView(this);
 
   @override
   void dispose() {

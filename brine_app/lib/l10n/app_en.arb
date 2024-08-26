@@ -79,9 +79,14 @@
   "@logout": {
     "description": "Text for a button that allows the user to log out of their account."
   },
+  "noDevicesFoundMessage": "No devices found",
   "noNetworksDetected": "No networks detected",
   "@noNetworksDetected": {
-    "description": "Error text displayed when the Brine device does not detect any WiFi networks."
+    "description": "Error text displayed when the app does not detect any Brine devices via Bluetooth nearby."
+  },
+  "noDevicesFoundDescription": "Please make sure your Brine device is powered on, nearby, and that you've pressed the pairing button. The light on the Brine monitor should be blinking.",
+  "@noDevicesFoundDescription": {
+    "description": "Error text displayed when the app does not detect any Brine devices via Bluetooth nearby."
   },
   "onboardingLegalPrompt1": "Please take a look at our ",
   "@onboardingLegalPrompt1": {
@@ -130,6 +135,10 @@
   "termsOfService": "terms of service",
   "@termsOfService": {
     "description": "Text for a button that allows the user to view the terms of service."
+  },
+  "tryAgain": "Try again",
+  "@tryAgain": {
+    "description": "Text for a button that allows the user to try an action again."
   },
   "username": "Username (email)",
   "@username": {
