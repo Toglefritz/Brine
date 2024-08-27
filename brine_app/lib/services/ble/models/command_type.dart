@@ -4,6 +4,9 @@ enum CommandType {
   /// <adjective>_<adjective>_<noun>, for example, "vast_teal_elephant."
   getDeviceId(value: 'get_device_id', responseKey: 'device_id'),
 
+  /// Requests that the Brine device provide the public key held by its cryptographic coprocessor.
+  getPublicKey(value: 'get_public_key', responseKey: 'public_key'),
+
   /// Instructs the Brine device to scan for WiFi networks and send the SSID and RSSI of each network to the app.
   scan(value: 'scan', responseKey: 'networks'),
 

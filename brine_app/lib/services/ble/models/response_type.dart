@@ -6,6 +6,9 @@ enum ResponseType {
   /// A response containing a list of WiFi networks discovered by the Brine device.
   networks,
 
+  /// A response containing the public key of the Brine device, held by its cryptographic coprocessor.
+  publicKey,
+
   /// A response indicating that the Brine device successfully connected to a WiFi network.
   wifiConnected,
 
@@ -23,6 +26,8 @@ enum ResponseType {
         return 'device_id';
       case ResponseType.networks:
         return 'networks';
+      case ResponseType.publicKey:
+        return 'public_key'; 
       case ResponseType.wifiConnected:
         return 'wifi_connected';
       case ResponseType.wifiConnectError:

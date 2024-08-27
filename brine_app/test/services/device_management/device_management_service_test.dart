@@ -56,6 +56,7 @@ void main() {
         await deviceManagementService.addDeviceToAccount(
           deviceId: 'mock_device_id',
           deviceName: 'mock_device_name',
+          publicKey: 'mock_public_key',
         );
 
         // Clean up by resetting the global HttpOverrides.

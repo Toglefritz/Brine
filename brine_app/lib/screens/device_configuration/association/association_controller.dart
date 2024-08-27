@@ -26,6 +26,7 @@ class AssociationController extends State<AssociationRoute> {
       await DeviceManagementService(user: user).addDeviceToAccount(
         deviceId: widget.deviceId,
         deviceName: widget.deviceName,
+        publicKey: widget.publicKey,
       );
     } catch (e) {
       debugPrint('Failed to associate device with exception, $e');

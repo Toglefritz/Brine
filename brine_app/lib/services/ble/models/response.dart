@@ -1,6 +1,7 @@
 import '../../../extensions/json.dart';
 import 'device_id_response.dart';
 import 'error_response.dart';
+import 'public_key_response.dart';
 import 'response_type.dart';
 import 'wifi_connected_response.dart';
 
@@ -32,6 +33,8 @@ abstract class Response {
       throw Exception('Response type not found in JSON');
     } else if (responseKey == ResponseType.deviceId.responseKey) {
       return DeviceIdResponse.fromJson(json);
+    } else if (responseKey == ResponseType.publicKey.responseKey) {
+      return PublicKeyResponse.fromJson(json);
     } else if (responseKey == ResponseType.wifiConnected.responseKey) {
       return WiFiConnectedResponse.fromJson(json);
     } else if (responseKey == ResponseType.error.responseKey) {

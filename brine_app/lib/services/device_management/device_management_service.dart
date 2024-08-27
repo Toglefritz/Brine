@@ -21,11 +21,12 @@ class DeviceManagementService {
   /// Creates an instance of the [DeviceManagementService] class with the specified [user].
   DeviceManagementService({required this.user});
 
-  static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : '';  // TODO(Toglefritz): update prod host
+  static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
 
   /// The base URL for all endpoints used by this service.
-  static String baseUrl =
-      kDebugMode ? 'http://$_cloudFunctionsHost:5001/brine-3b212/us-central1' : ''; // TODO(Toglefritz): update prod endpoint
+  static String baseUrl = kDebugMode
+      ? 'http://$_cloudFunctionsHost:5001/brine-3b212/us-central1'
+      : ''; // TODO(Toglefritz): update prod endpoint
 
   /// Calls the *addDeviceToAccount* endpoint to add a new device to the authenticated user's account. The Firebase
   /// backend will also create a record for the Brine device in the "devices" collection if one does not already exist.
@@ -49,13 +50,19 @@ class DeviceManagementService {
   /// "device_id": "vast_teal_elephant",
   /// "name": "7b67",
   /// "salt_level": 0.5,
-  /// "battery_level": 0.8
+  /// "battery_level": 0.8,
+  /// "public_key": "0x1234567890abcdef",
   /// }
   /// ```
   ///
-  /// The [addDeviceToAccount] function takes a [deviceId] and [deviceName] as parameters. The [deviceId] is the unique
-  /// identifier for the Brine device, and the [deviceName] is a value derived from the device's BLE advertisement data.
-  Future<void> addDeviceToAccount({required String deviceId, required String deviceName}) async {
+  /// The [addDeviceToAccount] function takes a [deviceId], [deviceName], and [publicKey] as parameters. The [deviceId]
+  /// is the unique identifier for the Brine device, and the [deviceName] is a value derived from the device's BLE
+  /// advertisement data.
+  Future<void> addDeviceToAccount({
+    required String deviceId,
+    required String deviceName,
+    required String publicKey,
+  }) async {
     try {
       // Get the user's ID token
       final String? idToken = await user.getIdToken();
@@ -71,6 +78,7 @@ class DeviceManagementService {
         body: {
           'deviceId': deviceId,
           'deviceName': deviceName.toLowerCase(),
+          'publicKey': publicKey,
         },
       );
 

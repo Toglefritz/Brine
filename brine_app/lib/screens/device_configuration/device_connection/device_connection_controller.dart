@@ -12,6 +12,7 @@ import '../../../services/ble/ble_communication_service.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
 import '../../../services/ble/models/device_id_response.dart';
+import '../../../services/ble/models/public_key_response.dart';
 import '../../../services/ble/models/response.dart';
 import '../association/association_route.dart';
 import 'device_connection_route.dart';
@@ -33,6 +34,12 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// subsequent steps in the provisioning process so they can use the centrally-established characteristic
   /// subscription.
   late BleCommunicationService? _bleCommunicationManager;
+
+  /// The device ID of the Brine device.
+  String? _deviceId;
+
+  /// The public key of the Brine device, in base-64 encoded format.
+  String? _publicKey;
 
   @override
   void initState() {
@@ -106,7 +113,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   }
 
   /// Subscribes to the single characteristic available from Brine devices.
-  void _createBleCommunicationManager(BleCharacteristic characteristic) {
+  Future<void> _createBleCommunicationManager(BleCharacteristic characteristic) async {
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
     _bleCommunicationManager = BleCommunicationService(characteristic: characteristic);
 
@@ -114,7 +121,10 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);
 
     // After the characteristic subscription is established, get the Brine monitor's device ID.
-    _getDeviceId(characteristic);
+    await _getDeviceId(characteristic);
+
+    // Also get the public key.
+    await _getPublicKey(characteristic);
   }
 
   /// Retrieves a device ID for the Brine device.
@@ -138,6 +148,27 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     }
   }
 
+  /// Retrieves the public key for the Brine device.
+  ///
+  /// Each Brine device is equipped with a cryptographic coprocessor that holds a public-private key pair. The public
+  /// key is used to establish secure communication between the Brine device and the app and between the Brine device
+  /// and the Brine cloud. The public key is retrieved using a command that is sent to the Brine device.
+  Future<void> _getPublicKey(BleCharacteristic characteristic) async {
+    debugPrint('Requesting public key');
+
+    // Get the command for requesting the device ID.
+    final Command publicKeyCommand = Command(commandType: CommandType.getPublicKey);
+    final String commandString = publicKeyCommand.toJsonString();
+
+    try {
+      await _bleCommunicationManager!.writeValue(value: commandString);
+    } catch (e) {
+      debugPrint('Failed to request public key with exception, $e');
+
+      // TODO(Toglefritz): Handle this error
+    }
+  }
+
   /// Handles changes in the value of a [BleCharacteristic].
   ///
   /// In this controller, the only command sent by the app is the one used to request the device ID. Therefore,
@@ -150,18 +181,39 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     if (response is DeviceIdResponse) {
       debugPrint('Received device ID: ${response.deviceId}');
 
-      // Navigate to the AssociationRoute and provide the device ID.
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute<void>(
-          builder: (context) => AssociationRoute(
-            deviceName: widget.device.name?.substring(6) ?? widget.device.address,
-            deviceId: response.deviceId,
-            bleCommunicationManager: _bleCommunicationManager!,
-          ),
-        ),
-      );
+      _deviceId = response.deviceId;
+
+      // If both the device ID and public key have been received, navigate to the account association screen.
+      if(_publicKey != null) {
+        await _continueToNextStep();
+      }
+    } else if(response is PublicKeyResponse) {
+      debugPrint('Received public key: ${response.publicKey}');
+
+      _publicKey = response.publicKey;
+
+      // If both the device ID and public key have been received, navigate to the account association screen.
+      if(_deviceId != null) {
+        await _continueToNextStep();
+      }
+    } else {
+      debugPrint('Unexpected response type: $response');
     }
+  }
+
+  /// Continues to the next step in the provisioning process.
+  Future<void> _continueToNextStep() async {
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => AssociationRoute(
+          bleCommunicationManager: _bleCommunicationManager!,
+          deviceName: widget.device.name?.substring(6) ?? widget.device.address,
+          deviceId: _deviceId!,
+          publicKey: _publicKey!,
+        ),
+      ),
+    );
   }
 
   @override
