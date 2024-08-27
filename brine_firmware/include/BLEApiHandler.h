@@ -5,6 +5,7 @@
 #include "FirebaseService.h"
 #include "WiFiService.h"
 #include <ArduinoJson.h>
+#include <CryptoService.h>
 #include <set>
 #include <string>
 
@@ -12,18 +13,18 @@
  * @class BLEApiHandler
  * @brief A class to handle JSON-based API commands over BLE.
  *
- * The BLEApiHandler class is responsible for parsing and processing JSON commands received over Bluetooth Low Energy 
- * (BLE) and generating appropriate JSON responses. This class enables the IoT device to communicate with a central 
+ * The BLEApiHandler class is responsible for parsing and processing JSON commands received over Bluetooth Low Energy
+ * (BLE) and generating appropriate JSON responses. This class enables the IoT device to communicate with a central
  * device using a structured JSON-based protocol, allowing for flexible and extensible command handling.
- * 
+ *
  * Depending upon the command received, the BLEApiHandler class can perform various operations such as retrieving the
  * device ID, scanning for available WiFi networks, connecting to a specific WiFi network, and more. To accomplish
  * these tasks, this class interacts with different service classes such as `WiFiService`, `FirebaseService`, and
  * 'DeviceName' to perform the required operations.
  *
  * @details
- * The `BLEApiHandler` class processes incoming JSON commands and generates responses based on the requested operations. 
- * The primary function of the class is to handle specific commands and return JSON responses that the central device 
+ * The `BLEApiHandler` class processes incoming JSON commands and generates responses based on the requested operations.
+ * The primary function of the class is to handle specific commands and return JSON responses that the central device
  * can interpret.
  *
  * Example JSON command format:
@@ -94,6 +95,10 @@ public:
     if (strcmp(command, "get_device_id") == 0) {
       return handleGetDeviceId();
     }
+    // The command "get_public_key" returns the public key of the device.
+    else if (strcmp(command, "get_public_key") == 0) {
+      return handleGetPublicKey();
+    }
     // The command, "scan," returns a list of available WiFi networks.
     else if (strcmp(command, "scan") == 0) {
       return handleScanWifiNetworks();
@@ -131,6 +136,32 @@ private:
     serializeJson(responseDoc, jsonResponse);
 
     DebugService::getInstance().debugPrint("Returning response with device ID, ");
+    DebugService::getInstance().debugPrintln(jsonResponse);
+
+    return jsonResponse;
+  }
+
+  /**
+   * @brief Handles the 'get_public_key' command.
+   *
+   * @return String The JSON response string containing the public key.
+   */
+  String handleGetPublicKey() {
+    CryptoService cryptoService = CryptoService();
+
+    // Get the public key from the CryptoService
+    String publicKey = cryptoService.readPublicKey();
+
+    // Create a JSON response object with the public key
+    JsonDocument responseDoc;
+    responseDoc["response"] = "public_key";
+    responseDoc["public_key"] = publicKey;
+
+    // Serialize the JSON response to a string
+    String jsonResponse;
+    serializeJson(responseDoc, jsonResponse);
+
+    DebugService::getInstance().debugPrint("Returning response with public key, ");
     DebugService::getInstance().debugPrintln(jsonResponse);
 
     return jsonResponse;

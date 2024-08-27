@@ -1,4 +1,5 @@
 #include "CryptoService.h"
+#include <base64.h>
 
 /**
  * @brief Initialize the CryptoService module.
@@ -32,8 +33,11 @@ bool CryptoService::begin() {
  *
  * @param[out] publicKey The public key obtained from the device.
  */
-byte *CryptoService::readPublicKey() {
+String CryptoService::readPublicKey() {
   byte *publicKey = atecc.publicKey64Bytes;
 
-  return publicKey;
+  // Convert the binary public key to a base64 encoded string
+  String encodedPublicKey = base64::encode(publicKey, 64);
+
+  return encodedPublicKey;
 }

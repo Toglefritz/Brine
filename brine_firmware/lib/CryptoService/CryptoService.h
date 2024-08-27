@@ -38,10 +38,14 @@ public:
    * This method retrieves the public key from the ATECC508A device. This
    * public key is shared with the cloud backend to verify the signature of
    * the data sent by the device.
+   * 
+   * The ATECC508A device returns the public key in binary format. Therefore,
+   * this method converts the binary public key to a base64 encoded string
+   * before returning it.
    *
    * @param[out] publicKey The public key obtained from the device.
    */
-  byte* readPublicKey();
+  String readPublicKey();
 
   // TODO(Toglefritz): Implement signing function
 
