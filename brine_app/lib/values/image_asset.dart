@@ -2,7 +2,8 @@
 // ignore_for_file: public_member_api_docs
 enum ImageAsset {
   logoTransparentBackground('icons/brine_transparent_background.png'),
-  logoTransparentBackgroundInverse('icons/brine_transparent_background_inverse.png'),
+  logoTransparentBackgroundInverse(
+      'icons/brine_transparent_background_inverse.png'),
   waterSoftener('water_softener_outline.png');
 
   const ImageAsset(this.relativePath);

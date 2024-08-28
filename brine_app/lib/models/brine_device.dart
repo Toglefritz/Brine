@@ -13,6 +13,9 @@ class BrineDevice {
   /// The percentage of battery life remaining on the Brine monitor.
   final double batteryLevel;
 
+  /// The public key held by the cryptographic coprocessor of the Brine device, in base64-encoded string format.
+  final String publicKey;
+
   /// The timestamp when the levels were last retrieved.
   final DateTime retrievalTimestamp;
 
@@ -22,24 +25,28 @@ class BrineDevice {
     required this.name,
     required this.saltLevel,
     required this.batteryLevel,
+    required this.publicKey,
     required this.retrievalTimestamp,
   });
 
   /// Creates an instance of [BrineDevice] from a JSON object.
   factory BrineDevice.fromJson(Map<String, dynamic> json) {
     // Get the salt level. The salt level can be an integer or a double, so it is necessary to check the type.
-    final double saltLevel =
-    json['salt_level'] is int ? (json['salt_level'] as int).toDouble() : json['salt_level'] as double;
+    final double saltLevel = json['salt_level'] is int
+        ? (json['salt_level'] as int).toDouble()
+        : json['salt_level'] as double;
 
     // Get the battery level. The battery level can be an integer or a double, so it is necessary to check the type.
-    final double batteryLevel =
-    json['battery_level'] is int ? (json['battery_level'] as int).toDouble() : json['battery_level'] as double;
+    final double batteryLevel = json['battery_level'] is int
+        ? (json['battery_level'] as int).toDouble()
+        : json['battery_level'] as double;
 
     return BrineDevice(
       deviceId: json['device_id'] as String,
       name: json['name'] as String,
       saltLevel: saltLevel,
       batteryLevel: batteryLevel,
+      publicKey: json['public_key'] as String,
       retrievalTimestamp: DateTime.now(),
     );
   }

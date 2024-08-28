@@ -13,9 +13,11 @@ class AuthenticationService {
   ///
   /// As part of creating a password-based account with Firebase Auth, a [FirebaseAuthException] can be thrown if
   /// issues with the provided username or password are discovered.
-  static Future<User?> _createBasicAuthAccount({required String emailAddress, required String password}) async {
+  static Future<User?> _createBasicAuthAccount(
+      {required String emailAddress, required String password}) async {
     try {
-      final UserCredential credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final UserCredential credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
@@ -35,7 +37,10 @@ class AuthenticationService {
   /// Creates a new user via Firebase Authentication.
   ///
   /// If an error occurs during the process, the error code and message are printed. Exceptions are rethrown.
-  static Future<void> createUser({required AuthMethod method, String? emailAddress, String? password}) async {
+  static Future<void> createUser(
+      {required AuthMethod method,
+      String? emailAddress,
+      String? password}) async {
     try {
       User? user;
 
@@ -46,7 +51,8 @@ class AuthenticationService {
             'For authenticating with basic auth, the email and password must be provided',
           );
 
-          user = await _createBasicAuthAccount(emailAddress: emailAddress!, password: password!);
+          user = await _createBasicAuthAccount(
+              emailAddress: emailAddress!, password: password!);
           break;
         case AuthMethod.google:
           user = await signInWithGoogle();
@@ -83,7 +89,8 @@ class AuthenticationService {
       final GoogleAuthProvider authProvider = GoogleAuthProvider();
 
       try {
-        final UserCredential userCredential = await auth.signInWithPopup(authProvider);
+        final UserCredential userCredential =
+            await auth.signInWithPopup(authProvider);
 
         user = userCredential.user;
       } catch (e) {
@@ -92,10 +99,12 @@ class AuthenticationService {
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn();
 
-      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
 
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
@@ -103,7 +112,8 @@ class AuthenticationService {
         );
 
         try {
-          final UserCredential userCredential = await auth.signInWithCredential(credential);
+          final UserCredential userCredential =
+              await auth.signInWithCredential(credential);
 
           user = userCredential.user;
         } on FirebaseAuthException catch (e) {

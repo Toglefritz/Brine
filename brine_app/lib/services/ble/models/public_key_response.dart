@@ -13,7 +13,8 @@ class PublicKeyResponse extends Response {
   /// Creates an instance of [PublicKeyResponse] with the provided [publicKey].
   ///
   /// The [publicKey] parameter specifies the device ID returned by the Brine device.
-  PublicKeyResponse(this.publicKey) : super(responseType: ResponseType.publicKey);
+  PublicKeyResponse(this.publicKey)
+      : super(responseType: ResponseType.publicKey);
 
   /// Factory constructor to create a [PublicKeyResponse] object from a JSON map.
   ///

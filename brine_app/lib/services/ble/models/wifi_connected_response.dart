@@ -6,7 +6,8 @@ class WiFiConnectedResponse extends Response {
   /// Creates an instance of [WiFiConnectedResponse] with the provided [ssid].
   ///
   /// The [ssid] parameter specifies the SSID of the WiFi network to which the Brine device connected.
-  WiFiConnectedResponse(this.ssid) : super(responseType: ResponseType.wifiConnected);
+  WiFiConnectedResponse(this.ssid)
+      : super(responseType: ResponseType.wifiConnected);
 
   /// Factory constructor to create a [WiFiConnectedResponse] object from a JSON map.
   ///

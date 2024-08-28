@@ -16,7 +16,8 @@ class SetupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(Theme.of(context).brightness.oppositeSystemOverlayStyle());
+    SystemChrome.setSystemUIOverlayStyle(
+        Theme.of(context).brightness.oppositeSystemOverlayStyle());
 
     return Scaffold(
       body: Center(

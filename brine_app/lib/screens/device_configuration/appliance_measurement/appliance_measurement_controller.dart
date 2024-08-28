@@ -10,7 +10,8 @@ import 'appliance_measurement_view.dart';
 /// Controller for [BrineInstallationRoute].
 class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
   /// A controller for the [TextField] used to collect the height of the water softener from the user.
-  final TextEditingController measurementFieldController = TextEditingController();
+  final TextEditingController measurementFieldController =
+      TextEditingController();
 
   /// The unit of measurement used for the height measurement.
   UnitOfMeasurement unitOfMeasurement = UnitOfMeasurement.inches;
@@ -47,10 +48,10 @@ class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
 
       // Update the appliance height in the database.
       DeviceManagementService(user: user).updateApplianceHeight(
-        deviceId: widget.deviceId,
+        deviceId: widget.device.deviceId,
         height: height,
       );
-    } catch(e) {
+    } catch (e) {
       debugPrint('Failed to parse height with exception, $e');
 
       // TODO(Toglefritz): Handle the failure to parse the height.

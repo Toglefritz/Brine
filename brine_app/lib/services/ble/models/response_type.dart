@@ -27,7 +27,7 @@ enum ResponseType {
       case ResponseType.networks:
         return 'networks';
       case ResponseType.publicKey:
-        return 'public_key'; 
+        return 'public_key';
       case ResponseType.wifiConnected:
         return 'wifi_connected';
       case ResponseType.wifiConnectError:

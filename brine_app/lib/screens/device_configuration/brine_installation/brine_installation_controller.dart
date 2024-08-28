@@ -21,7 +21,7 @@ class BrineInstallationController extends State<BrineInstallationRoute> {
       context,
       MaterialPageRoute<void>(
         builder: (context) => ApplianceMeasurementRoute(
-          deviceId: widget.deviceId,
+          device: widget.device,
           bleCommunicationManager: widget.bleCommunicationManager,
         ),
       ),

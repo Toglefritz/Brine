@@ -33,7 +33,8 @@ class OnboardingLegalPrompt extends StatelessWidget {
           TextSpan(
             text: AppLocalizations.of(context)!.termsOfService,
             style: const TextStyle(fontWeight: FontWeight.bold),
-            recognizer: TapGestureRecognizer()..onTap = handleTermsAndConditionsTap,
+            recognizer: TapGestureRecognizer()
+              ..onTap = handleTermsAndConditionsTap,
           ),
           TextSpan(
             text: AppLocalizations.of(context)!.and,

@@ -92,7 +92,8 @@ class WiFiSetupView extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(Insets.small),
                         child: ExpansionPanelList(
-                          expansionCallback: (int index, bool isExpanded) => state.onExpansionPanelToggled(
+                          expansionCallback: (int index, bool isExpanded) =>
+                              state.onExpansionPanelToggled(
                             index: index,
                             isExpanded: isExpanded,
                           ),
@@ -100,13 +101,18 @@ class WiFiSetupView extends StatelessWidget {
                           children: List.generate(
                             state.networks!.length,
                             (index) {
-                              final WiFiNetwork network = state.networks![index];
+                              final WiFiNetwork network =
+                                  state.networks![index];
                               return ExpansionPanel(
                                 isExpanded: index == state.expandedIndex,
-                                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                headerBuilder: (BuildContext context, bool isExpanded) => ListTile(
+                                backgroundColor:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                headerBuilder:
+                                    (BuildContext context, bool isExpanded) =>
+                                        ListTile(
                                   title: Text(network.ssid),
-                                  trailing: _getIconForSignalStrength(network.rssi),
+                                  trailing:
+                                      _getIconForSignalStrength(network.rssi),
                                   iconColor: Colors.transparent,
                                 ),
                                 canTapOnHeader: true,
@@ -118,9 +124,14 @@ class WiFiSetupView extends StatelessWidget {
                                   child: TextField(
                                     controller: state.passwordFieldController,
                                     decoration: InputDecoration(
-                                      labelText: AppLocalizations.of(context)!.password,
-                                      labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                            color: Theme.of(context).primaryColorDark,
+                                      labelText: AppLocalizations.of(context)!
+                                          .password,
+                                      labelStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .primaryColorDark,
                                           ),
                                       suffixIcon: Padding(
                                         padding: const EdgeInsets.only(
@@ -129,23 +140,32 @@ class WiFiSetupView extends StatelessWidget {
                                         child: MouseRegion(
                                           cursor: SystemMouseCursors.click,
                                           child: GestureDetector(
-                                            onTap: () => state.onConnectToNetwork(network),
-                                            child: const Icon(Icons.send_outlined),
+                                            onTap: () => state
+                                                .onConnectToNetwork(network),
+                                            child:
+                                                const Icon(Icons.send_outlined),
                                           ),
                                         ),
                                       ),
                                       border: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Theme.of(context).primaryColorDark),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .primaryColorDark),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Theme.of(context).primaryColorDark),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .primaryColorDark),
                                       ),
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Theme.of(context).primaryColorDark),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .primaryColorDark),
                                       ),
                                     ),
                                     obscureText: true,
-                                    onSubmitted: (_) => state.onConnectToNetwork(network),
+                                    onSubmitted: (_) =>
+                                        state.onConnectToNetwork(network),
                                   ),
                                 ),
                               );
@@ -164,9 +184,10 @@ class WiFiSetupView extends StatelessWidget {
                         const Icon(Icons.signal_wifi_off),
                         Text(
                           AppLocalizations.of(context)!.noNetworksDetected,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Theme.of(context).primaryColorDark,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
                       ],

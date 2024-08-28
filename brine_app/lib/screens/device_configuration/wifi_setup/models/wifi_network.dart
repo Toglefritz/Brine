@@ -17,9 +17,9 @@ class WiFiNetwork {
 
   /// Creates an instance of [WiFiNetwork] from a JSON object.
   factory WiFiNetwork.fromJson(JSON json) => WiFiNetwork(
-    ssid: json['ssid'] as String,
-    rssi: json['rssi'] as int,
-  );
+        ssid: json['ssid'] as String,
+        rssi: json['rssi'] as int,
+      );
 
   /// The SSID of the WiFi network.
   final String ssid;

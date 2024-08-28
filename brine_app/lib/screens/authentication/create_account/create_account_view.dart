@@ -25,7 +25,8 @@ class CreateAccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(Theme.of(context).brightness.oppositeSystemOverlayStyle());
+    SystemChrome.setSystemUIOverlayStyle(
+        Theme.of(context).brightness.oppositeSystemOverlayStyle());
 
     return AuthenticationPage(
       backOnTap: state.onBackTap,
@@ -102,7 +103,8 @@ class CreateAccountView extends StatelessWidget {
                           controller: state.passwordConfirmationFieldController,
                           validator: state.validatePasswordConfirmationField,
                           errorState: state.passwordConfirmationFieldError,
-                          additionalError: state.createAccountPasswordExceptionError,
+                          additionalError:
+                              state.createAccountPasswordExceptionError,
                         ),
                       ),
                     ],

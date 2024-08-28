@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
 import 'appliance_measurement_controller.dart';
 
@@ -12,16 +13,17 @@ class ApplianceMeasurementRoute extends StatefulWidget {
   /// Creates and instance of [ApplianceMeasurementRoute].
   const ApplianceMeasurementRoute({
     required this.bleCommunicationManager,
-    required this.deviceId,
+    required this.device,
     super.key,
   });
 
   /// A [BleCommunicationService] instance that manages the communication between the app and the Brine device.
   final BleCommunicationService bleCommunicationManager;
 
-  /// The Brine BLE device that is the target of the provisioning flow.
-  final String deviceId;
+  /// The Brine device that is the target of the provisioning flow.
+  final BrineDevice device;
 
   @override
-  State<ApplianceMeasurementRoute> createState() => ApplianceMeasurementController();
+  State<ApplianceMeasurementRoute> createState() =>
+      ApplianceMeasurementController();
 }

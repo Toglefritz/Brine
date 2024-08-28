@@ -17,7 +17,7 @@ class WelcomeController extends State<WelcomeRoute> {
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => const ScanRoute(
-          excludedDevices: [],  // By definition, there are no excluded devices from this route
+          excludedDevices: [], // By definition, there are no excluded devices from this route
         ),
       ),
     );

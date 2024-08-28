@@ -47,7 +47,9 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
     final String commandString = scanCommand.toJsonString();
 
     try {
-      widget.bleCommunicationManager.writeValue(value: commandString);
+      widget.bleCommunicationManager.writeValue(
+        value: commandString,
+      );
     } catch (e) {
       debugPrint('Failed to send scan command with exception, $e');
 
@@ -64,13 +66,15 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
     final List<dynamic> networkList = value['networks'] as List<dynamic>;
 
     setState(() {
-      networks = networkList.map((dynamic network) => WiFiNetwork.fromJson(network as JSON)).toList();
+      networks = networkList
+          .map((dynamic network) => WiFiNetwork.fromJson(network as JSON))
+          .toList();
     });
   }
 
   /// Handles taps on the network [ExpansionPanel]s to expand or collapse them.
   void onExpansionPanelToggled({required int index, required bool isExpanded}) {
-    if(isExpanded) {
+    if (isExpanded) {
       setState(() {
         expandedIndex = index;
       });
@@ -100,7 +104,7 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
           bleCommunicationManager: widget.bleCommunicationManager,
           ssid: ssid,
           password: password,
-          deviceId: widget.deviceId,
+          device: widget.device,
         ),
       ),
     );

@@ -8,6 +8,7 @@ import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import '../../../extensions/json.dart';
+import '../../../models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
@@ -36,10 +37,10 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   late BleCommunicationService? _bleCommunicationManager;
 
   /// The device ID of the Brine device.
-  String? _deviceId;
+  late String _deviceId;
 
   /// The public key of the Brine device, in base-64 encoded format.
-  String? _publicKey;
+  late String _publicKey;
 
   @override
   void initState() {
@@ -55,11 +56,13 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     debugPrint('Connecting to device: ${widget.device.address}');
 
     try {
-      _connectionStream = _ble.connect(deviceAddress: widget.device.address).listen(
-            _onConnectionStateUpdate,
-          );
+      _connectionStream =
+          _ble.connect(deviceAddress: widget.device.address).listen(
+                _onConnectionStateUpdate,
+              );
     } catch (e) {
-      debugPrint('Failed to connect to device, ${widget.device.address}, with exception, $e');
+      debugPrint(
+          'Failed to connect to device, ${widget.device.address}, with exception, $e');
 
       _handleConnectionError(e);
     }
@@ -76,7 +79,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// and characteristic discovery.
   // TODO(Toglefritz): add a timeout
   void _onConnectionStateUpdate(BleConnectionState state) {
-    debugPrint('Connection state update for ${widget.device.name}: ${state.name}');
+    debugPrint(
+        'Connection state update for ${widget.device.name}: ${state.name}');
 
     if (state == BleConnectionState.connected) {
       _discoverServices();
@@ -87,14 +91,16 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   void _discoverServices() {
     debugPrint('Discovering services');
 
-    _servicesDiscoveredStream = _ble.discoverServices(widget.device.address).listen(
-          _onServiceDiscovered,
-        );
+    _servicesDiscoveredStream =
+        _ble.discoverServices(widget.device.address).listen(
+              _onServiceDiscovered,
+            );
   }
 
   /// Called when a services are successfully discovered.
   void _onServiceDiscovered(List<BleService> services) {
-    debugPrint('Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
+    debugPrint(
+        'Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
 
     // Ensure that the expected single service containing a single characteristic were discovered.
     if (services.length != 1 || services.first.characteristics.length != 1) {
@@ -106,46 +112,25 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     }
 
     // Get the single characteristic available from the Brine monitor.
-    final BleCharacteristic characteristic = services.first.characteristics.first;
+    final BleCharacteristic characteristic =
+        services.first.characteristics.first;
 
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
     _createBleCommunicationManager(characteristic);
   }
 
   /// Subscribes to the single characteristic available from Brine devices.
-  Future<void> _createBleCommunicationManager(BleCharacteristic characteristic) async {
+  Future<void> _createBleCommunicationManager(
+      BleCharacteristic characteristic) async {
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
-    _bleCommunicationManager = BleCommunicationService(characteristic: characteristic);
+    _bleCommunicationManager =
+        BleCommunicationService(characteristic: characteristic);
 
     // Register a callback for changes in the value of the characteristic.
     _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);
 
-    // After the characteristic subscription is established, get the Brine monitor's device ID.
-    await _getDeviceId(characteristic);
-
     // Also get the public key.
     await _getPublicKey(characteristic);
-  }
-
-  /// Retrieves a device ID for the Brine device.
-  ///
-  /// Each Brine device has a unique device ID of the form <adjective>_<adjective>_<noun>, for example,
-  /// "vast_teal_elephant." The Bluetooth API used by Brine monitors include a command allowing the app to retrieve
-  /// this device ID. This is necessary because the device ID is included in the account association process.
-  Future<void> _getDeviceId(BleCharacteristic characteristic) async {
-    debugPrint('Requesting device ID');
-
-    // Get the command for requesting the device ID.
-    final Command deviceIdCommand = Command(commandType: CommandType.getDeviceId);
-    final String commandString = deviceIdCommand.toJsonString();
-
-    try {
-      await _bleCommunicationManager!.writeValue(value: commandString);
-    } catch (e) {
-      debugPrint('Failed to request device ID with exception, $e');
-
-      // TODO(Toglefritz): Handle this error
-    }
   }
 
   /// Retrieves the public key for the Brine device.
@@ -157,13 +142,42 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     debugPrint('Requesting public key');
 
     // Get the command for requesting the device ID.
-    final Command publicKeyCommand = Command(commandType: CommandType.getPublicKey);
+    final Command publicKeyCommand =
+        Command(commandType: CommandType.getPublicKey);
     final String commandString = publicKeyCommand.toJsonString();
 
     try {
-      await _bleCommunicationManager!.writeValue(value: commandString);
+      // The encryption key is null because the public key is not yet known, this is, after all, the command used to
+      // retrieve the public key.
+      await _bleCommunicationManager!.writeValue(
+        value: commandString,
+      );
     } catch (e) {
       debugPrint('Failed to request public key with exception, $e');
+
+      // TODO(Toglefritz): Handle this error
+    }
+  }
+
+  /// Retrieves a device ID for the Brine device.
+  ///
+  /// Each Brine device has a unique device ID of the form <adjective>_<adjective>_<noun>, for example,
+  /// "vast_teal_elephant." The Bluetooth API used by Brine monitors include a command allowing the app to retrieve
+  /// this device ID. This is necessary because the device ID is included in the account association process.
+  Future<void> _getDeviceId(BleCharacteristic characteristic) async {
+    debugPrint('Requesting device ID');
+
+    // Get the command for requesting the device ID.
+    final Command deviceIdCommand =
+        Command(commandType: CommandType.getDeviceId);
+    final String commandString = deviceIdCommand.toJsonString();
+
+    try {
+      await _bleCommunicationManager!.writeValue(
+        value: commandString,
+      );
+    } catch (e) {
+      debugPrint('Failed to request device ID with exception, $e');
 
       // TODO(Toglefritz): Handle this error
     }
@@ -177,25 +191,23 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     // Get a Response object from the characteristic value.
     final Response response = Response.fromJson(value);
 
-    // Check that the characteristic value contains the device ID.
-    if (response is DeviceIdResponse) {
-      debugPrint('Received device ID: ${response.deviceId}');
-
-      _deviceId = response.deviceId;
-
-      // If both the device ID and public key have been received, navigate to the account association screen.
-      if(_publicKey != null) {
-        await _continueToNextStep();
-      }
-    } else if(response is PublicKeyResponse) {
+    // Check that the characteristic value contains the public key.
+    if (response is PublicKeyResponse) {
       debugPrint('Received public key: ${response.publicKey}');
 
       _publicKey = response.publicKey;
 
-      // If both the device ID and public key have been received, navigate to the account association screen.
-      if(_deviceId != null) {
-        await _continueToNextStep();
-      }
+      // Once the public key is received, request the device ID.
+      await _getDeviceId(_bleCommunicationManager!.characteristic);
+    }
+    // Check that the characteristic value contains the device ID.
+    else if (response is DeviceIdResponse) {
+      debugPrint('Received device ID: ${response.deviceId}');
+
+      _deviceId = response.deviceId;
+
+      // Once both the public key and device ID are received, continue to the next step in the provisioning process.
+      await _continueToNextStep();
     } else {
       debugPrint('Unexpected response type: $response');
     }
@@ -203,14 +215,24 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Continues to the next step in the provisioning process.
   Future<void> _continueToNextStep() async {
+    // Create a BrineDevice instance from the information obtained from the Brine monitor.
+    final BrineDevice device = BrineDevice(
+      deviceId: _deviceId,
+      name: widget.device.name?.substring(6) ?? widget.device.address,
+      saltLevel: -1,
+      // A value of -1 indicates that the salt level is unknown.
+      batteryLevel: -1,
+      // A value of -1 indicates that the battery level is unknown.
+      publicKey: _publicKey,
+      retrievalTimestamp: DateTime.now(),
+    );
+
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => AssociationRoute(
           bleCommunicationManager: _bleCommunicationManager!,
-          deviceName: widget.device.name?.substring(6) ?? widget.device.address,
-          deviceId: _deviceId!,
-          publicKey: _publicKey!,
+          device: device,
         ),
       ),
     );

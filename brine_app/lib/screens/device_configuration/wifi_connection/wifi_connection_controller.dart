@@ -16,7 +16,8 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
     // Send a command to the Brine device to provide the SSID and password of the WiFi network to which the Brine device
     // should connect. This is done after the build method is complete because the view will be rebuilt after a response
     // is received.
-    WidgetsBinding.instance.addPostFrameCallback((_) => _sendWiFiConnectCommand());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _sendWiFiConnectCommand());
 
     super.initState();
   }
@@ -41,7 +42,9 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
     );
 
     try {
-      widget.bleCommunicationManager.writeValue(value: commandString);
+      widget.bleCommunicationManager.writeValue(
+        value: commandString,
+      );
     } catch (e) {
       debugPrint('Failed to send connect command with exception, $e');
 
@@ -85,7 +88,7 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
         MaterialPageRoute<void>(
           builder: (BuildContext context) => BrineInstallationRoute(
             bleCommunicationManager: widget.bleCommunicationManager,
-            deviceId: widget.deviceId,
+            device: widget.device,
           ),
         ),
       );

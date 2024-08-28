@@ -24,9 +24,7 @@ class AssociationController extends State<AssociationRoute> {
 
       // Add the device to the user's account.
       await DeviceManagementService(user: user).addDeviceToAccount(
-        deviceId: widget.deviceId,
-        deviceName: widget.deviceName,
-        publicKey: widget.publicKey,
+        device: widget.device,
       );
     } catch (e) {
       debugPrint('Failed to associate device with exception, $e');
@@ -42,7 +40,7 @@ class AssociationController extends State<AssociationRoute> {
       MaterialPageRoute<void>(
         builder: (context) => WiFiSetupRoute(
           bleCommunicationManager: widget.bleCommunicationManager,
-          deviceId: widget.deviceId,
+          device: widget.device,
         ),
       ),
     );

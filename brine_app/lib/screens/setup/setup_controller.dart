@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/brine_device.dart';
 import '../../services/device_management/device_management_service.dart';
-import '../../services/device_management/models/brine_device.dart';
 import '../softener_monitor/softener_monitor_route.dart';
 import '../welcome/welcome_route.dart';
 import 'setup_route.dart';
@@ -63,7 +63,9 @@ class SetupController extends State<SetupRoute> {
   /// First, gets a list of [BrineDevice]s on the users account. Second, for each device on the user's account, get
   /// the salt and battery levels of the device.
   Future<List<BrineDevice>> _getDevices() async {
-    debugPrint('Getting devices for user, ${FirebaseAuth.instance.currentUser?.uid}');
+    debugPrint(
+      'Getting devices for user, ${FirebaseAuth.instance.currentUser?.uid}',
+    );
 
     final List<BrineDevice> deviceList = [];
 

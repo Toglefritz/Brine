@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
 import 'wifi_setup_controller.dart';
 
@@ -16,16 +17,16 @@ import 'wifi_setup_controller.dart';
 class WiFiSetupRoute extends StatefulWidget {
   /// Creates and instance of [WiFiSetupRoute].
   const WiFiSetupRoute({
+    required this.device,
     required this.bleCommunicationManager,
-    required this.deviceId,
     super.key,
   });
 
+  /// The [BrineDevice] that is the target of the association process.
+  final BrineDevice device;
+
   /// A [BleCommunicationService] instance that manages the communication between the app and the Brine device.
   final BleCommunicationService bleCommunicationManager;
-
-  /// The Brine BLE device that is the target of the provisioning flow.
-  final String deviceId;
 
   @override
   State<WiFiSetupRoute> createState() => WiFiSetupController();

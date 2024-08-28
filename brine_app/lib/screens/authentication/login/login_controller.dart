@@ -64,7 +64,8 @@ class LoginController extends State<LoginRoute> {
         if (e.code == 'user-not-found') {
           Analytics.trackEvent(eventName: 'user-not-found');
           unawaited(
-            FirebaseCrashlytics.instance.recordError('Authentication with basic auth failed with exception, $e', s),
+            FirebaseCrashlytics.instance.recordError(
+                'Authentication with basic auth failed with exception, $e', s),
           );
 
           setState(() {
@@ -77,7 +78,8 @@ class LoginController extends State<LoginRoute> {
         } else if (e.code == 'wrong-password') {
           Analytics.trackEvent(eventName: 'wrong-password');
           unawaited(
-            FirebaseCrashlytics.instance.recordError('Authentication with basic auth failed with exception, $e', s),
+            FirebaseCrashlytics.instance.recordError(
+                'Authentication with basic auth failed with exception, $e', s),
           );
 
           setState(() {
@@ -90,7 +92,8 @@ class LoginController extends State<LoginRoute> {
         } else if (e.code == 'user-disabled') {
           Analytics.trackEvent(eventName: 'user-disabled');
           unawaited(
-            FirebaseCrashlytics.instance.recordError('Authentication with basic auth failed with exception, $e', s),
+            FirebaseCrashlytics.instance.recordError(
+                'Authentication with basic auth failed with exception, $e', s),
           );
 
           setState(() {
@@ -134,10 +137,11 @@ class LoginController extends State<LoginRoute> {
   /// different problems with the login. The codes from these exceptions are used to set the
   /// [loginUsernameExceptionError] and [loginPasswordExceptionError] fields. These show up in the UI the same way
   /// as form validation errors.
-  Future<UserCredential?> login({required String emailAddress, required String password}) async {
+  Future<UserCredential?> login(
+      {required String emailAddress, required String password}) async {
     try {
-      final UserCredential credential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailAddress, password: password);
+      final UserCredential credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: emailAddress, password: password);
 
       return credential;
     } on FirebaseAuthException catch (e) {
@@ -231,7 +235,8 @@ class LoginController extends State<LoginRoute> {
     } catch (e, s) {
       debugPrint('Failed to sign in with Google with exception, $e');
 
-      unawaited(FirebaseCrashlytics.instance.recordError('Failed to sign in with Google with exception, $e', s));
+      unawaited(FirebaseCrashlytics.instance
+          .recordError('Failed to sign in with Google with exception, $e', s));
     }
   }
 

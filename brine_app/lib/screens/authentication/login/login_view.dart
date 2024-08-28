@@ -16,7 +16,6 @@ import 'login_route.dart';
 
 /// View for [LoginRoute].
 class LoginView extends StatelessWidget {
-
   /// Creates an instance of [LoginView].
   const LoginView(this.state, {super.key});
 
@@ -25,7 +24,8 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(Theme.of(context).brightness.oppositeSystemOverlayStyle());
+    SystemChrome.setSystemUIOverlayStyle(
+        Theme.of(context).brightness.oppositeSystemOverlayStyle());
 
     return AuthenticationPage(
       backOnTap: state.onBackTap,

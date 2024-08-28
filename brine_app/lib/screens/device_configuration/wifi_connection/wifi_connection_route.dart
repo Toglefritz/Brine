@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
 import 'wifi_connection_controller.dart';
 
@@ -19,7 +20,7 @@ class WiFiConnectionRoute extends StatefulWidget {
     required this.bleCommunicationManager,
     required this.ssid,
     required this.password,
-    required this.deviceId,
+    required this.device,
     super.key,
   });
 
@@ -36,8 +37,8 @@ class WiFiConnectionRoute extends StatefulWidget {
   /// response indicating the success or failure of this connection attempt.
   final String password;
 
-  /// The Brine BLE device that is the target of the provisioning flow.
-  final String deviceId;
+  /// The Brine device that is the target of the provisioning flow.
+  final BrineDevice device;
 
   @override
   State<WiFiConnectionRoute> createState() => WiFiConnectionController();

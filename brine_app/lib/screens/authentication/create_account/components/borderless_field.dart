@@ -54,7 +54,10 @@ class BorderlessField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText ?? false,
-      inputFormatters: [FilteringTextInputFormatter(RegEx.authenticationFieldsCharset, allow: true)],
+      inputFormatters: [
+        FilteringTextInputFormatter(RegEx.authenticationFieldsCharset,
+            allow: true)
+      ],
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.all(Insets.small),
         hintText: hint,

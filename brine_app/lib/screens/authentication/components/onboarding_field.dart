@@ -70,7 +70,10 @@ class OnboardingField extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType ?? TextInputType.text,
         obscureText: obscureText ?? false,
-        inputFormatters: [FilteringTextInputFormatter(RegEx.authenticationFieldsCharset, allow: true)],
+        inputFormatters: [
+          FilteringTextInputFormatter(RegEx.authenticationFieldsCharset,
+              allow: true)
+        ],
         decoration: InputDecoration(
           filled: true,
           fillColor: Theme.of(context).primaryColorLight,

@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-
+import '../../models/brine_device.dart';
 import '../firebase_emulator/dev_machine_ip.dart';
-import 'models/brine_device.dart';
 
 /// A service class for managing Brine IoT devices.
 ///
@@ -21,7 +19,8 @@ class DeviceManagementService {
   /// Creates an instance of the [DeviceManagementService] class with the specified [user].
   DeviceManagementService({required this.user});
 
-  static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
+  static const String _cloudFunctionsHost =
+      kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
 
   /// The base URL for all endpoints used by this service.
   static String baseUrl = kDebugMode
@@ -55,14 +54,8 @@ class DeviceManagementService {
   /// }
   /// ```
   ///
-  /// The [addDeviceToAccount] function takes a [deviceId], [deviceName], and [publicKey] as parameters. The [deviceId]
-  /// is the unique identifier for the Brine device, and the [deviceName] is a value derived from the device's BLE
-  /// advertisement data.
-  Future<void> addDeviceToAccount({
-    required String deviceId,
-    required String deviceName,
-    required String publicKey,
-  }) async {
+  /// The [addDeviceToAccount] function takes a [BrineDevice] instance as a parameters.
+  Future<void> addDeviceToAccount({required BrineDevice device}) async {
     try {
       // Get the user's ID token
       final String? idToken = await user.getIdToken();
@@ -76,21 +69,23 @@ class DeviceManagementService {
         // Include the ID token in the Authorization header
         headers: {'Authorization': 'Bearer $idToken'},
         body: {
-          'deviceId': deviceId,
-          'deviceName': deviceName.toLowerCase(),
-          'publicKey': publicKey,
+          'deviceId': device.deviceId,
+          'deviceName': device.name.toLowerCase(),
+          'publicKey': device.publicKey,
         },
       );
 
       // Check the response status code
       if (response.statusCode == HttpStatus.ok) {
-        debugPrint('Successfully added the Brine monitor with device ID, $deviceId, to the user\'s account');
+        debugPrint(
+            'Successfully added the Brine monitor with device ID, ${device.name}, to the user\'s account');
 
         return;
       }
       // A non-200 status code was returned.
       else {
-        throw Exception('Account association failed with reason phrase, ${response.reasonPhrase}');
+        throw Exception(
+            'Account association failed with reason phrase, ${response.reasonPhrase}');
       }
     } catch (e) {
       debugPrint('Failed to associate the device with exception, $e');
@@ -103,7 +98,8 @@ class DeviceManagementService {
   /// know the height of the water softener. This allows the distance measurements from the Brine device to be
   /// translated into a percentage of remaining salt in the water softener. This function sends the height of the
   /// water softener to the Firestore backend where it is stored and used in the calculation.
-  Future<void> updateApplianceHeight({required String deviceId, required int height}) async {
+  Future<void> updateApplianceHeight(
+      {required String deviceId, required int height}) async {
     try {
       // Get the user's ID token
       final String? idToken = await user.getIdToken();
@@ -130,7 +126,8 @@ class DeviceManagementService {
       }
       // A non-200 status code was returned.
       else {
-        throw Exception('Setting appliance height failed with reason phrase, ${response.reasonPhrase}');
+        throw Exception(
+            'Setting appliance height failed with reason phrase, ${response.reasonPhrase}');
       }
     } catch (e) {
       debugPrint('Failed to set appliance height with exception, $e');
@@ -161,8 +158,10 @@ class DeviceManagementService {
         debugPrint('Successfully got user deviceIds: ${response.body}');
 
         // Parse the response body
-        final Map<String, dynamic> devicesJson = json.decode(response.body) as Map<String, dynamic>;
-        final List<String> deviceIds = List<String>.from(devicesJson['deviceIds'] as List<dynamic>);
+        final Map<String, dynamic> devicesJson =
+            json.decode(response.body) as Map<String, dynamic>;
+        final List<String> deviceIds =
+            List<String>.from(devicesJson['deviceIds'] as List<dynamic>);
 
         return deviceIds;
       } else {
@@ -208,12 +207,14 @@ class DeviceManagementService {
 
       if (response.statusCode == HttpStatus.ok) {
         // Parse the JSON response
-        final Map<String, dynamic> data = json.decode(response.body) as Map<String, dynamic>;
+        final Map<String, dynamic> data =
+            json.decode(response.body) as Map<String, dynamic>;
 
         // Construct and return the BrineDevice object
         return BrineDevice.fromJson(data);
       } else {
-        throw Exception('Failed to load device levels: ${response.reasonPhrase}');
+        throw Exception(
+            'Failed to load device levels: ${response.reasonPhrase}');
       }
     } catch (e) {
       debugPrint('Error getting device levels: $e');

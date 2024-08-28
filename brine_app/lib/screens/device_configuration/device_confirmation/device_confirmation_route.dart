@@ -24,5 +24,6 @@ class DeviceConfirmationRoute extends StatefulWidget {
   final List<BleDevice> excludedDevices;
 
   @override
-  State<DeviceConfirmationRoute> createState() => DeviceConfirmationController();
+  State<DeviceConfirmationRoute> createState() =>
+      DeviceConfirmationController();
 }

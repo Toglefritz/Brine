@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_splendid_ble/central/models/ble_characteristic.dart';
 import 'package:flutter_splendid_ble/central/models/ble_characteristic_value.dart';
-
 import '../../extensions/json.dart';
 
 /// This class acts as a central manager for all BLE communication between the app and a Brine BLE peripheral for
@@ -78,7 +76,7 @@ class BleCommunicationService {
 
     // Listen for changes in the value of the characteristic.
     _characteristicValueListener = characteristic.subscribe().listen(
-          (value) {
+      (value) {
         // Add the new chunk to the cache.
         characteristicValue += value.valueString;
 
@@ -87,7 +85,8 @@ class BleCommunicationService {
           // Notify all registered callbacks when the value of the characteristic changes.
           for (final void Function(JSON) callback in _callbacks) {
             // Convert the full value of the characteristic to a JSON object and pass it to the callback.
-            final JSON characteristicValueJson = json.decode(characteristicValue) as JSON;
+            final JSON characteristicValueJson =
+                json.decode(characteristicValue) as JSON;
 
             callback(characteristicValueJson);
           }

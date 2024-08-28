@@ -34,7 +34,8 @@ Future<void> main() async {
 
   // Get the use_emulator boolean from the `flutter run` command to determine if the Firebase Emulator Suite should
   // be used. The `fromEnvironment` method returns false by default if the argument is not passed.
-  const bool useFirebaseEmulator = bool.fromEnvironment('USE_FIREBASE_EMULATOR');
+  const bool useFirebaseEmulator =
+      bool.fromEnvironment('USE_FIREBASE_EMULATOR');
 
   // In debug mode, use the Firebase local emulator.
   if (kDebugMode && useFirebaseEmulator) {

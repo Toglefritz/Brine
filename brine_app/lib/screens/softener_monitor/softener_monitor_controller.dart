@@ -13,7 +13,7 @@ class SoftenerMonitorController extends State<SoftenerMonitorRoute> {
 
     await AuthenticationService.signOut();
 
-    if(!mounted) return;
+    if (!mounted) return;
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(

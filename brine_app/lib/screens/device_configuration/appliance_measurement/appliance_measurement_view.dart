@@ -70,10 +70,12 @@ class ApplianceMeasurementView extends StatelessWidget {
                         child: TextField(
                           controller: state.measurementFieldController,
                           decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.waterSoftenerHeight,
-                            labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
+                            labelText: AppLocalizations.of(context)!
+                                .waterSoftenerHeight,
+                            labelStyle:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
                             // A dropdown menu allowing the unit of measurement to be selected
                             suffixIcon: Padding(
                               padding: const EdgeInsets.only(
@@ -83,7 +85,8 @@ class ApplianceMeasurementView extends StatelessWidget {
                                 value: state.unitOfMeasurement,
                                 items: UnitOfMeasurement.values
                                     .map<DropdownMenuItem<UnitOfMeasurement>>(
-                                      (UnitOfMeasurement unit) => DropdownMenuItem<UnitOfMeasurement>(
+                                      (UnitOfMeasurement unit) =>
+                                          DropdownMenuItem<UnitOfMeasurement>(
                                         value: unit,
                                         child: Text(unit.label),
                                       ),
@@ -93,15 +96,18 @@ class ApplianceMeasurementView extends StatelessWidget {
                               ),
                             ),
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).primaryColorDark),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColorDark),
                               borderRadius: BorderRadius.circular(24),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).primaryColorDark),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColorDark),
                               borderRadius: BorderRadius.circular(24),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).primaryColorDark),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColorDark),
                               borderRadius: BorderRadius.circular(24),
                             ),
                           ),
