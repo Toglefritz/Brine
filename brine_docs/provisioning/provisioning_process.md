@@ -11,13 +11,13 @@ This document outlines the provisioning process for Brine IoT devices. The proce
 3. **Device Discovery**: The mobile app scans for Brine devices over BLE and finds the advertising Brine device.
 4. **BLE Pairing and Bonding**: The mobile app performs BLE pairing and bonding with the selected Brine device.
 5. **Device Information Retrieval**: The mobile app obtains the Brine device's unique device ID.
-6. **Backend Communication**: The mobile app sends the device ID, along with the authenticated user's ID, to a Firebase backend service via a REST API endpoint that associates the Brine device to the user's account.
+6. **Backend Communication**: The mobile app sends the device ID, device name, and the device's cryptographic public key along with the authenticated user's credentials, to a Firebase backend service via a REST API endpoint that associates the Brine device to the user's account.
 7. **Device Association**: The Firebase backend service associates the Brine device with the user's account.
 8. **WiFi Credentials Transfer**: The mobile app collects WiFi credentials from the user and sends them to the Brine device over BLE.
 9. **WiFi Connection**: The Brine device attempts to connect to the WiFi network using the provided credentials and reports the success of this operation back to the mobile app over BLE.
-10. **Sending Public Key to Cloud**: Once the Brine device is successfully connect to the WiFi network, it sends a public key to the backend service via a REST API endpoint that is part of a public-private key pair the device generates.
-11. **Device Identify Verification**: The cloud backend verifies the authenticity of the Brine device using manufacturing records. If the verification process passes, the public key sent by the Brine device is stored in the backend service.
-10. **Provisioning Completion**: Once the Brine device is successfully connected to the WiFi network, and it has successfully provided its public key to the backend system, the provisioning process is complete.
+10. **Brine Installation**: The user is provided with instructions to install the Brine device in the water softener.
+11. **Set Appliance Height**: The user measures the height of their water softener and inputs this measurement into the app. The app sends this height to the the cloud backend. 
+12. **Provisioning Completion**: Once the Brine device is successfully connected to the WiFi network, and it has successfully provided its public key to the backend system, the provisioning process is complete.
 
 ```mermaid
 sequenceDiagram
@@ -86,25 +86,15 @@ Using encrypted BLE characteristics for sharing WiFi credentials adds an extra l
 
 The device association step is where information about the Brine device and the authenticated user is linked in backend resources. This association enables the mobile app to retrieve a list of Brine devices associated with the user and display relevant information from those devices.
 
-To perform the device association, the mobile app sends the retrieved device ID, along with the authenticated user's ID, to a Firebase backend service via a REST API endpoint.
+To perform the device association, the mobile app sends the retrieved device ID, device name, and the public key from the Brine device, along with the authenticated user's credentials, to a Firebase backend service via a REST API endpoint. More information about the public key can be found in its own section below.
 
 The Firebase backend service receives the device information and user ID and associates the Brine device with the user's account. This association is typically stored in a database or other backend resource, allowing the mobile app to query and retrieve the associated devices when needed.
 
 By associating the Brine device with the user's account, the mobile app can provide a personalized experience for the user. On future launches of the mobile app, it can retrieve the list of associated Brine devices from the backend and display relevant information from those devices, such as device status, sensor readings, or other device-specific data.
 
-The device association step is crucial for maintaining a seamless connection between the Brine devices and the user's account, enabling efficient management and monitoring of the devices through the mobile app.
+#### Sending Public Key to the Cloud
 
-###  WiFi Credentials Transfer
-
-After the Brine device is associated with the user’s account, the mobile app prompts the user to enter the WiFi credentials (SSID and password) of the network to which the Brine device should connect.
-
-Once the user has entered the WiFi credentials, the mobile app proceeds to send these credentials to the Brine device over Bluetooth Low Energy (BLE).
-
-After sending the WiFi credentials, the mobile app waits for a response from the Brine device to confirm the receipt and processing of the credentials. 
-
-### Sending Public Key to the Cloud
-
-Once the Brine device successfully connects to the WiFi network, it generates a public-private key pair. This key pair is used for secure communication between the device and the backend system. The Brine device uses a cryptographic coprocessor to generate a unique public-private key pair. The private key is securely stored on the device, while the public key is prepared for transmission to the backend service.
+During the manufacturing process, each Brine device generates a public-private key pair. This key pair is used for secure communication between the device and the backend system. The Brine device uses a cryptographic coprocessor to generate a unique public-private key pair. The private key is securely stored on the device, while the public key is prepared for transmission to the backend service.
 
 The Brine device sends its public key to the backend service via a REST API endpoint. This process involves the following sub-steps:
 
@@ -120,3 +110,36 @@ Upon receiving the public key from the Brine device, the backend service perform
 	4.	Handle Mismatch or Failure: If no match is found or the information is inconsistent, the backend service flags the device as potentially unauthorized, and further actions may be taken, such as notifying administrators or blocking the device.
 
 If the authenticity verification process passes, the backend service stores the public key in its database. 
+
+###  WiFi Credentials Transfer
+
+After the Brine device is associated with the user’s account, the mobile app prompts the user to enter the WiFi credentials (SSID and password) of the network to which the Brine device should connect.
+
+Once the user has entered the WiFi credentials, the mobile app proceeds to send these credentials to the Brine device over Bluetooth Low Energy (BLE).
+
+After sending the WiFi credentials, the mobile app waits for a response from the Brine device to confirm the receipt and processing of the credentials. 
+
+### Brine Installation
+
+The mobile app provides the user with step-by-step instructions for installing the Brine monitor in the water softener.
+
+1. **Prepare the Water Softener**: Ensure that the water softener is clean and free of any debris that might interfere with the installation of the Brine monitor.
+2. **Position the Brine Monitor**: Place the Brine monitor on top of the water softener, ensuring that it is centered and stable.
+3. **Secure the Monitor**: Use the provided mounting hardware to secure the Brine monitor in place. Follow the specific instructions for your water softener model to ensure a proper fit.
+
+Once the installation is verified, the Brine monitor will begin measuring the salt level in the water softener and transmitting this data to the cloud backend for analysis and monitoring.
+
+### Set Appliance Height
+
+After the Brine device is connected to the user's account, the mobile app prompts the user to measure the height of the water softener. The user is instructed to use a measuring tape to determine the distance from the base to the top of the water softener.
+
+Once the user has measured the height, they enter this value into the mobile app. The app then sends this height information to the cloud backend and uses it to calculate the approximate percentage of salt left in the water softener. This calculation is based on the distance between the top of the water softener and the current level of salt inside it, which is measured by the Brine device.
+
+The steps are as follows:
+
+1. The mobile app prompts the user to measure the height of the water softener.
+2. The user measures the height using a measuring tape.
+3. The user enters the measured height into the mobile app.
+4. The app sends this information to the cloud backend via a REST API request.
+5. The Brine device measures the distance from the top of the water softener to the salt level.
+6. The app uses the height and distance measurements to estimate the percentage of salt remaining in the water softener.
