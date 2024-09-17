@@ -77,7 +77,7 @@ bool CryptoService::signRequest(const String &data, String &signature) {
 
   // Step 3: Encode the raw signature in Base64 for transmission
   byte *signatureBytes = atecc.signature;
-  signature = base64::encode(signatureBytes, sizeof(signatureBytes));
+  signature = base64::encode(signatureBytes, 64);
 
   debugService.debugPrintln("Request signed successfully.");
 

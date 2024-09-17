@@ -10,20 +10,6 @@
  *  Run this test with the command `pio test --filter test_CryptoService`.
  */
 
-/**
- * @brief Test for initializing the CryptoService module.
- *
- * This function tests the `begin` function of the CryptoService class.
- * It verifies if the cryptographic service starts successfully.
- */
-void test_crypto_service_module_begin(void) {
-    CryptoService cryptoService;
-
-    bool beginResult = cryptoService.begin();
-
-    TEST_ASSERT_TRUE_MESSAGE(beginResult, "Cryptography service failed to start");
-}
-
 /** 
  * @brief Test for reading the public key from the ATECC508A device.
  * 
@@ -33,7 +19,12 @@ void test_crypto_service_module_begin(void) {
 void test_crypto_service_read_public_key(void) {
     CryptoService cryptoService;
 
-    cryptoService.begin();
+    // Initialize the CryptoService
+    bool beginResult = cryptoService.begin();
+
+    TEST_ASSERT_TRUE_MESSAGE(beginResult, "Failed to initialize CryptoService");
+
+    // Read the public key
     String publicKey = cryptoService.readPublicKey();
 
     TEST_ASSERT_NOT_NULL_MESSAGE(publicKey, "Public key is null");
@@ -50,7 +41,12 @@ void test_crypto_service_read_public_key(void) {
 void test_crypto_service_sign_request(void) {
     CryptoService cryptoService;
 
-    cryptoService.begin();
+    // Initialize the CryptoService
+    bool beginResult = cryptoService.begin();
+
+    TEST_ASSERT_TRUE_MESSAGE(beginResult, "Failed to initialize CryptoService");
+
+    // Sign the request
     String data = "Test data";
     String signature;
 
@@ -70,7 +66,6 @@ void test_crypto_service_sign_request(void) {
 void setup() {
     UNITY_BEGIN();
 
-    RUN_TEST(test_crypto_service_module_begin);
     RUN_TEST(test_crypto_service_read_public_key);
     RUN_TEST(test_crypto_service_sign_request);
 
