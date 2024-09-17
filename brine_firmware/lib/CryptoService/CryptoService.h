@@ -47,7 +47,21 @@ public:
    */
   String readPublicKey();
 
-  // TODO(Toglefritz): Implement signing function
+/**
+ * @brief Signs the given data using the private key stored on the ATECC508A 
+ * device.
+ * 
+ * This method signs the given data using the private key stored on the 
+ * ATECC508A device. The signature is returned as a base64 encoded string. This 
+ * function is used to sign requests before they are sent to the cloud backend.
+ * The cloud backend system can then verify the signature using the public key,
+ * which it obtains from the mobile app after the Brine monitor sends this key
+ * to the mobile app during the provisioning process.
+ * 
+ * @param data The data to sign.
+ * @param signature The signature of the data.
+ */
+  bool signRequest(const String &data, String &signature);
 
 private:
   /**

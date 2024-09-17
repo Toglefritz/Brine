@@ -34,9 +34,30 @@ void test_crypto_service_read_public_key(void) {
     CryptoService cryptoService;
 
     cryptoService.begin();
-    byte *publicKey = cryptoService.readPublicKey();
+    String publicKey = cryptoService.readPublicKey();
 
     TEST_ASSERT_NOT_NULL_MESSAGE(publicKey, "Public key is null");
+}
+
+/**
+ * @brief Test for signing data using the private key stored on the ATECC508A 
+ * device.
+ * 
+ * This function tests the `signRequest` function of the CryptoService class.
+ * It verifies if the data is signed successfully using the private key stored
+ * on the ATECC508A device.
+ */
+void test_crypto_service_sign_request(void) {
+    CryptoService cryptoService;
+
+    cryptoService.begin();
+    String data = "Test data";
+    String signature;
+
+    bool signResult = cryptoService.signRequest(data, signature);
+
+    TEST_ASSERT_TRUE_MESSAGE(signResult, "Failed to sign the request");
+    TEST_ASSERT_NOT_NULL_MESSAGE(signature, "Signature is null");
 }
 
 /**
@@ -51,6 +72,7 @@ void setup() {
 
     RUN_TEST(test_crypto_service_module_begin);
     RUN_TEST(test_crypto_service_read_public_key);
+    RUN_TEST(test_crypto_service_sign_request);
 
 
     UNITY_END();
