@@ -2,9 +2,9 @@
 #ifndef FIREBASESERVICE_H
 #define FIREBASESERVICE_H
 
+#include "DeviceConfig.h"
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
-#include "DeviceConfig.h"
 
 /**
  * @class FirebaseService
@@ -27,7 +27,7 @@ public:
    *
    * @param batteryLife A float representing the remaining battery life percentage.
    * @param distance A float representing the distance measured by the sensor in meters.
-   * 
+   *
    * @return true if the upload was successful, false otherwise.
    */
   bool uploadSensorData(float batteryLife, float distance) {
@@ -67,21 +67,43 @@ private:
   bool sendPostRequest(const char *endpoint, const String &jsonPayload) {
     // Create an HTTP client object and send a POST request to the specified Firebase endpoint with the JSON payload.
     HTTPClient http;
+
+    // Create a CryptoService instance to sign the request.
+    CryptoService cryptoService;
+
+    // Begin the HTTP connection
     http.begin(endpoint);
+
+    // Add the necessary HTTP headers
     http.addHeader("Content-Type", "application/json");
 
-    // TODO: Add authentication header
-    // This could involve generating a token using the cryptographic coprocessor and adding it as a header.
-    // Example: http.addHeader("Authorization", "Bearer <token>");
+    // Sign the JSON payload
+    String signature;
+    if (!cryptoService.signRequest(jsonPayload, signature)) {
+      DebugService::getInstance().debugPrintln("Failed to sign the request.");
+      http.end(); // Close the connection
+      return false;
+    }
+
+    // Add the signature to the HTTP headers
+    http.addHeader("X-Signature", signature);
 
     // Send the POST request and store the HTTP response code.
     int httpResponseCode = http.POST(jsonPayload);
+
+    // Print the response payload for debugging
+    if (httpResponseCode > 0) {
+      String response = http.getString();
+      DebugService::getInstance().debugPrintln("Response: " + response);
+    } else {
+      DebugService::getInstance().debugPrintln("Error on sending POST: " + String(httpResponseCode));
+    }
 
     // End the HTTP session.
     http.end();
 
     // Return true if the HTTP response code is 200 (OK).
-    return httpResponseCode == 200;
+    return (httpResponseCode == 200 || httpResponseCode == 201);
   }
 };
 
