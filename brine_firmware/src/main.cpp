@@ -9,7 +9,6 @@
 #include <I2CButton.h>
 #include <I2CLED.h>
 #include <Wire.h>
-#include <Hash.h>
 
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
 // when the provisioning process been running for three minutes or more.

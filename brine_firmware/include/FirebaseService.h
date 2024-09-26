@@ -5,6 +5,7 @@
 #include "DeviceConfig.h"
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
+#include <CryptoService.h>
 
 /**
  * @class FirebaseService
