@@ -22,7 +22,7 @@ const admin = require('../config/adminInit.cjs');
  *     "device_id": "vast_teal_elephant",
  *     "name": "7b67",
  *     "battery_level": 0.7,
- *     "salt_level": 0.4,
+ *     "salt_distance": 800,
  *     "appliance_height": 1000,
  *     "last_updated": "2021-09-01T12:00:00Z"
  * }
@@ -139,7 +139,7 @@ async function addDeviceToUser(req, res) {
                 device_id: deviceId,
                 name: deviceName,
                 battery_level: -1,  // -1 indicates unknown battery level
-                salt_level: -1,    // -1 indicates unknown salt level
+                salt_distance: -1,    // -1 indicates unknown salt level
                 appliance_height: -1,  // -1 indicates unknown appliance height
                 public_key: publicKey,
                 last_updated: new Date().toISOString(),

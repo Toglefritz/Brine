@@ -12,7 +12,7 @@ const admin = require('../config/adminInit.cjs');
  *     "device_id": "vast_teal_elephant",
  *     "name": "7b67",
  *     "battery_level": 0.7,
- *     "salt_level": 0.4,
+ *     "salt_distance": 800,
  *     "appliance_height": 1000,
  *     "last_updated": "2021-09-01T12:00:00Z"
  * }
