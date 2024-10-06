@@ -66,14 +66,13 @@ bool _updateDeviceLevels() {
   // Get the "salt level" from the distance sensor. Note that the salt level here is represented as a distance value.
   // Converting this distance to a unit such as the percentage of salt remaining is handled by the cloud service
   // backend in order to save memory, processing time, and energy on the Brine device.
-  //float saltLevel = sensor.getDistance();
+  float saltLevel = sensor.getDistance();
 
   // Get the remaining battery life percentage from the battery monitor.
-  //float batteryLife = batteryMonitor.getBatteryLifePercent();
+  float batteryLife = batteryMonitor.getBatteryLifePercent();
 
   // Upload the salt and battery levels to the Firebase cloud.
-  //bool success = firebaseService.uploadSensorData(batteryLife, saltLevel);
-  bool success = firebaseService.uploadSensorData(50, 800);
+  bool success = firebaseService.uploadSensorData(batteryLife, saltLevel);
 
   return success;
 }

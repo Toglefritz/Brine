@@ -40,7 +40,7 @@ public:
     // Add the battery life percentage and distance measurement to the JSON document.
     doc["device_id"] = DEVICE_ID;
     doc["battery_level"] = batteryLife;
-    doc["salt_level"] = distance;
+    doc["salt_distance"] = distance;
 
     // Serialize the JSON document to a string.
     String payload;

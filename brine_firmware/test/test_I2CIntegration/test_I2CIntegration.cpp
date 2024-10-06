@@ -135,7 +135,7 @@ void test_crypto_service_read_public_key(void) {
  */
 void test_crypto_service_sign_request(void) {
   // Sign the request
-  String data = "{\"device_id\":\"vast_teal_elephant\",\"battery_level\":50,\"salt_level\":1505}";
+  String data = "{\"device_id\":\"vast_teal_elephant\",\"battery_level\":50,\"salt_distance\":1505}";
   String signature;
 
   bool signResult = cryptoService.signRequest(data, signature);
