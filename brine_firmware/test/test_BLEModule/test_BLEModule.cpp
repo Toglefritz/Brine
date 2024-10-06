@@ -45,6 +45,9 @@ void test_ble_module_advertise(void) {
  * suite.
  */
 void setup() {
+    // Join the I2C bus
+    Wire.begin();
+    
     UNITY_BEGIN();
 
     RUN_TEST(test_ble_module_begin);

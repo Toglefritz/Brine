@@ -13,9 +13,6 @@ CryptoService::CryptoService() {}
  * @return True if initialization is successful, otherwise false.
  */
 bool CryptoService::begin() {
-  // Initialize I2C communication
-  Wire.begin();
-
   if (!atecc.begin()) {
     debugService.debugPrintln("Failed to initialize ATECC508A!");
     return false;

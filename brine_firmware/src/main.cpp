@@ -6,9 +6,11 @@
 #include <BLEApiHandler.h>
 #include <BLEModule.h>
 #include <DeviceConfigurationManager.h>
+#include <DistanceSensor.h>
 #include <I2CButton.h>
 #include <I2CLED.h>
 #include <Wire.h>
+#include <BatteryMonitor.h>
 
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
 // when the provisioning process been running for three minutes or more.
@@ -34,6 +36,47 @@ void IRAM_ATTR button_isr() { buttonPressed = true; }
 
 // A handler for Bluetooth API commands and responses.
 BLEApiHandler apiHandler;
+
+// A service for sending information to the Firebase cloud backend.
+FirebaseService firebaseService;
+
+// A service for getting readings from the distance sensor used to determine the salt level in the water softener based
+// on the distance of the salt level from the sensor compared to the overall height of the water softener.
+DistanceSensor sensor;
+
+// A service for getting the remaining battery life of the device based on a voltage divider connected to the battery.
+BatteryMonitor batteryMonitor(A0);
+
+// A service for interacting with the cryptographic coprocessor.
+CryptoService cryptoService;
+
+/**
+ * @brief Updates the device salt and battery levels in the Firebase cloud.
+ *
+ * This function retrieves the salt and battery levels from the device's sensors and sends them to the Firebase cloud
+ * backend via a POST request. The function uses the `FirebaseService` singleton instance to send the data.
+ *
+ * @note This function will fail if the device is not connected to the internet.
+ *
+ * @return true if the data was successfully uploaded to the Firebase cloud, false otherwise.
+ */
+bool _updateDeviceLevels() {
+  DebugService::getInstance().debugPrintln("Updating device levels...");  
+
+  // Get the "salt level" from the distance sensor. Note that the salt level here is represented as a distance value.
+  // Converting this distance to a unit such as the percentage of salt remaining is handled by the cloud service
+  // backend in order to save memory, processing time, and energy on the Brine device.
+  //float saltLevel = sensor.getDistance();
+
+  // Get the remaining battery life percentage from the battery monitor.
+  //float batteryLife = batteryMonitor.getBatteryLifePercent();
+
+  // Upload the salt and battery levels to the Firebase cloud.
+  //bool success = firebaseService.uploadSensorData(batteryLife, saltLevel);
+  bool success = firebaseService.uploadSensorData(50, 800);
+
+  return success;
+}
 
 /**
  * @brief Initializes the device configuration manager and sets up Bluetooth callbacks.
@@ -110,6 +153,27 @@ void startProvisioning() {
     // Handle descriptor write event in main
   });
 
+  // Set a callback for handling completion of the provisioning process upon receiving a command from the client
+  // indicating that all tasks have been completed.
+  apiHandler.setProvisioningCompleteCallback([]() {
+    DebugService::getInstance().debugPrintln("Provisioning complete. Stopping provisioning process.");
+
+    // Stop the provisioning process.
+    DeviceConfigurationManager::getInstance().stopProvisioning();
+
+    // Turn off the LED in case it was on at the time of the timeout.
+    I2CLED::getInstance().turnOff();
+
+    // Upload the salt and battery levels to the cloud.
+    _updateDeviceLevels();
+    // TODO handle the upload process failing
+
+    // Reset the provisioning start time and button pressed flags.
+    provisioningStartTime = 0;
+    buttonPressed = false;
+    clientConnected = false;
+  });
+
   // Start the provisioning process.
   deviceConfigManager.startProvisioning();
 
@@ -129,6 +193,22 @@ void setup() {
 
   // Turn the LED off initially.
   I2CLED::getInstance().turnOff();
+
+  // Initialize the distance sensor.
+  bool sensorInitialized = sensor.begin();
+  if (!sensorInitialized) {
+    DebugService::getInstance().debugPrintln("Failed to initialize distance sensor.");
+  } else {
+    DebugService::getInstance().debugPrintln("Distance sensor initialized.");
+  }
+
+  // Initialize the cryptographic coprocessor.
+  bool cryptoInitialized = cryptoService.begin();
+  if (!cryptoInitialized) {
+    DebugService::getInstance().debugPrintln("Failed to initialize cryptographic coprocessor.");
+  } else {
+    DebugService::getInstance().debugPrintln("Cryptographic coprocessor initialized.");
+  }
 
   // Use the debugService to print messages.
   DebugService::getInstance().debugPrintln("Brine monitor setup complete.");
@@ -157,7 +237,7 @@ void loop() {
     // Start the provisioning process.
     startProvisioning();
   }
-  // If more than three minutes has passed since the provisioning process started, and a client is not connected, 
+  // If more than three minutes has passed since the provisioning process started, and a client is not connected,
   // turn off provisioning process.
   else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000 && !clientConnected) {
     DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");

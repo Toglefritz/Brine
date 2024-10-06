@@ -114,11 +114,20 @@ public:
 
       return handleWifiConnect(ssid, password);
     }
+    // The command "complete_provisioning" indicates that the provisioning process is complete.
+    else if (strcmp(command, "complete_provisioning") == 0) {
+      return handleCompleteProvisioning();
+    }
     // The command is not recognized
     else {
       return createErrorResponse("Unknown command");
     }
   }
+
+  /**
+   * @brief Sets a callback function to handle the provisioning completion event.
+   */
+  void setProvisioningCompleteCallback(std::function<void()> callback) { provisioningCompleteCallback = callback; }
 
 private:
   /**
@@ -247,6 +256,53 @@ private:
       } else {
         errorResponseDoc["message"] = "Unknown error";
       }
+
+      String errorResponse;
+      serializeJson(errorResponseDoc, errorResponse);
+
+      return errorResponse;
+    }
+  }
+
+  /**
+   * @brief A callback function to handle the completion of the provisioning process.
+   */
+  std::function<void()> provisioningCompleteCallback;
+
+  /**
+   * @brief Concludes the provisioning process by sending the salt and battery levels to Firebase and then ending
+   * Bluetooth communication.
+   *
+   * This method is called when the client indicates to the Brine device that all setup steps are complete.
+   */
+  String handleCompleteProvisioning() {
+    DebugService::getInstance().debugPrint("Completing provisioning process");
+
+    // Check if the connection was successful
+    try {
+      // Create a JSON response indicating successful connection.
+      JsonDocument responseDoc;
+      responseDoc["response"] = "provisioning_complete";
+
+      String jsonResponse;
+      serializeJson(responseDoc, jsonResponse);
+
+      // Call the provisioning complete callback function
+      provisioningCompleteCallback();
+
+      DebugService::getInstance().debugPrint("Provisioning process complete");
+
+      return jsonResponse;
+    }
+    // If the connection failed, return an error response.
+    catch (const std::exception &e) {
+      DebugService::getInstance().debugPrint("Failed to complete provisioning process: ");
+      DebugService::getInstance().debugPrintln(e.what());
+
+      // Create a JSON response indicating the reason for the failure.
+      JsonDocument errorResponseDoc;
+      errorResponseDoc["response"] = "complete_provisioning_error";
+      errorResponseDoc["message"] = e.what();
 
       String errorResponse;
       serializeJson(errorResponseDoc, errorResponse);

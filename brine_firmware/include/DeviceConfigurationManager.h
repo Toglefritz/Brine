@@ -60,6 +60,8 @@ public:
    * Stops the provisioning process by ending the BLE module.
    */
   void stopProvisioning() {
+    // TODO(Toglefritz): Send salt and battery levels to Firebase.
+
     // End the BLE module
     bleModule.end();
   }

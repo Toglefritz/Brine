@@ -58,6 +58,9 @@ void test_get_distance(void) {
  * suite.
  */
 void setup() {
+    // Join the I2C bus
+    Wire.begin();
+    
     UNITY_BEGIN();
 
     RUN_TEST(test_sensor_initialization);
