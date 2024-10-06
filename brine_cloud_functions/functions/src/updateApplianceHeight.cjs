@@ -84,6 +84,9 @@ async function updateApplianceHeight(req, res) {
 
         // Update the appliance height in the device document
         try {
+            // Convert the appliance height to a number
+            const applianceHeight = parseInt(req.body.appliance_height);
+
             // Update the appliance height in the device document
             await deviceDocRef.update({ appliance_height: applianceHeight });
 

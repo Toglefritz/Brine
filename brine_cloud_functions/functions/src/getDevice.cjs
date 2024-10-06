@@ -1,9 +1,9 @@
 const admin = require('../config/adminInit.cjs');
 
 /**
- * @brief Retrieves the battery level and salt level of a device.
+ * @brief Retrieves information about a device by its device ID.
  * 
- * This function is called by the mobile app to retrieve the battery level and salt level of a device. The function
+ * This function is called by the mobile app to retrieve information about a Brine device. The function
  * retrieves the device document from Firestore and returns the levels as a JSON response.
  * 
  * Each device document in Firestore has the following structure:
@@ -17,16 +17,10 @@ const admin = require('../config/adminInit.cjs');
  *     "last_updated": "2021-09-01T12:00:00Z"
  * }
  * 
- * The function is provided with the device ID as a query parameter. It first retrieves the user document from Firestore
- * to check if the user has access to the specified device. It then retrieves the device document from Firestore and
- * returns the battery level and salt level as a JSON response. For example,
- * 
- * {
- *   "battery_level": 0.7,
- *   "salt_level": 0.4
- * }
+ * The function is provided with the device ID as a query parameter. It retreives the device document from Firestore
+ * and returns it as a JSON response after verifying that the user has access to the device.
  */
-async function getDeviceLevels(req, res) {
+async function getDevice(req, res) {
     // Get the user ID from the request, which was attached by the authenticate middleware.
     const userUid = req.user.uid;
 
@@ -69,21 +63,15 @@ async function getDeviceLevels(req, res) {
             return;
         }
 
-        // Get the battery level and salt level from the device document
-        const batteryLevel = deviceDocSnapshot.get("battery_level");
-        const saltLevel = deviceDocSnapshot.get("salt_level");
-
-        // Return the battery level and salt level as JSON
-        res.status(200).json({
-            battery_level: batteryLevel,
-            salt_level: saltLevel
-        });
+        // Return the device document.
+        const deviceData = deviceDocSnapshot.data();
+        res.status(200).json(deviceData);
     } catch (error) {
         // If an error occurs, log it and return an internal server error.
-        console.error("Error getting device levels:", error);
+        console.error("Error getting device:", error);
         res.status(500).send('Internal Server Error');
     }
 }
 
 // Export the function to make it available for import
-module.exports = { getDeviceLevels: getDeviceLevels };
+module.exports = { getDevice: getDevice };

@@ -25,7 +25,7 @@ const authenticate = require('./middleware/authMiddleware.cjs');
 const { createUser } = require('./src/createUser.cjs');
 const { getUserDevices } = require('./src/getUserDevices.cjs');
 const { updateDeviceLevels } = require('./src/updateDeviceLevels.cjs');
-const { getDeviceLevels } = require('./src/getDeviceLevels.cjs');
+const { getDevice } = require('./src/getDevice.cjs');
 const { addDeviceToUser } = require('./src/addDeviceToUser.cjs');
 const { updateApplianceHeight } = require('./src/updateApplianceHeight.cjs');
 
@@ -87,17 +87,18 @@ exports.updateDeviceLevels = onRequest(async (req, res) => {
 });
 
 /**
- * @brief Endpoint used to get the levels of a device.
+ * @brief Endpoint used to get information about a Brine device.
  * 
- * This endpoint is called by the mobile app to retrieve the salt and battery levels for a specific device. The 
- * function retrieves the device document from the Firestore database and returns the levels as a JSON response.
+ * This endpoint is called by the mobile app to retrieve information about the Brine device stored in the Firestore
+ * database. The function retrieves the device document from Firestore and returns it as a JSON response after verifying
+ * that the user has access to the device.
  * 
  * @param {Object} req The HTTP request object.
  * @param {Object} res The HTTP response object.
  */
-exports.getDeviceLevels = functions.https.onRequest(async (req, res) => {
+exports.getDevice = functions.https.onRequest(async (req, res) => {
     authenticate(req, res, async () => {
-        getDeviceLevels(req, res);
+        getDevice(req, res);
     });
 });
 
