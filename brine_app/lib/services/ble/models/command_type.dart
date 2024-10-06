@@ -11,7 +11,10 @@ enum CommandType {
   scan(value: 'scan', responseKey: 'networks'),
 
   /// Provides the SSID and password of a WiFi network to which the Brine device should connect.
-  wifiConnect(value: 'wifi_connect', responseKey: 'wifi_connection_status');
+  wifiConnect(value: 'wifi_connect', responseKey: 'wifi_connection_status'),
+
+  /// Requests that the Brine device conclude the provisioning process and return to normal operation.
+  completeProvisioning(value: 'complete_provisioning', responseKey: 'provisioning_complete');
 
   /// Creates an instance of [CommandType].
   const CommandType({

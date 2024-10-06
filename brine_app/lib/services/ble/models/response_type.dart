@@ -15,6 +15,9 @@ enum ResponseType {
   /// A response indicating that the Brine device encountered a failure while attempting to connect to a WiFi network.
   wifiConnectError,
 
+  /// A response indicating that the Brine device has successfully concluded the provisioning process.
+  provisioningComplete,
+
   /// An error response.
   error;
 
@@ -32,6 +35,8 @@ enum ResponseType {
         return 'wifi_connected';
       case ResponseType.wifiConnectError:
         return 'wifi_connect_error';
+      case ResponseType.provisioningComplete:
+        return 'provisioning_complete';
       case ResponseType.error:
         return 'error';
     }

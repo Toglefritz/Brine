@@ -56,13 +56,13 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     debugPrint('Connecting to device: ${widget.device.address}');
 
     try {
-      _connectionStream =
-          _ble.connect(deviceAddress: widget.device.address).listen(
-                _onConnectionStateUpdate,
-              );
+      _connectionStream = _ble.connect(deviceAddress: widget.device.address).listen(
+            _onConnectionStateUpdate,
+          );
     } catch (e) {
       debugPrint(
-          'Failed to connect to device, ${widget.device.address}, with exception, $e');
+        'Failed to connect to device, ${widget.device.address}, with exception, $e',
+      );
 
       _handleConnectionError(e);
     }
@@ -80,7 +80,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   // TODO(Toglefritz): add a timeout
   void _onConnectionStateUpdate(BleConnectionState state) {
     debugPrint(
-        'Connection state update for ${widget.device.name}: ${state.name}');
+      'Connection state update for ${widget.device.name}: ${state.name}',
+    );
 
     if (state == BleConnectionState.connected) {
       _discoverServices();
@@ -91,16 +92,14 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   void _discoverServices() {
     debugPrint('Discovering services');
 
-    _servicesDiscoveredStream =
-        _ble.discoverServices(widget.device.address).listen(
-              _onServiceDiscovered,
-            );
+    _servicesDiscoveredStream = _ble.discoverServices(widget.device.address).listen(
+          _onServiceDiscovered,
+        );
   }
 
   /// Called when a services are successfully discovered.
   void _onServiceDiscovered(List<BleService> services) {
-    debugPrint(
-        'Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
+    debugPrint('Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
 
     // Ensure that the expected single service containing a single characteristic were discovered.
     if (services.length != 1 || services.first.characteristics.length != 1) {
@@ -112,19 +111,16 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     }
 
     // Get the single characteristic available from the Brine monitor.
-    final BleCharacteristic characteristic =
-        services.first.characteristics.first;
+    final BleCharacteristic characteristic = services.first.characteristics.first;
 
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
     _createBleCommunicationManager(characteristic);
   }
 
   /// Subscribes to the single characteristic available from Brine devices.
-  Future<void> _createBleCommunicationManager(
-      BleCharacteristic characteristic) async {
+  Future<void> _createBleCommunicationManager(BleCharacteristic characteristic) async {
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
-    _bleCommunicationManager =
-        BleCommunicationService(characteristic: characteristic);
+    _bleCommunicationManager = BleCommunicationService(characteristic: characteristic);
 
     // Register a callback for changes in the value of the characteristic.
     _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);
@@ -142,8 +138,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     debugPrint('Requesting public key');
 
     // Get the command for requesting the device ID.
-    final Command publicKeyCommand =
-        Command(commandType: CommandType.getPublicKey);
+    final Command publicKeyCommand = Command(commandType: CommandType.getPublicKey);
     final String commandString = publicKeyCommand.toJsonString();
 
     try {
@@ -168,8 +163,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     debugPrint('Requesting device ID');
 
     // Get the command for requesting the device ID.
-    final Command deviceIdCommand =
-        Command(commandType: CommandType.getDeviceId);
+    final Command deviceIdCommand = Command(commandType: CommandType.getDeviceId);
     final String commandString = deviceIdCommand.toJsonString();
 
     try {
@@ -185,8 +179,11 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Handles changes in the value of a [BleCharacteristic].
   ///
-  /// In this controller, the only command sent by the app is the one used to request the device ID. Therefore,
-  /// the only value this callback expects to receive is the one containing the requested device ID value.
+  /// This controller obtains two pieces of information from the Brine monitor: the public key and the device ID. The
+  /// controller requests the public key first. Then, once the public key is received, the controller requests the
+  /// device ID.
+  ///
+  /// Finally, once both the public key and device ID are received, the controller continues to the next step.
   Future<void> _onCharacteristicChanged(JSON value) async {
     // Get a Response object from the characteristic value.
     final Response response = Response.fromJson(value);
@@ -219,10 +216,10 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     final BrineDevice device = BrineDevice(
       deviceId: _deviceId,
       name: widget.device.name?.substring(6) ?? widget.device.address,
-      saltLevel: -1,
       // A value of -1 indicates that the salt level is unknown.
-      batteryLevel: -1,
+      saltLevel: -1,
       // A value of -1 indicates that the battery level is unknown.
+      batteryLevel: -1,
       publicKey: _publicKey,
       retrievalTimestamp: DateTime.now(),
     );

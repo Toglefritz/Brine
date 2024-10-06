@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_splendid_ble/central/models/ble_characteristic.dart';
 import 'package:flutter_splendid_ble/central/models/ble_characteristic_value.dart';
+import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
+import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 import '../../extensions/json.dart';
 
 /// This class acts as a central manager for all BLE communication between the app and a Brine BLE peripheral for
@@ -36,6 +38,9 @@ import '../../extensions/json.dart';
 /// race conditions in which the app will not know when the Brine device has finished processing a command can be
 /// avoided.
 class BleCommunicationService {
+  /// An instance of [SplendidBleCentral] used for communication with the Brine BLE peripheral.
+  static SplendidBleCentral ble = SplendidBleCentral();
+
   /// Creates an instance of [BleCommunicationService] and subscribes to the characteristic of the Brine device.
   BleCommunicationService({required this.characteristic}) {
     // Subscribe to the characteristic so that the app can receive updates from the Brine device.
@@ -85,8 +90,7 @@ class BleCommunicationService {
           // Notify all registered callbacks when the value of the characteristic changes.
           for (final void Function(JSON) callback in _callbacks) {
             // Convert the full value of the characteristic to a JSON object and pass it to the callback.
-            final JSON characteristicValueJson =
-                json.decode(characteristicValue) as JSON;
+            final JSON characteristicValueJson = json.decode(characteristicValue) as JSON;
 
             callback(characteristicValueJson);
           }
@@ -110,6 +114,12 @@ class BleCommunicationService {
 
       rethrow;
     }
+  }
+
+  /// Disconnects from the Brine device and disposes of the characteristic subscription.
+  Future<void> disconnect(BleDevice device) async {
+    await ble.disconnect(device.address);
+    dispose();
   }
 
   /// When the characteristic subscription is no longer needed, this method should be called to dispose of the

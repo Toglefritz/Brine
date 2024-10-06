@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import '../../../models/unit_of_measurement.dart';
 import '../../../services/device_management/device_management_service.dart';
 import '../brine_installation/brine_installation_route.dart';
+import '../provisioning_complete/provisioning_complete_route.dart';
 import 'appliance_measurement_route.dart';
 import 'appliance_measurement_view.dart';
 
 /// Controller for [BrineInstallationRoute].
 class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
   /// A controller for the [TextField] used to collect the height of the water softener from the user.
-  final TextEditingController measurementFieldController =
-      TextEditingController();
+  final TextEditingController measurementFieldController = TextEditingController();
 
   /// The unit of measurement used for the height measurement.
   UnitOfMeasurement unitOfMeasurement = UnitOfMeasurement.inches;
@@ -34,7 +34,7 @@ class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
   }
 
   /// Handles submission of the height of the water softener.
-  void onHeightSubmitted() {
+  Future<void> onHeightSubmitted() async {
     // TODO(Toglefritz): add analytics call
 
     try {
@@ -47,7 +47,7 @@ class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
       final User user = FirebaseAuth.instance.currentUser!;
 
       // Update the appliance height in the database.
-      DeviceManagementService(user: user).updateApplianceHeight(
+      await DeviceManagementService(user: user).updateApplianceHeight(
         deviceId: widget.device.deviceId,
         height: height,
       );
@@ -57,7 +57,19 @@ class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
       // TODO(Toglefritz): Handle the failure to parse the height.
     }
 
-    // TODO(Toglefritz): navigate to next route
+    if (!mounted) {
+      return;
+    }
+
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => ProvisioningCompleteRoute(
+          bleCommunicationManager: widget.bleCommunicationManager,
+          device: widget.device,
+        ),
+      ),
+    );
   }
 
   /// Converts the height of the water softener to millimeters.

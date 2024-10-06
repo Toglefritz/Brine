@@ -23,6 +23,10 @@
   "@bleConnecting": {
     "description": "Text displayed while the app is establishing a Bluetooth connection to a device."
   },
+  "done": "Done",
+  "@done": {
+    "description": "Text indicating that a process has been completed."
+  },
   "brine": "Brine",
   "@brine": {
     "description": "The name of the app and the product."
@@ -30,6 +34,10 @@
   "chooseAnother": "Choose another",
   "@chooseAnother": {
     "description": "Text for a button allowing the user to select a different Brine device from the Bluetooth scan"
+  },
+  "completingSetup": "Completing setup...",
+  "@completingSetup": {
+    "description": "Text displayed while the app is completing the setup process at the end of the provisioning flow."
   },
   "confirmPassword": "Confirm password",
   "@confirmPassword": {
@@ -111,6 +119,10 @@
   "scanningMessage": "Scanning for devices...",
   "@scanningMessage": {
     "description": "Text displayed while the app is scanning for Brine devices."
+  },
+  "setupComplete": "Setup complete",
+  "@setupComplete": {
+    "description": "Text displayed when the setup process is complete."
   },
   "signUpWithApple": "sign up with Apple",
   "@signUpWithApple": {

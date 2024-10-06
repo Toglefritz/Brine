@@ -8,6 +8,7 @@ import 'package:flutter_splendid_ble/shared/models/bluetooth_permission_status.d
 import 'package:flutter_splendid_ble/shared/models/bluetooth_status.dart';
 
 import '../../../services/analytics/analytics.dart';
+import '../../../services/ble/ble_communication_service.dart';
 import '../../setup/setup_route.dart';
 import '../device_confirmation/device_confirmation_route.dart';
 import 'scan_route.dart';
@@ -16,9 +17,6 @@ import 'scan_view_none_found.dart';
 
 /// Controller for the [ScanRoute].
 class ScanController extends State<ScanRoute> {
-  /// An instance of the [SplendidBle] service used for the Bluetooth scanning process.
-  final SplendidBle _ble = SplendidBle();
-
   /// A [StreamSubscription] used to listen for changes in the state of the Bluetooth adapter.
   ///
   /// This subscription listens for updates on the current status of the Bluetooth adapter,
@@ -56,7 +54,7 @@ class ScanController extends State<ScanRoute> {
   ///
   /// This method sets up a listener to monitor the current status of the Bluetooth permissions on the host platform.
   void _initBluetoothPermissionStatusMonitor() {
-    _bluetoothPermissionStream = _ble.emitCurrentPermissionStatus().listen(
+    _bluetoothPermissionStream = BleCommunicationService.ble.emitCurrentPermissionStatus().listen(
       (status) {
         _bluetoothPermissionStatus = status;
 
@@ -71,7 +69,7 @@ class ScanController extends State<ScanRoute> {
     );
 
     // Request Bluetooth permissions. If they have already been granted, this method will do nothing.
-    _ble.requestBluetoothPermissions();
+    BleCommunicationService.ble.requestBluetoothPermissions();
   }
 
   /// Initializes Bluetooth status monitoring.
@@ -80,7 +78,7 @@ class ScanController extends State<ScanRoute> {
   /// during the initialization phase of the app or when Bluetooth monitoring is required.
   void _initBluetoothAdapterStatusMonitor() {
     try {
-      _bluetoothStatusStream = _ble.emitCurrentBluetoothStatus().listen(
+      _bluetoothStatusStream = BleCommunicationService.ble.emitCurrentBluetoothStatus().listen(
         (status) {
           _bluetoothAdapterStatus = status;
 
@@ -120,7 +118,7 @@ class ScanController extends State<ScanRoute> {
     debugPrint('Starting scan');
 
     // Start the scan
-    _discoveredDeviceSubscription = _ble.startScan(
+    _discoveredDeviceSubscription = BleCommunicationService.ble.startScan(
       filters: <ScanFilter>[
         ScanFilter(
           serviceUuids: ['6272696e-6573-616c-746d-6f6e69746f72'],
@@ -201,7 +199,7 @@ class ScanController extends State<ScanRoute> {
 
   /// Stops the scan for nearby BLE devices.
   void _stopScan({bool? scanTimeout}) {
-    _ble.stopScan();
+    BleCommunicationService.ble.stopScan();
     _discoveredDeviceSubscription?.cancel();
 
     // If the scan was stopped due to a timeout, show a message to the user.
