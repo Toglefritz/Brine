@@ -56,6 +56,8 @@ void main() {
           deviceId: 'mock_device_id',
           name: 'mock_device_name',
           publicKey: 'mock_public_key',
+          saltDistance: 100,
+          applianceHeight: 200,
           saltLevel: 0.5,
           batteryLevel: 0.8,
           retrievalTimestamp: DateTime.now(),

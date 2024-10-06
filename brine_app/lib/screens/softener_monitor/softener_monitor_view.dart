@@ -30,7 +30,8 @@ class SoftenerMonitorView extends StatelessWidget {
     // If the salt level is above 40%, the label will follow the salt level indicator down the screen.
     if (saltLevel > 0.70) {
       return EdgeInsets.only(
-          top: screenHeight * (1 - saltLevel) - Insets.medium);
+        top: screenHeight * (1 - saltLevel) - Insets.medium,
+      );
     }
     // If the salt level is below 40%, the label will be displayed near the top of the page.
     else {
@@ -117,10 +118,9 @@ class SoftenerMonitorView extends StatelessWidget {
                     ),
                     child: Text(
                       AppLocalizations.of(context)!.saltRemaining.toUpperCase(),
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: _getTextColor(context),
-                              ),
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: _getTextColor(context),
+                          ),
                       textAlign: TextAlign.center,
                     ),
                   ),

@@ -216,6 +216,10 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     final BrineDevice device = BrineDevice(
       deviceId: _deviceId,
       name: widget.device.name?.substring(6) ?? widget.device.address,
+      // A value of -1 indicates that the salt distance is unknown.
+      saltDistance: -1,
+      // A value of -1 indicates that the appliance height is unknown.
+      applianceHeight: -1,
       // A value of -1 indicates that the salt level is unknown.
       saltLevel: -1,
       // A value of -1 indicates that the battery level is unknown.
