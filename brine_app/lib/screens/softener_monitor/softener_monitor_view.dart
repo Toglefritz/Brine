@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,12 +27,15 @@ class SoftenerMonitorView extends StatelessWidget {
     final double saltLevel = state.widget.devices[0].saltLevel;
 
     // Get the height of the screen
-    final screenHeight = MediaQuery.of(context).size.height;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
-    // If the salt level is above 40%, the label will follow the salt level indicator down the screen.
+    // If the salt level is above 30%, the label will be drawn on top of the salt level indicator widget.
     if (saltLevel > 0.70) {
+      // If the salt level is at 100%, a fixed top padding of Insets.medium will be used.
+      final double topPadding = max(Insets.medium, screenHeight * (1 - saltLevel) - Insets.medium);
+
       return EdgeInsets.only(
-        top: screenHeight * (1 - saltLevel) - Insets.medium,
+        top: topPadding,
       );
     }
     // If the salt level is below 40%, the label will be displayed near the top of the page.

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// Represents a Brine monitor device and includes the salt and battery levels obtained from the device, along with a
 /// timestamp of when the levels were last retrieved.
 class BrineDevice {
@@ -54,8 +56,11 @@ class BrineDevice {
         ? (json['appliance_height'] as int).toDouble()
         : json['appliance_height'] as double;
 
-    // Calculate the salt level as a percentage
-    final double saltLevel = saltDistance / applianceHeight;
+    // Calculate the salt level as a percentage. If an issue occurs resulting in the salt level exceeding 100%, the
+    // salt level will be capped at 100%. This is to prevent the salt level from being displayed as greater than 100%.
+    // Similarly, if the salt level is calculated to be less than 0%, the salt level will be capped at 0%.
+    // TODO(Toglefritz): Show an error message in these cases
+    final double saltLevel = min(1, max(0, saltDistance / applianceHeight));
 
     // Get the battery level. The battery level can be an integer or a double, so it is necessary to check the type.
     final double batteryLevel = json['battery_level'] is int
