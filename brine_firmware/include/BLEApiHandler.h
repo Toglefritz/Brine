@@ -6,6 +6,7 @@
 #include "WiFiService.h"
 #include <ArduinoJson.h>
 #include <CryptoService.h>
+#include <NVSService.h>
 #include <set>
 #include <string>
 
@@ -229,6 +230,28 @@ private:
     if (connected) {
       DebugService::getInstance().debugPrint("Connected to WiFi network: ");
       DebugService::getInstance().debugPrintln(ssid);
+
+      // Save the SSID and password to NVS so they can be used to reconnect to WiFi after a reboot.
+      // Initialize NVSService with the "wifi" namespace.
+      if (!NVSService::getInstance().begin("wifi")) {
+        DebugService::getInstance().debugPrintln("NVS Service initialization failed.");
+        // TODO Handle initialization failure
+      } else {
+        DebugService::getInstance().debugPrintln("NVS Service initialized successfully.");
+
+        // Create a JSON document to store the WiFi credentials.
+        JsonDocument wifiCredentialsDoc;
+        wifiCredentialsDoc["ssid"] = ssid;
+        wifiCredentialsDoc["password"] = password;
+
+        // Save the WiFi credentials to NVS under the key, "wifiCredentials".
+        if (!NVSService::getInstance().saveJSON("wifiCredentials", wifiCredentialsDoc)) {
+          DebugService::getInstance().debugPrintln("Failed to save WiFi credentials to NVS.");
+          // TODO Handle save failure
+        } else {
+          DebugService::getInstance().debugPrintln("WiFi credentials saved to NVS.");
+        }
+      }
 
       // Create a JSON response indicating successful connection.
       JsonDocument responseDoc;

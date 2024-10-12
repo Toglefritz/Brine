@@ -57,8 +57,12 @@ public:
 private:
   Preferences preferences; // Preferences instance for NVS operations
 
+  // Determines if the NVS service has been initialized. This is used to prevent multiple attempts to open the same
+  // namespace, which can cause errors.
+  bool isInitialized;
+
   // Private constructor to enforce singleton pattern
-  NVSService();
+  NVSService() : isInitialized(false) {}
 
   // Delete copy constructor and assignment operator to prevent copies
   NVSService(const NVSService &) = delete;

@@ -5,12 +5,12 @@
 #include "DebugService.h"
 #include <BLEApiHandler.h>
 #include <BLEModule.h>
+#include <BatteryMonitor.h>
 #include <DeviceConfigurationManager.h>
 #include <DistanceSensor.h>
 #include <I2CButton.h>
 #include <I2CLED.h>
 #include <Wire.h>
-#include <BatteryMonitor.h>
 
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
 // when the provisioning process been running for three minutes or more.
@@ -37,6 +37,9 @@ void IRAM_ATTR button_isr() { buttonPressed = true; }
 // A handler for Bluetooth API commands and responses.
 BLEApiHandler apiHandler;
 
+// A service for saving and reading values from the non-volatile storage (NVS) of the ESP32.
+NVSService& nvsService = NVSService::getInstance();
+
 // A service for sending information to the Firebase cloud backend.
 FirebaseService firebaseService;
 
@@ -61,7 +64,7 @@ CryptoService cryptoService;
  * @return true if the data was successfully uploaded to the Firebase cloud, false otherwise.
  */
 bool _updateDeviceLevels() {
-  DebugService::getInstance().debugPrintln("Updating device levels...");  
+  DebugService::getInstance().debugPrintln("Updating device levels...");
 
   // Get the "salt level" from the distance sensor. Note that the salt level here is represented as a distance value.
   // Converting this distance to a unit such as the percentage of salt remaining is handled by the cloud service
@@ -180,6 +183,47 @@ void startProvisioning() {
   provisioningStartTime = millis();
 }
 
+/**
+ * @brief Connect to the saved WiFi credentials.
+ *
+ * This function attempts to retrieve the saved WiFi credentials from the NVS service and connect to the WiFi network.
+ * The function first checks if the WiFi credentials are available in the NVS service. If the credentials are found, the
+ * function attempts to connect to the WiFi network using the retrieved SSID and password. If the connection is
+ * successful, the function prints a success message. If the connection fails, the function prints an error message.
+ * If the WiFi credentials are not found in the NVS service, the function prints a message indicating that the
+ * credentials are not available.
+ *
+ * @return true if the device successfully connects to the WiFi network, false otherwise.
+ */
+bool connectToSavedWiFi() {
+  JsonDocument retrievedDoc;
+  // Retrieve the JSON document stored under the key "wifiCredentials"
+  bool retrieveResult = nvsService.retrieveJSON("wifiCredentials", retrievedDoc);
+  if (retrieveResult) {
+    DebugService::getInstance().debugPrintln("WiFi credentials retrieved successfully.");
+
+    // Attempt to connect to WiFi using the retrieved credentials.
+    bool wifiConnected =
+        WiFi.begin(retrievedDoc["ssid"].as<String>().c_str(), retrievedDoc["password"].as<String>().c_str());
+    if (wifiConnected) {
+      DebugService::getInstance().debugPrintln("WiFi connected successfully.");
+
+      return true;
+    } else {
+      DebugService::getInstance().debugPrintln("Failed to connect to WiFi.");
+    
+      return false;
+    }
+  } else {
+    DebugService::getInstance().debugPrintln("No WiFi credentials found in NVS.");
+    
+    return false;
+  }
+}
+
+/**
+ * @brief The setup function for the Brine monitor firmware.
+ */
 void setup() {
   // Join the I2C bus
   Wire.begin();
@@ -209,6 +253,14 @@ void setup() {
     DebugService::getInstance().debugPrintln("Cryptographic coprocessor initialized.");
   }
 
+  // Initialize NVSService with the "wifi_credentials" namespace.
+  if (!nvsService.begin("wifi")) {
+    DebugService::getInstance().debugPrintln("NVS Service initialization failed.");
+    // TODO Handle initialization failure
+  } else {
+    DebugService::getInstance().debugPrintln("NVS Service initialized successfully.");
+  }
+
   // Use the debugService to print messages.
   DebugService::getInstance().debugPrintln("Brine monitor setup complete.");
 
@@ -225,7 +277,8 @@ void setup() {
   DebugService::getInstance().debugPrint("Device name: ");
   DebugService::getInstance().debugPrintln(DeviceName::getDeviceName());
 
-  // TODO(Toglefritz): Check if WiFi credentials are saved and connect to the network if they are.
+  // Attempt to retrieve WiFi credentials from NVS.
+  connectToSavedWiFi();
 
   // TODO(Toglefritz): Get and send information to Brine backend
 }

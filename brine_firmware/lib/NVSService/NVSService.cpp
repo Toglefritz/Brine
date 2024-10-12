@@ -7,9 +7,6 @@ NVSService &NVSService::getInstance() {
   return instance;
 }
 
-// Private constructor
-NVSService::NVSService() {}
-
 /**
  * @brief Initialize the NVS service.
  *
@@ -19,10 +16,18 @@ NVSService::NVSService() {}
  * @return true if initialization is successful, false otherwise.
  */
 bool NVSService::begin(const char *namespaceName) {
+  if (isInitialized) {
+    DebugService::getInstance().debugPrintln("NVS namespace already initialized.");
+    return true;
+  }
+
   if (!preferences.begin(namespaceName, false)) { // false = Read/Write
     DebugService::getInstance().debugPrintln("Failed to open NVS namespace.");
     return false;
   }
+  // Set the initialization flag
+  isInitialized = true;
+
   DebugService::getInstance().debugPrintln("NVS namespace opened successfully.");
 
   return true;
@@ -60,24 +65,30 @@ bool NVSService::saveJSON(const char *key, const JsonDocument &doc) {
  */
 bool NVSService::retrieveJSON(const char *key, JsonDocument &doc) {
   // Retrieve the JSON string from NVS
-  String jsonString = preferences.getString(key, "");
+  try {
+    String jsonString = preferences.getString(key, "");
 
-  if (jsonString.isEmpty()) {
-    DebugService::getInstance().debugPrintln("No data found for the given key.");
+    if (jsonString.isEmpty()) {
+      DebugService::getInstance().debugPrintln("No data found for the given key.");
+
+      return false;
+    }
+
+    // Deserialize JSON string into the provided JsonDocument
+    DeserializationError error = deserializeJson(doc, jsonString);
+    if (error) {
+      DebugService::getInstance().debugPrintln("Failed to parse JSON data.");
+      return false;
+    }
+
+    DebugService::getInstance().debugPrintln("JSON data retrieved and parsed successfully.");
+
+    return true;
+  } catch (...) {
+    DebugService::getInstance().debugPrintln("Unable to load WiFi credentials from NVS.");
 
     return false;
   }
-
-  // Deserialize JSON string into the provided JsonDocument
-  DeserializationError error = deserializeJson(doc, jsonString);
-  if (error) {
-    DebugService::getInstance().debugPrintln("Failed to parse JSON data.");
-    return false;
-  }
-
-  DebugService::getInstance().debugPrintln("JSON data retrieved and parsed successfully.");
-
-  return true;
 }
 
 /**
@@ -109,6 +120,6 @@ bool NVSService::eraseAll() {
   } else {
     DebugService::getInstance().debugPrintln("Failed to erase all keys.");
   }
-  
+
   return result;
 }

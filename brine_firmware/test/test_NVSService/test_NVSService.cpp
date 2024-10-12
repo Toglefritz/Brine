@@ -121,6 +121,8 @@ void setup() {
     RUN_TEST(test_nvs_initialization);
     RUN_TEST(test_save_json);
     RUN_TEST(test_retrieve_json);
+    // An attempt to re-initialize NVS should still succeed
+    RUN_TEST(test_nvs_initialization);
     RUN_TEST(test_erase_key);
     RUN_TEST(test_erase_all);
     
