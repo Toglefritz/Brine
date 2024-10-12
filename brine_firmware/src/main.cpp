@@ -310,4 +310,8 @@ void loop() {
   else if (provisioningStartTime != 0 && !clientConnected) {
     I2CLED::getInstance().blink(millis());
   }
+  // If the provisioning process is not running, turn the LED off.
+  else {
+    I2CLED::getInstance().turnOff();
+  }
 }
