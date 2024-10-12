@@ -2,7 +2,7 @@
 #include <unity.h>
 
 /*
- *  Test file for the DistanceSensor class. This test file tests the
+ * Test file for the DistanceSensor class. This test file tests the
  * functionality of the VLX53L1X distance sensor by verifying that it
  * initializes correctly and is able to obtain a distance reading.
  *
