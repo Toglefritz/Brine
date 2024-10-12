@@ -1,6 +1,6 @@
 #include "I2CButton.h"
 
-I2CButton::I2CButton(){};
+I2CButton::I2CButton() {};
 
 /**
  * @brief Initializes the I2CButton.
@@ -12,28 +12,37 @@ I2CButton::I2CButton(){};
  * @param buttonHandler A function pointer to the button handler function.
  */
 bool I2CButton::begin(void (*buttonHandler)()) {
-    debugService.debugPrintln("Initializing I2CButton.");
+  debugService.debugPrintln("Initializing I2CButton.");
 
-    pinMode(interruptPin, INPUT);
-    attachInterrupt(digitalPinToInterrupt(interruptPin), buttonHandler,
-                    FALLING);
+  pinMode(interruptPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), buttonHandler, FALLING);
 
-    // Check if button will acknowledge over I2C.
-    if (button.begin() == false) {
-        debugService.debugPrintln(
-            "I2CButton failed to initialize. Device did not acknowledge.");
+  // Check if button will acknowledge over I2C.
+  if (button.begin() == false) {
+    debugService.debugPrintln("I2CButton failed to initialize. Device did not acknowledge.");
 
-        return false;
-    }
+    return false;
+  }
 
-    debugService.debugPrintln("I2CButton initialized.");
+  debugService.debugPrintln("I2CButton initialized.");
 
-    // Configure the interrupt pin to go low when the button is clicked.
-    button.enableClickedInterrupt();
+  // Configure the interrupt pin to go low when the button is clicked.
+  button.enableClickedInterrupt();
 
-    button.clearEventBits();
+  button.enablePressedInterrupt();
 
-    return true;
+  button.clearEventBits();
+
+  return true;
+}
+
+/**
+ * @brief Checks if the button is currently pressed.
+ *
+ * @return true if the button is pressed, false otherwise.
+ */
+bool I2CButton::isPressed() {
+  return button.isPressed();
 }
 
 /**

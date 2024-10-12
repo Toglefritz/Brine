@@ -12,9 +12,19 @@
 #include <I2CLED.h>
 #include <Wire.h>
 
+/// An I2CButton instance used to handle button presses.
+I2CButton &button = I2CButton::getInstance();
+
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
 // when the provisioning process been running for three minutes or more.
 volatile bool buttonPressed = false;
+
+// If the button is held down for this duration, the device will perform a reset.
+const unsigned long LONG_PRESS_DURATION = 10000; // 10,000 milliseconds = 10 seconds
+
+// Variables to track button press timing
+unsigned long buttonPressStartTime = 0;
+bool isLongPressTriggered = false;
 
 // A timestamp for when the provisioning process was started. This is used to create a timeout for the provisioning
 // process to prevent it from running indefinitely if no provisioning activities are detected.
@@ -38,7 +48,7 @@ void IRAM_ATTR button_isr() { buttonPressed = true; }
 BLEApiHandler apiHandler;
 
 // A service for saving and reading values from the non-volatile storage (NVS) of the ESP32.
-NVSService& nvsService = NVSService::getInstance();
+NVSService &nvsService = NVSService::getInstance();
 
 // A service for sending information to the Firebase cloud backend.
 FirebaseService firebaseService;
@@ -183,6 +193,21 @@ void startProvisioning() {
   provisioningStartTime = millis();
 }
 
+// Function to trigger system reboot
+void triggerSystemReboot() {
+  DebugService::getInstance().debugPrintln("Long button press detected. Rebooting system...");
+  // Perform any necessary cleanup here
+
+  // Clear NVS before rebooting (if desired)
+  nvsService.eraseAll();
+
+  // Delay to ensure messages are sent before reboot
+  delay(1000);
+
+  // Reboot the ESP32
+  ESP.restart();
+}
+
 /**
  * @brief Connect to the saved WiFi credentials.
  *
@@ -211,12 +236,12 @@ bool connectToSavedWiFi() {
       return true;
     } else {
       DebugService::getInstance().debugPrintln("Failed to connect to WiFi.");
-    
+
       return false;
     }
   } else {
     DebugService::getInstance().debugPrintln("No WiFi credentials found in NVS.");
-    
+
     return false;
   }
 }
@@ -229,7 +254,7 @@ void setup() {
   Wire.begin();
 
   // Initialize the button service, setting the buttonCallback function as the callback for button presses.
-  I2CButton::getInstance().begin(button_isr);
+  button.begin(button_isr);
 
   // Initialize the LED service.
   I2CLED::getInstance().begin();
@@ -286,32 +311,60 @@ void setup() {
 void loop() {
   // Start the provisioning process if the button was pressed and the provisioning process has not already started.
   if (buttonPressed && provisioningStartTime == 0) {
+    // Record the time when the button was pressed
+    buttonPressStartTime = millis();
+    buttonPressed = false; // Reset the flag
+
     // Start the provisioning process.
     startProvisioning();
   }
-  // If more than three minutes has passed since the provisioning process started, and a client is not connected,
-  // turn off provisioning process.
-  else if (provisioningStartTime != 0 && millis() - provisioningStartTime >= 180000 && !clientConnected) {
-    DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");
+  // Check if provisioning is ongoing
+  if (provisioningStartTime != 0) {
+    // If more than three minutes has passed since the provisioning process started, and a client is not connected,
+    // turn off provisioning process.
+    if (millis() - provisioningStartTime >= 180000 && !clientConnected) { // 3 minutes
+      DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");
 
-    DeviceConfigurationManager::getInstance().stopProvisioning();
+      DeviceConfigurationManager::getInstance().stopProvisioning();
 
-    // Turn off the LED in case it was on at the time of the timeout.
-    I2CLED::getInstance().turnOff();
+      // Turn off the LED in case it was on at the time of the timeout.
+      I2CLED::getInstance().turnOff();
 
-    // Reset the provisioning start time and button pressed flags.
-    provisioningStartTime = 0;
-    buttonPressed = false;
+      // Reset the provisioning start time and button pressed flags.
+      provisioningStartTime = 0;
+      buttonPressed = false;
 
-    // Reset the state of the button.
-    I2CButton::getInstance().clearEventBits();
+      // Reset the state of the button.
+      I2CButton::getInstance().clearEventBits();
+    } else if (!clientConnected) {
+      // Blink LED while provisioning
+      I2CLED::getInstance().blink(millis());
+    }
   }
+
+  // Detect long button press
+  if (buttonPressStartTime != 0) {
+    // Check if the button is still being held down
+    if (button.isPressed()) {
+      // Check if the duration exceeds the long press threshold
+      if (!isLongPressTriggered && (millis() - buttonPressStartTime >= LONG_PRESS_DURATION)) {
+        isLongPressTriggered = true;
+        triggerSystemReboot();
+      }
+    } else {
+      // Button was released before long press duration
+      buttonPressStartTime = 0;
+      isLongPressTriggered = false;
+    }
+  }
+
   // If the provisioning process is currently running, but a client is not connected yet, blink the LED.
-  else if (provisioningStartTime != 0 && !clientConnected) {
+  if (provisioningStartTime != 0 && !clientConnected) {
     I2CLED::getInstance().blink(millis());
   }
-  // If the provisioning process is not running, turn the LED off.
-  else {
+
+  // Ensure that the LED is off when provisioning is not running.
+  if (provisioningStartTime == 0) {
     I2CLED::getInstance().turnOff();
   }
 }
