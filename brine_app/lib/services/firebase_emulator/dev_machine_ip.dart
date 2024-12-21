@@ -3,4 +3,4 @@
 // Use "localhost" if running the emulator suite on the same machine as the app and without any external devices (such
 // as a Brine device). Otherwise, and this will be the case in most situations, use the IP address of the machine
 // running the emulator suite. The emulator suite can be started with the command `firebase emulators:start`.
-const String devMachineIP = '192.168.86.28';
+const String devMachineIP = '192.168.86.39';

@@ -48,5 +48,11 @@
         <string>This app uses Bluetooth to set up to your Brine devices.</string>
         <key>NSBluetoothPeripheralUsageDescription</key>
         <string>This app uses Bluetooth to set up to your Brine devices.</string>
+
+        <!-- Keychain access -->
+        <key>keychain-access-groups</key>
+        <array>
+            <string>$(AppIdentifierPrefix)$(CFBundleIdentifier)</string>
+        </array>
 </dict>
 </plist>

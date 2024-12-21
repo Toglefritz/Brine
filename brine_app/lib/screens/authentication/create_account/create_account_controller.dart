@@ -25,8 +25,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
   final TextEditingController passwordFieldController = TextEditingController();
 
   /// A controller used for the password confirmation field.
-  final TextEditingController passwordConfirmationFieldController =
-      TextEditingController();
+  final TextEditingController passwordConfirmationFieldController = TextEditingController();
 
   /// Determines if the username field is in an error state, which is, in turn, determined by the
   /// [validateUsernameField] method.
@@ -74,8 +73,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
           setState(() {
             passwordFieldError = true;
-            createAccountPasswordExceptionError =
-                'The password provided is too weak.';
+            createAccountPasswordExceptionError = 'The password provided is too weak.';
             creatingAccount = false;
           });
 
@@ -85,8 +83,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
           setState(() {
             usernameFieldError = true;
-            createAccountUsernameExceptionError =
-                'An account already exists using that email.';
+            createAccountUsernameExceptionError = 'An account already exists using that email.';
             creatingAccount = false;
           });
 
@@ -94,16 +91,13 @@ class CreateAccountController extends State<CreateAccountRoute> {
         } else if (e.code == 'network-request-failed') {
           Analytics.trackEvent(eventName: 'network-request-failed');
           unawaited(
-            FirebaseCrashlytics.instance.recordError(
-                'Account creation with basic auth failed with exception, $e',
-                StackTrace.current),
+            FirebaseCrashlytics.instance
+                .recordError('Account creation with basic auth failed with exception, $e', StackTrace.current),
           );
 
           setState(() {
-            createAccountUsernameExceptionError =
-                'A network error occurred. Please try again.';
-            createAccountPasswordExceptionError =
-                'A network error occurred. Please try again.';
+            createAccountUsernameExceptionError = 'A network error occurred. Please try again.';
+            createAccountPasswordExceptionError = 'A network error occurred. Please try again.';
             usernameFieldError = true;
             passwordFieldError = true;
             creatingAccount = false;
@@ -114,8 +108,9 @@ class CreateAccountController extends State<CreateAccountRoute> {
           Analytics.trackEvent(eventName: 'unknown_error');
           unawaited(
             FirebaseCrashlytics.instance.recordError(
-                'Account creation with basic auth failed with exception, $e',
-                StackTrace.current),
+              'Account creation with basic auth failed with exception, $e',
+              StackTrace.current,
+            ),
           );
 
           setState(() {
@@ -133,8 +128,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
       } catch (e, s) {
         Analytics.trackEvent(eventName: 'unknown_error');
         unawaited(
-          FirebaseCrashlytics.instance.recordError(
-              'Account creation with basic auth failed with exception, $e', s),
+          FirebaseCrashlytics.instance.recordError('Account creation with basic auth failed with exception, $e', s),
         );
 
         setState(() {
@@ -158,8 +152,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
         creatingAccount = false;
       });
 
-      debugPrint(
-          'Successfully created account, ${FirebaseAuth.instance.currentUser?.uid}');
+      debugPrint('Successfully created account, ${FirebaseAuth.instance.currentUser?.uid}');
 
       Analytics.trackSignUp(AuthMethod.basicAuth);
 
