@@ -50,7 +50,7 @@ public:
 
     // Define the Firebase endpoint URL for uploading sensor data.
     // TODO update endpoint for production.
-    const char *firebaseCombinedEndpoint = "http://192.168.86.28:5001/brine-3b212/us-central1/updateDeviceLevels";
+    const char *firebaseCombinedEndpoint = "http://192.168.86.39:5001/brine-3b212/us-central1/updateDeviceLevels";
 
     // Send a POST request to the Firebase endpoint with the combined JSON payload.
     bool success = sendPostRequest(firebaseCombinedEndpoint, payload);
