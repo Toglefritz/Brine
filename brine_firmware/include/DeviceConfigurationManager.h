@@ -50,8 +50,6 @@ public:
   void startProvisioning() {
     DebugService::getInstance().debugPrintln("Button pressed. Starting provisioning process.");
 
-    // TODO(Toglefritz): Wake up the ESP32 from deep sleep.
-
     // Initialize the Bluetooth system.
     initializeBluetooth();
   }

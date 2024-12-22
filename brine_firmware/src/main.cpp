@@ -257,10 +257,13 @@ bool connectToSavedWiFi() {
 void _configureDeepSleepService() {
   DeepSleepService& deepSleepService = DeepSleepService::getInstance();
 
+  // Set the duration to sleep between sensor uploads. In debug mode, this duration is 30 seconds to allow for faster
+  // iterations during development. In production, the device waits 24 hours between sensor readings.
+  int deepSleepDuration = DebugService::getInstance().DEBUG ? 30000 : 86400000;
+
   // Configure wake-up sources. The first argument is a duration in milliseconds for the timer wake-up. The second is
   // a GPIO pin used to manually wake up the device.
-  // TODO deepSleepService.configureWakeUp(86400000, GPIO_NUM_32);
-  deepSleepService.configureWakeUp(30000, GPIO_NUM_32);
+  deepSleepService.configureWakeUp(deepSleepDuration, GPIO_NUM_32);
 
   // Enter deep sleep.
   deepSleepService.enterDeepSleep();
