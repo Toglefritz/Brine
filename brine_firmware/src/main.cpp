@@ -11,6 +11,7 @@
 #include <I2CButton.h>
 #include <I2CLED.h>
 #include <Wire.h>
+#include <DeepSleepService.h>
 
 /// An I2CButton instance used to handle button presses.
 I2CButton &button = I2CButton::getInstance();
@@ -247,6 +248,25 @@ bool connectToSavedWiFi() {
 }
 
 /**
+ * @brief Configures the deep sleep management service.
+ * 
+ * This function configures the service that handles the deep sleep cycle for the Brine device. The service handles
+ * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the 
+ * device wakes, callback functions are invoked.
+ */
+void _configureDeepSleepService() {
+  DeepSleepService& deepSleepService = DeepSleepService::getInstance();
+
+  // Configure wake-up sources. The first argument is a duration in milliseconds for the timer wake-up. The second is
+  // a GPIO pin used to manually wake up the device.
+  // TODO deepSleepService.configureWakeUp(86400000, GPIO_NUM_32);
+  deepSleepService.configureWakeUp(30000, GPIO_NUM_32);
+
+  // Enter deep sleep.
+  deepSleepService.enterDeepSleep();
+}
+
+/**
  * @brief The setup function for the Brine monitor firmware.
  */
 void setup() {
@@ -305,7 +325,11 @@ void setup() {
   // Attempt to retrieve WiFi credentials from NVS.
   connectToSavedWiFi();
 
-  // TODO(Toglefritz): Get and send information to Brine backend
+  // Capture sensor readings and send them to the cloud backend.
+  _updateDeviceLevels();
+
+  // Configure the deep sleep service.
+  _configureDeepSleepService();
 }
 
 void loop() {
