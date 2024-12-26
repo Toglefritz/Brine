@@ -6,12 +6,12 @@
 #include <BLEApiHandler.h>
 #include <BLEModule.h>
 #include <BatteryMonitor.h>
+#include <DeepSleepService.h>
 #include <DeviceConfigurationManager.h>
 #include <DistanceSensor.h>
 #include <I2CButton.h>
 #include <I2CLED.h>
 #include <Wire.h>
-#include <DeepSleepService.h>
 
 /// An I2CButton instance used to handle button presses.
 I2CButton &button = I2CButton::getInstance();
@@ -59,7 +59,7 @@ FirebaseService firebaseService;
 DistanceSensor sensor;
 
 // A service for getting the remaining battery life of the device based on a voltage divider connected to the battery.
-BatteryMonitor batteryMonitor(A0);
+BatteryMonitor batteryMonitor();
 
 // A service for interacting with the cryptographic coprocessor.
 CryptoService cryptoService;
@@ -77,16 +77,23 @@ CryptoService cryptoService;
 bool _updateDeviceLevels() {
   DebugService::getInstance().debugPrintln("Updating device levels...");
 
-  // Get the "salt level" from the distance sensor. Note that the salt level here is represented as a distance value.
-  // Converting this distance to a unit such as the percentage of salt remaining is handled by the cloud service
-  // backend in order to save memory, processing time, and energy on the Brine device.
+  // Get the "salt level" from the distance sensor.
   float saltLevel = sensor.getDistance();
 
-  // Get the remaining battery life percentage from the battery monitor.
+  // Create a BatteryMonitor instance
+  BatteryMonitor batteryMonitor;
+
+  // Get the remaining battery life percentage using the BatteryMonitor
   float batteryLife = batteryMonitor.getBatteryLifePercent();
 
-  // Upload the salt and battery levels to the Firebase cloud.
+  // Upload the salt and battery levels to the Firebase cloud
   bool success = firebaseService.uploadSensorData(batteryLife, saltLevel);
+
+  if (success) {
+    DebugService::getInstance().debugPrintln("Device levels successfully updated in Firebase.");
+  } else {
+    DebugService::getInstance().debugPrintln("Failed to update device levels in Firebase.");
+  }
 
   return success;
 }
@@ -249,13 +256,13 @@ bool connectToSavedWiFi() {
 
 /**
  * @brief Configures the deep sleep management service.
- * 
+ *
  * This function configures the service that handles the deep sleep cycle for the Brine device. The service handles
- * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the 
+ * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the
  * device wakes, callback functions are invoked.
  */
 void _configureDeepSleepService() {
-  DeepSleepService& deepSleepService = DeepSleepService::getInstance();
+  DeepSleepService &deepSleepService = DeepSleepService::getInstance();
 
   // Set the duration to sleep between sensor uploads. In debug mode, this duration is 30 seconds to allow for faster
   // iterations during development. In production, the device waits 24 hours between sensor readings.
