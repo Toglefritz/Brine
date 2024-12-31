@@ -236,20 +236,30 @@ bool connectToSavedWiFi() {
     DebugService::getInstance().debugPrintln("WiFi credentials retrieved successfully.");
 
     // Attempt to connect to WiFi using the retrieved credentials.
-    bool wifiConnected =
-        WiFi.begin(retrievedDoc["ssid"].as<String>().c_str(), retrievedDoc["password"].as<String>().c_str());
-    if (wifiConnected) {
-      DebugService::getInstance().debugPrintln("WiFi connected successfully.");
+    WiFi.begin(retrievedDoc["ssid"].as<String>().c_str(), retrievedDoc["password"].as<String>().c_str());
 
+    // Wait for connection with a timeout
+    unsigned long startTime = millis();
+    const unsigned long timeout = 15000; // 15 seconds timeout
+
+    while (WiFi.status() != WL_CONNECTED && millis() - startTime < timeout) {
+      delay(500); // Wait for 500ms before checking again
+      DebugService::getInstance().debugPrint(".");
+    }
+
+    DebugService::getInstance().debugPrintln(""); // End of dots
+
+    if (WiFi.status() == WL_CONNECTED) {
+      DebugService::getInstance().debugPrintln("WiFi connected successfully.");
+      DebugService::getInstance().debugPrint("IP Address: ");
+      DebugService::getInstance().debugPrintln(WiFi.localIP().toString());
       return true;
     } else {
-      DebugService::getInstance().debugPrintln("Failed to connect to WiFi.");
-
+      DebugService::getInstance().debugPrintln("Failed to connect to WiFi within the timeout.");
       return false;
     }
   } else {
     DebugService::getInstance().debugPrintln("No WiFi credentials found in NVS.");
-
     return false;
   }
 }
@@ -328,15 +338,43 @@ void setup() {
   DebugService::getInstance().debugPrint("MAC address: ");
   DebugService::getInstance().debugPrintln(WiFi.macAddress());
 
-  // Print the devie name for debugging purposes.
+  // Print the device name for debugging purposes.
   DebugService::getInstance().debugPrint("Device name: ");
   DebugService::getInstance().debugPrintln(DeviceName::getDeviceName());
 
-  // Attempt to retrieve WiFi credentials from NVS.
-  connectToSavedWiFi();
+  // Attempt to connect to WiFi with retries
+  bool wifiConnected = false;
+  const int maxRetries = 5; // Number of retries
+  int retryCount = 0;
+
+  while (!wifiConnected && retryCount < maxRetries) {
+    DebugService::getInstance().debugPrint("Attempting to connect to WiFi... (Attempt ");
+    DebugService::getInstance().debugPrint(String(retryCount + 1).c_str());
+    DebugService::getInstance().debugPrintln(")");
+
+    wifiConnected = connectToSavedWiFi();
+
+    if (!wifiConnected) {
+      DebugService::getInstance().debugPrintln("WiFi connection failed. Retrying...");
+      delay(5000); // Wait before retrying
+      retryCount++;
+    }
+  }
+
+  if (!wifiConnected) {
+    DebugService::getInstance().debugPrintln("Failed to connect to WiFi after multiple attempts.");
+    // Optionally reset the device or enter deep sleep here
+    _configureDeepSleepService();
+    return; // Exit setup if WiFi connection fails
+  }
+
+  DebugService::getInstance().debugPrintln("WiFi connected successfully.");
 
   // Capture sensor readings and send them to the cloud backend.
-  _updateDeviceLevels();
+  if (!_updateDeviceLevels()) {
+    DebugService::getInstance().debugPrintln("Failed to upload device levels to Firebase.");
+    // Handle upload failure if needed
+  }
 
   // Configure the deep sleep service.
   _configureDeepSleepService();

@@ -7,6 +7,13 @@
 #include <CryptoService.h>
 #include <HTTPClient.h>
 
+ static const bool DEBUG =
+  #if DEBUG_MODE
+        true;
+  #else
+        false;
+  #endif
+
 /**
  * @class FirebaseService
  * @brief Provides static methods to send data to Firebase backend.
@@ -49,8 +56,15 @@ public:
     DebugService::getInstance().debugPrintln("Payload: " + payload);
 
     // Define the Firebase endpoint URL for uploading sensor data.
-    // TODO update endpoint for production.
-    const char *firebaseCombinedEndpoint = "http://192.168.86.39:5001/brine-3b212/us-central1/updateDeviceLevels";
+    const char *firebaseCombinedEndpoint;
+
+    if (DEBUG) {
+        firebaseCombinedEndpoint = "http://" FIREBASE_EMULATOR_IP ":5001/brine-3b212/us-central1/updateDeviceLevels";
+    } else {
+        firebaseCombinedEndpoint = "https://updatedevicelevels-7wo3szegoq-uc.a.run.app";
+    }
+
+    DebugService::getInstance().debugPrintln(String("Using updateDeviceLevels endpoint, ") + firebaseCombinedEndpoint);
 
     // Send a POST request to the Firebase endpoint with the combined JSON payload.
     bool success = sendPostRequest(firebaseCombinedEndpoint, payload);
@@ -89,24 +103,24 @@ private:
     http.addHeader("Content-Type", "application/json");
 
     // Sign the JSON payload
-/*     String signature;
-    DebugService::getInstance().debugPrint("Signing request with payload,");
-    DebugService::getInstance().debugPrintln(jsonPayload);
-    try {
-      if (!cryptoService.signRequest(jsonPayload, signature)) {
-        DebugService::getInstance().debugPrintln("Failed to sign the request.");
-        http.end(); // Close the connection
-        return false;
-      }
-    } catch (const std::exception &e) {
-      DebugService::getInstance().debugPrint("Signing the request failed with exception,");
-      DebugService::getInstance().debugPrintln(e.what());
-      http.end(); // Close the connection
-      return false;
-    }
+    /*     String signature;
+        DebugService::getInstance().debugPrint("Signing request with payload,");
+        DebugService::getInstance().debugPrintln(jsonPayload);
+        try {
+          if (!cryptoService.signRequest(jsonPayload, signature)) {
+            DebugService::getInstance().debugPrintln("Failed to sign the request.");
+            http.end(); // Close the connection
+            return false;
+          }
+        } catch (const std::exception &e) {
+          DebugService::getInstance().debugPrint("Signing the request failed with exception,");
+          DebugService::getInstance().debugPrintln(e.what());
+          http.end(); // Close the connection
+          return false;
+        }
 
-    // Add the signature to the HTTP headers
-    http.addHeader("X-Signature", signature); */
+        // Add the signature to the HTTP headers
+        http.addHeader("X-Signature", signature); */
 
     // Send the POST request and store the HTTP response code.
     int httpResponseCode;
