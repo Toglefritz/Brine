@@ -7,13 +7,6 @@
 #include <CryptoService.h>
 #include <HTTPClient.h>
 
- static const bool DEBUG =
-  #if DEBUG_MODE
-        true;
-  #else
-        false;
-  #endif
-
 /**
  * @class FirebaseService
  * @brief Provides static methods to send data to Firebase backend.
@@ -56,13 +49,7 @@ public:
     DebugService::getInstance().debugPrintln("Payload: " + payload);
 
     // Define the Firebase endpoint URL for uploading sensor data.
-    const char *firebaseCombinedEndpoint;
-
-    if (DEBUG) {
-        firebaseCombinedEndpoint = "http://" FIREBASE_EMULATOR_IP ":5001/brine-3b212/us-central1/updateDeviceLevels";
-    } else {
-        firebaseCombinedEndpoint = "https://updatedevicelevels-7wo3szegoq-uc.a.run.app";
-    }
+    const char *firebaseCombinedEndpoint = getEndpoint();
 
     DebugService::getInstance().debugPrintln(String("Using updateDeviceLevels endpoint, ") + firebaseCombinedEndpoint);
 
@@ -75,6 +62,46 @@ public:
 private:
   static const char *firebaseBatteryEndpoint;  ///< Firebase endpoint URL for battery life data.
   static const char *firebaseDistanceEndpoint; ///< Firebase endpoint URL for distance measurement data.
+
+  /**
+   * @brief Retrieves the appropriate Firebase Functions endpoint based on the build configuration.
+   *
+   * This function uses the preprocessor flag `FLAVOR` to determine whether the firmware is built
+   * for a development (`dev`) or production (`prod`) environment. Depending on the value of the
+   * `FLAVOR` flag, the function returns the corresponding Firebase Functions endpoint URL:
+   *
+   * - `FLAVOR == 1`: The endpoint for the development environment (e.g., using the Firebase Emulator Suite).
+   * - `FLAVOR == 2`: The endpoint for the production environment (e.g., the live Firebase Functions URL).
+   *
+   * The `FLAVOR` flag is defined in the `platformio.ini` file under `build_flags`:
+   *
+   * ```ini
+   * build_flags = -D FLAVOR=1  # Development environment
+   * # or
+   * build_flags = -D FLAVOR=2  # Production environment
+   * ```
+   *
+   * If the `FLAVOR` flag is not defined or has an invalid value, the preprocessor will trigger a
+   * compilation error, prompting the user to correctly set the `FLAVOR` flag.
+   *
+   * @return The Firebase Functions endpoint URL as a `const char*`.
+   *
+   * @note This function ensures that the correct endpoint is used at compile-time, reducing
+   * runtime logic and improving efficiency. The use of preprocessor directives makes it easy to
+   * switch between environments without modifying the source code.
+   *
+   * @throws Compilation error if `FLAVOR` is undefined or invalid.
+   */
+  const char *getEndpoint() {
+// Return the appropriate endpoint based on the FLAVOR flag
+#if defined(FLAVOR) && (FLAVOR == 1)
+    return "http://192.168.86.39:5001/brine-3b212/us-central1/updateDeviceLevels";
+#elif defined(FLAVOR) && (FLAVOR == 2)
+    return "https://updatedevicelevels-7wo3szegoq-uc.a.run.app";
+#else
+#error "FLAVOR not defined or invalid. Please set FLAVOR to 1 (dev) or 2 (prod) in platformio.ini."
+#endif
+  }
 
   /**
    * @brief Sends a POST request to a specified Firebase endpoint with JSON payload.
