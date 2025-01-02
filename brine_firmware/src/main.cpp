@@ -80,6 +80,9 @@ bool _updateDeviceLevels() {
   // Get the "salt level" from the distance sensor.
   float saltLevel = sensor.getDistance();
 
+  // Stop the distance sensor's operations.
+  sensor.stopMeasurement();
+
   // Create a BatteryMonitor instance
   BatteryMonitor batteryMonitor;
 
