@@ -5,6 +5,7 @@
 #include <DistanceSensor.h>
 #include "BLEModule.h"
 #include <CryptoService.h>
+#include <BatteryMonitor.h>
 
 /*
  *  This test file tests the all I2C peripherals together in a single test.
@@ -143,6 +144,24 @@ void test_crypto_service_sign_request(void) {
   TEST_ASSERT_TRUE_MESSAGE(signResult, "Failed to sign the request");
   TEST_ASSERT_NOT_NULL_MESSAGE(signature, "Signature is null");
 }
+/**
+ * @brief Test for getting a battery life reading from the MAX17048 battery fuel
+ * gauge.
+ * 
+ * This function tests the `getBatteryLifePercent` frunction of the
+ * BatteryMonitor class. It verifies that the returned battery life value is
+ * within an expected range.
+ */
+
+void test_battery_life_percentage(void) {
+  BatteryMonitor batteryMonitor;
+
+  // Test that the battery life percentage is within a reasonable range
+  float batteryLife = batteryMonitor.getBatteryLifePercent();
+
+  TEST_ASSERT_GREATER_OR_EQUAL(0.0, batteryLife); // Battery life should be 0% or more
+  TEST_ASSERT_LESS_OR_EQUAL(100.0, batteryLife);  // Battery life should be 100% or less
+}
 
 /**
  * @brief Initializes the test environment and runs the Unity test framework.
@@ -166,6 +185,7 @@ void setup() {
     RUN_TEST(test_crypto_service_begin);
     RUN_TEST(test_crypto_service_read_public_key);
     RUN_TEST(test_crypto_service_sign_request);
+    RUN_TEST(test_battery_life_percentage);
 
     // End the Unity test framework
     UNITY_END();
