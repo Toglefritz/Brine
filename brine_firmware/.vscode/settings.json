@@ -48,7 +48,8 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "test_i2cscanner": "cpp"
     },
     "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, ColumnLimit: 120 }",
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Attach }"
