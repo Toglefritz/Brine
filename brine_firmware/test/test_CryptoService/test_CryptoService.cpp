@@ -10,6 +10,13 @@
  *  Run this test with the command `pio test --filter test_CryptoService`.
  */
 
+// Define pins for the main I2C bus
+#define CRYPTO_SDA_PIN 19
+#define CRYPTO_SCL_PIN 18
+
+// The I2C interface for this test.
+TwoWire cryptoI2C = TwoWire(0);
+
 // Create an instance of the CryptoService class
 CryptoService cryptoService;
 
@@ -21,7 +28,7 @@ CryptoService cryptoService;
  */
 void test_crypto_service_begin(void) {
   // Initialize the CryptoService
-  bool beginResult = cryptoService.begin();
+  bool beginResult = cryptoService.begin(cryptoI2C);
 
   TEST_ASSERT_TRUE_MESSAGE(beginResult, "Failed to initialize CryptoService");
 }
@@ -66,8 +73,8 @@ void test_crypto_service_sign_request(void) {
  * suite.
  */
 void setup() {
-  // Join the I2C bus
-  Wire.begin();
+  // Initialize the custom I2C instance with specified SDA and SCL pins
+  cryptoI2C.begin(CRYPTO_SDA_PIN, CRYPTO_SCL_PIN);
 
   UNITY_BEGIN();
 

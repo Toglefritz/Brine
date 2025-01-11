@@ -13,8 +13,15 @@
  *  Run this test with the command `pio test --filter test_BatteryMonitor`.
  */
 
+// Define pins for the main I2C bus
+#define MAIN_SDA_PIN 21
+#define MAIN_SCL_PIN 22
+
+// The I2C interface for this test.
+TwoWire mainI2C = TwoWire(0);
+
 void test_battery_life_percentage(void) {
-  BatteryMonitor batteryMonitor;
+  BatteryMonitor batteryMonitor = BatteryMonitor(mainI2C);
 
   // Test that the battery life percentage is within a reasonable range
   float batteryLife = batteryMonitor.getBatteryLifePercent();
@@ -24,8 +31,8 @@ void test_battery_life_percentage(void) {
 }
 
 void setup() {
-  // Initialize I2C communication
-  Wire.begin();
+  // Initialize the custom I2C instance with specified SDA and SCL pins
+  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
 
   // Start the Unity test framework
   UNITY_BEGIN();

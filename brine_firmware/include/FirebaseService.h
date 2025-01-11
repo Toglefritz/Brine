@@ -104,13 +104,11 @@ private:
   }
 
   /**
-   * @brief Sends a POST request to a specified Firebase endpoint with JSON payload.
+   * @brief Sends a POST request to a specified Firebase endpoint with a signed JSON payload.
    *
-   * @details This method sends an HTTP POST request to the specified Firebase endpoint with the provided JSON payload.
-   * Security is of critical importance when sending data to a remote server. The server must be able to trust the
-   * identity of the sender and the integrity of the data. In this implementation, the JSON payload is signed using a
-   * private key before being sent to the server. The server can then verify the signature using the corresponding
-   * public key to ensure that the data has not been tampered with.
+   * @details This method signs the JSON payload using the cryptographic coprocessor's private key and includes
+   * the signature in the `X-Signature` header. The Firebase backend verifies the signature using the device's
+   * public key, ensuring authenticity and data integrity.
    *
    * @param endpoint The Firebase endpoint URL.
    * @param jsonPayload The JSON string payload to be sent.
@@ -130,31 +128,30 @@ private:
     http.addHeader("Content-Type", "application/json");
 
     // Sign the JSON payload
-    /*     String signature;
-        DebugService::getInstance().debugPrint("Signing request with payload,");
-        DebugService::getInstance().debugPrintln(jsonPayload);
-        try {
-          if (!cryptoService.signRequest(jsonPayload, signature)) {
-            DebugService::getInstance().debugPrintln("Failed to sign the request.");
-            http.end(); // Close the connection
-            return false;
-          }
-        } catch (const std::exception &e) {
-          DebugService::getInstance().debugPrint("Signing the request failed with exception,");
-          DebugService::getInstance().debugPrintln(e.what());
-          http.end(); // Close the connection
-          return false;
-        }
+    String signature;
+    try {
+      DebugService::getInstance().debugPrintln("Signing the request payload...");
+      if (!cryptoService.signRequest(jsonPayload, signature)) {
+        DebugService::getInstance().debugPrintln("Failed to sign the request.");
+        http.end(); // Close the connection
+        return false;
+      }
+      // Add the signature to the HTTP headers
+      http.addHeader("X-Signature", signature);
+    } catch (const std::exception &e) {
+      DebugService::getInstance().debugPrint("Exception occurred during signing: ");
+      DebugService::getInstance().debugPrintln(e.what());
+      http.end(); // Close the connection
+      return false;
+    }
 
-        // Add the signature to the HTTP headers
-        http.addHeader("X-Signature", signature); */
-
-    // Send the POST request and store the HTTP response code.
+    // Send the POST request and store the HTTP response code
     int httpResponseCode;
     try {
+      DebugService::getInstance().debugPrintln("Sending POST request...");
       httpResponseCode = http.POST(jsonPayload);
     } catch (const std::exception &e) {
-      DebugService::getInstance().debugPrint("Failed to send POST request with exception,");
+      DebugService::getInstance().debugPrint("Failed to send POST request with exception: ");
       DebugService::getInstance().debugPrintln(e.what());
       http.end(); // Close the connection
       return false;
@@ -168,10 +165,10 @@ private:
       DebugService::getInstance().debugPrintln("Error on sending POST: " + String(httpResponseCode));
     }
 
-    // End the HTTP session.
+    // End the HTTP session
     http.end();
 
-    // Return true if the HTTP response code is 200 (OK).
+    // Return true if the HTTP response code is 200 (OK) or 201 (Created)
     return (httpResponseCode == 200 || httpResponseCode == 201);
   }
 };

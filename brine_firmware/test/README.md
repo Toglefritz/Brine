@@ -1,8 +1,8 @@
 # README for Hardware-in-the-Loop (HITL) Tests
 
 This directory contains Hardware-in-the-Loop (HITL) tests for each hardware component of the Brine IoT device. These 
-tests are designed to interactively verify the functionality of the hardware components by collecting feedback from a 
-human tester over serial communication.
+tests are designed to interactively verify the functionality of the hardware components, sometimes by collecting 
+feedback from a human tester over serial communication.
 
 ## Writing HITL Tests
 
@@ -15,9 +15,9 @@ Each test file should include the following:
 
 1. Include necessary libraries and headers.
 2. Initialize the hardware component.
-3. Write a setup function to initialize any necessary variables.
-4. Write a test function to perform the actual testing. This function should control the hardware component and then 
-ask the human tester to verify the result, when necessary.
+3. Write a setup function to initialize any necessary variables and resources such as an I2C bus.
+4. Write a test function to perform the actual testing. This function should control the hardware component and,
+optionally, ask the human tester to verify the result, when necessary.
 
 Here is a pseudocode example of what a test file might look like:
 
@@ -36,23 +36,8 @@ void setup() {
 
 // Test function
 void test_component() {
-    // Control the component
-    component.control();
-    // Ask the tester to verify the result
-    Serial.println("Please verify the result and then type 'y' to continue.");
-    while (Serial.available() == 0) {
-        // Wait for the tester to type 'y'
-    }
-    // Read the response
-    char response = Serial.read();
-    if (response != 'y') {
-        // If the response is not 'y', print an error message and return
-        Serial.println("Error: Test failed.");
-        return;
-    } else {
-        // If the response is 'y', print a success message
-        Serial.println("Test passed.");
-    }
+    // Perform an action on the component.
+    TEST_ASSERT_TRUE(component.action());
 }
 
 // Register the test function
@@ -87,6 +72,5 @@ navigate to "Test" and click on the "Run" button.
 
 ## Interactive Testing
 
-During the test, the tester will be asked to verify the result of each test step. The tester should observe the 
-hardware component and then type 'y' in the serial monitor to indicate that the test step passed. If the test step did 
-not pass, the tester should type anything other than 'y'. The test will then print an error message and stop.
+During the test, the tester may be asked to verify the result of each test step. The tester should observe the output
+in the PlatformIO CLI and perform the requested actions as required by the test.

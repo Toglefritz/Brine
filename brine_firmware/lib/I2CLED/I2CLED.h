@@ -41,7 +41,7 @@ class I2CLED {
      * @return bool - Returns true if the initialization was successful, false
      * otherwise.
      */
-    bool begin();
+    bool begin(TwoWire &i2cBus);
 
     /**
      * @brief Turns the LED on.

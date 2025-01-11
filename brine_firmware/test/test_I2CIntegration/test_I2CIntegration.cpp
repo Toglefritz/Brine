@@ -15,6 +15,20 @@
  *  Run this test with the command `pio test --filter test_I2CIntegration`.
  */
 
+// Define pins for the main I2C bus
+#define MAIN_SDA_PIN 21
+#define MAIN_SCL_PIN 22
+
+// The I2C interface for this test.
+TwoWire mainI2C = TwoWire(0);
+
+// Define pins for the main I2C bus
+#define CRYPTO_SDA_PIN 19
+#define CRYPTO_SCL_PIN 18
+
+// The I2C interface for this test.
+TwoWire cryptoI2C = TwoWire(1);
+
 // A DistanceSensor instance used for this test.
 DistanceSensor distanceSensor;
 
@@ -40,19 +54,19 @@ void buttonHandler() {
  */
 void test_initialize_i2c_peripherals(void) {
     // Initialize the LED.
-    bool ledInitialized = I2CLED::getInstance().begin();
+    bool ledInitialized = I2CLED::getInstance().begin(mainI2C);
 
     // Initialize the button.
-    bool buttonInitialized = I2CButton::getInstance().begin(buttonHandler);
+    bool buttonInitialized = I2CButton::getInstance().begin(mainI2C, buttonHandler);
 
     // Initialize the distance sensor.
-    bool distanceSensorInitialized = distanceSensor.begin();
+    bool distanceSensorInitialized = distanceSensor.begin(mainI2C);
 
     // Initialize the BLE module.
     bool bleModuleInitialized = bleModule.begin();
 
     // Initialize the CryptoService.
-    bool cryptoServiceInitialized = cryptoService.begin();
+    bool cryptoServiceInitialized = cryptoService.begin(cryptoI2C);
 
     // Test that all peripherals were initialized successfully.
     TEST_ASSERT_TRUE(ledInitialized && buttonInitialized && distanceSensorInitialized && bleModuleInitialized && cryptoServiceInitialized);
@@ -108,7 +122,7 @@ void test_get_distance(void) {
  */
 void test_crypto_service_begin(void) {
   // Initialize the CryptoService
-  bool beginResult = cryptoService.begin();
+  bool beginResult = cryptoService.begin(cryptoI2C);
 
   TEST_ASSERT_TRUE_MESSAGE(beginResult, "Failed to initialize CryptoService");
 }
@@ -154,7 +168,7 @@ void test_crypto_service_sign_request(void) {
  */
 
 void test_battery_life_percentage(void) {
-  BatteryMonitor batteryMonitor;
+  BatteryMonitor batteryMonitor = BatteryMonitor(mainI2C);
 
   // Test that the battery life percentage is within a reasonable range
   float batteryLife = batteryMonitor.getBatteryLifePercent();
@@ -172,8 +186,9 @@ void test_battery_life_percentage(void) {
  * the Unity test framework.
  */
 void setup() {
-    // Join the I2C bus
-    Wire.begin();
+    // Initialize the custom I2C instances with specified SDA and SCL pins
+    mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
+    cryptoI2C.begin(CRYPTO_SDA_PIN, CRYPTO_SCL_PIN);
 
     // Start the Unity test framework
     UNITY_BEGIN();

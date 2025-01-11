@@ -11,14 +11,14 @@ I2CButton::I2CButton() {};
  *
  * @param buttonHandler A function pointer to the button handler function.
  */
-bool I2CButton::begin(void (*buttonHandler)()) {
+bool I2CButton::begin(TwoWire &i2cBus, void (*buttonHandler)()) {
   debugService.debugPrintln("Initializing I2CButton.");
 
   pinMode(interruptPin, INPUT);
   attachInterrupt(digitalPinToInterrupt(interruptPin), buttonHandler, FALLING);
 
   // Check if button will acknowledge over I2C.
-  if (button.begin() == false) {
+  if (button.begin((uint8_t)0x6F, i2cBus) == false) {
     debugService.debugPrintln("I2CButton failed to initialize. Device did not acknowledge.");
 
     return false;

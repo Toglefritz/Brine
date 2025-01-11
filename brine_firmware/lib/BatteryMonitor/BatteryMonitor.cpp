@@ -3,9 +3,9 @@
 #include <DebugService.h>
 
 // Constructor
-BatteryMonitor::BatteryMonitor() {
+BatteryMonitor::BatteryMonitor(TwoWire &i2cBus) {
   // Initialize the MAX17048
-  if (!_fuelGauge.begin()) {
+  if (!_fuelGauge.begin(i2cBus)) {
     DebugService::getInstance().debugPrintln("MAX17048 initialization failed! Check wiring.");
   } else {
     DebugService::getInstance().debugPrintln("MAX17048 initialized successfully.");

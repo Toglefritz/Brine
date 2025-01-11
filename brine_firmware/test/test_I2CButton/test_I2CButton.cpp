@@ -13,6 +13,13 @@
 #include <Arduino.h>
 #include <I2CButton.h>
 
+// Define pins for the main I2C bus
+#define MAIN_SDA_PIN 21
+#define MAIN_SCL_PIN 22
+
+// The I2C interface for this test.
+TwoWire mainI2C = TwoWire(0);
+
 // The start time of the sketch, which is used to create a timeout condition for
 // the test that is used as a failure condition.
 unsigned long startTime = millis();
@@ -48,7 +55,7 @@ void buttonHandler() {
  */
 void test_button_initialization() {
     // Test that the button initializes correctly
-    TEST_ASSERT_TRUE(I2CButton::getInstance().begin(buttonHandler));
+    TEST_ASSERT_TRUE(I2CButton::getInstance().begin(mainI2C, buttonHandler));
 }
 
 /**
@@ -82,8 +89,8 @@ void checkOneMinutePassed() {
 }
 
 void setup() {
-    // Join the I2C bus
-    Wire.begin();
+    // Initialize the custom I2C instance with specified SDA and SCL pins
+    mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
 
     // Start the Unity test framework
     UNITY_BEGIN();

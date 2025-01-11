@@ -13,23 +13,39 @@
  *  Run this test with the command `pio test --filter test_I2CLED`.
  */
 
+// Define pins for the main I2C bus
+#define MAIN_SDA_PIN 21
+#define MAIN_SCL_PIN 22
+
+// The I2C interface for this test.
+TwoWire mainI2C = TwoWire(0);
+
+/**
+ * @brief Tests initialization of the I2C LED.
+ */
 void test_led_initialization(void) {
-    // Test that the LED initializes correctly
-    TEST_ASSERT_TRUE(I2CLED::getInstance().begin());
+  // Test that the LED initializes correctly
+  TEST_ASSERT_TRUE(I2CLED::getInstance().begin(mainI2C));
 }
 
+/**
+ * @brief Tests turning the LED on.
+ */
 void test_led_turn_on(void) {
-    // Test that the LED turns on correctly
-    I2CLED::getInstance().turnOn();
+  // Test that the LED turns on correctly
+  I2CLED::getInstance().turnOn();
 
-    TEST_ASSERT_TRUE(I2CLED::getInstance().turnOn());
+  TEST_ASSERT_TRUE(I2CLED::getInstance().turnOn());
 }
 
+/**
+ * @brief Tests turning off the LED.
+ */
 void test_led_turn_off(void) {
-    // Test that the LED turns off correctly
-    I2CLED::getInstance().turnOff();
+  // Test that the LED turns off correctly
+  I2CLED::getInstance().turnOff();
 
-    TEST_ASSERT_TRUE(I2CLED::getInstance().turnOff());
+  TEST_ASSERT_TRUE(I2CLED::getInstance().turnOff());
 }
 
 /**
@@ -41,22 +57,22 @@ void test_led_turn_off(void) {
  * the Unity test framework.
  */
 void setup() {
-    // Join the I2C bus
-    Wire.begin();
+  // Initialize the custom I2C instance with specified SDA and SCL pins
+  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
 
-    // Start the Unity test framework
-    UNITY_BEGIN();
+  // Start the Unity test framework
+  UNITY_BEGIN();
 
-    RUN_TEST(test_led_initialization);
-    RUN_TEST(test_led_turn_on);
-    delay(1000); // Short delay allowing human tester to more easily verify LED
-                 // state visually
-    RUN_TEST(test_led_turn_off);
+  RUN_TEST(test_led_initialization);
+  RUN_TEST(test_led_turn_on);
+  delay(1000); // Short delay allowing human tester to more easily verify LED
+               // state visually
+  RUN_TEST(test_led_turn_off);
 
-    // End the Unity test framework
-    UNITY_END();
+  // End the Unity test framework
+  UNITY_END();
 }
 
 void loop() {
-    // Do nothing
+  // Do nothing
 }

@@ -8,7 +8,7 @@ public:
   /**
    * Constructor initializes the MAX17048 fuel gauge.
    */
-  BatteryMonitor();
+  BatteryMonitor(TwoWire &i2cBus);
 
   /**
    * Retrieves the battery life percentage from the MAX17048.

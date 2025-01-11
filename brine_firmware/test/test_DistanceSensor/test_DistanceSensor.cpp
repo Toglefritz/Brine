@@ -9,6 +9,13 @@
  *  Run this test with the command `pio test --filter test_DistanceSensor`.
  */
 
+// Define pins for the main I2C bus
+#define MAIN_SDA_PIN 21
+#define MAIN_SCL_PIN 22
+
+// The I2C interface for this test.
+TwoWire mainI2C = TwoWire(0);
+
 DistanceSensor sensor;
 
 /**
@@ -18,7 +25,7 @@ DistanceSensor sensor;
  */
 void test_sensor_initialization(void) {
     // Test that the sensor initializes correctly
-    TEST_ASSERT_TRUE(sensor.begin());
+    TEST_ASSERT_TRUE(sensor.begin(mainI2C));
 }
 
 /**
@@ -58,8 +65,8 @@ void test_get_distance(void) {
  * suite.
  */
 void setup() {
-    // Join the I2C bus
-    Wire.begin();
+    // Initialize the custom I2C instance with specified SDA and SCL pins
+    mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
     
     UNITY_BEGIN();
 

@@ -30,7 +30,7 @@ public:
    *
    * @return True if initialization is successful, otherwise false.
    */
-  bool begin();
+  bool begin(TwoWire &i2cBus);
 
   /**
    * @brief Obtains the public key from the ATECC508A device.

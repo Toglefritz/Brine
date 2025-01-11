@@ -38,7 +38,7 @@ public:
    * @return bool - Returns true if the initialization was successful, false
    * otherwise.
    */
-  bool begin(void (*callback)());
+  bool begin(TwoWire &i2cBus, void (*callback)());
 
   /**
    * @brief Clears the event bits, including the pressed and clicked bits.

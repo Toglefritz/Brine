@@ -12,8 +12,8 @@ CryptoService::CryptoService() {}
  *
  * @return True if initialization is successful, otherwise false.
  */
-bool CryptoService::begin() {
-  if (!atecc.begin()) {
+bool CryptoService::begin(TwoWire &i2cBus) {
+  if (!atecc.begin((uint8_t)0x60, i2cBus)) {
     debugService.debugPrintln("Failed to initialize ATECC508A!");
     return false;
   }
@@ -57,6 +57,10 @@ String CryptoService::readPublicKey() {
 bool CryptoService::signRequest(const String &data, String &signature) {
   debugService.debugPrintln("Signing request...");
 
+  debugService.debugPrintln("Data to sign: " + data);
+  debugService.debugPrint("Data length: ");
+  debugService.debugPrintln(String(data.length()));
+
   // Step 1: Hash the input data using SHA-256 into a 32-byte hash
   byte hash[32];
   mbedtls_sha256_context sha_ctx;
@@ -65,6 +69,12 @@ bool CryptoService::signRequest(const String &data, String &signature) {
   mbedtls_sha256_update(&sha_ctx, (const unsigned char *)data.c_str(), data.length());
   mbedtls_sha256_finish(&sha_ctx, hash);
   mbedtls_sha256_free(&sha_ctx);
+
+  debugService.debugPrint("Hash: ");
+  for (int i = 0; i < 32; ++i) {
+    debugService.debugPrint(String(hash[i], HEX) + " ");
+  }
+  debugService.debugPrintln("");
 
   // Step 2: Use the ATECC508A to sign the hash
   if (!atecc.createSignature(hash)) {

@@ -13,6 +13,23 @@
 #include <I2CLED.h>
 #include <Wire.h>
 
+/**
+ * Two I2C busses are used for the Brine device, one reserved for the cryptographic coprocessor and the other used by
+ * all other I2C peripherals. This setup helps to reduce the chances of I2C communication issues when compared with 
+ * using a single bus.
+ */
+
+// Define pins for the main I2C bus (general peripherals)
+#define MAIN_SDA_PIN 21
+#define MAIN_SCL_PIN 22
+
+// Define pins for the crypto I2C bus (cryptographic coprocessor)
+#define CRYPTO_SDA_PIN 19
+#define CRYPTO_SCL_PIN 18
+
+TwoWire mainI2C = TwoWire(0);    // I2C_NUM_0 for general peripherals
+TwoWire cryptoI2C = TwoWire(1);  // I2C_NUM_1 for cryptographic coprocessor
+
 /// An I2CButton instance used to handle button presses.
 I2CButton &button = I2CButton::getInstance();
 
@@ -84,7 +101,7 @@ bool _updateDeviceLevels() {
   sensor.stopMeasurement();
 
   // Create a BatteryMonitor instance
-  BatteryMonitor batteryMonitor;
+  BatteryMonitor batteryMonitor = BatteryMonitor(mainI2C);
 
   // Get the remaining battery life percentage using the BatteryMonitor
   float batteryLife = batteryMonitor.getBatteryLifePercent();
@@ -293,20 +310,25 @@ void _configureDeepSleepService() {
  * @brief The setup function for the Brine monitor firmware.
  */
 void setup() {
-  // Join the I2C bus
-  Wire.begin();
+  // Initialize the main I2C bus for general peripherals
+  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
+  DebugService::getInstance().debugPrintln("Main I2C bus initialized.");
+
+  // Initialize the crypto I2C bus for the cryptographic coprocessor
+  cryptoI2C.begin(CRYPTO_SDA_PIN, CRYPTO_SCL_PIN);
+  DebugService::getInstance().debugPrintln("Crypto I2C bus initialized.");
 
   // Initialize the button service, setting the buttonCallback function as the callback for button presses.
-  button.begin(button_isr);
+  button.begin(mainI2C, button_isr);
 
   // Initialize the LED service.
-  I2CLED::getInstance().begin();
+  I2CLED::getInstance().begin(mainI2C);
 
   // Turn the LED off initially.
   I2CLED::getInstance().turnOff();
 
   // Initialize the distance sensor.
-  bool sensorInitialized = sensor.begin();
+  bool sensorInitialized = sensor.begin(mainI2C);
   if (!sensorInitialized) {
     DebugService::getInstance().debugPrintln("Failed to initialize distance sensor.");
   } else {
@@ -314,7 +336,7 @@ void setup() {
   }
 
   // Initialize the cryptographic coprocessor.
-  bool cryptoInitialized = cryptoService.begin();
+  bool cryptoInitialized = cryptoService.begin(cryptoI2C);
   if (!cryptoInitialized) {
     DebugService::getInstance().debugPrintln("Failed to initialize cryptographic coprocessor.");
   } else {

@@ -10,9 +10,9 @@ DistanceSensor::DistanceSensor() : sensor() {}
  * Begins I2C communication and checks the sensor's initial status.
  * If initialization fails, it enters an infinite loop after logging the error.
  */
-bool DistanceSensor::begin() {
+bool DistanceSensor::begin(TwoWire &i2cBus) {
   // Initialize the sensor
-  bool status = sensor.begin();
+  bool status = sensor.begin(i2cBus);
 
   // Check if the sensor failed to initialize
   if (status != 0) {
