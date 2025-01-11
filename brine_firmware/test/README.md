@@ -74,3 +74,17 @@ navigate to "Test" and click on the "Run" button.
 
 During the test, the tester may be asked to verify the result of each test step. The tester should observe the output
 in the PlatformIO CLI and perform the requested actions as required by the test.
+
+## Full System Test
+
+The full system test, located in the *test_fullSystem* directory, is designed to run a comprehensive set of tests covering all hardware components and their interactions. Unlike individual component tests, which focus on testing specific hardware in isolation, the full system test ensures that all components work together correctly when integrated into the Brine IoT device.
+
+### Running the Full System Test
+
+To run the full system test, you can use the PlatformIO CLI:
+
+```sh
+pio test --filter test_fullSystem
+```
+
+Alternatively, if you are using the PlatformIO IDE, navigate to the “Test” section, select the test_fullSystem environment, and click “Run.”

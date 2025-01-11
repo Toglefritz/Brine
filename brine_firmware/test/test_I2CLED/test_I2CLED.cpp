@@ -1,3 +1,4 @@
+#include "test_I2CLED.h"
 #include <I2CLED.h>
 #include <Wire.h>
 #include <unity.h>
@@ -23,30 +24,7 @@ TwoWire mainI2C = TwoWire(0);
 /**
  * @brief Tests initialization of the I2C LED.
  */
-void test_led_initialization(void) {
-  // Test that the LED initializes correctly
-  TEST_ASSERT_TRUE(I2CLED::getInstance().begin(mainI2C));
-}
-
-/**
- * @brief Tests turning the LED on.
- */
-void test_led_turn_on(void) {
-  // Test that the LED turns on correctly
-  I2CLED::getInstance().turnOn();
-
-  TEST_ASSERT_TRUE(I2CLED::getInstance().turnOn());
-}
-
-/**
- * @brief Tests turning off the LED.
- */
-void test_led_turn_off(void) {
-  // Test that the LED turns off correctly
-  I2CLED::getInstance().turnOff();
-
-  TEST_ASSERT_TRUE(I2CLED::getInstance().turnOff());
-}
+void test_led_initialization(void) { test_led_initialization(mainI2C); }
 
 /**
  * @brief Initializes the test environment and runs the Unity test framework.

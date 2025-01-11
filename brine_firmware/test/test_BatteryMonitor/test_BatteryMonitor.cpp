@@ -1,6 +1,6 @@
-#include <BatteryMonitor.h>
 #include <Wire.h>
 #include <unity.h>
+#include "test_BatteryMonitor.h"
 
 /*
  *  This test file tests the BatteryMonitor class. The BatteryMonitor class
@@ -20,15 +20,10 @@
 // The I2C interface for this test.
 TwoWire mainI2C = TwoWire(0);
 
-void test_battery_life_percentage(void) {
-  BatteryMonitor batteryMonitor = BatteryMonitor(mainI2C);
-
-  // Test that the battery life percentage is within a reasonable range
-  float batteryLife = batteryMonitor.getBatteryLifePercent();
-
-  TEST_ASSERT_GREATER_OR_EQUAL(0.0, batteryLife); // Battery life should be 0% or more
-  TEST_ASSERT_LESS_OR_EQUAL(100.0, batteryLife);  // Battery life should be 100% or less
-}
+/**
+ * Checks that the battery monitor is able to obtain a battery level.
+ */
+void test_battery_life_percentage(void) { test_battery_life_percentage(mainI2C); }
 
 void setup() {
   // Initialize the custom I2C instance with specified SDA and SCL pins

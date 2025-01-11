@@ -12,6 +12,7 @@
 // Include necessary libraries and headers
 #include <Arduino.h>
 #include <I2CButton.h>
+#include "test_I2CButton.h"
 
 // Define pins for the main I2C bus
 #define MAIN_SDA_PIN 21
@@ -20,32 +21,6 @@
 // The I2C interface for this test.
 TwoWire mainI2C = TwoWire(0);
 
-// The start time of the sketch, which is used to create a timeout condition for
-// the test that is used as a failure condition.
-unsigned long startTime = millis();
-
-// Determines if the button was pressed.
-bool buttonPressed = false;
-
-// A timeout duration for the test, in milliseconds.
-unsigned long timeoutDuration = 30000;
-
-// Determines if the test has timed out due to the button not being pressed.
-bool testTimedOut = false;
-
-/**
- * @brief The button handler function.
- *
- * This function is called when the button is pressed. It sets the
- * `buttonPressed` variable to true, indicating that the button was pressed.
- */
-void buttonHandler() {
-    buttonPressed = true;
-
-    // End the test with a success message.
-    TEST_PASS();
-}
-
 /**
  * @brief Test the initialization of the button.
  *
@@ -53,40 +28,7 @@ void buttonHandler() {
  * `begin` method of the `I2CButton` class. It asserts that the `begin` method
  * returns true, indicating a successful initialization.
  */
-void test_button_initialization() {
-    // Test that the button initializes correctly
-    TEST_ASSERT_TRUE(I2CButton::getInstance().begin(mainI2C, buttonHandler));
-}
-
-/**
- * @brief Test the button press functionality.
- *
- * This function is used to test the button press functionality. It displays a
- * message instructing the user to press the button in order to pass the test.
- */
-void test_button_press() {
-    TEST_IGNORE_MESSAGE("This test is interactive. Please press the button.");
-}
-
-/**
- * Checks if one minute has passed since the start time and the button has not
- * been pressed. If one minute has passed and the button has not been pressed,
- * the Unity test framework is ended with a failure message.
- */
-void checkOneMinutePassed() {
-    // If one minute has passed since the start time
-    if (millis() - startTime >= timeoutDuration && !buttonPressed) {
-        // Reset the start time
-        startTime = millis();
-
-        // Set the timeout flag
-        testTimedOut = true;
-
-        // End the Unity test framework
-        TEST_FAIL_MESSAGE(
-            "The button was not pressed within the test timeout. Test failed.");
-    }
-}
+void test_button_initialization(void) { test_button_initialization(mainI2C); } 
 
 void setup() {
     // Initialize the custom I2C instance with specified SDA and SCL pins
