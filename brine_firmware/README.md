@@ -16,8 +16,6 @@ The primary sensor used by the Brine device is the VL53L1X distance sensor. This
 
 For user feedback, the device includes an RGB LED. This LED can display different colors and patterns to indicate the device's status. This system is mainly used during the provisioning process and the LED generally remains off during normal operation so its use does not affect the battery life of the device.
 
-To ensure secure communication with backend services, the device includes a cryptographic coprocessor. This coprocessor handles authentication, ensuring that the data sent and received by the device is secure and trustworthy.
-
 The device is powered by three AA batteries. To maximize battery life, the device spends most of its time in a deep sleep state. It wakes up once every 24 hours to measure the salt level, send the data to the backend services, and then returns to the deep sleep state. This power management strategy allows the device to operate for extended periods without requiring a battery change.
 
 The device is designed to be mounted inside the lid of a water softener, facing down towards the salt. This positioning allows the distance sensor to accurately measure the salt level.
@@ -37,12 +35,10 @@ graph LR
     A[main.cpp] --> B[Button Service]
     A --> C[LED Service]
     A --> D[Distance Sensor Service]
-    A --> E[Cryptographic Coprocessor Service]
     A --> F[Battery Monitor Service]
     B --> G[Button Hardware]
     C --> H[LED Hardware]
     D --> I[Distance Sensor Hardware]
-    E --> J[Cryptographic Coprocessor Hardware]
     F --> K[Battery Monitor Hardware]
 ```
 

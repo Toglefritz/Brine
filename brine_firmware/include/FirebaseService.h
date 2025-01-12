@@ -4,7 +4,6 @@
 
 #include "DeviceConfig.h"
 #include <ArduinoJson.h>
-#include <CryptoService.h>
 #include <HTTPClient.h>
 
 /**
@@ -16,7 +15,6 @@
  * uses HTTP POST requests to send data to predefined Firebase endpoints.
  *
  * @note This class assumes the presence of an active internet connection.
- * PKI and cryptographic operations for secure data transmission will be added in future iterations.
  */
 class FirebaseService {
 public:
@@ -93,22 +91,18 @@ private:
    * @throws Compilation error if `FLAVOR` is undefined or invalid.
    */
   const char *getEndpoint() {
-// Return the appropriate endpoint based on the FLAVOR flag
-#if defined(FLAVOR) && (FLAVOR == 1)
-    return "http://192.168.86.39:5001/brine-3b212/us-central1/updateDeviceLevels";
-#elif defined(FLAVOR) && (FLAVOR == 2)
-    return "https://updatedevicelevels-7wo3szegoq-uc.a.run.app";
-#else
-#error "FLAVOR not defined or invalid. Please set FLAVOR to 1 (dev) or 2 (prod) in platformio.ini."
-#endif
+  // Return the appropriate endpoint based on the FLAVOR flag
+  #if defined(FLAVOR) && (FLAVOR == 1)
+      return "http://192.168.86.39:5001/brine-3b212/us-central1/updateDeviceLevels";
+  #elif defined(FLAVOR) && (FLAVOR == 2)
+      return "https://updatedevicelevels-7wo3szegoq-uc.a.run.app";
+  #else
+  #error "FLAVOR not defined or invalid. Please set FLAVOR to 1 (dev) or 2 (prod) in platformio.ini."
+  #endif
   }
 
   /**
    * @brief Sends a POST request to a specified Firebase endpoint with a signed JSON payload.
-   *
-   * @details This method signs the JSON payload using the cryptographic coprocessor's private key and includes
-   * the signature in the `X-Signature` header. The Firebase backend verifies the signature using the device's
-   * public key, ensuring authenticity and data integrity.
    *
    * @param endpoint The Firebase endpoint URL.
    * @param jsonPayload The JSON string payload to be sent.
@@ -118,32 +112,11 @@ private:
     // Create an HTTP client object and send a POST request to the specified Firebase endpoint with the JSON payload.
     HTTPClient http;
 
-    // Create a CryptoService instance to sign the request.
-    CryptoService cryptoService;
-
     // Begin the HTTP connection
     http.begin(endpoint);
 
     // Add the necessary HTTP headers
     http.addHeader("Content-Type", "application/json");
-
-    // Sign the JSON payload
-    String signature;
-    try {
-      DebugService::getInstance().debugPrintln("Signing the request payload...");
-      if (!cryptoService.signRequest(jsonPayload, signature)) {
-        DebugService::getInstance().debugPrintln("Failed to sign the request.");
-        http.end(); // Close the connection
-        return false;
-      }
-      // Add the signature to the HTTP headers
-      http.addHeader("X-Signature", signature);
-    } catch (const std::exception &e) {
-      DebugService::getInstance().debugPrint("Exception occurred during signing: ");
-      DebugService::getInstance().debugPrintln(e.what());
-      http.end(); // Close the connection
-      return false;
-    }
 
     // Send the POST request and store the HTTP response code
     int httpResponseCode;

@@ -31,18 +31,11 @@
 #define BUTTON_LED_I2C_ADDRESS 0x6F
 #define BATTERY_FUEL_GAUGE_ADDRESS 0x36 
 
-/// Define the expected I2C addresses for devices on the crypto I2C bus
-#define CRYPTO_I2C_ADDRESS 0x60
-
 // Array of expected addresses on the main I2C bus
 const uint8_t expectedMainAddresses[] = {SENSOR_I2C_ADDRESS, BUTTON_LED_I2C_ADDRESS, BATTERY_FUEL_GAUGE_ADDRESS};
 
-// Array of expected addresses on the crypto I2C bus
-const uint8_t expectedCryptoAddresses[] = {CRYPTO_I2C_ADDRESS};
-
 // Buffer to store detected addresses
 uint8_t detectedMainAddresses[sizeof(expectedMainAddresses)];
-uint8_t detectedCryptoAddresses[sizeof(expectedCryptoAddresses)];
 
 size_t detectedCount = 0;
 
@@ -84,30 +77,6 @@ void test_main_I2C_devices_detected(TwoWire &mainI2C) {
 
     // Use the generated message in the assertion
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(sizeof(expectedMainAddresses), detectedCount, messageBuffer);
-  }
-}
-
-// Unity test to verify that all expected I2C devices on the crypto I2C bus are detected
-void test_crypto_I2C_devices_detected(TwoWire &cryptoI2C) {
-  size_t detectedCount = 0;
-  scanI2C(cryptoI2C, detectedCryptoAddresses, sizeof(detectedCryptoAddresses), detectedCount);
-
-  // Check if the number of detected devices matches the expected count
-  if (sizeof(expectedCryptoAddresses) != detectedCount) {
-    char messageBuffer[150]; // Buffer to store the complete error message
-    snprintf(messageBuffer, sizeof(messageBuffer),
-             "Incorrect number of crypto I2C devices detected. Expected: %d, Detected: %d. Addresses: ",
-             sizeof(expectedCryptoAddresses), detectedCount);
-
-    // Append each detected address to the message
-    for (size_t i = 0; i < detectedCount; i++) {
-      char addressBuffer[6]; // Buffer to store each address in hex format
-      snprintf(addressBuffer, sizeof(addressBuffer), "0x%02X ", detectedCryptoAddresses[i]);
-      strncat(messageBuffer, addressBuffer, sizeof(messageBuffer) - strlen(messageBuffer) - 1);
-    }
-
-    // Use the generated message in the assertion
-    TEST_ASSERT_EQUAL_UINT8_MESSAGE(sizeof(expectedCryptoAddresses), detectedCount, messageBuffer);
   }
 }
 

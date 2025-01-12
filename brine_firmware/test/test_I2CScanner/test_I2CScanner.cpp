@@ -32,27 +32,15 @@
 // The I2C interface for this test.
 TwoWire mainI2C = TwoWire(0);
 
-// Define pins for the main I2C bus
-#define CRYPTO_SDA_PIN 19
-#define CRYPTO_SCL_PIN 18
-
-// The I2C interface for this test.
-TwoWire cryptoI2C = TwoWire(1);
-
 // Unity test to verify that all expected I2C devices on the main I2C bus are detected
 void test_main_I2C_devices_detected(void) { test_main_I2C_devices_detected(mainI2C); }
-
-// Unity test to verify that all expected I2C devices on the crypto I2C bus are detected
-void test_crypto_I2C_devices_detected(void) { test_crypto_I2C_devices_detected(mainI2C); }
 
 void setup() {
   // Initialize the custom I2C instances with specified SDA and SCL pins
   mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
-  cryptoI2C.begin(CRYPTO_SDA_PIN, CRYPTO_SCL_PIN);
 
   UNITY_BEGIN();                       // Start the Unity test framework
   RUN_TEST(test_main_I2C_devices_detected); // Run the I2C devices detection test
-  RUN_TEST(test_crypto_I2C_devices_detected); // Run the I2C devices detection test
   UNITY_END();                         // End the Unity test framework
 }
 

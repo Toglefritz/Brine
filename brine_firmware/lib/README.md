@@ -16,8 +16,6 @@ The directory typically contains subdirectories for each library or module, whic
 
 - **I2CButton**: Contains the driver for interfacing with the Qwiic Button module, encapsulating all the functionality needed to interact with the button.
 
-- **I2CCrypto**: Provides the functionality to communicate with and utilize the Qwiic ATECC508A cryptographic coprocessor module.
-
 - **I2CDistanceSensor**: Houses the code required for interfacing with the Qwiic VL53L1X distance sensor, providing an API for measuring distances.
 
 - **FirebaseModule**: A library that encapsulates the functionality required for interacting with Firebase, offering a simplified interface for database operations.

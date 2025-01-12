@@ -9,7 +9,6 @@
 #include "../test_NVSService/test_NVSService.h"
 #include "../test_BatteryMonitor/test_BatteryMonitor.h"
 #include "../test_BLEModule/test_BLEModule.h"
-#include "../test_CryptoService/test_CryptoService.h"
 
 /*
  * This file combines all separate tests into a single test run by including the
@@ -34,34 +33,23 @@
 // The I2C interface for this test.
 TwoWire mainI2C = TwoWire(0);
 
-// Define pins for the main I2C bus
-#define CRYPTO_SDA_PIN 19
-#define CRYPTO_SCL_PIN 18
-
-// The I2C interface for this test.
-TwoWire cryptoI2C = TwoWire(1);
-
 // Declare helper functions for tests requiring arguments. Functions within
 // calls to RUN_TEST must be void, so these helper functions allow arguments to
 // be passed to these functions.
 void test_button_initialization(void) { test_button_initialization(mainI2C); }
 void test_led_initialization(void) { test_led_initialization(mainI2C); }
 void test_main_I2C_devices_detected(void) { test_main_I2C_devices_detected(mainI2C); }
-void test_crypto_I2C_devices_detected(void) { test_crypto_I2C_devices_detected(mainI2C); }
 void test_battery_life_percentage(void) { test_battery_life_percentage(mainI2C); }
-void test_crypto_service_begin(void) { test_crypto_service_begin(cryptoI2C); }
 
 void setup() {
   // Initialize the I2C busses for the main instances
   mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
-  cryptoI2C.begin(CRYPTO_SDA_PIN, CRYPTO_SCL_PIN);
 
   // Start Unity framework
   UNITY_BEGIN();
 
   // I2C scanner tests
   RUN_TEST(test_main_I2C_devices_detected);
-  RUN_TEST(test_crypto_I2C_devices_detected);
 
   // I2C LED tests
   RUN_TEST(test_led_initialization);
@@ -83,11 +71,6 @@ void setup() {
   // BLE module tests
   RUN_TEST(test_ble_module_begin);
   RUN_TEST(test_ble_module_advertise);
-
-  // Cryptographic coprocessor tests
-  RUN_TEST(test_crypto_service_begin);
-  RUN_TEST(test_crypto_service_read_public_key);
-  RUN_TEST(test_crypto_service_sign_request);
 
   // I2C button tests
   startTime = millis();

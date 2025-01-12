@@ -13,23 +13,6 @@
 #include <I2CLED.h>
 #include <Wire.h>
 
-/**
- * Two I2C busses are used for the Brine device, one reserved for the cryptographic coprocessor and the other used by
- * all other I2C peripherals. This setup helps to reduce the chances of I2C communication issues when compared with 
- * using a single bus.
- */
-
-// Define pins for the main I2C bus (general peripherals)
-#define MAIN_SDA_PIN 21
-#define MAIN_SCL_PIN 22
-
-// Define pins for the crypto I2C bus (cryptographic coprocessor)
-#define CRYPTO_SDA_PIN 19
-#define CRYPTO_SCL_PIN 18
-
-TwoWire mainI2C = TwoWire(0);    // I2C_NUM_0 for general peripherals
-TwoWire cryptoI2C = TwoWire(1);  // I2C_NUM_1 for cryptographic coprocessor
-
 /// An I2CButton instance used to handle button presses.
 I2CButton &button = I2CButton::getInstance();
 
@@ -75,12 +58,6 @@ FirebaseService firebaseService;
 // on the distance of the salt level from the sensor compared to the overall height of the water softener.
 DistanceSensor sensor;
 
-// A service for getting the remaining battery life of the device based on a voltage divider connected to the battery.
-BatteryMonitor batteryMonitor();
-
-// A service for interacting with the cryptographic coprocessor.
-CryptoService cryptoService;
-
 /**
  * @brief Updates the device salt and battery levels in the Firebase cloud.
  *
@@ -100,8 +77,8 @@ bool _updateDeviceLevels() {
   // Stop the distance sensor's operations.
   sensor.stopMeasurement();
 
-  // Create a BatteryMonitor instance
-  BatteryMonitor batteryMonitor = BatteryMonitor(mainI2C);
+  // Initialize the battery monitor
+  BatteryMonitor batteryMonitor = BatteryMonitor(Wire);
 
   // Get the remaining battery life percentage using the BatteryMonitor
   float batteryLife = batteryMonitor.getBatteryLifePercent();
@@ -311,36 +288,24 @@ void _configureDeepSleepService() {
  */
 void setup() {
   // Initialize the main I2C bus for general peripherals
-  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
-  DebugService::getInstance().debugPrintln("Main I2C bus initialized.");
-
-  // Initialize the crypto I2C bus for the cryptographic coprocessor
-  cryptoI2C.begin(CRYPTO_SDA_PIN, CRYPTO_SCL_PIN);
-  DebugService::getInstance().debugPrintln("Crypto I2C bus initialized.");
+  Wire.begin();
+  DebugService::getInstance().debugPrintln("I2C bus initialized.");
 
   // Initialize the button service, setting the buttonCallback function as the callback for button presses.
-  button.begin(mainI2C, button_isr);
+  button.begin(Wire, button_isr);
 
   // Initialize the LED service.
-  I2CLED::getInstance().begin(mainI2C);
+  I2CLED::getInstance().begin(Wire);
 
   // Turn the LED off initially.
   I2CLED::getInstance().turnOff();
 
   // Initialize the distance sensor.
-  bool sensorInitialized = sensor.begin(mainI2C);
+  bool sensorInitialized = sensor.begin(Wire);
   if (!sensorInitialized) {
     DebugService::getInstance().debugPrintln("Failed to initialize distance sensor.");
   } else {
     DebugService::getInstance().debugPrintln("Distance sensor initialized.");
-  }
-
-  // Initialize the cryptographic coprocessor.
-  bool cryptoInitialized = cryptoService.begin(cryptoI2C);
-  if (!cryptoInitialized) {
-    DebugService::getInstance().debugPrintln("Failed to initialize cryptographic coprocessor.");
-  } else {
-    DebugService::getInstance().debugPrintln("Cryptographic coprocessor initialized.");
   }
 
   // Initialize NVSService with the "wifi_credentials" namespace.
