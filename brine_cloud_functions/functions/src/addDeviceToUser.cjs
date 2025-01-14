@@ -52,10 +52,9 @@ async function addDeviceToUser(req, res) {
     // middleware.
     const userUid = req.user.uid;
 
-    // Extract the device ID, device name, and public key from the request
+    // Extract the device ID and device name from the request
     const deviceId = req.body.deviceId;
     const deviceName = req.body.deviceName;
-    const publicKey = req.body.publicKey;
 
     console.log('Adding device to user', userUid, ':', deviceId, ';', deviceName);
 
@@ -68,11 +67,6 @@ async function addDeviceToUser(req, res) {
     } else if (!deviceName) {
         console.error('Device name is required');
         res.status(400).send('Device name is required');
-
-        return;
-    } else if (!publicKey) {
-        console.error('Public key is required');
-        res.status(400).send('Public key is required');
 
         return;
     }
@@ -141,7 +135,6 @@ async function addDeviceToUser(req, res) {
                 battery_level: -1,  // -1 indicates unknown battery level
                 salt_distance: -1,    // -1 indicates unknown salt level
                 appliance_height: -1,  // -1 indicates unknown appliance height
-                public_key: publicKey,
                 last_updated: new Date().toISOString(),
             });
 

@@ -24,6 +24,7 @@ const authenticate = require('./middleware/authMiddleware.cjs');
 // more functions that implements the logic for the corresponding endpoint.
 const { createUser } = require('./src/createUser.cjs');
 const { getUserDevices } = require('./src/getUserDevices.cjs');
+const { generatePSK } = require('./src/generatePSK.cjs');
 const { updateDeviceLevels } = require('./src/updateDeviceLevels.cjs');
 const { getDevice } = require('./src/getDevice.cjs');
 const { addDeviceToUser } = require('./src/addDeviceToUser.cjs');
@@ -69,6 +70,23 @@ exports.addDeviceToUser = functions.https.onRequest(async (req, res) => {
 exports.getUserDevices = functions.https.onRequest(async (req, res) => {
     authenticate(req, res, async () => {
         getUserDevices(req, res);
+    });
+});
+
+
+/**
+ * @brief Endpoint used to generate a pre-shared key (PSK) for a Brine device.
+ * 
+ * This endpoint is called by the mobile app during the provisioning process to generate a new pre-shared key (PSK) for 
+ * a device. The PSK is stored in Firestore along with the device ID, a creation timestamp, and a validity flag. 
+ * The function returns the PSK to the mobile app.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.generatePSK = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        generatePSK(req, res);
     });
 });
 
