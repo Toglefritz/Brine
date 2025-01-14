@@ -13,7 +13,6 @@ import '../../../services/ble/ble_communication_service.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
 import '../../../services/ble/models/device_id_response.dart';
-import '../../../services/ble/models/public_key_response.dart';
 import '../../../services/ble/models/response.dart';
 import '../association/association_route.dart';
 import 'device_connection_route.dart';
@@ -38,9 +37,6 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// The device ID of the Brine device.
   late String _deviceId;
-
-  /// The public key of the Brine device, in base-64 encoded format.
-  late String _publicKey;
 
   @override
   void initState() {
@@ -125,33 +121,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     // Register a callback for changes in the value of the characteristic.
     _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);
 
-    // Also get the public key.
-    await _getPublicKey(characteristic);
-  }
-
-  /// Retrieves the public key for the Brine device.
-  ///
-  /// Each Brine device is equipped with a cryptographic coprocessor that holds a public-private key pair. The public
-  /// key is used to establish secure communication between the Brine device and the app and between the Brine device
-  /// and the Brine cloud. The public key is retrieved using a command that is sent to the Brine device.
-  Future<void> _getPublicKey(BleCharacteristic characteristic) async {
-    debugPrint('Requesting public key');
-
-    // Get the command for requesting the device ID.
-    final Command publicKeyCommand = Command(commandType: CommandType.getPublicKey);
-    final String commandString = publicKeyCommand.toJsonString();
-
-    try {
-      // The encryption key is null because the public key is not yet known, this is, after all, the command used to
-      // retrieve the public key.
-      await _bleCommunicationManager!.writeValue(
-        value: commandString,
-      );
-    } catch (e) {
-      debugPrint('Failed to request public key with exception, $e');
-
-      // TODO(Toglefritz): Handle this error
-    }
+    // With the subscription established, request the device ID.
+    await _getDeviceId(_bleCommunicationManager!.characteristic);
   }
 
   /// Retrieves a device ID for the Brine device.
@@ -179,31 +150,19 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Handles changes in the value of a [BleCharacteristic].
   ///
-  /// This controller obtains two pieces of information from the Brine monitor: the public key and the device ID. The
-  /// controller requests the public key first. Then, once the public key is received, the controller requests the
-  /// device ID.
-  ///
-  /// Finally, once both the public key and device ID are received, the controller continues to the next step.
+  /// This controller requests the device ID from the Brine monitor. Once the device ID is obtained, it continues
+  /// to the next step.
   Future<void> _onCharacteristicChanged(JSON value) async {
     // Get a Response object from the characteristic value.
     final Response response = Response.fromJson(value);
 
-    // Check that the characteristic value contains the public key.
-    if (response is PublicKeyResponse) {
-      debugPrint('Received public key: ${response.publicKey}');
-
-      _publicKey = response.publicKey;
-
-      // Once the public key is received, request the device ID.
-      await _getDeviceId(_bleCommunicationManager!.characteristic);
-    }
     // Check that the characteristic value contains the device ID.
-    else if (response is DeviceIdResponse) {
+    if (response is DeviceIdResponse) {
       debugPrint('Received device ID: ${response.deviceId}');
 
       _deviceId = response.deviceId;
 
-      // Once both the public key and device ID are received, continue to the next step in the provisioning process.
+      // Continue to the next step in the provisioning process.
       await _continueToNextStep();
     } else {
       debugPrint('Unexpected response type: $response');
@@ -224,7 +183,6 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
       saltLevel: -1,
       // A value of -1 indicates that the battery level is unknown.
       batteryLevel: -1,
-      publicKey: _publicKey,
       retrievalTimestamp: DateTime.now(),
     );
 

@@ -71,7 +71,8 @@ class DarkOnboardingButton extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
-                      right: loading ?? false ? Insets.small + 16 : 0),
+                    right: loading ?? false ? Insets.small + 16 : 0,
+                  ),
                   child: Text(
                     text.toUpperCase(),
                     textAlign: TextAlign.center,

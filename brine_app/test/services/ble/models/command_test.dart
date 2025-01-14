@@ -16,9 +16,7 @@ void main() {
     group('toJsonString', () {
       /// This test verifies that the `toJsonString` method successfully converts a [Command] object to a serialized
       /// JSON string.
-      test(
-          'should successfully convert a Command object to a serialized JSON string for the `scan` command type',
-          () {
+      test('should successfully convert a Command object to a serialized JSON string for the `scan` command type', () {
         // Create a Command object with the CommandType.retrieveDeviceId type.
         final Command command = Command(commandType: CommandType.scan);
 
@@ -47,8 +45,10 @@ void main() {
         final String jsonString = command.toJsonString(parameters: parameters);
 
         // Verify that the Command object was successfully converted to a serialized JSON string.
-        expect(jsonString,
-            '{"command":"wifi_connect","parameters":{"ssid":"mock_ssid","password":"mock_password"}}');
+        expect(
+          jsonString,
+          '{"command":"wifi_connect","parameters":{"ssid":"mock_ssid","password":"mock_password"}}',
+        );
       });
     });
   });

@@ -49,7 +49,6 @@ class DeviceManagementService {
   /// "name": "7b67",
   /// "salt_level": 0.5,
   /// "battery_level": 0.8,
-  /// "public_key": "0x1234567890abcdef",
   /// }
   /// ```
   ///
@@ -70,7 +69,6 @@ class DeviceManagementService {
         body: {
           'deviceId': device.deviceId,
           'deviceName': device.name.toLowerCase(),
-          'publicKey': device.publicKey,
         },
       );
 

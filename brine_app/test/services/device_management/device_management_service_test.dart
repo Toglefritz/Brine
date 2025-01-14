@@ -55,7 +55,6 @@ void main() {
         final BrineDevice device = BrineDevice(
           deviceId: 'mock_device_id',
           name: 'mock_device_name',
-          publicKey: 'mock_public_key',
           saltDistance: 100,
           applianceHeight: 200,
           saltLevel: 0.5,

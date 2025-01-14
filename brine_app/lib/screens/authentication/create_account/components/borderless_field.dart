@@ -55,15 +55,14 @@ class BorderlessField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText ?? false,
       inputFormatters: [
-        FilteringTextInputFormatter(RegEx.authenticationFieldsCharset,
-            allow: true)
+        FilteringTextInputFormatter(RegEx.authenticationFieldsCharset, allow: true),
       ],
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.all(Insets.small),
         hintText: hint,
         border: InputBorder.none,
         hintStyle: TextStyle(
-          color: Theme.of(context).primaryColorDark.withOpacity(0.5),
+          color: Theme.of(context).primaryColorDark.withValues(alpha: 0.5),
         ),
         suffixIcon: errorState
             ? GestureDetector(

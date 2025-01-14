@@ -7,11 +7,6 @@ class ProvisioningCompleteResponse extends Response {
   /// Creates an instance of [ProvisioningCompleteResponse].
   ProvisioningCompleteResponse() : super(responseType: ResponseType.provisioningComplete);
 
-  /// Factory constructor to create a [ProvisioningCompleteResponse] object from a JSON map.
-  factory ProvisioningCompleteResponse.fromJson() {
-    return ProvisioningCompleteResponse();
-  }
-
   /// Converts the response to a JSON-serializable map.
   ///
   /// This method provides the specific JSON structure for the device ID response.

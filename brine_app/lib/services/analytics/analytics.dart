@@ -39,8 +39,10 @@ class Analytics {
   }
 
   /// Tracks a custom event with an optional map of parameters.
-  static void trackEvent(
-      {required String eventName, Map<String, Object>? parameters}) {
+  static void trackEvent({
+    required String eventName,
+    Map<String, Object>? parameters,
+  }) {
     debugPrint('Analytics trackEvent: $eventName, $parameters');
 
     if (!kDebugMode) {

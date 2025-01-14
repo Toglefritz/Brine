@@ -56,9 +56,6 @@ sequenceDiagram
     MobileApp ->> BrineDevice: Send WiFi credentials over BLE
     BrineDevice ->> BrineDevice: Connect to WiFi network
     BrineDevice ->> MobileApp: Report WiFi connection success
-    BrineDevice ->> Backend: Send public key to cloud
-    Backend ->> Backend: Verify device identity
-    Backend ->> Backend: Store device public key
     MobileApp ->> User: Notify provisioning completion
 ```
 

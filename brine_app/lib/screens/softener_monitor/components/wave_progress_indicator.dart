@@ -26,8 +26,7 @@ class WaveProgressIndicator extends StatefulWidget {
 
 /// [WaveProgressIndicatorState] is the state class for [WaveProgressIndicator].
 /// It holds the [AnimationController] which is used to animate the wave.
-class WaveProgressIndicatorState extends State<WaveProgressIndicator>
-    with TickerProviderStateMixin {
+class WaveProgressIndicatorState extends State<WaveProgressIndicator> with TickerProviderStateMixin {
   late AnimationController _waveController;
   late Animation<double> _waveAnimation;
 
@@ -58,14 +57,12 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator>
     // Initialize the progress AnimationController
     _progressController = AnimationController(
       duration: const Duration(
-          milliseconds:
-              500), // adjust duration for the progress change animation
+        milliseconds: 500,
+      ), // adjust duration for the progress change animation
       vsync: this,
     );
 
-    _progressAnimation =
-        Tween(begin: widget.progressPercent, end: widget.progressPercent)
-            .animate(
+    _progressAnimation = Tween(begin: widget.progressPercent, end: widget.progressPercent).animate(
       CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
     );
 
@@ -81,9 +78,7 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator>
 
     // If the progress value has changed, animate to the new value
     if (widget.progressPercent != oldWidget.progressPercent) {
-      _progressAnimation =
-          Tween(begin: oldWidget.progressPercent, end: widget.progressPercent)
-              .animate(
+      _progressAnimation = Tween(begin: oldWidget.progressPercent, end: widget.progressPercent).animate(
         CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
       );
 
@@ -148,8 +143,7 @@ class WavePainter extends CustomPainter {
     path.moveTo(0, size.height);
     for (int i = 0; i <= size.width.toInt(); i++) {
       // Calculate the sine wave for current position
-      final double wave = amplitudeFactor *
-          sin((i / size.width) * 2 * pi + 2 * pi * waveAnimationValue);
+      final double wave = amplitudeFactor * sin((i / size.width) * 2 * pi + 2 * pi * waveAnimationValue);
 
       // Calculate the height that should not be filled by the progress indicator
       final double unfilledHeight = size.height * (1 - progressPercent);

@@ -26,9 +26,6 @@ class BrineDevice {
   /// The percentage of battery life remaining on the Brine monitor.
   final double batteryLevel;
 
-  /// The public key held by the cryptographic coprocessor of the Brine device, in base64-encoded string format.
-  final String publicKey;
-
   /// The timestamp when the levels were last retrieved.
   final DateTime retrievalTimestamp;
 
@@ -40,7 +37,6 @@ class BrineDevice {
     required this.applianceHeight,
     required this.saltLevel,
     required this.batteryLevel,
-    required this.publicKey,
     required this.retrievalTimestamp,
   });
 
@@ -74,7 +70,6 @@ class BrineDevice {
       applianceHeight: applianceHeight,
       saltLevel: saltLevel,
       batteryLevel: batteryLevel,
-      publicKey: json['public_key'] as String,
       retrievalTimestamp: DateTime.now(),
     );
   }

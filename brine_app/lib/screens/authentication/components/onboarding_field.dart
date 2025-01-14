@@ -71,8 +71,10 @@ class OnboardingField extends StatelessWidget {
         keyboardType: keyboardType ?? TextInputType.text,
         obscureText: obscureText ?? false,
         inputFormatters: [
-          FilteringTextInputFormatter(RegEx.authenticationFieldsCharset,
-              allow: true)
+          FilteringTextInputFormatter(
+            RegEx.authenticationFieldsCharset,
+            allow: true,
+          ),
         ],
         decoration: InputDecoration(
           filled: true,
@@ -86,7 +88,7 @@ class OnboardingField extends StatelessWidget {
           border: defaultBorder,
           hintText: hint,
           hintStyle: TextStyle(
-            color: Theme.of(context).primaryColorDark.withOpacity(0.5),
+            color: Theme.of(context).primaryColorDark.withValues(alpha: 0.5),
           ),
           suffixIcon: errorState
               ? GestureDetector(
