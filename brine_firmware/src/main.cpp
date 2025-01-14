@@ -95,6 +95,95 @@ bool _updateDeviceLevels() {
   return success;
 }
 
+// Function to trigger system reboot
+void triggerSystemReboot() {
+  DebugService::getInstance().debugPrintln("Long button press detected. Rebooting system...");
+  // Perform any necessary cleanup here
+
+  // Clear NVS before rebooting (if desired)
+  nvsService.eraseAll();
+
+  // Stop provisioning if it is ongoing.
+  provisioningStartTime = 0;
+
+  // Delay to ensure messages are sent before reboot
+  delay(1000);
+
+  // Reboot the ESP32
+  ESP.restart();
+}
+
+/**
+ * @brief Connect to the saved WiFi credentials.
+ *
+ * This function attempts to retrieve the saved WiFi credentials from the NVS service and connect to the WiFi network.
+ * The function first checks if the WiFi credentials are available in the NVS service. If the credentials are found, the
+ * function attempts to connect to the WiFi network using the retrieved SSID and password. If the connection is
+ * successful, the function prints a success message. If the connection fails, the function prints an error message.
+ * If the WiFi credentials are not found in the NVS service, the function prints a message indicating that the
+ * credentials are not available.
+ *
+ * @return true if the device successfully connects to the WiFi network, false otherwise.
+ */
+bool connectToSavedWiFi() {
+  JsonDocument retrievedDoc;
+  // Retrieve the JSON document stored under the key "wifiCredentials"
+  bool retrieveResult = nvsService.retrieveJSON("wifiCredentials", retrievedDoc);
+  if (retrieveResult) {
+    DebugService::getInstance().debugPrintln("WiFi credentials retrieved successfully.");
+
+    // Attempt to connect to WiFi using the retrieved credentials.
+    WiFi.begin(retrievedDoc["ssid"].as<String>().c_str(), retrievedDoc["password"].as<String>().c_str());
+
+    // Wait for connection with a timeout
+    unsigned long startTime = millis();
+    const unsigned long timeout = 15000; // 15 seconds timeout
+
+    while (WiFi.status() != WL_CONNECTED && millis() - startTime < timeout) {
+      delay(500); // Wait for 500ms before checking again
+      DebugService::getInstance().debugPrint(".");
+    }
+
+    DebugService::getInstance().debugPrintln(""); // End of dots
+
+    if (WiFi.status() == WL_CONNECTED) {
+      DebugService::getInstance().debugPrintln("WiFi connected successfully.");
+      DebugService::getInstance().debugPrint("IP Address: ");
+      DebugService::getInstance().debugPrintln(WiFi.localIP().toString());
+      return true;
+    } else {
+      DebugService::getInstance().debugPrintln("Failed to connect to WiFi within the timeout.");
+      return false;
+    }
+  } else {
+    DebugService::getInstance().debugPrintln("No WiFi credentials found in NVS.");
+    return false;
+  }
+}
+
+/**
+ * @brief Configures the deep sleep management service.
+ *
+ * This function configures the service that handles the deep sleep cycle for the Brine device. The service handles
+ * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the
+ * device wakes, callback functions are invoked.
+ */
+void _configureDeepSleepService() {
+  DeepSleepService &deepSleepService = DeepSleepService::getInstance();
+
+  // Set the duration to sleep between sensor uploads. In debug mode, this duration is 30 seconds to allow for faster
+  // iterations during development. In production, the device waits 24 hours between sensor readings.
+  int deepSleepDuration = DebugService::getInstance().DEBUG ? 30000 : 86400000;
+
+  // Configure wake-up sources. The first argument is a duration in milliseconds for the timer wake-up. The second is
+  // a GPIO pin used to manually wake up the device.
+  deepSleepService.configureWakeUp(deepSleepDuration, GPIO_NUM_32);
+
+  // Enter deep sleep.
+  deepSleepService.enterDeepSleep();
+}
+
+
 /**
  * @brief Initializes the device configuration manager and sets up Bluetooth callbacks.
  *
@@ -189,6 +278,9 @@ void startProvisioning() {
     provisioningStartTime = 0;
     buttonPressed = false;
     clientConnected = false;
+
+    // Go to sleep
+    _configureDeepSleepService();
   });
 
   // Start the provisioning process.
@@ -196,91 +288,6 @@ void startProvisioning() {
 
   // Set the provisioning start time to the current time.
   provisioningStartTime = millis();
-}
-
-// Function to trigger system reboot
-void triggerSystemReboot() {
-  DebugService::getInstance().debugPrintln("Long button press detected. Rebooting system...");
-  // Perform any necessary cleanup here
-
-  // Clear NVS before rebooting (if desired)
-  nvsService.eraseAll();
-
-  // Delay to ensure messages are sent before reboot
-  delay(1000);
-
-  // Reboot the ESP32
-  ESP.restart();
-}
-
-/**
- * @brief Connect to the saved WiFi credentials.
- *
- * This function attempts to retrieve the saved WiFi credentials from the NVS service and connect to the WiFi network.
- * The function first checks if the WiFi credentials are available in the NVS service. If the credentials are found, the
- * function attempts to connect to the WiFi network using the retrieved SSID and password. If the connection is
- * successful, the function prints a success message. If the connection fails, the function prints an error message.
- * If the WiFi credentials are not found in the NVS service, the function prints a message indicating that the
- * credentials are not available.
- *
- * @return true if the device successfully connects to the WiFi network, false otherwise.
- */
-bool connectToSavedWiFi() {
-  JsonDocument retrievedDoc;
-  // Retrieve the JSON document stored under the key "wifiCredentials"
-  bool retrieveResult = nvsService.retrieveJSON("wifiCredentials", retrievedDoc);
-  if (retrieveResult) {
-    DebugService::getInstance().debugPrintln("WiFi credentials retrieved successfully.");
-
-    // Attempt to connect to WiFi using the retrieved credentials.
-    WiFi.begin(retrievedDoc["ssid"].as<String>().c_str(), retrievedDoc["password"].as<String>().c_str());
-
-    // Wait for connection with a timeout
-    unsigned long startTime = millis();
-    const unsigned long timeout = 15000; // 15 seconds timeout
-
-    while (WiFi.status() != WL_CONNECTED && millis() - startTime < timeout) {
-      delay(500); // Wait for 500ms before checking again
-      DebugService::getInstance().debugPrint(".");
-    }
-
-    DebugService::getInstance().debugPrintln(""); // End of dots
-
-    if (WiFi.status() == WL_CONNECTED) {
-      DebugService::getInstance().debugPrintln("WiFi connected successfully.");
-      DebugService::getInstance().debugPrint("IP Address: ");
-      DebugService::getInstance().debugPrintln(WiFi.localIP().toString());
-      return true;
-    } else {
-      DebugService::getInstance().debugPrintln("Failed to connect to WiFi within the timeout.");
-      return false;
-    }
-  } else {
-    DebugService::getInstance().debugPrintln("No WiFi credentials found in NVS.");
-    return false;
-  }
-}
-
-/**
- * @brief Configures the deep sleep management service.
- *
- * This function configures the service that handles the deep sleep cycle for the Brine device. The service handles
- * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the
- * device wakes, callback functions are invoked.
- */
-void _configureDeepSleepService() {
-  DeepSleepService &deepSleepService = DeepSleepService::getInstance();
-
-  // Set the duration to sleep between sensor uploads. In debug mode, this duration is 30 seconds to allow for faster
-  // iterations during development. In production, the device waits 24 hours between sensor readings.
-  int deepSleepDuration = DebugService::getInstance().DEBUG ? 30000 : 86400000;
-
-  // Configure wake-up sources. The first argument is a duration in milliseconds for the timer wake-up. The second is
-  // a GPIO pin used to manually wake up the device.
-  deepSleepService.configureWakeUp(deepSleepDuration, GPIO_NUM_32);
-
-  // Enter deep sleep.
-  deepSleepService.enterDeepSleep();
 }
 
 /**
@@ -332,42 +339,49 @@ void setup() {
   DebugService::getInstance().debugPrint("Device name: ");
   DebugService::getInstance().debugPrintln(DeviceName::getDeviceName());
 
-  // Attempt to connect to WiFi with retries
-  bool wifiConnected = false;
-  const int maxRetries = 5; // Number of retries
-  int retryCount = 0;
+  // If the button has not been pressed, the wakeup resulted from reaching the timer.
+  if (!buttonPressed) {
+    // Attempt to connect to WiFi with retries
+    bool wifiConnected = false;
+    const int maxRetries = 3; // Number of retries
+    int retryCount = 0;
 
-  while (!wifiConnected && retryCount < maxRetries) {
-    DebugService::getInstance().debugPrint("Attempting to connect to WiFi... (Attempt ");
-    DebugService::getInstance().debugPrint(String(retryCount + 1).c_str());
-    DebugService::getInstance().debugPrintln(")");
+    while (!wifiConnected && retryCount < maxRetries) {
+      if(buttonPressed) {
+        break;
+      }
 
-    wifiConnected = connectToSavedWiFi();
+      DebugService::getInstance().debugPrint("Attempting to connect to WiFi... (Attempt ");
+      DebugService::getInstance().debugPrint(String(retryCount + 1).c_str());
+      DebugService::getInstance().debugPrintln(")");
+
+      wifiConnected = connectToSavedWiFi();
+
+      if (!wifiConnected) {
+        DebugService::getInstance().debugPrintln("WiFi connection failed. Retrying...");
+        delay(5000); // Wait before retrying
+        retryCount++;
+      }
+    }
 
     if (!wifiConnected) {
-      DebugService::getInstance().debugPrintln("WiFi connection failed. Retrying...");
-      delay(5000); // Wait before retrying
-      retryCount++;
+      DebugService::getInstance().debugPrintln("Failed to connect to WiFi after multiple attempts.");
+      // Optionally reset the device or enter deep sleep here
+      _configureDeepSleepService();
+      return; // Exit setup if WiFi connection fails
     }
-  }
 
-  if (!wifiConnected) {
-    DebugService::getInstance().debugPrintln("Failed to connect to WiFi after multiple attempts.");
-    // Optionally reset the device or enter deep sleep here
+    DebugService::getInstance().debugPrintln("WiFi connected successfully.");
+
+    // Capture sensor readings and send them to the cloud backend.
+    if (!_updateDeviceLevels()) {
+      DebugService::getInstance().debugPrintln("Failed to upload device levels to Firebase.");
+      // Handle upload failure if needed
+    }
+
+    // Configure the deep sleep service.
     _configureDeepSleepService();
-    return; // Exit setup if WiFi connection fails
   }
-
-  DebugService::getInstance().debugPrintln("WiFi connected successfully.");
-
-  // Capture sensor readings and send them to the cloud backend.
-  if (!_updateDeviceLevels()) {
-    DebugService::getInstance().debugPrintln("Failed to upload device levels to Firebase.");
-    // Handle upload failure if needed
-  }
-
-  // Configure the deep sleep service.
-  _configureDeepSleepService();
 }
 
 void loop() {
@@ -380,6 +394,7 @@ void loop() {
     // Start the provisioning process.
     startProvisioning();
   }
+
   // Check if provisioning is ongoing
   if (provisioningStartTime != 0) {
     // If more than three minutes has passed since the provisioning process started, and a client is not connected,
@@ -405,19 +420,16 @@ void loop() {
   }
 
   // Detect long button press
-  if (buttonPressStartTime != 0) {
-    // Check if the button is still being held down
-    if (button.isPressed()) {
-      // Check if the duration exceeds the long press threshold
-      if (!isLongPressTriggered && (millis() - buttonPressStartTime >= LONG_PRESS_DURATION)) {
-        isLongPressTriggered = true;
-        triggerSystemReboot();
-      }
-    } else {
-      // Button was released before long press duration
-      buttonPressStartTime = 0;
-      isLongPressTriggered = false;
+  if (button.isPressed()) {
+    // Check if the duration exceeds the long press threshold
+    if (!isLongPressTriggered && (millis() - buttonPressStartTime >= LONG_PRESS_DURATION)) {
+      isLongPressTriggered = true;
+      triggerSystemReboot();
     }
+  } else {
+    // Button was released before long press duration
+    buttonPressStartTime = 0;
+    isLongPressTriggered = false;
   }
 
   // If the provisioning process is currently running, but a client is not connected yet, blink the LED.
