@@ -95,6 +95,17 @@ public:
     if (strcmp(command, "get_device_id") == 0) {
       return handleGetDeviceId();
     }
+    // The command "psk_transfer," is used by the mobile app to provide a pre-shared key to the IoT device that it 
+    // will use later in calls to the backend service.
+    else if (strcmp(command, "psk_transfer") == 0) {
+      // Get the parameters from the command.
+      JsonObject parameters = doc["parameters"].as<JsonObject>();
+
+      // Get the PSKfrom the parameters.
+      const char *psk = parameters["key"];
+
+      return handlePskProvided(psk);
+    }
     // The command, "scan," returns a list of available WiFi networks.
     else if (strcmp(command, "scan") == 0) {
       return handleScanWifiNetworks();
@@ -102,7 +113,7 @@ public:
     // The command "wifi_connect" provides the SSID and password for a network to which the device should connect
     // in the parameters provided with this command. The parameters use the "ssid" and "password" keys.
     else if (strcmp(command, "wifi_connect") == 0) {
-      // Get the parameters for the WiFi connection
+      // Get the parameters for the WiFi connection from the command.
       JsonObject parameters = doc["parameters"].as<JsonObject>();
 
       const char *ssid = parameters["ssid"];
@@ -144,6 +155,45 @@ private:
     DebugService::getInstance().debugPrintln(jsonResponse);
 
     return jsonResponse;
+  }
+
+  /**
+   * @brief Stores a pre-shared key provided by the client into NVS.
+   *
+   * This IoT device interacts with a cloud backend service. Those interactions require authentication in the form
+   * of HMAC signatures generated from a pre-shared key. That pre-shared key is transferred from the mobile
+   * app as part of the Brine provisioning process.
+   *
+   * This function handles the transfer of PSKs from the client device over Bluetooth. The IoT device will save these 
+   * keys into NVS for later use.
+   *
+   * @return String The JSON response containing a confirmation of the command.
+   */
+  String handlePskProvided(const char *psk) {
+    // Get the instance of the NVSServices singleton.
+    NVSService &nvsService = NVSService::getInstance();
+
+    // Create a JSON document to store the PSK.
+    JsonDocument doc;
+    doc["psk"] = psk;
+
+    // Save the JSON document under the key "preSharedKey"
+    bool saveResult = nvsService.saveJSON("preSharedKey", doc);
+
+    // If saving the token to NVS failed, return an error response.
+    if (!saveResult) {
+      return createErrorResponse("Failed to save refresh token");
+    }
+    // Otherwise, if saving the token was successful, return a success response.
+    else {
+      JsonDocument responseDoc;
+      responseDoc["response"] = "psk_saved";
+
+      String jsonResponse;
+      serializeJson(responseDoc, jsonResponse);
+
+      return jsonResponse;
+    }
   }
 
   /**

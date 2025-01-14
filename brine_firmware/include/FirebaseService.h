@@ -91,14 +91,27 @@ private:
    * @throws Compilation error if `FLAVOR` is undefined or invalid.
    */
   const char *getEndpoint() {
-  // Return the appropriate endpoint based on the FLAVOR flag
-  #if defined(FLAVOR) && (FLAVOR == 1)
-      return "http://192.168.86.39:5001/brine-3b212/us-central1/updateDeviceLevels";
-  #elif defined(FLAVOR) && (FLAVOR == 2)
-      return "https://updatedevicelevels-7wo3szegoq-uc.a.run.app";
-  #else
-  #error "FLAVOR not defined or invalid. Please set FLAVOR to 1 (dev) or 2 (prod) in platformio.ini."
-  #endif
+// Return the appropriate endpoint based on the FLAVOR flag
+#if defined(FLAVOR) && (FLAVOR == 1)
+    return "http://192.168.86.39:5001/brine-3b212/us-central1/updateDeviceLevels";
+#elif defined(FLAVOR) && (FLAVOR == 2)
+    return "https://updatedevicelevels-7wo3szegoq-uc.a.run.app";
+#else
+#error "FLAVOR not defined or invalid. Please set FLAVOR to 1 (dev) or 2 (prod) in platformio.ini."
+#endif
+  }
+
+  /**
+   * @brief Returns a boolean indicating if the device is in the development environment.
+   */
+  const bool isDevelopment() {
+#if defined(FLAVOR) && (FLAVOR == 1)
+    return true;
+#elif defined(FLAVOR) && (FLAVOR == 2)
+    return false;
+#else
+#error "FLAVOR not defined or invalid. Please set FLAVOR to 1 (dev) or 2 (prod) in platformio.ini."
+#endif
   }
 
   /**
@@ -112,8 +125,18 @@ private:
     // Create an HTTP client object and send a POST request to the specified Firebase endpoint with the JSON payload.
     HTTPClient http;
 
-    // Begin the HTTP connection
-    http.begin(endpoint);
+    // Begin HTTPS connection with root CA certificate verification
+    const char *firebaseCACert = "-----BEGIN CERTIFICATE-----\n"
+                                 "... (Firebase's Root CA Certificate) ...\n"
+                                 "-----END CERTIFICATE-----";
+
+    // Begin the HTTP connection. If the device is running in the production environment, use SSL to establish trust
+    // with the Firebase backend.
+    if (isDevelopment()) {
+      http.begin(endpoint);
+    } else {
+      http.begin(endpoint, firebaseCACert);
+    }
 
     // Add the necessary HTTP headers
     http.addHeader("Content-Type", "application/json");
