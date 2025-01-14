@@ -31,7 +31,7 @@ device, as well as information about the device itself. The app will facilitate 
 of push notifications when the battery and/or salt level on one of the Brine devices for a user
 are low.
 
-## Provisioning Flow (draft)
+## Provisioning Flow
 
 The diagram below shows the provisioning flow for a Brine device.
 
@@ -52,6 +52,14 @@ sequenceDiagram
     MobileApp ->> BrineDevice: Retrieve device ID
     MobileApp ->> Backend: Send device ID and user ID
     Backend ->> Backend: Associate device with user account
+    MobileApp ->> Backend: Request PSK for the Brine device
+    Backend ->> MobileApp: Generate and return PSK
+    MobileApp ->> BrineDevice: Transfer PSK
+    BrineDevice ->> BrineDevice: Save PSK to NVS
+    MobileApp ->> BrineDevice: Request WiFi scan results
+    BrineDevice ->> BrineDevice: Perform WiFi scan
+    BrineDevice ->> MobileApp: Return list of WiFi networks
+    User ->> MobileApp: Select WiFi network
     User ->> MobileApp: Provide WiFi credentials
     MobileApp ->> BrineDevice: Send WiFi credentials over BLE
     BrineDevice ->> BrineDevice: Connect to WiFi network

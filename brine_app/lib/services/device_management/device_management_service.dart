@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import '../../models/brine_device.dart';
+import 'models/brine_device.dart';
 import '../firebase_emulator/dev_machine_ip.dart';
+import 'models/pre_shared_key.dart';
 
 /// A service class for managing Brine IoT devices.
 ///
@@ -209,6 +210,64 @@ class DeviceManagementService {
       }
     } catch (e) {
       debugPrint('Error getting device levels: $e');
+
+      rethrow;
+    }
+  }
+
+  /// Calls the Firebase endpoint to generate a new pre-shared key (PSK) for a Brine device during provisioning.
+  ///
+  /// This function sends a POST request to the `generatePSK` Firebase Cloud Function endpoint with the
+  /// unique device ID of the Brine device. The backend generates a secure random PSK, stores it in Firestore,
+  /// and returns it to the mobile app. The mobile app then transfers this PSK securely to the Brine device
+  /// over Bluetooth.
+  ///
+  /// A **pre-shared key (PSK)** is a secret key used for authenticating and securing communication between
+  /// the Brine device and the Firebase backend. The Brine device uses the PSK to sign requests using an
+  /// HMAC (Hash-Based Message Authentication Code). When the device sends a request, the backend verifies
+  /// the HMAC signature using the stored PSK, ensuring that only devices with valid keys can access protected
+  /// resources.
+  ///
+  /// **Security Notes**:
+  /// - The PSK is handled only ephemerally by the mobile app during the provisioning process; it is not stored
+  ///   persistently on the app.
+  /// - The backend stores the PSK along with metadata such as the creation timestamp and validity status.
+  /// - If a device is compromised, the PSK can be revoked, and a new PSK can be issued through re-provisioning.
+  Future<PreSharedKey> generatePreSharedKey({required String deviceId}) async {
+    try {
+      // Get the user's ID token
+      final String? idToken = await user.getIdToken();
+
+      // Define the endpoint URL
+      const String endpoint = '/generatePSK';
+
+      // Create the body of the request containing the device ID.
+      final Map<String, dynamic> body = {
+        'deviceId': deviceId,
+      };
+
+      // Make an HTTP GET request to the endpoint
+      final Response response = await post(
+        Uri.parse(baseUrl + endpoint),
+        // Include the ID token in the Authorization header
+        headers: {'Authorization': 'Bearer $idToken'},
+        body: body,
+      );
+
+      if (response.statusCode == HttpStatus.ok) {
+        // Parse the JSON response
+        final String psk = response.body;
+
+        // Create a PreSharedKey instance from the string.
+        final PreSharedKey preSharedKey = PreSharedKey(psk);
+
+        // Return  the PSK.
+        return preSharedKey;
+      } else {
+        throw Exception('Failed to get device PSK: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      debugPrint('Error getting device PSK: $e');
 
       rethrow;
     }

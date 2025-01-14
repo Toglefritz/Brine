@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/brine_device.dart';
+import '../../services/device_management/models/brine_device.dart';
 import 'softener_monitor_controller.dart';
 
 /// Displays the level of salt remaining in the water softener and the battery life remaining on the Brine monitor.

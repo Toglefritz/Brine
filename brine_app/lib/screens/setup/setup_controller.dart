@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/brine_device.dart';
+import '../../services/device_management/models/brine_device.dart';
 import '../../services/device_management/device_management_service.dart';
 import '../softener_monitor/softener_monitor_route.dart';
 import '../welcome/welcome_route.dart';

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:brine/models/brine_device.dart';
+import 'package:brine/services/device_management/models/brine_device.dart';
 import 'package:brine/services/device_management/device_management_service.dart';
 import 'package:fake_http_client/fake_http_client.dart';
 import 'package:flutter_test/flutter_test.dart';

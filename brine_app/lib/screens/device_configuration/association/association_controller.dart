@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../services/device_management/device_management_service.dart';
-import '../wifi_setup/wifi_setup_route.dart';
+import '../pre_shared_key_setup/pre_shared_key_setup_route.dart';
 import 'association_route.dart';
 import 'association_view.dart';
 
@@ -38,7 +38,7 @@ class AssociationController extends State<AssociationRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => WiFiSetupRoute(
+        builder: (context) => PreSharedKeySetupRoute(
           bleCommunicationManager: widget.bleCommunicationManager,
           device: widget.device,
         ),

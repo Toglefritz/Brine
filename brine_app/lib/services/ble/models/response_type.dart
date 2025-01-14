@@ -3,6 +3,9 @@ enum ResponseType {
   /// A response containing the device ID.
   deviceId,
 
+  /// A response indicating that the PSK was successfully transferred to the Brine device and saved to NVS.
+  pskTransferred,
+
   /// A response containing a list of WiFi networks discovered by the Brine device.
   networks,
 
@@ -24,6 +27,8 @@ enum ResponseType {
     switch (this) {
       case ResponseType.deviceId:
         return 'device_id';
+      case ResponseType.pskTransferred:
+        return 'psk_saved';
       case ResponseType.networks:
         return 'networks';
       case ResponseType.wifiConnected:

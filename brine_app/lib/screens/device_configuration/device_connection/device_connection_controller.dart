@@ -8,12 +8,12 @@ import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import '../../../extensions/json.dart';
-import '../../../models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
 import '../../../services/ble/models/device_id_response.dart';
 import '../../../services/ble/models/response.dart';
+import '../../../services/device_management/models/brine_device.dart';
 import '../association/association_route.dart';
 import 'device_connection_route.dart';
 import 'device_connection_view.dart';

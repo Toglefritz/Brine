@@ -89,10 +89,16 @@ class BleCommunicationService {
         if (value.value.last == 0x0A) {
           // Notify all registered callbacks when the value of the characteristic changes.
           for (final void Function(JSON) callback in _callbacks) {
-            // Convert the full value of the characteristic to a JSON object and pass it to the callback.
-            final JSON characteristicValueJson = json.decode(characteristicValue) as JSON;
+            try {
+              // Convert the full value of the characteristic to a JSON object and pass it to the callback.
+              final JSON characteristicValueJson = json.decode(characteristicValue) as JSON;
 
-            callback(characteristicValueJson);
+              callback(characteristicValueJson);
+            } catch (e) {
+              debugPrint('Failed to decode characteristic value, $characteristicValue, with exception, $e');
+
+              rethrow;
+            }
           }
 
           // Clear the cache for the next sequence of chunks.

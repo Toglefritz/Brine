@@ -108,6 +108,10 @@
   "@password": {
     "description": "Label for the field where the user must enter their password."
   },
+  "performingPskSetup": "Performing security setup...",
+  "@performingPskSetup": {
+    "description": "Text displayed while the app is performing the security setup process."
+  },
   "privacyPolicy": "privacy policy",
   "@privacyPolicy": {
     "description": "Text for a button that allows the user to view the privacy policy."

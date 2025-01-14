@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/brine_device.dart';
+import '../../../services/device_management/models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
 import 'brine_installation_controller.dart';
 

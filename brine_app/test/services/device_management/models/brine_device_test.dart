@@ -1,4 +1,4 @@
-import 'package:brine/models/brine_device.dart';
+import 'package:brine/services/device_management/models/brine_device.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// This file contains tests for the [BrineDevice] class.
