@@ -105,29 +105,19 @@ public:
   /**
    * @brief Sets the value of a Bluetooth Low Energy (BLE) characteristic.
    *
-   * This method is designed to write a potentially long value to a BLE characteristic by dividing it into smaller
-   * chunks. BLE characteristics have a maximum length limit for their values, which can vary depending on the BLE stack
-   * and the underlying hardware capabilities. This limit is often in the range of 20 to 512 bytes. Writing values that
-   * exceed this limit in a single operation is not possible; hence, the need to divide long values into manageable
-   * chunks.
+   * This method writes a potentially long value to a BLE characteristic by dividing it into smaller
+   * chunks. An optional callback can be provided, which will be invoked after the entire value
+   * has been successfully written and notified.
    *
-   * The division of long values into smaller chunks ensures compatibility across different BLE devices and platforms,
-   * enhancing the reliability of data transmission over BLE. It allows for the efficient use of BLE's limited bandwidth
-   * and ensures that large data payloads can be transmitted successfully without exceeding the maximum transmission
-   * unit (MTU) size limitations.
-   *
-   * The method uses a special character, 0x0A (newline character in ASCII), to denote the end of the last chunk. This
-   * character acts as a delimiter, signaling the receiving end that it has received the complete value and that there
-   * are no more chunks to expect. This is crucial for the receiving device to know when the entire value has been
-   * successfully transmitted and can be processed as a whole. The use of a delimiter is a common practice in
-   * communication protocols to mark the end of a message or data segment, ensuring data integrity and facilitating the
-   * correct parsing and handling of received data.
-   *
+   * @param pCharacteristic The BLE characteristic to which the value will be written.
    * @param value The long value to be written to the BLE characteristic, divided into smaller chunks if necessary.
-   * @note It is important to ensure that the receiving end of the BLE communication is implemented to handle the
-   * chunked data transmission and the use of the 0x0A character as the end-of-data delimiter.
+   * @param onComplete An optional callback function to invoke after the value is fully written (default is nullptr).
+   *
+   * @note Ensure that the receiving BLE device can handle chunked transmissions and recognizes the 0x0A character
+   * as the end-of-data delimiter.
    */
-  void setCharacteristicValue(BLECharacteristic *pCharacteristic, const std::string &value) {
+  void setCharacteristicValue(BLECharacteristic *pCharacteristic, const std::string &value,
+                              std::function<void()> onWrite = nullptr) {
     // The maximum chunk size for BLE characteristic values.
     size_t chunkSize = 512;
 
@@ -153,13 +143,18 @@ public:
         chunk += '\x0A'; // Append termination byte
       }
 
-      // Use the parent class's setValue to actually set the chunk value
+      // Use the BLE characteristic's setValue method to set the chunk value.
       pCharacteristic->setValue(chunk);
 
       // Notify subscribed clients
       pCharacteristic->notify();
 
       offset += length;
+    }
+
+    // If an onComplete callback is provided, invoke it after all chunks are sent
+    if (onWrite) {
+      onWrite();
     }
   }
 

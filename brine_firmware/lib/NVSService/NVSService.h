@@ -40,6 +40,23 @@ public:
   bool retrieveJSON(const char *key, JsonDocument &doc);
 
   /**
+   * @brief Save a string to NVS under the specified key.
+   *
+   * @param key The key under which the string will be stored.
+   * @param value The string to store.
+   * @return true if the operation is successful, false otherwise.
+   */
+  bool saveString(const char *key, const String &value);
+
+  /**
+   * @brief Retrieve a string from NVS using the specified key.
+   *
+   * @param key The key associated with the string.
+   * @return The retrieved string. If the key is not found, an empty string is returned.
+   */
+  String getString(const char *key);
+
+  /**
    * @brief Erase a specific key from NVS.
    *
    * @param key The key to erase.
@@ -53,6 +70,11 @@ public:
    * @return true if the operation is successful, false otherwise.
    */
   bool eraseAll();
+
+  /**
+   * @brief Stops communication with the NVS system.
+   */
+  void end();
 
 private:
   Preferences preferences; // Preferences instance for NVS operations

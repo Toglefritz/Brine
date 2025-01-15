@@ -92,6 +92,38 @@ bool NVSService::retrieveJSON(const char *key, JsonDocument &doc) {
 }
 
 /**
+ * @brief Save a string to NVS under the specified key.
+ *
+ * @param key The key under which the string will be stored.
+ * @param value The string to store.
+ * @return true if the operation is successful, false otherwise.
+ */
+bool NVSService::saveString(const char *key, const String &value) {
+  bool result = preferences.putString(key, value);
+  if (result) {
+    DebugService::getInstance().debugPrintln("String data saved successfully.");
+  } else {
+    DebugService::getInstance().debugPrintln("Failed to save string data.");
+  }
+  return result;
+}
+
+/**
+ * @brief Retrieve a string from NVS using the specified key.
+ *
+ * @param key The key associated with the string.
+ * @return The retrieved string. If the key is not found, an empty string is returned.
+ */
+String NVSService::getString(const char *key) {
+  String value = preferences.getString(key, "");
+  if (value.isEmpty()) {
+    DebugService::getInstance().debugPrintln("No string data found for the given key.");
+  }
+  
+  return value;
+}
+
+/**
  * @brief Erase a specific key from NVS.
  *
  * @param key The key to erase.
@@ -122,4 +154,13 @@ bool NVSService::eraseAll() {
   }
 
   return result;
+}
+
+/**
+ * @brief Stops the communication with the NVS system.
+ */
+void NVSService::end() {
+  preferences.end();
+  isInitialized = false;
+  DebugService::getInstance().debugPrintln("NVS namespace closed.");
 }

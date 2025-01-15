@@ -59,16 +59,38 @@ FirebaseService firebaseService;
 DistanceSensor sensor;
 
 /**
+ * @brief Configures the deep sleep management service.
+ *
+ * This function configures the service that handles the deep sleep cycle for the Brine device. The service handles
+ * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the
+ * device wakes, callback functions are invoked.
+ */
+void _configureDeepSleepService() {
+  DeepSleepService &deepSleepService = DeepSleepService::getInstance();
+
+  // Set the duration to sleep between sensor uploads. In debug mode, this duration is 30 seconds to allow for faster
+  // iterations during development. In production, the device waits 24 hours between sensor readings.
+  int deepSleepDuration = DebugService::getInstance().DEBUG ? 30000 : 86400000;
+
+  // Configure wake-up sources. The first argument is a duration in milliseconds for the timer wake-up. The second is
+  // a GPIO pin used to manually wake up the device.
+  deepSleepService.configureWakeUp(deepSleepDuration, GPIO_NUM_32);
+
+  // Enter deep sleep.
+  deepSleepService.enterDeepSleep();
+}
+
+/**
  * @brief Updates the device salt and battery levels in the Firebase cloud.
  *
  * This function retrieves the salt and battery levels from the device's sensors and sends them to the Firebase cloud
  * backend via a POST request. The function uses the `FirebaseService` singleton instance to send the data.
  *
- * @note This function will fail if the device is not connected to the internet.
+ * @param sleepOnSuccess If true, the device will enter deep sleep after successfully updating the levels.
  *
  * @return true if the data was successfully uploaded to the Firebase cloud, false otherwise.
  */
-bool _updateDeviceLevels() {
+bool _updateDeviceLevels(bool sleepOnSuccess = false) {
   DebugService::getInstance().debugPrintln("Updating device levels...");
 
   // Get the "salt level" from the distance sensor.
@@ -88,6 +110,11 @@ bool _updateDeviceLevels() {
 
   if (success) {
     DebugService::getInstance().debugPrintln("Device levels successfully updated in Firebase.");
+
+    // With the device levels updated, the device can now enter deep sleep again.
+    if (sleepOnSuccess) {
+      _configureDeepSleepService();
+    }
   } else {
     DebugService::getInstance().debugPrintln("Failed to update device levels in Firebase.");
   }
@@ -117,18 +144,19 @@ void triggerSystemReboot() {
  * @brief Connect to the saved WiFi credentials.
  *
  * This function attempts to retrieve the saved WiFi credentials from the NVS service and connect to the WiFi network.
- * The function first checks if the WiFi credentials are available in the NVS service. If the credentials are found, the
- * function attempts to connect to the WiFi network using the retrieved SSID and password. If the connection is
- * successful, the function prints a success message. If the connection fails, the function prints an error message.
- * If the WiFi credentials are not found in the NVS service, the function prints a message indicating that the
- * credentials are not available.
+ * If the credentials are not found, it returns a distinct status indicating that retries should be skipped.
  *
- * @return true if the device successfully connects to the WiFi network, false otherwise.
+ * @return int A status code:
+ * - 1 if the device successfully connects to the WiFi network.
+ * - 0 if the connection attempt fails.
+ * - -1 if no WiFi credentials are found in NVS.
  */
-bool connectToSavedWiFi() {
+int connectToSavedWiFi() {
   JsonDocument retrievedDoc;
+
   // Retrieve the JSON document stored under the key "wifiCredentials"
   bool retrieveResult = nvsService.retrieveJSON("wifiCredentials", retrievedDoc);
+
   if (retrieveResult) {
     DebugService::getInstance().debugPrintln("WiFi credentials retrieved successfully.");
 
@@ -150,39 +178,40 @@ bool connectToSavedWiFi() {
       DebugService::getInstance().debugPrintln("WiFi connected successfully.");
       DebugService::getInstance().debugPrint("IP Address: ");
       DebugService::getInstance().debugPrintln(WiFi.localIP().toString());
-      return true;
+      return 1; // WiFi connected successfully
     } else {
       DebugService::getInstance().debugPrintln("Failed to connect to WiFi within the timeout.");
-      return false;
+      return 0; // WiFi connection attempt failed
     }
   } else {
     DebugService::getInstance().debugPrintln("No WiFi credentials found in NVS.");
-    return false;
+    return -1; // No WiFi credentials found
   }
 }
 
 /**
- * @brief Configures the deep sleep management service.
+ * @brief Handles completion of the provisioning process.
  *
- * This function configures the service that handles the deep sleep cycle for the Brine device. The service handles
- * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the
- * device wakes, callback functions are invoked.
+ * This function is called when the provisioning process is complete. It returns the Brine device to normal operation.
  */
-void _configureDeepSleepService() {
-  DeepSleepService &deepSleepService = DeepSleepService::getInstance();
+void onProvisioningComplete() {
+  DebugService::getInstance().debugPrintln("Provisioning complete. Stopping provisioning process.");
 
-  // Set the duration to sleep between sensor uploads. In debug mode, this duration is 30 seconds to allow for faster
-  // iterations during development. In production, the device waits 24 hours between sensor readings.
-  int deepSleepDuration = DebugService::getInstance().DEBUG ? 30000 : 86400000;
+  // Stop the provisioning process.
+  DeviceConfigurationManager::getInstance().stopProvisioning();
 
-  // Configure wake-up sources. The first argument is a duration in milliseconds for the timer wake-up. The second is
-  // a GPIO pin used to manually wake up the device.
-  deepSleepService.configureWakeUp(deepSleepDuration, GPIO_NUM_32);
+  // Turn off the LED in case it was on at the time of the timeout.
+  I2CLED::getInstance().turnOff();
 
-  // Enter deep sleep.
-  deepSleepService.enterDeepSleep();
+  // Upload the salt and battery levels to the cloud.
+  _updateDeviceLevels(true);
+  // TODO handle the upload process failing
+
+  // Reset the provisioning start time and button pressed flags.
+  provisioningStartTime = 0;
+  buttonPressed = false;
+  clientConnected = false;
 }
-
 
 /**
  * @brief Initializes the device configuration manager and sets up Bluetooth callbacks.
@@ -238,7 +267,12 @@ void startProvisioning() {
 
     // Handle the JSON command using BLEApiHandler
     String jsonResponse = apiHandler.handleCommand(String(value.c_str()));
-    deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str());
+    // If the provisioning process is complete, call the onProvisioningComplete function after the response is sent.
+    if (jsonResponse.indexOf("provisioning_complete") != -1) {
+      deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str(), onProvisioningComplete);
+    } else {
+      deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str());
+    }
   });
 
   // Set the read callback for handling characteristic read events.
@@ -257,30 +291,6 @@ void startProvisioning() {
       DebugService::getInstance().debugPrintln("Main: Notifications disabled");
     }
     // Handle descriptor write event in main
-  });
-
-  // Set a callback for handling completion of the provisioning process upon receiving a command from the client
-  // indicating that all tasks have been completed.
-  apiHandler.setProvisioningCompleteCallback([]() {
-    DebugService::getInstance().debugPrintln("Provisioning complete. Stopping provisioning process.");
-
-    // Stop the provisioning process.
-    DeviceConfigurationManager::getInstance().stopProvisioning();
-
-    // Turn off the LED in case it was on at the time of the timeout.
-    I2CLED::getInstance().turnOff();
-
-    // Upload the salt and battery levels to the cloud.
-    _updateDeviceLevels();
-    // TODO handle the upload process failing
-
-    // Reset the provisioning start time and button pressed flags.
-    provisioningStartTime = 0;
-    buttonPressed = false;
-    clientConnected = false;
-
-    // Go to sleep
-    _configureDeepSleepService();
   });
 
   // Start the provisioning process.
@@ -347,7 +357,7 @@ void setup() {
     int retryCount = 0;
 
     while (!wifiConnected && retryCount < maxRetries) {
-      if(buttonPressed) {
+      if (buttonPressed) {
         break;
       }
 
@@ -355,9 +365,14 @@ void setup() {
       DebugService::getInstance().debugPrint(String(retryCount + 1).c_str());
       DebugService::getInstance().debugPrintln(")");
 
-      wifiConnected = connectToSavedWiFi();
+      int connectStatus = connectToSavedWiFi();
 
-      if (!wifiConnected) {
+      if (connectStatus == 1) {
+        wifiConnected = true; // Successfully connected
+      } else if (connectStatus == -1) {
+        DebugService::getInstance().debugPrintln("No WiFi credentials found. Skipping retries.");
+        break; // Skip retries if no credentials are found
+      } else {
         DebugService::getInstance().debugPrintln("WiFi connection failed. Retrying...");
         delay(5000); // Wait before retrying
         retryCount++;

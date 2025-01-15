@@ -3,8 +3,10 @@
 #define FIREBASESERVICE_H
 
 #include "DeviceConfig.h"
+#include "mbedtls/md.h"
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
+#include <NVSService.h>
 
 /**
  * @class FirebaseService
@@ -60,6 +62,118 @@ public:
 private:
   static const char *firebaseBatteryEndpoint;  ///< Firebase endpoint URL for battery life data.
   static const char *firebaseDistanceEndpoint; ///< Firebase endpoint URL for distance measurement data.
+
+  /**
+   * @brief Retrieves the PSK from NVS for use in generating an HMAC.
+   *
+   * This function initializes the NVSService with the "preSharedKey" namespace and attempts
+   * to retrieve the stored pre-shared key (PSK) as a simple string. If initialization fails
+   * or the PSK is not found, an error is logged and an empty string is returned.
+   *
+   * @return A string containing the PSK if retrieval is successful, or an empty string if an error occurs.
+   */
+  String loadPsk() {
+    // Get an instance of the NVSService singleton
+    NVSService &nvsService = NVSService::getInstance();
+
+    // Initialize NVSService with the "preSharedKey" namespace
+    bool initResult = nvsService.begin("preSharedKey");
+
+    // Check that initialization was successful
+    if (!initResult) {
+      DebugService::getInstance().debugPrintln("Error: Failed to initialize NVSService for 'preSharedKey'.");
+      return ""; // Return an empty string to indicate failure
+    }
+
+    // Retrieve the PSK as a string from NVS
+    String psk = nvsService.getString("psk");
+    if (psk.isEmpty()) {
+      DebugService::getInstance().debugPrintln("Error: PSK not found in NVS.");
+      nvsService.end(); // End the NVS session before returning
+      return "";        // Explicitly return an empty string on failure
+    }
+
+    DebugService::getInstance().debugPrintln("PSK successfully loaded from NVS.");
+
+    // End NVS session
+    nvsService.end();
+
+    // Return the PSK
+    return psk;
+  }
+
+  /**
+   * @brief Generates an HMAC (Hash-based Message Authentication Code) using SHA-256 with the mbedTLS library.
+   *
+   * This function takes a payload and a pre-shared key (PSK) as input, and produces an HMAC using the SHA-256
+   * hashing algorithm provided by the mbedTLS library. The resulting HMAC is returned as a hexadecimal string.
+   * If the PSK cannot be retrieved or an error occurs during HMAC computation, an empty string is returned.
+   *
+   * @param payload The input string to be hashed.
+   * @return A hexadecimal string representing the HMAC of the input payload, or an empty string if an error occurs.
+   */
+  String generateHMAC(String payload) {
+    // Get the PSK
+    String psk = loadPsk();
+    if (psk.isEmpty()) {
+      DebugService::getInstance().debugPrintln("Error: Cannot generate HMAC without a valid PSK.");
+      return ""; // Return an empty string to indicate failure
+    }
+
+    // Initialize the mbedTLS context and set up the HMAC operation
+    mbedtls_md_context_t ctx;
+    mbedtls_md_init(&ctx);
+
+    const mbedtls_md_info_t *md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
+    if (md_info == nullptr) {
+      DebugService::getInstance().debugPrintln("Error: Failed to get SHA-256 info for HMAC.");
+      mbedtls_md_free(&ctx);
+      return "";
+    }
+
+    if (mbedtls_md_setup(&ctx, md_info, 1) != 0) { // 1 indicates HMAC mode
+      DebugService::getInstance().debugPrintln("Error: Failed to set up HMAC context.");
+      mbedtls_md_free(&ctx);
+      return "";
+    }
+
+    // Start the HMAC process with the PSK
+    if (mbedtls_md_hmac_starts(&ctx, (const unsigned char *)psk.c_str(), psk.length()) != 0) {
+      DebugService::getInstance().debugPrintln("Error: Failed to start HMAC computation.");
+      mbedtls_md_free(&ctx);
+      return "";
+    }
+
+    // Update the HMAC with the payload
+    if (mbedtls_md_hmac_update(&ctx, (const unsigned char *)payload.c_str(), payload.length()) != 0) {
+      DebugService::getInstance().debugPrintln("Error: Failed to update HMAC with payload.");
+      mbedtls_md_free(&ctx);
+      return "";
+    }
+
+    // Finalize the HMAC computation
+    unsigned char hmacResult[32]; // SHA-256 produces a 32-byte hash
+    if (mbedtls_md_hmac_finish(&ctx, hmacResult) != 0) {
+      DebugService::getInstance().debugPrintln("Error: Failed to finish HMAC computation.");
+      mbedtls_md_free(&ctx);
+      return "";
+    }
+
+    // Free the mbedTLS context
+    mbedtls_md_free(&ctx);
+
+    // Convert the HMAC result to a hexadecimal string
+    String hmacHex = "";
+    for (int i = 0; i < 32; i++) {
+      if (hmacResult[i] < 16) {
+        hmacHex += "0"; // Add leading zero for single-digit bytes
+      }
+      hmacHex += String(hmacResult[i], HEX);
+    }
+
+    DebugService::getInstance().debugPrintln("HMAC successfully generated using mbedTLS.");
+    return hmacHex;
+  }
 
   /**
    * @brief Retrieves the appropriate Firebase Functions endpoint based on the build configuration.
@@ -122,6 +236,14 @@ private:
    * @return true if the request was successful, false otherwise.
    */
   bool sendPostRequest(const char *endpoint, const String &jsonPayload) {
+    // Generate an HMAC for the payload
+    String hmac = generateHMAC(jsonPayload);
+    if (hmac.isEmpty()) {
+      DebugService::getInstance().debugPrintln("Error: Failed to generate HMAC. Aborting upload.");
+
+      return false;
+    }
+
     // Create an HTTP client object and send a POST request to the specified Firebase endpoint with the JSON payload.
     HTTPClient http;
 
@@ -140,6 +262,8 @@ private:
 
     // Add the necessary HTTP headers
     http.addHeader("Content-Type", "application/json");
+    http.addHeader("X-HMAC-Signature", hmac); // Include the HMAC in the request header
+    http.addHeader("X-Device-ID", DEVICE_ID); // Include the device ID in the request header
 
     // Send the POST request and store the HTTP response code
     int httpResponseCode;

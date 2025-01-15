@@ -102,7 +102,10 @@ public:
       JsonObject parameters = doc["parameters"].as<JsonObject>();
 
       // Get the PSKfrom the parameters.
-      const char *psk = parameters["key"];
+      const char *psk = parameters["psk"];
+
+      DebugService::getInstance().debugPrint("Received PSK from mobile app: ");
+      DebugService::getInstance().debugPrintln(psk);
 
       return handlePskProvided(psk);
     }
@@ -131,10 +134,6 @@ public:
     }
   }
 
-  /**
-   * @brief Sets a callback function to handle the provisioning completion event.
-   */
-  void setProvisioningCompleteCallback(std::function<void()> callback) { provisioningCompleteCallback = callback; }
 
 private:
   /**
@@ -158,43 +157,38 @@ private:
   }
 
   /**
-   * @brief Stores a pre-shared key provided by the client into NVS.
-   *
-   * This IoT device interacts with a cloud backend service. Those interactions require authentication in the form
-   * of HMAC signatures generated from a pre-shared key. That pre-shared key is transferred from the mobile
-   * app as part of the Brine provisioning process.
-   *
-   * This function handles the transfer of PSKs from the client device over Bluetooth. The IoT device will save these 
-   * keys into NVS for later use.
-   *
-   * @return String The JSON response containing a confirmation of the command.
-   */
-  String handlePskProvided(const char *psk) {
+ * @brief Stores a pre-shared key provided by the client into NVS.
+ *
+ * This IoT device interacts with a cloud backend service. Those interactions require authentication in the form
+ * of HMAC signatures generated from a pre-shared key. That pre-shared key is transferred from the mobile
+ * app as part of the Brine provisioning process.
+ *
+ * This function handles the transfer of PSKs from the client device over Bluetooth. The IoT device will save these 
+ * keys into NVS for later use.
+ *
+ * @return String The JSON response containing a confirmation of the command.
+ */
+String handlePskProvided(const char *psk) {
     // Get the instance of the NVSServices singleton.
     NVSService &nvsService = NVSService::getInstance();
 
-    // Create a JSON document to store the PSK.
-    JsonDocument doc;
-    doc["psk"] = psk;
+    // Save the PSK as a string under the key "preSharedKey"
+    bool saveResult = nvsService.saveString("psk", psk);
 
-    // Save the JSON document under the key "preSharedKey"
-    bool saveResult = nvsService.saveJSON("preSharedKey", doc);
-
-    // If saving the token to NVS failed, return an error response.
+    // If saving the PSK to NVS failed, return an error response.
     if (!saveResult) {
-      return createErrorResponse("Failed to save refresh token");
+        return createErrorResponse("Failed to save pre-shared key");
     }
-    // Otherwise, if saving the token was successful, return a success response.
-    else {
-      JsonDocument responseDoc;
-      responseDoc["response"] = "psk_saved";
 
-      String jsonResponse;
-      serializeJson(responseDoc, jsonResponse);
+    // Otherwise, if saving the PSK was successful, return a success response.
+    JsonDocument responseDoc;
+    responseDoc["response"] = "psk_saved";
 
-      return jsonResponse;
-    }
-  }
+    String jsonResponse;
+    serializeJson(responseDoc, jsonResponse);
+
+    return jsonResponse;
+}
 
   /**
    * @brief Scans for WiFi networks and returns a list of networks as a JSON string.
@@ -307,18 +301,13 @@ private:
   }
 
   /**
-   * @brief A callback function to handle the completion of the provisioning process.
-   */
-  std::function<void()> provisioningCompleteCallback;
-
-  /**
    * @brief Concludes the provisioning process by sending the salt and battery levels to Firebase and then ending
    * Bluetooth communication.
    *
    * This method is called when the client indicates to the Brine device that all setup steps are complete.
    */
   String handleCompleteProvisioning() {
-    DebugService::getInstance().debugPrint("Completing provisioning process");
+    DebugService::getInstance().debugPrintln("Completing provisioning process");
 
     // Check if the connection was successful
     try {
@@ -329,10 +318,7 @@ private:
       String jsonResponse;
       serializeJson(responseDoc, jsonResponse);
 
-      // Call the provisioning complete callback function
-      provisioningCompleteCallback();
-
-      DebugService::getInstance().debugPrint("Provisioning process complete");
+      DebugService::getInstance().debugPrintln("Provisioning process complete");
 
       return jsonResponse;
     }
