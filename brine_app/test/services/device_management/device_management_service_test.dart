@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:brine/services/device_management/models/brine_device.dart';
+
 import 'package:brine/services/device_management/device_management_service.dart';
+import 'package:brine/services/device_management/models/brine_device.dart';
 import 'package:fake_http_client/fake_http_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+
 import '../../mocks/mock_user.mocks.dart';
 import '../../utils/mock_http_server.dart';
 

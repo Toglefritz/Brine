@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/device_management/models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
+import '../../../services/device_management/models/brine_device.dart';
 import 'pre_shared_key_setup_controller.dart';
 
 /// Requests a pre-shared key (PSK) from the Firebase backend and transfers the PSK to the Brine device.

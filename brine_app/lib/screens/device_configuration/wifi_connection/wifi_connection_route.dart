@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/device_management/models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
+import '../../../services/device_management/models/brine_device.dart';
 import 'wifi_connection_controller.dart';
 
 /// This route accepts the SSID and password of a WiFi network to which the Brine monitor should connect and

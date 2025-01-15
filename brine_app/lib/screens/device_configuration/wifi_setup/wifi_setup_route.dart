@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/device_management/models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
+import '../../../services/device_management/models/brine_device.dart';
 import 'wifi_setup_controller.dart';
 
 /// Sends a command to the Brine monitor to have it perform a scan for available WiFi networks. Then displays a list of

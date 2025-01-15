@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'models/brine_device.dart';
 import '../firebase_emulator/dev_machine_ip.dart';
+import 'models/brine_device.dart';
 import 'models/pre_shared_key.dart';
 
 /// A service class for managing Brine IoT devices.
@@ -256,10 +256,13 @@ class DeviceManagementService {
 
       if (response.statusCode == HttpStatus.ok) {
         // Parse the JSON response
-        final String psk = response.body;
+        final String pskJsonString = response.body;
+
+        // Convert the response to JSON.
+        final Map<String, dynamic> pskJson = json.decode(pskJsonString) as Map<String, dynamic>;
 
         // Create a PreSharedKey instance from the string.
-        final PreSharedKey preSharedKey = PreSharedKey(psk);
+        final PreSharedKey preSharedKey = PreSharedKey.fromJson(pskJson);
 
         // Return  the PSK.
         return preSharedKey;

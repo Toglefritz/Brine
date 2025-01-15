@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../theme/insets.dart';
-import 'pre_shared_key_setup_controller.dart';
 import 'pre_shared_key_setup_route.dart';
 
 /// View for the [PreSharedKeySetupRoute].

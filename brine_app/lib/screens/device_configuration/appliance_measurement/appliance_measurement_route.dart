@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/device_management/models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
+import '../../../services/device_management/models/brine_device.dart';
 import 'appliance_measurement_controller.dart';
 
 /// The Brine is equipped with a distance sensor that enables it to measure the distance between the monitor and the

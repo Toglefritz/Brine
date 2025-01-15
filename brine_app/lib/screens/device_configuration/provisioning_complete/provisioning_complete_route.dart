@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/device_management/models/brine_device.dart';
 import '../../../services/ble/ble_communication_service.dart';
+import '../../../services/device_management/models/brine_device.dart';
 import 'provisioning_complete_controller.dart';
 
 /// This is the final step of the provisioning process. The app sends one last message to the Brine device to finalize
