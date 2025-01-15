@@ -10,14 +10,15 @@ This document outlines the provisioning process for Brine IoT devices. The proce
 2. **BLE Advertising**: The Brine device begins advertising information over Bluetooth Low Energy (BLE).
 3. **Device Discovery**: The mobile app scans for Brine devices over BLE and finds the advertising Brine device.
 4. **BLE Pairing and Bonding**: The mobile app performs BLE pairing and bonding with the selected Brine device.
-5. **Device Information Retrieval**: The mobile app obtains the Brine device's unique device ID and public key (used for security). The app also obtains some information from the Brine device as a Bluetooth peripheral.
-6. **Backend Communication**: The mobile app sends the device ID, device name, and the device's cryptographic public key along with the authenticated user's credentials, to a Firebase backend service via a REST API endpoint that associates the Brine device to the user's account.
+5. **Device Information Retrieval**: The mobile app obtains the Brine device's unique device ID. The app also obtains some information from the Brine device as a Bluetooth peripheral.
+6. **Backend Communication**: The mobile app sends the device ID and device name, along with the authenticated user's credentials, to a Firebase backend service via a REST API endpoint that associates the Brine device to the user's account.
 7. **Device Association**: The Firebase backend service associates the Brine device with the user's account.
+8. **PSK Generation and Transfer**: The mobile app requests a PSK from the Firebasse backend and then transferrs it to the Brine device.
 8. **WiFi Credentials Transfer**: The mobile app collects WiFi credentials from the user and sends them to the Brine device over BLE.
 9. **WiFi Connection**: The Brine device attempts to connect to the WiFi network using the provided credentials and reports the success of this operation back to the mobile app over BLE.
 10. **Brine Installation**: The user is provided with instructions to install the Brine device in the water softener.
 11. **Set Appliance Height**: The user measures the height of their water softener and inputs this measurement into the app. The app sends this height to the the cloud backend. 
-12. **Provisioning Completion**: Once the Brine device is successfully connected to the WiFi network, and it has successfully provided its public key to the backend system, the provisioning process is complete.
+12. **Provisioning Completion**: The Brine device and the mobile app exchange a final message to confirm to each other that the provisioning process is complete.
 
 ```mermaid
 sequenceDiagram
@@ -34,13 +35,18 @@ sequenceDiagram
     MobileApp ->> BrineDevice: Retrieve device ID
     MobileApp ->> Backend: Send device ID and user ID
     Backend ->> Backend: Associate device with user account
+    MobileApp ->> Backend: Request PSK for the Brine device
+    Backend ->> MobileApp: Generate and return PSK
+    MobileApp ->> BrineDevice: Transfer PSK
+    BrineDevice ->> BrineDevice: Save PSK to NVS
+    MobileApp ->> BrineDevice: Request WiFi scan results
+    BrineDevice ->> BrineDevice: Perform WiFi scan
+    BrineDevice ->> MobileApp: Return list of WiFi networks
+    User ->> MobileApp: Select WiFi network
     User ->> MobileApp: Provide WiFi credentials
     MobileApp ->> BrineDevice: Send WiFi credentials over BLE
     BrineDevice ->> BrineDevice: Connect to WiFi network
     BrineDevice ->> MobileApp: Report WiFi connection success
-    BrineDevice ->> Backend: Send public key to cloud
-    Backend ->> Backend: Verify device identity
-    Backend ->> Backend: Store device public key
     MobileApp ->> User: Notify provisioning completion
 ```
 
@@ -86,30 +92,11 @@ Using encrypted BLE characteristics for sharing WiFi credentials adds an extra l
 
 The device association step is where information about the Brine device and the authenticated user is linked in backend resources. This association enables the mobile app to retrieve a list of Brine devices associated with the user and display relevant information from those devices.
 
-To perform the device association, the mobile app sends the retrieved device ID, device name, and the public key from the Brine device, along with the authenticated user's credentials, to a Firebase backend service via a REST API endpoint. More information about the public key can be found in its own section below.
+To perform the device association, the mobile app sends the retrieved device ID, device name, and the authenticated user's credentials to a Firebase backend service via a REST API endpoint.
 
 The Firebase backend service receives the device information and user ID and associates the Brine device with the user's account. This association is typically stored in a database or other backend resource, allowing the mobile app to query and retrieve the associated devices when needed.
 
 By associating the Brine device with the user's account, the mobile app can provide a personalized experience for the user. On future launches of the mobile app, it can retrieve the list of associated Brine devices from the backend and display relevant information from those devices, such as device status, sensor readings, or other device-specific data.
-
-#### Sending Public Key to the Cloud
-
-During the manufacturing process, each Brine device generates a public-private key pair. This key pair is used for secure communication between the device and the backend system. The Brine device uses a cryptographic coprocessor to generate a unique public-private key pair. The private key is securely stored on the device, while the public key is prepared for transmission to the backend service.
-
-The Brine device sends its public key to the backend service via a REST API endpoint. This process involves the following sub-steps:
-
-	1.	Prepare Data Packet: The Brine device packages its public key and any additional necessary metadata (such as device ID and a timestamp) into a data packet.
-	2.	Establish Secure Connection: The Brine device establishes a secure connection with the backend service using HTTPS to ensure the confidentiality and integrity of the transmitted data.
-	3.	Send Data Packet: The Brine device sends the data packet to the backend service via the designated REST API endpoint.
-
-Upon receiving the public key from the Brine device, the backend service performs a series of checks to verify the authenticity of the device. This verification process involves the following sub-steps:
-
-	1.	Extract Device Information: The backend service extracts the device ID and other relevant information from the received data packet.
-	2.	Database Lookup: The backend service queries a database containing manufacturing records to verify the device’s authenticity. This database was created during the manufacturing process and includes information such as the device’s unique ID, serial number, and other identifying details.
-	3.	Match Verification: The backend service compares the extracted device information with the records in the manufacturing database. If a match is found and the information is consistent, the device is considered authentic.
-	4.	Handle Mismatch or Failure: If no match is found or the information is inconsistent, the backend service flags the device as potentially unauthorized, and further actions may be taken, such as notifying administrators or blocking the device.
-
-If the authenticity verification process passes, the backend service stores the public key in its database. 
 
 ###  WiFi Credentials Transfer
 
