@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../brine_app.dart';
-import '../screens/authentication/onboarding/onboarding_route.dart';
-import '../services/analytics/analytics.dart';
-import '../services/authentication/authentication_service.dart';
+import '../../brine_app.dart';
+import '../../screens/authentication/onboarding/onboarding_route.dart';
+import '../../services/analytics/analytics.dart';
+import '../../services/authentication/authentication_service.dart';
 
 /// The app's main [AppBar] widget, which is generally used on pages after the user is authenticated.
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {

@@ -183,6 +183,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
       saltLevel: -1,
       // A value of -1 indicates that the battery level is unknown.
       batteryLevel: -1,
+      lastUpdatedTimestamp: DateTime.now(),
       retrievalTimestamp: DateTime.now(),
     );
 

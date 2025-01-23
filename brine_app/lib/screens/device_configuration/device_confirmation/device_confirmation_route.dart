@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
+import '../../../services/device_management/models/brine_device.dart';
 import '../scan/scan_route.dart';
 import 'device_confirmation_controller.dart';
 
@@ -21,7 +22,7 @@ class DeviceConfirmationRoute extends StatefulWidget {
 
   /// A list of devices that were previously excluded from the Bluetooth scan. If the [device] is also excluded,
   /// it will be added to this prior list and the updated list passed back to the [ScanRoute].
-  final List<BleDevice> excludedDevices;
+  final List<String> excludedDevices;
 
   @override
   State<DeviceConfirmationRoute> createState() =>

@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../components/light_button.dart';
+import '../../../components/buttons/light_button.dart';
 import '../../../extensions/brightness_extensions.dart';
 import '../../../models/device.dart';
 import '../../../theme/insets.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import '../../../services/analytics/analytics.dart';
+import '../../../services/device_management/models/brine_device.dart';
 import '../device_connection/device_connection_route.dart';
 import '../scan/scan_route.dart';
 import 'device_confirmation_route.dart';
@@ -38,9 +39,9 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
     Analytics.trackEvent(eventName: 'device_confirmation_denied');
 
     // Add the discovered, but rejected, device to the list of excluded devices.
-    final List<BleDevice> deviceExclusionList = [
+    final List<String> deviceExclusionList = [
       ...widget.excludedDevices,
-      widget.device,
+      widget.device.name ?? '',
     ];
 
     // Go back to the scan route.
@@ -48,7 +49,7 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => ScanRoute(
-          excludedDevices: deviceExclusionList,
+          excludedDeviceNames: deviceExclusionList,
         ),
       ),
     );

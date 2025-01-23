@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../components/light_button.dart';
+import '../../../components/buttons/light_button.dart';
 import '../../../models/unit_of_measurement.dart';
 import '../../../theme/insets.dart';
 import '../../../values/image_asset.dart';

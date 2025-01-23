@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../screens/authentication/onboarding/onboarding_view.dart';
-import '../theme/insets.dart';
+import '../../screens/authentication/onboarding/onboarding_view.dart';
+import '../../theme/insets.dart';
 
 /// A button appearing on the [OnboardingView].
 class LightButton extends StatelessWidget {

@@ -5,11 +5,15 @@ class BatteryIndicator extends StatelessWidget {
   /// Creates an instance of [BatteryIndicator].
   const BatteryIndicator({
     required this.batteryLife,
+    this.color,
     super.key,
   });
 
   /// The percentage of battery life remaining on the device.
   final double batteryLife;
+
+  /// The color of the battery indicator.
+  final Color? color;
 
   /// Returns an icon to indicate the current battery life.
   IconData getBatteryIndicator() {
@@ -36,7 +40,7 @@ class BatteryIndicator extends StatelessWidget {
       quarterTurns: 1,
       child: Icon(
         getBatteryIndicator(),
-        color: const Color(0xFF212121),
+        color: color ?? const Color(0xFF212121),
         size: 56,
       ),
     );

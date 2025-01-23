@@ -26,6 +26,9 @@ class BrineDevice {
   /// The percentage of battery life remaining on the Brine monitor.
   final double batteryLevel;
 
+  /// A timestamp for when the information about the Brine device was last updated in the database.
+  final DateTime lastUpdatedTimestamp;
+
   /// The timestamp when the levels were last retrieved.
   final DateTime retrievalTimestamp;
 
@@ -37,15 +40,15 @@ class BrineDevice {
     required this.applianceHeight,
     required this.saltLevel,
     required this.batteryLevel,
+    required this.lastUpdatedTimestamp,
     required this.retrievalTimestamp,
   });
 
   /// Creates an instance of [BrineDevice] from a JSON object.
   factory BrineDevice.fromJson(Map<String, dynamic> json) {
     // Get the salt level. The salt level can be an integer or a double, so it is necessary to check the type.
-    final double saltDistance = json['salt_distance'] is int
-        ? (json['salt_distance'] as int).toDouble()
-        : json['salt_distance'] as double;
+    final double saltDistance =
+        json['salt_distance'] is int ? (json['salt_distance'] as int).toDouble() : json['salt_distance'] as double;
 
     // Get the total height of the water softener
     final double applianceHeight = json['appliance_height'] is int
@@ -59,9 +62,11 @@ class BrineDevice {
     final double saltLevel = min(1, max(0, saltDistance / applianceHeight));
 
     // Get the battery level. The battery level can be an integer or a double, so it is necessary to check the type.
-    final double batteryLevel = json['battery_level'] is int
-        ? (json['battery_level'] as int).toDouble()
-        : json['battery_level'] as double;
+    final double batteryLevel =
+        json['battery_level'] is int ? (json['battery_level'] as int).toDouble() : json['battery_level'] as double;
+
+    // Get the last updated timestamp
+    final DateTime lastUpdatedTimestamp = DateTime.parse(json['last_updated'] as String);
 
     return BrineDevice(
       deviceId: json['device_id'] as String,
@@ -70,7 +75,15 @@ class BrineDevice {
       applianceHeight: applianceHeight,
       saltLevel: saltLevel,
       batteryLevel: batteryLevel,
+      lastUpdatedTimestamp: lastUpdatedTimestamp,
       retrievalTimestamp: DateTime.now(),
     );
   }
+
+  /// A helper function used to determine if an update from a Brine device is overdue.
+  ///
+  /// The [lastUpdatedTimestamp] field determine the last date when the Brine device successfully updated its
+  /// information in the Firestore database. There are a number of reasons why a Brine device might stop sending updates.
+  /// This getter determines if the most recent update was more than three days in the past.
+  bool get isUpdateOverdue => DateTime.now().difference(lastUpdatedTimestamp).inDays > 3;
 }

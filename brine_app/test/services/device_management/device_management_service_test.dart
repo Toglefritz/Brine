@@ -61,6 +61,7 @@ void main() {
           applianceHeight: 200,
           saltLevel: 0.5,
           batteryLevel: 0.8,
+          lastUpdatedTimestamp: DateTime.now(),
           retrievalTimestamp: DateTime.now(),
         );
 

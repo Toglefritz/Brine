@@ -59,6 +59,20 @@
   "@deviceDetected": {
     "description": "Text displayed when the app detects a Brine device."
   },
+  "deviceOverdueMessageDescription": "It has been a while since your Brine device has sent an update. It appears to be offline.",
+  "@deviceOverdueMessageDescription": {
+    "description": "Description of the message displayed when the app has not received an update from the Brine device in a while."
+  },
+  "deviceOverdueMessage": "Last updated: {timestamp}",
+  "@deviceOverdueMessage": {
+    "description": "Message displayed when the app has not received an update from the Brine device in a while.",
+    "placeholders": {
+      "timestamp": {
+        "type": "String",
+        "example": "2021-12-31 23:59:59"
+      }
+    }
+  },
   "getOneNow": "Get one now",
   "@getOneNow": {
     "description": "Text for a button that allows the user to purchase a Brine device."
@@ -115,6 +129,10 @@
   "privacyPolicy": "privacy policy",
   "@privacyPolicy": {
     "description": "Text for a button that allows the user to view the privacy policy."
+  },
+  "reconnect": "Reconnect",
+  "@reconnect": {
+    "description": "Text for a button that allows the user to reconnect to an offline device."
   },
   "saltRemaining": "Salt Remaining",
   "@saltRemaining": {

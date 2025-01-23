@@ -141,8 +141,8 @@ class ScanController extends State<ScanRoute> {
     debugPrint('Discovered Brine device, ${device.name}');
 
     // Check if the discovered device is among the excluded devices
-    final bool isExcluded = widget.excludedDevices
-        .where((excludedDevice) => excludedDevice.address == device.address)
+    final bool isExcluded = widget.excludedDeviceNames
+        .where((String excludedDeviceName) => excludedDeviceName == device.name)
         .isNotEmpty;
 
     // Check that the discovered device is not excluded. If it is, ignore the device. If it is not excluded, double
@@ -163,7 +163,7 @@ class ScanController extends State<ScanRoute> {
         MaterialPageRoute<void>(
           builder: (BuildContext context) => DeviceConfirmationRoute(
             device: device,
-            excludedDevices: widget.excludedDevices,
+            excludedDevices: widget.excludedDeviceNames,
           ),
         ),
       );
