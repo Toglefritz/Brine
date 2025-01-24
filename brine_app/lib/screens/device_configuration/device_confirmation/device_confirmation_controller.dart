@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import '../../../services/analytics/analytics.dart';
-import '../../../services/device_management/models/brine_device.dart';
 import '../device_connection/device_connection_route.dart';
 import '../scan/scan_route.dart';
 import 'device_confirmation_route.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
-import '../../../services/device_management/models/brine_device.dart';
 import 'scan_controller.dart';
 
 /// Performs a scan for nearby BLE device, filtered to show only devices with the specified service UUID.
