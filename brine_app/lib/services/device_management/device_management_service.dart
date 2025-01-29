@@ -131,8 +131,7 @@ class DeviceManagementService {
 
   /// Calls the *getUserDevicesHttp* endpoint to retrieve the list of devices for the current user. Assumes the user
   /// is already authenticated with Firebase Auth. Returns a list of devices or throws an exception if an error occurs.
-  // TODO(Toglefritz): update this method to call the getDeviceLevels function and return a list of BrineDevice instead
-  Future<List<String>> getUserDevices() async {
+  Future<List<BrineDevice>> getUserDevices() async {
     try {
       // Get the user's ID token
       final String? idToken = await user.getIdToken();
@@ -149,13 +148,23 @@ class DeviceManagementService {
 
       // Check the response status code
       if (response.statusCode == HttpStatus.ok) {
-        debugPrint('Successfully got user deviceIds: ${response.body}');
+        debugPrint('Successfully got user devices: ${response.body}');
 
-        // Parse the response body
-        final Map<String, dynamic> devicesJson = json.decode(response.body) as Map<String, dynamic>;
-        final List<String> deviceIds = List<String>.from(devicesJson['devices'] as List<dynamic>);
+        // Convert the response body to JSON.
+        final Map<String, dynamic> responseData = json.decode(response.body) as Map<String, dynamic>;
 
-        return deviceIds;
+        // Get the list of device from the response
+        final List<dynamic> devicesJson = responseData['devices'] as List<dynamic>;
+
+        // Construct a list of BrineDevice objects from the JSON data
+        final List<BrineDevice> deviceList = [];
+        for (final dynamic device in devicesJson) {
+          final BrineDevice brineDevice = BrineDevice.fromJson(device as Map<String, dynamic>);
+
+          deviceList.add(brineDevice);
+        }
+
+        return deviceList;
       } else {
         // Handle errors or unexpected status codes
         throw Exception('Failed to load deviceIds: ${response.reasonPhrase}');

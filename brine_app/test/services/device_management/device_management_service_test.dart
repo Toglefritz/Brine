@@ -50,8 +50,7 @@ void main() {
         when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
 
         // Create an instance of the DeviceManagementService class using the mock user.
-        final DeviceManagementService deviceManagementService =
-            DeviceManagementService(user: mockUser);
+        final DeviceManagementService deviceManagementService = DeviceManagementService(user: mockUser);
 
         // Create a test instance of BrineDevice
         final BrineDevice device = BrineDevice(
@@ -106,8 +105,7 @@ void main() {
         when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
 
         // Create an instance of the DeviceManagementService class using the mock user.
-        final DeviceManagementService deviceManagementService =
-            DeviceManagementService(user: mockUser);
+        final DeviceManagementService deviceManagementService = DeviceManagementService(user: mockUser);
 
         // Call the function under test.
         await deviceManagementService.updateApplianceHeight(
@@ -151,12 +149,10 @@ void main() {
         when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
 
         // Create an instance of the DeviceManagementService class using the mock user.
-        final DeviceManagementService deviceManagementService =
-            DeviceManagementService(user: mockUser);
+        final DeviceManagementService deviceManagementService = DeviceManagementService(user: mockUser);
 
         // Call the function under test.
-        final List<String> deviceIds =
-            await deviceManagementService.getUserDevices();
+        final List<BrineDevice> deviceIds = await deviceManagementService.getUserDevices();
 
         // Clean up by resetting the global HttpOverrides.
         HttpOverrides.global = null;
@@ -197,16 +193,13 @@ void main() {
 
         // Mock getting an ID token for the user
         final MockUser mockUser = MockUser();
-        when(mockUser.getIdToken())
-            .thenAnswer((_) async => 'silent_emerald_tiger');
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'silent_emerald_tiger');
 
         // Create an instance of the DeviceManagementService class using the mock user.
-        final DeviceManagementService deviceManagementService =
-            DeviceManagementService(user: mockUser);
+        final DeviceManagementService deviceManagementService = DeviceManagementService(user: mockUser);
 
         // Call the function under test.
-        final BrineDevice brineDevice = await deviceManagementService
-            .getDeviceLevels('silent_emerald_tiger');
+        final BrineDevice brineDevice = await deviceManagementService.getDeviceLevels('silent_emerald_tiger');
 
         // Clean up by resetting the global HttpOverrides.
         HttpOverrides.global = null;
