@@ -119,7 +119,7 @@ String NVSService::getString(const char *key) {
   if (value.isEmpty()) {
     DebugService::getInstance().debugPrintln("No string data found for the given key.");
   }
-  
+
   return value;
 }
 
