@@ -17,7 +17,7 @@ const admin = require('./config/adminInit.cjs');
 const { onRequest } = require("firebase-functions/v2/https");
 const functions = require('firebase-functions');
 
-// Imort the authentication middleware function that verifies the Firebase ID token.
+// Import the authentication middleware function that verifies the Firebase ID token.
 const authenticate = require('./middleware/authMiddleware.cjs');
 
 // Import the functions that handle the business logic for each endpoint. Each of these imported files contains one or
@@ -72,7 +72,6 @@ exports.getUserDevices = functions.https.onRequest(async (req, res) => {
         getUserDevices(req, res);
     });
 });
-
 
 /**
  * @brief Endpoint used to generate a pre-shared key (PSK) for a Brine device.

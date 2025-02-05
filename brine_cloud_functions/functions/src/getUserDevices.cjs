@@ -21,14 +21,14 @@ const admin = require('../config/adminInit.cjs');
  *   "devices" : [ {
  *     "appliance_height" : 1067,
  *     "last_updated" : "2025-01-10T22:18:39.379Z",
- *   "device_id" : "vast_teal_elephant",
+ *     "device_id" : "vast_teal_elephant",
  *     "battery_level" : 99.2421875,
  *     "psk_created_at" : "2025-01-15T03:12:03.598Z",
  *     "name" : "b76b",
  *     "psk" : "0cf06f8876cd5490c318f50be6b8b0d79d47ff7b7ba7cf3b56d8a779c6a693d8",
  *     "salt_distance" : 700,
  *     "psk_valid" : true
- *  } ]
+ *   } ]
  * }
  * 
  */
