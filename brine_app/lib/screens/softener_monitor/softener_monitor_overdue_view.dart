@@ -28,22 +28,22 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
       appBar: AppBar(
         actions: [
           PopupMenuButton<String>(
-            onSelected: (value) => state.onLogout(),
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: AppLocalizations.of(context)!.logout,
-                  child: Text(
-                    AppLocalizations.of(context)!.logout,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ];
-            },
+            onSelected: (value) => state.onAccountTap(),
             icon: Icon(
               Icons.more_vert,
               color: Theme.of(context).primaryColorDark,
             ),
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem<String>(
+                  value: AppLocalizations.of(context)!.logout,
+                  child: ListTile(
+                    leading: const Icon(Icons.person_outlined),
+                    title: Text(AppLocalizations.of(context)!.account),
+                  ),
+                ),
+              ];
+            },
           ),
         ],
       ),
@@ -131,20 +131,19 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                           ),
                           child: ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.4,
+                              minWidth: MediaQuery.of(context).size.width * 0.4,
+                              maxWidth: MediaQuery.of(context).size.width * 0.8,
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Transform.translate(
-                                  offset: const Offset(-5, -10),
-                                  child: Text(
-                                    '*',
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                  ),
+                                Text(
+                                  '*  ',
+                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                 ),
                                 Flexible(
                                   child: Text(
@@ -159,9 +158,7 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: Insets.medium,
-                          ),
+                          padding: const EdgeInsets.all(Insets.medium),
                           child: LightButton(
                             text: AppLocalizations.of(context)!.reconnect,
                             onPressed: state.onReconnectDevice,
@@ -172,10 +169,11 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                             bottom: Insets.medium,
                           ),
                           child: Text(
-                            AppLocalizations.of(context)!.deviceOverdueMessage(state.lastUpdateTime),
+                            AppLocalizations.of(context)!
+                                .deviceOverdueMessage(state.widget.devices.first.lastUpdateTime),
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).primaryColorDark,
-                            ),
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
                           ),
                         ),
                       ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../services/authentication/authentication_service.dart';
-import '../authentication/onboarding/onboarding_route.dart';
+import '../../services/analytics/analytics.dart';
+import '../account/account_route.dart';
 import '../device_configuration/scan/scan_route.dart';
 import 'softener_monitor_overdue_view.dart';
 import 'softener_monitor_route.dart';
@@ -9,28 +9,18 @@ import 'softener_monitor_view.dart';
 
 /// Controller for [SoftenerMonitorRoute].
 class SoftenerMonitorController extends State<SoftenerMonitorRoute> {
-  /// Handles taps on the "logout" button.
-  Future<void> onLogout() async {
-    // TODO(Toglefritz): analytics tag
+  /// Handles taps on the "account" button in the app bar menu. This simply navigates to the account route.
+  Future<void> onAccountTap() async {
+    Analytics.trackEvent(eventName: 'account_menu_tap');
 
-    await AuthenticationService.signOut();
-
-    if (!mounted) return;
-    await Navigator.pushReplacement(
+    await Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const OnboardingRoute(),
+        builder: (BuildContext context) => AccountRoute(
+          devices: widget.devices,
+        ),
       ),
     );
-  }
-
-  /// A getter for the last update time of the device, in the form, MM/DD/YYYY HH:MM:SS.
-  String get lastUpdateTime {
-    // Get the last update time of the device.
-    final DateTime lastUpdate = widget.devices.first.lastUpdatedTimestamp;
-
-    // Format the last update time.
-    return '${lastUpdate.month}/${lastUpdate.day}/${lastUpdate.year}';
   }
 
   /// Called when the "Reconnect" button is tapped.

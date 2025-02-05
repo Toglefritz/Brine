@@ -46,7 +46,7 @@ class DarkOnboardingButton extends StatelessWidget {
               ? Theme.of(context).primaryColorDark
               : Colors.transparent,
           side: BorderSide(
-            width: 4,
+            width: 2,
             color: Theme.of(context).primaryColorDark,
           ),
         ),

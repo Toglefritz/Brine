@@ -1,4 +1,12 @@
 {
+  "account": "Account",
+  "@account": {
+    "description": "A title for the account/profile information screen."
+  },
+  "accountControls": "Account Controls",
+  "@accountControls": {
+    "description": "Title for a section of the account settings screen containing account management controls."
+  },
   "addADevice": "Add a device",
   "@addADevice": {
     "description": "Text for a button that allows the user to add a device to their account."
@@ -19,6 +27,10 @@
   "@back": {
     "description": "Text for a button that allows the user to navigate back to the previous screen."
   },
+  "batteryLevel": "Battery Level",
+  "@batteryLevel": {
+    "description": "Label for the battery level of the Brine device."
+  },
   "bleConnecting": "Establishing connection...",
   "@bleConnecting": {
     "description": "Text displayed while the app is establishing a Bluetooth connection to a device."
@@ -30,6 +42,10 @@
   "brine": "Brine",
   "@brine": {
     "description": "The name of the app and the product."
+  },
+  "brineDevices": "Brine Devices",
+  "@brineDevices": {
+    "description": "Title for the screen where the user can view and manage their Brine devices."
   },
   "chooseAnother": "Choose another",
   "@chooseAnother": {
@@ -63,6 +79,10 @@
   "@deviceOverdueMessageDescription": {
     "description": "Description of the message displayed when the app has not received an update from the Brine device in a while."
   },
+  "deviceId": "Device ID",
+  "@deviceId": {
+    "description": "Label for the unique identifier of the Brine device."
+  },
   "deviceOverdueMessage": "Last updated: {timestamp}",
   "@deviceOverdueMessage": {
     "description": "Message displayed when the app has not received an update from the Brine device in a while.",
@@ -84,6 +104,10 @@
   "installationTitle": "Install Brine",
   "@installationTitle": {
     "description": "Title for the screen presenting the installation instructions for the Brine device."
+  },
+  "lastUpdated": "Last updated",
+  "@lastUpdated": {
+    "description": "Label for the date and time when the Brine device last sent an update."
   },
   "login": "login",
   "@login": {
@@ -157,6 +181,10 @@
   "salesPrompt": "Don't have a Brine device?",
   "@salesPrompt": {
     "description": "Marketing prompt text inviting the user to purchase a Brine device."
+  },
+  "saltLevel": "Salt Level",
+  "@saltLevel": {
+    "description": "Label for the salt level in the water softener."
   },
   "saveText": "Save",
   "@saveText": {

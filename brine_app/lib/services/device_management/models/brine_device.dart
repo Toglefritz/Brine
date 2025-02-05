@@ -86,4 +86,8 @@ class BrineDevice {
   /// information in the Firestore database. There are a number of reasons why a Brine device might stop sending updates.
   /// This getter determines if the most recent update was more than three days in the past.
   bool get isUpdateOverdue => DateTime.now().difference(lastUpdatedTimestamp).inDays > 3;
+
+  /// A helper function for getting the last updated timestamp in a human-readable format.
+  /// A getter for the last update time of the device, in the form, MM/DD/YYYY.
+  String get lastUpdateTime => '${lastUpdatedTimestamp.month}/${lastUpdatedTimestamp.day}/${lastUpdatedTimestamp.year}';
 }

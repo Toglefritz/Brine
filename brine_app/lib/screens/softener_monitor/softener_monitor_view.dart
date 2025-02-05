@@ -72,22 +72,22 @@ class SoftenerMonitorView extends StatelessWidget {
       appBar: AppBar(
         actions: [
           PopupMenuButton<String>(
-            onSelected: (value) => state.onLogout(),
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: AppLocalizations.of(context)!.logout,
-                  child: Text(
-                    AppLocalizations.of(context)!.logout,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ];
-            },
+            onSelected: (String value) => state.onAccountTap(),
             icon: Icon(
               Icons.more_vert,
               color: Theme.of(context).primaryColorDark,
             ),
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem<String>(
+                  value: AppLocalizations.of(context)!.account,
+                  child: ListTile(
+                    leading: const Icon(Icons.person_outlined),
+                    title: Text(AppLocalizations.of(context)!.account),
+                  ),
+                ),
+              ];
+            },
           ),
         ],
       ),
@@ -98,7 +98,7 @@ class SoftenerMonitorView extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: WaveProgressIndicator(
-              progressPercent: 1 - state.widget.devices[0].saltLevel,
+              progressPercent: 1 - state.widget.devices.first.saltLevel,
               fillColor: Theme.of(context).primaryColor,
               // Defaults to 0.5.
             ),
@@ -110,7 +110,7 @@ class SoftenerMonitorView extends StatelessWidget {
                   Padding(
                     padding: _getLabelTopPadding(context),
                     child: Text(
-                      '${(state.widget.devices[0].saltLevel * 100).toInt()}%',
+                      '${(state.widget.devices.first.saltLevel * 100).toInt()}%',
                       style: GoogleFonts.bungee().copyWith(
                         fontSize: 52,
                         color: _getTextColor(context),

@@ -20,7 +20,10 @@ class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainAppBar(),
+      appBar: const MainAppBar(
+        // On this screen, there are, by definition, no devices to display.
+        devices: [],
+      ),
       body: SafeArea(
         child: Center(
           child: Padding(

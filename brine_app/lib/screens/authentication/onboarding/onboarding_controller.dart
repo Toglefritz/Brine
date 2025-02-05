@@ -24,7 +24,7 @@ class OnboardingController extends State<OnboardingRoute> {
   void handleCreateAccountTap() {
     Analytics.trackEvent(eventName: 'onboarding_create_account_tap');
 
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => const CreateAccountRoute(),

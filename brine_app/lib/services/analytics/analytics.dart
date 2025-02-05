@@ -38,6 +38,15 @@ class Analytics {
     }
   }
 
+  /// Tracks logout events.
+  static void trackLogout() {
+    debugPrint('Analytics trackLogout');
+
+    if (!kDebugMode) {
+      FirebaseAnalytics.instance.logEvent(name: 'logout');
+    }
+  }
+
   /// Tracks a custom event with an optional map of parameters.
   static void trackEvent({
     required String eventName,
