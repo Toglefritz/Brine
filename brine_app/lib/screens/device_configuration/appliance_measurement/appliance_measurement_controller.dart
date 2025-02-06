@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/unit_of_measurement.dart';
+import '../../../services/analytics/analytics.dart';
 import '../../../services/device_management/device_management_service.dart';
 import '../brine_installation/brine_installation_route.dart';
 import '../provisioning_complete/provisioning_complete_route.dart';
@@ -18,14 +19,14 @@ class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
 
   @override
   void initState() {
-    // TODO(Toglefritz): add analytics call
+    Analytics.trackPageView('appliance_measurement');
 
     super.initState();
   }
 
   /// Handles changes in the unit of measurement.
   void onUnitOfMeasurementChanged(UnitOfMeasurement? unit) {
-    // TODO(Toglefritz): add analytics call
+    Analytics.trackEvent(eventName: 'unit_of_measurement_changed', parameters: {'unit': unit.toString()});
 
     // Update the unit of measurement.
     setState(() {
@@ -35,7 +36,7 @@ class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
 
   /// Handles submission of the height of the water softener.
   Future<void> onHeightSubmitted() async {
-    // TODO(Toglefritz): add analytics call
+    Analytics.trackEvent(eventName: 'height_submitted', parameters: {'height': measurementFieldController.text});
 
     try {
       final int rawHeight = int.parse(measurementFieldController.text);

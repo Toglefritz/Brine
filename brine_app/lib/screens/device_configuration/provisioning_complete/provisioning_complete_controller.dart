@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../extensions/json.dart';
+import '../../../services/analytics/analytics.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
 import '../../../services/ble/models/response.dart';
@@ -18,6 +19,8 @@ class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
 
   @override
   void initState() {
+    Analytics.trackPageView('provisioning_complete');
+
     // Complete the provisioning process.
     _completeProvisioning();
 

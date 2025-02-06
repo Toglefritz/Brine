@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../services/analytics/analytics.dart';
 import '../appliance_measurement/appliance_measurement_route.dart';
 import 'brine_installation_route.dart';
 import 'brine_installation_view.dart';
@@ -8,14 +9,14 @@ import 'brine_installation_view.dart';
 class BrineInstallationController extends State<BrineInstallationRoute> {
   @override
   void initState() {
-    // TODO(Toglefritz): add analytics call
+    Analytics.trackPageView('brine_installation');
 
     super.initState();
   }
 
   /// Handles taps on the button used by the user to confirm they have completed installation of the Brine device.
   Future<void> onContinue() async {
-    // TODO(Toglefritz): add analytics call
+    Analytics.trackEvent(eventName: 'brine_installation_continue_tap');
 
     await Navigator.pushReplacement(
       context,

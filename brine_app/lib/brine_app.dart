@@ -27,7 +27,6 @@ class BrineApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorKey: navigatorKey,
-      // TODO(Toglefritz): Move this to a wrapper widget with its own Navigator to prevent this Scaffold from being moved
       home: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: StreamBuilder<User?>(

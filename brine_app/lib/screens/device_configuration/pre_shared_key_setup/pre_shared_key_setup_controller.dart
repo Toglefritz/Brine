@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../extensions/json.dart';
+import '../../../services/analytics/analytics.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
 import '../../../services/ble/models/response.dart';
@@ -16,6 +17,8 @@ import 'pre_shared_key_setup_view.dart';
 class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
   @override
   void initState() {
+    Analytics.trackPageView('pre_shared_key_setup');
+
     // Associate the Brine device to the user's account.
     WidgetsBinding.instance.addPostFrameCallback((_) => _performPskSetup());
 

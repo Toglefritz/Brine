@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../extensions/json.dart';
+import '../../../services/analytics/analytics.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
 import '../../../services/ble/models/response.dart';
@@ -13,6 +14,8 @@ import 'wifi_connection_view.dart';
 class WiFiConnectionController extends State<WiFiConnectionRoute> {
   @override
   void initState() {
+    Analytics.trackPageView('wifi_connection');
+
     // Send a command to the Brine device to provide the SSID and password of the WiFi network to which the Brine device
     // should connect. This is done after the build method is complete because the view will be rebuilt after a response
     // is received.

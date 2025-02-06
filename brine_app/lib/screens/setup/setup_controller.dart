@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/analytics/analytics.dart';
 import '../../services/device_management/device_management_service.dart';
 import '../../services/device_management/models/brine_device.dart';
 import '../softener_monitor/softener_monitor_route.dart';
@@ -12,6 +13,8 @@ import 'setup_view.dart';
 class SetupController extends State<SetupRoute> {
   @override
   void initState() {
+    Analytics.trackPageView('setup');
+
     // Perform setup for app usage
     _performSetup();
 

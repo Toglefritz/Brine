@@ -44,6 +44,8 @@ class ScanController extends State<ScanRoute> {
 
   @override
   void initState() {
+    Analytics.trackPageView('scan');
+
     // Initialize the Bluetooth permission status monitor.
     _initBluetoothPermissionStatusMonitor();
 

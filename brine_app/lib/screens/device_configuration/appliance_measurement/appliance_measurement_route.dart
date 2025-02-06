@@ -24,6 +24,5 @@ class ApplianceMeasurementRoute extends StatefulWidget {
   final BrineDevice device;
 
   @override
-  State<ApplianceMeasurementRoute> createState() =>
-      ApplianceMeasurementController();
+  State<ApplianceMeasurementRoute> createState() => ApplianceMeasurementController();
 }

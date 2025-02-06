@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../extensions/json.dart';
+import '../../../services/analytics/analytics.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
 import '../wifi_connection/wifi_connection_route.dart';
@@ -22,6 +23,8 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
 
   @override
   void initState() {
+    Analytics.trackPageView('wifi_setup');
+
     // Send a command to the Brine device to scan for available WiFi networks. This is done after the build method is
     // complete because the view will be rebuilt after the command is sent and the response is received.
     WidgetsBinding.instance.addPostFrameCallback((_) => _sendScanCommand());
@@ -66,9 +69,7 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
     final List<dynamic> networkList = value['networks'] as List<dynamic>;
 
     setState(() {
-      networks = networkList
-          .map((dynamic network) => WiFiNetwork.fromJson(network as JSON))
-          .toList();
+      networks = networkList.map((dynamic network) => WiFiNetwork.fromJson(network as JSON)).toList();
     });
   }
 
@@ -90,6 +91,8 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
   /// This function simply navigates to the next screen in the setup process, providing the SSID and password for the
   /// selected network to the next screen.
   Future<void> onConnectToNetwork(WiFiNetwork network) async {
+    Analytics.trackEvent(eventName: 'wifi_connect');
+
     // Get the SSID of the selected network.
     final String ssid = network.ssid;
 

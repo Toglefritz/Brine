@@ -8,6 +8,7 @@ import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 
 import '../../../extensions/json.dart';
+import '../../../services/analytics/analytics.dart';
 import '../../../services/ble/ble_communication_service.dart';
 import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
@@ -40,6 +41,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   @override
   void initState() {
+    Analytics.trackPageView('device_connection');
+
     // Start the process of connecting to the provided BleDevice. This is done after the build method is complete
     // because the controller needs to have access to the context in order to navigate to the next route.
     WidgetsBinding.instance.addPostFrameCallback((_) => _connectToDevice());
