@@ -49,10 +49,9 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           itemBuilder: (BuildContext context) {
             return [
               PopupMenuItem<String>(
-                value: AppLocalizations.of(context)!.logout,
+                value: AppLocalizations.of(context)!.account,
                 child: ListTile(
-                  leading: const Icon(Icons.person_outlined),
-                  title: Text(AppLocalizations.of(context)!.logout),
+                  title: Text(AppLocalizations.of(context)!.account),
                 ),
               ),
             ];

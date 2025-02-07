@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../components/buttons/light_button.dart';
 import '../../components/dashed_outlines/dashed_divider.dart';
 import '../../theme/insets.dart';
+import 'components/softener_monitor_app_bar.dart';
 import 'softener_monitor_controller.dart';
 import 'softener_monitor_route.dart';
 
@@ -13,7 +14,10 @@ import 'softener_monitor_route.dart';
 // TODO(Toglefritz): implement option for selecting device
 class SoftenerMonitorOverdueView extends StatelessWidget {
   /// Creates an instance of [SoftenerMonitorOverdueView].
-  const SoftenerMonitorOverdueView(this.state, {super.key});
+  const SoftenerMonitorOverdueView({
+    required this.state,
+    super.key,
+  });
 
   /// A controller for this view.
   final SoftenerMonitorController state;
@@ -25,33 +29,14 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? const Color(0xFFFFE0A3)
           : Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) => state.onAccountTap(),
-            icon: Icon(
-              Icons.more_vert,
-              color: Theme.of(context).primaryColorDark,
-            ),
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: AppLocalizations.of(context)!.logout,
-                  child: ListTile(
-                    leading: const Icon(Icons.person_outlined),
-                    title: Text(AppLocalizations.of(context)!.account),
-                  ),
-                ),
-              ];
-            },
-          ),
-        ],
-      ),
+      appBar: SoftenerMonitorAppBar(state: state),
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * state.widget.devices[0].saltLevel),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).size.height * state.selectedDevice.saltLevel,
+            ),
             child: DashedDivider(
               color: Theme.of(context).primaryColorDark,
               strokeWidth: 2,
@@ -67,7 +52,7 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                       padding: const EdgeInsets.only(top: Insets.medium),
                       child: RichText(
                         text: TextSpan(
-                          text: '${(state.widget.devices[0].saltLevel * 100).toInt()}%',
+                          text: '${(state.selectedDevice.saltLevel * 100).toInt()}%',
                           style: GoogleFonts.bungee().copyWith(
                             fontSize: 52,
                             color: Theme.of(context).primaryColorDark,
@@ -105,7 +90,7 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (state.widget.devices[0].saltLevel <= 0.1)
+                  if (state.selectedDevice.saltLevel <= 0.1)
                     ColoredBox(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       child: Padding(
@@ -169,8 +154,7 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                             bottom: Insets.medium,
                           ),
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .deviceOverdueMessage(state.widget.devices.first.lastUpdateTime),
+                            AppLocalizations.of(context)!.deviceOverdueMessage(state.selectedDevice.lastUpdateTime),
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: Theme.of(context).primaryColorDark,
                                 ),

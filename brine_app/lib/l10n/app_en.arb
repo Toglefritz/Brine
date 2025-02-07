@@ -71,6 +71,10 @@
   "@detectedDeviceConfirmation": {
     "description": "Text asking the user to confirm that the detected device is the one they wish to add."
   },
+  "device": "Device",
+  "@device": {
+    "description": "A generic label for a field related to a device."
+  },
   "deviceDetected": "Device detected",
   "@deviceDetected": {
     "description": "Text displayed when the app detects a Brine device."

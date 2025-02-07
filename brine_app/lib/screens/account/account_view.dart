@@ -88,8 +88,13 @@ class AccountView extends StatelessWidget {
                       (index) {
                         final BrineDevice device = state.widget.devices[index];
 
-                        return ExpandableDeviceCard(
-                          device: device,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Insets.small,
+                          ),
+                          child: ExpandableDeviceCard(
+                            device: device,
+                          ),
                         );
                       },
                     ),

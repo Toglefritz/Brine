@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/insets.dart';
 import 'components/battery_indicator.dart';
+import 'components/softener_monitor_app_bar.dart';
 import 'components/wave_progress_indicator.dart';
 import 'softener_monitor_controller.dart';
 import 'softener_monitor_route.dart';
@@ -14,7 +15,10 @@ import 'softener_monitor_route.dart';
 // TODO(Toglefritz): implement option for selecting device
 class SoftenerMonitorView extends StatelessWidget {
   /// Creates an instance of [SoftenerMonitorView].
-  const SoftenerMonitorView(this.state, {super.key});
+  const SoftenerMonitorView({
+    required this.state,
+    super.key,
+  });
 
   /// A controller for this view.
   final SoftenerMonitorController state;
@@ -24,7 +28,7 @@ class SoftenerMonitorView extends StatelessWidget {
   /// stopping at a certain point representing the lowest position the text will occupy on the screen.
   EdgeInsets _getLabelTopPadding(BuildContext context) {
     // Get the level of salt in the appliance.
-    final double saltLevel = state.widget.devices[0].saltLevel;
+    final double saltLevel = state.selectedDevice.saltLevel;
 
     // Get the height of the screen
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -49,7 +53,7 @@ class SoftenerMonitorView extends StatelessWidget {
   /// [Brightness].
   Color _getTextColor(BuildContext context) {
     // Get the level of salt in the appliance.
-    final double saltLevel = state.widget.devices[0].saltLevel;
+    final double saltLevel = state.selectedDevice.saltLevel;
 
     // If the salt level is above 70%, the label will be drawn on top of the salt level indicator widget.
     if (saltLevel > 0.70) {
@@ -69,28 +73,7 @@ class SoftenerMonitorView extends StatelessWidget {
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? const Color(0xFFFFE0A3)
           : Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (String value) => state.onAccountTap(),
-            icon: Icon(
-              Icons.more_vert,
-              color: Theme.of(context).primaryColorDark,
-            ),
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: AppLocalizations.of(context)!.account,
-                  child: ListTile(
-                    leading: const Icon(Icons.person_outlined),
-                    title: Text(AppLocalizations.of(context)!.account),
-                  ),
-                ),
-              ];
-            },
-          ),
-        ],
-      ),
+      appBar: SoftenerMonitorAppBar(state: state),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -98,7 +81,7 @@ class SoftenerMonitorView extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: WaveProgressIndicator(
-              progressPercent: 1 - state.widget.devices.first.saltLevel,
+              progressPercent: 1 - state.selectedDevice.saltLevel,
               fillColor: Theme.of(context).primaryColor,
               // Defaults to 0.5.
             ),
@@ -110,7 +93,7 @@ class SoftenerMonitorView extends StatelessWidget {
                   Padding(
                     padding: _getLabelTopPadding(context),
                     child: Text(
-                      '${(state.widget.devices.first.saltLevel * 100).toInt()}%',
+                      '${(state.selectedDevice.saltLevel * 100).toInt()}%',
                       style: GoogleFonts.bungee().copyWith(
                         fontSize: 52,
                         color: _getTextColor(context),
@@ -129,7 +112,7 @@ class SoftenerMonitorView extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  if (state.widget.devices[0].saltLevel <= 0.1)
+                  if (state.selectedDevice.saltLevel <= 0.1)
                     Padding(
                       padding: const EdgeInsets.only(
                         top: Insets.medium,
@@ -150,7 +133,7 @@ class SoftenerMonitorView extends StatelessWidget {
                             bottom: Insets.medium,
                           ),
                           child: BatteryIndicator(
-                            batteryLife: state.widget.devices[0].batteryLevel,
+                            batteryLife: state.selectedDevice.batteryLevel,
                           ),
                         ),
                       ],
