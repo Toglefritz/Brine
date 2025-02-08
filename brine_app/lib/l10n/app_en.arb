@@ -35,6 +35,10 @@
   "@bleConnecting": {
     "description": "Text displayed while the app is establishing a Bluetooth connection to a device."
   },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Generic text for a button that allows the user to cancel an action."
+  },
   "done": "Done",
   "@done": {
     "description": "Text indicating that a process has been completed."
@@ -161,6 +165,24 @@
   "reconnect": "Reconnect",
   "@reconnect": {
     "description": "Text for a button that allows the user to reconnect to an offline device."
+  },
+  "remove": "Remove",
+  "@remove": {
+    "description": "Generic text for a button that allows the user to remove an item."
+  },
+  "removeDevice": "Remove device",
+  "@removeDevice": {
+    "description": "Text for a button that allows the user to remove a device from their account."
+  },
+  "removeDeviceConfirmation": "Are you sure you want to remove the Brine device with ID, \"{deviceId}\", from your account?",
+  "@removeDeviceConfirmation": {
+    "description": "Confirmation message asking the user if they are sure they want to remove a device from their account.",
+    "placeholders": {
+      "deviceId": {
+        "type": "String",
+        "example": "vast_teal_elephant"
+      }
+    }
   },
   "saltRemaining": "Salt Remaining",
   "@saltRemaining": {

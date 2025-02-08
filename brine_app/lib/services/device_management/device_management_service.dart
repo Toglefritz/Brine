@@ -284,4 +284,44 @@ class DeviceManagementService {
       rethrow;
     }
   }
+
+  /// Calls the *removeDeviceFromUser* endpoint to remove a device from the authenticated user's account.
+  ///
+  /// This function sends a DELETE request to the Firebase backend, which removes the device ID from the user's list
+  /// of devices in Firestore. If no other users are associated with the device, the backend also deletes the device
+  /// record from the "devices" collection.
+  ///
+  /// If successful, the function completes without returning a value. Otherwise, it throws an exception.
+  ///
+  /// **Example usage:**
+  /// ```dart
+  /// await DeviceManagementService(user: firebaseUser).removeDeviceFromAccount(deviceId: "vast_teal_elephant");
+  /// ```
+  Future<void> removeDeviceFromAccount({required String deviceId}) async {
+    try {
+      // Get the user's ID token
+      final String? idToken = await user.getIdToken();
+
+      // Define the endpoint URL with deviceId as a query parameter
+      final String endpoint = '/removeDeviceFromUser?deviceId=$deviceId';
+
+      // Make an authenticated HTTP DELETE request to the endpoint
+      final Response response = await delete(
+        Uri.parse(baseUrl + endpoint),
+        // Include the ID token in the Authorization header
+        headers: {'Authorization': 'Bearer $idToken'},
+      );
+
+      // Check the response status code
+      if (response.statusCode == HttpStatus.ok) {
+        debugPrint('Successfully removed device with ID: $deviceId from the user\'s account.');
+        return;
+      } else {
+        throw Exception('Device removal failed with reason: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      debugPrint('Failed to remove device with exception: $e');
+      throw Exception('Failed to remove device with exception: $e');
+    }
+  }
 }

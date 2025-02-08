@@ -32,6 +32,19 @@ class BrineAppTheme {
       hoverColor: Color(0xFF212121),
       focusColor: Color(0xFF212121),
     ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all<Color>(
+          const Color(0xFF212121),
+        ),
+        textStyle: WidgetStateProperty.all<TextStyle>(
+          const TextStyle(
+            fontSize: 14,
+            color: Color(0xFF212121),
+          ),
+        ),
+      ),
+    ),
   ).copyWith(
     extensions: <ThemeExtension<dynamic>>[
       const ColorLibrary(
@@ -59,6 +72,19 @@ class BrineAppTheme {
     ),
     inputDecorationTheme: const InputDecorationTheme(
       focusColor: Colors.white10,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all<Color>(
+          const Color(0xFFFFFFFF),
+        ),
+        textStyle: WidgetStateProperty.all<TextStyle>(
+          const TextStyle(
+            fontSize: 14,
+            color: Color(0xFFFFFFFF),
+          ),
+        ),
+      ),
     ),
   ).copyWith(
     extensions: <ThemeExtension<dynamic>>[

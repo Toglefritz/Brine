@@ -24,11 +24,15 @@ class ExpandableDeviceCard extends StatefulWidget {
   /// The Brine device associated with this card.
   final BrineDevice device;
 
+  /// A callback function invoked when the delete button is tapped.
+  final VoidCallback onRemoveDevice;
+
   /// Creates an instance of [ExpandableDeviceCard].
   ///
   /// All parameters are required to provide complete information about the device.
   const ExpandableDeviceCard({
     required this.device,
+    required this.onRemoveDevice,
     super.key,
   });
 
@@ -94,104 +98,120 @@ class ExpandableDeviceCardState extends State<ExpandableDeviceCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _toggleExpanded,
-      child: AnimatedContainer(
-        duration: _cardAnimationDuration,
-        curve: Curves.easeInOut,
-        padding: const EdgeInsets.all(Insets.medium),
-        height: _isExpanded ? MediaQuery.textScalerOf(context).scale(190) : MediaQuery.textScalerOf(context).scale(100),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        // Prevents small pixel overflows
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Insets.xLarge),
-              child: Text(
-                widget.device.name,
-                style: GoogleFonts.bungee().copyWith(
-                  fontSize: 36,
-                  color: Theme.of(context).primaryColorDark,
+      child: Stack(
+        alignment: Alignment.topRight,
+        children: [
+          AnimatedContainer(
+            duration: _cardAnimationDuration,
+            curve: Curves.easeInOut,
+            padding: const EdgeInsets.all(Insets.medium),
+            height:
+                _isExpanded ? MediaQuery.textScalerOf(context).scale(190) : MediaQuery.textScalerOf(context).scale(100),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            // Prevents small pixel overflows
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Insets.xLarge),
+                  child: Text(
+                    widget.device.name,
+                    style: GoogleFonts.bungee().copyWith(
+                      fontSize: 36,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                  ),
                 ),
+                AnimatedSwitcher(
+                  duration: _contentAnimationDuration,
+                  child: _isContentVisible
+                      ? Column(
+                          key: ValueKey<bool>(_isExpanded),
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                children: [
+                                  TextSpan(
+                                    text: '${AppLocalizations.of(context)!.deviceId}: ',
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text: widget.device.deviceId,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                children: [
+                                  TextSpan(
+                                    text: '${AppLocalizations.of(context)!.saltLevel}: ',
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text: '${(widget.device.saltLevel * 100).toInt()}%',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                children: [
+                                  TextSpan(
+                                    text: '${AppLocalizations.of(context)!.batteryLevel}: ',
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text: '${widget.device.batteryLevel.toInt()}%',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                children: [
+                                  TextSpan(
+                                    text: '${AppLocalizations.of(context)!.lastUpdated}: ',
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text: widget.device.lastUpdateTime,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
+                ),
+              ],
+            ),
+          ),
+
+          // A button used to remove the device from the user's account.
+          if (_isExpanded)
+            IconButton(
+              icon: Icon(
+                Icons.delete_outline_rounded,
+                color: Colors.red[900],
               ),
+              onPressed: widget.onRemoveDevice,
             ),
-            AnimatedSwitcher(
-              duration: _contentAnimationDuration,
-              child: _isContentVisible
-                  ? Column(
-                      key: ValueKey<bool>(_isExpanded),
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: '${AppLocalizations.of(context)!.deviceId}: ',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              TextSpan(
-                                text: widget.device.deviceId,
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: '${AppLocalizations.of(context)!.saltLevel}: ',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              TextSpan(
-                                text: '${(widget.device.saltLevel * 100).toInt()}%',
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: '${AppLocalizations.of(context)!.batteryLevel}: ',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              TextSpan(
-                                text: '${widget.device.batteryLevel.toInt()}%',
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: '${AppLocalizations.of(context)!.lastUpdated}: ',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              TextSpan(
-                                text: widget.device.lastUpdateTime,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : const SizedBox(),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

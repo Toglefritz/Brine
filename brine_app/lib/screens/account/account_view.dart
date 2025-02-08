@@ -16,6 +16,36 @@ class AccountView extends StatelessWidget {
   /// A controller for this view.
   final AccountController state;
 
+  /// A dialog presented to the user when they attempt to remove a Brine device from their account.
+  static Future<bool?> showRemoveDeviceConfirmationDialog({
+    required BuildContext context,
+    required String deviceId,
+  }) async {
+    final bool? removeDevice = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.removeDevice),
+          content: Text(AppLocalizations.of(context)!.removeDeviceConfirmation(deviceId)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(AppLocalizations.of(context)!.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(AppLocalizations.of(context)!.remove),
+            ),
+          ],
+        );
+      },
+    );
+
+    return removeDevice;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,6 +124,7 @@ class AccountView extends StatelessWidget {
                           ),
                           child: ExpandableDeviceCard(
                             device: device,
+                            onRemoveDevice: () => state.removeDevice(device.deviceId),
                           ),
                         );
                       },
