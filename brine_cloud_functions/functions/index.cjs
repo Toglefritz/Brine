@@ -29,6 +29,7 @@ const { updateDeviceLevels } = require('./src/updateDeviceLevels.cjs');
 const { getDevice } = require('./src/getDevice.cjs');
 const { addDeviceToUser } = require('./src/addDeviceToUser.cjs');
 const { updateApplianceHeight } = require('./src/updateApplianceHeight.cjs');
+const { removeDeviceFromUser } = require('./src/removeDeviceFromUser.cjs');
 
 /**
  * @brief Cloud Function that is triggered when a new user is created.
@@ -132,5 +133,21 @@ exports.getDevice = functions.https.onRequest(async (req, res) => {
 exports.updateApplianceHeight = functions.https.onRequest(async (req, res) => {
     authenticate(req, res, async () => {
         updateApplianceHeight(req, res);
+    });
+});
+
+/**
+ * @brief Endpoint used to remove a Brine device from a user's account.
+ * 
+ * This endpoint is called by the mobile app when a user wants to remove a device from their account. The function 
+ * removes the device ID from the user's list of devices and, if no other users are linked to the device, deletes
+ * the device record from the "devices" collection.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.removeDeviceFromUser = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        removeDeviceFromUser(req, res);
     });
 });
