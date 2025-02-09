@@ -20,6 +20,7 @@ class DeviceManagementService {
   /// Creates an instance of the [DeviceManagementService] class with the specified [user].
   DeviceManagementService({required this.user});
 
+  /// The host for the Firebase Functions base URL.
   static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
 
   /// The base URL for all endpoints used by this service.

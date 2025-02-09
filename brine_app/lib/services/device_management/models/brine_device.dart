@@ -58,8 +58,7 @@ class BrineDevice {
     // Calculate the salt level as a percentage. If an issue occurs resulting in the salt level exceeding 100%, the
     // salt level will be capped at 100%. This is to prevent the salt level from being displayed as greater than 100%.
     // Similarly, if the salt level is calculated to be less than 0%, the salt level will be capped at 0%.
-    // TODO(Toglefritz): Show an error message in these cases
-    final double saltLevel = min(1, max(0, saltDistance / applianceHeight));
+    final double saltLevel = min(1, max(0, (1 - (saltDistance / applianceHeight)) * 100));
 
     // Get the battery level. The battery level can be an integer or a double, so it is necessary to check the type.
     final double batteryLevel =

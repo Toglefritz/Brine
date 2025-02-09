@@ -10,21 +10,23 @@ environment:
 
 dependencies:
   # Used to access Firestore
-  cloud_firestore: ^5.5.1
+  cloud_firestore: ^5.6.3
   # Used to call Firebase callable functions
-  cloud_functions: ^5.2.0
+  cloud_functions: ^5.3.2
   # APIs used for data encryption.
   encrypt: ^5.0.3
   # Used to track user interactions, app usage, and events
-  firebase_analytics: ^11.3.6
+  firebase_analytics: ^11.4.2
   # Protects backend resources
-  firebase_app_check: ^0.3.1+7
+  firebase_app_check: ^0.3.2+2
   # Firebase Auth services
-  firebase_auth: ^5.3.4
+  firebase_auth: ^5.4.2
   # Enables the use of Firebase services
-  firebase_core: ^3.8.1
+  firebase_core: ^3.11.0
   # Reports errors to the Firebase console
-  firebase_crashlytics: ^4.2.0
+  firebase_crashlytics: ^4.3.2
+  # Used to send push notifications
+  firebase_messaging: ^15.2.2
   # The Flutter SDK.
   flutter:
     sdk: flutter

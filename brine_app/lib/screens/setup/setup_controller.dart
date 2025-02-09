@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/analytics/analytics.dart';
 import '../../services/device_management/device_management_service.dart';
 import '../../services/device_management/models/brine_device.dart';
+import '../../services/push_notifications/push_notifications_service.dart';
 import '../softener_monitor/softener_monitor_route.dart';
 import '../welcome/welcome_route.dart';
 import 'setup_route.dart';
@@ -15,8 +18,11 @@ class SetupController extends State<SetupRoute> {
   void initState() {
     Analytics.trackPageView('setup');
 
-    // Perform setup for app usage
+    // Perform setup for app usage.
     _performSetup();
+
+    // Send the device's FCM token to Firebase to ensure it is up to date.
+    _sendDeviceTokenToFirebase();
 
     super.initState();
   }
@@ -60,6 +66,23 @@ class SetupController extends State<SetupRoute> {
           ),
         );
       }
+    }
+  }
+
+  /// Sends the device's FCM token to Firebase to ensure it is up to date.
+  Future<void> _sendDeviceTokenToFirebase() async {
+    // Currently, push notifications are only supported on iOS and Android.
+    if (!(Platform.isIOS || Platform.isAndroid)) {
+      return;
+    }
+
+    try {
+      final PushNotificationsService pushNotificationsService =
+          PushNotificationsService(user: FirebaseAuth.instance.currentUser!);
+
+      await pushNotificationsService.registerFcmToken();
+    } catch (e) {
+      debugPrint('Failed to send FCM token to Firebase with exception: $e');
     }
   }
 
