@@ -101,6 +101,51 @@
       }
     }
   },
+  "displayName": "Display name",
+  "@displayName": {
+    "description": "Label for the field where the user must enter a display name."
+  },
+  "displayNameRequired": "Display name is required",
+  "@displayNameRequired": {
+    "description": "Error message displayed when the user tries to submit a form without entering a display name."
+  },
+  "displayNameUpdateFailed": "Failed to update display name",
+  "@displayNameUpdateFailed": {
+    "description": "Error message displayed when the app fails to update the user's display name."
+  },
+  "editAccount": "Edit Account",
+  "@editAccount": {
+    "description": "Title for the screen where the user can edit their account information."
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Label for the field where the user must enter their email address."
+  },
+  "emailInvalid": "Email is invalid",
+  "@emailInvalid": {
+    "description": "Error message displayed when the user enters an invalid email address."
+  },
+  "emailRequired": "Email is required",
+  "@emailRequired": {
+    "description": "Error message displayed when the user tries to submit a form without entering an email address."
+  },
+  "emailUpdateFailed": "Failed to update email",
+  "@emailUpdateFailed": {
+    "description": "Error message displayed when the app fails to update the user's email address."
+  },
+  "emailUpdateDialogMessage": "We've sent a confirmation email to {email}. Please click the link in the email to confirm your new email address.",
+  "@emailUpdateDialogMessage": {
+    "description": "Message displayed in the dialog explaining the process for confirming a change to the user's email.",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "emailUpdateDialogTitle": "Confirmation required",
+  "@emailUpdateDialogTitle": {
+    "description": "Title for the dialog explaining the process for confirming a change to the user's email"
+  },
   "getOneNow": "Get one now",
   "@getOneNow": {
     "description": "Text for a button that allows the user to purchase a Brine device."
@@ -133,6 +178,10 @@
   "@logout": {
     "description": "Text for a button that allows the user to log out of their account."
   },
+  "newPassword": "New password",
+  "@newPassword": {
+    "description": "Label for the field where the user must enter a new password."
+  },
   "noDevicesFoundMessage": "No devices found",
   "noNetworksDetected": "No networks detected",
   "@noNetworksDetected": {
@@ -141,6 +190,10 @@
   "noDevicesFoundDescription": "Please make sure your Brine device is powered on, nearby, and that you've pressed the pairing button. The light on the Brine monitor should be blinking.",
   "@noDevicesFoundDescription": {
     "description": "Error text displayed when the app does not detect any Brine devices via Bluetooth nearby."
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "Generic text for a button that allows the user to confirm an action."
   },
   "onboardingLegalPrompt1": "Please take a look at our ",
   "@onboardingLegalPrompt1": {
@@ -154,6 +207,18 @@
   "@password": {
     "description": "Label for the field where the user must enter their password."
   },
+  "passwordRequired": "Password is required",
+  "@passwordRequired": {
+    "description": "Error message displayed when the user tries to submit a form without entering a password."
+  },
+  "passwordTooShort": "Password is too short (minimum 8 characters)",
+  "@passwordTooShort": {
+    "description": "Error message displayed when the user enters a password that is too short."
+  },
+  "passwordUpdateFailed": "Failed to update password",
+  "@passwordUpdateFailed": {
+    "description": "Error message displayed when the app fails to update the user's password."
+  },
   "performingPskSetup": "Performing security setup...",
   "@performingPskSetup": {
     "description": "Text displayed while the app is performing the security setup process."
@@ -161,6 +226,18 @@
   "privacyPolicy": "privacy policy",
   "@privacyPolicy": {
     "description": "Text for a button that allows the user to view the privacy policy."
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Title for a screen where the user can view and edit their profile information."
+  },
+  "profileUpdateSuccess": "Profile updated successfully",
+  "@profileUpdateSuccess": {
+    "description": "Success message displayed when the user's profile information is updated successfully."
+  },
+  "reauthenticationFailed": "Authentication failed. We are unable to update your account information at this time.",
+  "@reauthenticationFailed": {
+    "description": "Error message displayed when the app fails to reauthenticate the user."
   },
   "reconnect": "Reconnect",
   "@reconnect": {
@@ -192,6 +269,10 @@
   "@scanningMessage": {
     "description": "Text displayed while the app is scanning for Brine devices."
   },
+  "security": "Security",
+  "@security": {
+    "description": "Title for a profile screen where the user can set up security settings."
+  },
   "setupComplete": "Setup complete",
   "@setupComplete": {
     "description": "Text displayed when the setup process is complete."
@@ -211,6 +292,10 @@
   "saltLevel": "Salt Level",
   "@saltLevel": {
     "description": "Label for the salt level in the water softener."
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Text for a button that allows the user to save changes."
   },
   "saveText": "Save",
   "@saveText": {

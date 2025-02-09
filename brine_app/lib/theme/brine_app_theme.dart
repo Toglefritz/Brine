@@ -31,6 +31,24 @@ class BrineAppTheme {
     inputDecorationTheme: const InputDecorationTheme(
       hoverColor: Color(0xFF212121),
       focusColor: Color(0xFF212121),
+      border: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Color(0xFF212121),
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Color(0xFF212121),
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Color(0xFF212121),
+        ),
+      ),
+      labelStyle: TextStyle(
+        color: Color(0xFF212121),
+      ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
@@ -72,6 +90,24 @@ class BrineAppTheme {
     ),
     inputDecorationTheme: const InputDecorationTheme(
       focusColor: Colors.white10,
+      border: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.white10,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.white10,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.white10,
+        ),
+      ),
+      labelStyle: TextStyle(
+        color: Color(0xFFFFFFFF),
+      ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(

@@ -51,6 +51,16 @@ class AccountView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.account),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: state.onBack,
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: state.onEditProfile,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -59,26 +69,33 @@ class AccountView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // The user's initials inside a circular avatar.
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: const Color(0xFF212121), // Always dark color on primary
-                      width: 2,
+                // If the user has a profile picture, display it here.
+                if (state.user?.photoURL != null)
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(state.user!.photoURL!),
+                  )
+                // Otherwise, display the user's initials inside a circular avatar.
+                else
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFF212121), // Always dark color on primary
+                        width: 2,
+                      ),
+                      color: Theme.of(context).primaryColor,
                     ),
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(Insets.medium),
-                    child: Text(
-                      state.userInitials,
-                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                            color: const Color(0xFF212121), // Always dark color on primary
-                          ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(Insets.medium),
+                      child: Text(
+                        state.userInitials,
+                        style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                              color: const Color(0xFF212121), // Always dark color on primary
+                            ),
+                      ),
                     ),
                   ),
-                ),
 
                 // The user's name
                 Padding(
