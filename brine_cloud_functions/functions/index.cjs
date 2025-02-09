@@ -30,6 +30,7 @@ const { getDevice } = require('./src/getDevice.cjs');
 const { addDeviceToUser } = require('./src/addDeviceToUser.cjs');
 const { updateApplianceHeight } = require('./src/updateApplianceHeight.cjs');
 const { removeDeviceFromUser } = require('./src/removeDeviceFromUser.cjs');
+const { addFcmToken } = require('./src/addFcmToken.cjs');
 
 /**
  * @brief Cloud Function that is triggered when a new user is created.
@@ -149,5 +150,20 @@ exports.updateApplianceHeight = functions.https.onRequest(async (req, res) => {
 exports.removeDeviceFromUser = functions.https.onRequest(async (req, res) => {
     authenticate(req, res, async () => {
         removeDeviceFromUser(req, res);
+    });
+});
+
+/**
+ * @brief Endpoint used to provide an FCM token for push notifications.
+ * 
+ * This endpoint allows the mobile app to register an FCM token for a user. The function ensures that the token
+ * is stored in Firestore under the `fcm_tokens` field in the user's document.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.addFcmToken = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        addFcmToken(req, res);
     });
 });

@@ -3,11 +3,11 @@ const admin = require('../config/adminInit.cjs');
 /**
  * Calls the 'createUser' Firebase Cloud Function to create a new user  document in Firestore.
  * 
- * This function requires the client to be authenticated. If the client is  not authenticated, it will automatically
- * authenticate anonymously.
- * 
- * The authenticated user's UID is used as both the document ID and the uid  field value in the document in Firestore.
- * An empty devices array is also added to the document.
+ * This function is automatically triggered by the Firebase Auth system when a user creates a new account. It creates
+ * a document in the "users" collection in Firebase Firestore with the user's UID as the document ID. The document 
+ * contains the user's UID, an empty array for devices, and an empty array for FCM tokens. These arrays are initially
+ * empty since this function is only responsible for creating the user document right after the user's account is
+ * created. Other functions will be responsible for updating these arrays as the user interacts with the app.
  */
 async function createUser(user) {
     // Get the user's UID from the user object.
@@ -18,6 +18,7 @@ async function createUser(user) {
         await admin.firestore().collection('users').doc(uid).set({
             uid: uid,
             devices: [],
+            fcm_tokens: [],
         });
 
         return { result: `User with UID ${uid} added.` };

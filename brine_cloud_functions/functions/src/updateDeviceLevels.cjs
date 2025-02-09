@@ -1,5 +1,6 @@
 const admin = require('../config/adminInit.cjs');
 const crypto = require('crypto');
+const NotificationService = require('./notificationService.cjs');
 
 /**
  * @brief Updates the battery level and salt level of a device in a Firestore document.
@@ -7,6 +8,10 @@ const crypto = require('crypto');
  * This function expects a POST request containing the device ID of the Brine device and
  * updated battery and salt level readings. The request is validated using an HMAC signature
  * provided in the headers. The PSK for the device is retrieved from Firestore for HMAC verification.
+ *
+ * The function calculates the salt level as a percentage based on the device's salt distance measurement
+ * and the total height of the appliance. If either the battery level or calculated salt level percentage
+ * is below 5%, a push notification is triggered.
  *
  * Request headers:
  * - X-Device-ID: The unique identifier of the device.
@@ -29,16 +34,24 @@ async function updateDeviceLevels(req, res) {
             return;
         }
 
-        // Retrieve the PSK from Firestore
+        // Retrieve the PSK and appliance height from Firestore
         const deviceDoc = await admin.firestore().collection('devices').doc(deviceId).get();
         if (!deviceDoc.exists) {
             res.status(404).send('Device not found.');
             return;
         }
 
-        const psk = deviceDoc.data().psk;
+        const deviceData = deviceDoc.data();
+        const psk = deviceData.psk;
+        const applianceHeight = deviceData.appliance_height;
+
         if (!psk) {
             res.status(500).send('PSK not found for the device.');
+            return;
+        }
+
+        if (!applianceHeight || applianceHeight <= 0) {
+            res.status(500).send('Appliance height is missing or invalid.');
             return;
         }
 
@@ -52,31 +65,78 @@ async function updateDeviceLevels(req, res) {
         }
 
         // Get the parameters from the request body
-        const { battery_level: batteryLevel, salt_distance: saltLevel } = req.body;
+        const { battery_level: batteryLevel, salt_distance: saltDistance } = req.body;
 
         // Get the current timestamp, which will be used as the last updated time
         const lastUpdated = new Date().toISOString();
 
         // Validate the input data
-        if (!deviceId || typeof batteryLevel === 'undefined' || typeof saltLevel === 'undefined') {
-            res.status(400).send('Device ID, battery level, and salt level are required.');
+        if (!deviceId || typeof batteryLevel === 'undefined' || typeof saltDistance === 'undefined') {
+            res.status(400).send('Device ID, battery level, and salt distance are required.');
             return;
         }
+
+        // Calculate salt level percentage
+        const saltLevelPercent = ((1 - (saltDistance / applianceHeight)) * 100).toFixed(2);
 
         // Update the Firestore document
         await admin.firestore().collection('devices').doc(deviceId).update({
             'battery_level': batteryLevel,
-            'salt_distance': saltLevel,
+            'salt_distance': saltDistance,
             'last_updated': lastUpdated,
         });
 
+        console.log(`Device ${deviceId} levels updated: Battery=${batteryLevel}, Salt Level=${saltLevelPercent}%`);
+
+        // Trigger Push Notification if Battery is below 5% or Salt Level is below 5%
+        // TODO: Make the threshold values configurable by the user
+        if (batteryLevel < 0.05 || saltLevelPercent < 5) {
+            console.log(`Device ${deviceId} has low levels. Fetching user details for notifications...`);
+
+            // Find the user who owns this device
+            const usersQuery = await admin.firestore()
+                .collection('users')
+                .where('devices', 'array-contains', deviceId)
+                .get();
+
+            // Check if the user exists. It should always exist, but just in case...
+            if (!usersQuery.empty) {
+                usersQuery.forEach(async (userDoc) => {
+                    const userData = userDoc.data();
+
+                    // Get the user's FCM tokens
+                    const fcmTokens = userData.fcm_tokens || [];
+
+                    if (fcmTokens.length > 0) {
+                        const notificationTitle = "Low Device Levels Alert";
+                        let notificationBody = `Your Brine device (${deviceId}) has `;
+
+                        if (batteryLevel < 0.05 && saltLevelPercent < 5) {
+                            notificationBody += "low battery and salt levels.";
+                        } else if (batteryLevel < 0.05) {
+                            notificationBody += "a low battery level.";
+                        } else {
+                            notificationBody += "a low salt level.";
+                        }
+
+                        // Send push notification
+                        await NotificationService.sendNotification(fcmTokens, notificationTitle, notificationBody);
+                    } else {
+                        console.warn(`No FCM tokens found for user ${userDoc.id}. No notification sent.`);
+                    }
+                });
+            } else {
+                console.warn(`No user found for device ${deviceId}.`);
+            }
+        }
+
+        // Respond to the request
         res.status(200).send('Device levels updated successfully.');
     } catch (error) {
         console.error('Error updating device levels:', error);
         res.status(500).send('An error occurred while updating the device levels.');
     }
 }
-
 
 // Export the function to make it available for import
 module.exports = { updateDeviceLevels };
