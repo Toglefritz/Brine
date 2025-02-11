@@ -18,6 +18,7 @@ class LightButton extends StatelessWidget {
     super.key,
     this.width,
     this.icon,
+    this.color,
   });
 
   /// The text displayed on the button.
@@ -34,6 +35,9 @@ class LightButton extends StatelessWidget {
   /// [IconData] for an icon displayed on the left side of the button.
   final IconData? icon;
 
+  /// The color of the boarder, text, and icon.
+  final Color? color;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -42,7 +46,7 @@ class LightButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           side: BorderSide(
-            color: Theme.of(context).primaryColorDark,
+            color: color ?? Theme.of(context).primaryColorDark,
           ),
           backgroundColor: Theme.of(context).primaryColorLight,
         ),
@@ -54,7 +58,7 @@ class LightButton extends StatelessWidget {
                 padding: const EdgeInsets.all(Insets.small),
                 child: Icon(
                   icon,
-                  color: Theme.of(context).primaryColorDark,
+                  color: color ?? Theme.of(context).primaryColorDark,
                   size: 24,
                 ),
               ),
@@ -72,7 +76,7 @@ class LightButton extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
-                      color: Theme.of(context).primaryColorDark,
+                      color: color ?? Theme.of(context).primaryColorDark,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

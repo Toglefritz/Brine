@@ -71,6 +71,18 @@
   "@createAccount": {
     "description": "Text for a button that allows the user to create an account."
   },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Generic text for a button that allows the user to delete an item."
+  },
+  "deleteAccount": "Delete Account",
+  "@deleteAccount": {
+    "description": "Title for the screen where the user can delete their account."
+  },
+  "deleteAccountConfirmation": "Are you sure you want to delete your account?",
+  "@deleteAccountConfirmation": {
+    "description": "Confirmation message asking the user if they are sure they want to delete their account."
+  },
   "detectedDeviceConfirmation": "Is this the device you wish to add?",
   "@detectedDeviceConfirmation": {
     "description": "Text asking the user to confirm that the detected device is the one they wish to add."

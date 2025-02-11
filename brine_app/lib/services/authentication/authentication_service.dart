@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
 
+import '../firebase_emulator/dev_machine_ip.dart';
 import 'models/auth_methods.dart';
 
 /// A service class that handles authentication tasks with Firebase Auth.
@@ -9,6 +11,20 @@ import 'models/auth_methods.dart';
 /// This class provides static methods to perform various authentication actions, such as creating accounts with email
 /// and password, signing in with Google, and signing out. It encapsulates the Firebase Auth operations for this app.
 class AuthenticationService {
+  /// The Firebase Auth [User] object representing the current user.
+  final User user;
+
+  /// Creates an instance of the [AuthenticationService] class with the specified [user].
+  AuthenticationService({required this.user});
+
+  /// The host for the Firebase Functions base URL.
+  static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
+
+  /// The base URL for all endpoints used by this service.
+  static String baseUrl = kDebugMode
+      ? 'http://$_cloudFunctionsHost:5001/brine-3b212/us-central1'
+      : ''; // TODO(Toglefritz): update prod endpoint
+
   /// Creates a password-based account with Firebase Auth.
   ///
   /// As part of creating a password-based account with Firebase Auth, a [FirebaseAuthException] can be thrown if
@@ -138,6 +154,40 @@ class AuthenticationService {
       await FirebaseAuth.instance.signOut();
     } catch (e) {
       rethrow;
+    }
+  }
+
+  /// Deletes the user's document in the "users" collection of the Firestore database.
+  Future<void> deleteUserDocument() async {
+    try {
+      // Get the authenticated user's Firebase ID token
+      final String? idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+
+      if (idToken == null) {
+        throw Exception('User is not authenticated. Cannot delete user document.');
+      }
+
+      // Define the backend endpoint URL
+      const String endpoint = '/deleteUser';
+
+      // Make an authenticated HTTP DELETE request
+      final Response response = await delete(
+        Uri.parse(baseUrl + endpoint),
+        headers: {
+          'Authorization': 'Bearer $idToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      // Check the response status code
+      if (response.statusCode == 200) {
+        debugPrint('Successfully deleted user document for UID: ${user.uid}');
+      } else {
+        throw Exception('Failed to delete user document: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      debugPrint('Error deleting user document: $e');
+      throw Exception('Error deleting user document: $e');
     }
   }
 }

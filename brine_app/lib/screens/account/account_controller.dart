@@ -331,6 +331,40 @@ class AccountController extends State<AccountRoute> {
     await AuthenticationService.signOut();
   }
 
+  /// Allows a user to delete their account.
+  ///
+  /// This function first presents a dialog to the user to confirm that they wish to delete their account. If they
+  /// choose the affirmative option, the account is deleted using a request to a Firebase Functions endpoint.
+  /// Additionally, the user's document in the Firestore collection is deleted. Finally, the user is signed out.
+  // TODO(Toglefritz): Disconnect Brine devices from WiFi
+  Future<void> deleteAccount() async {
+    // Present a dialog to the user to confirm that they wish to delete their account.
+    final bool? didConfirm = await AccountView.showDeleteAccountConfirmationDialog(context: context);
+
+    // If the user confirmed that they wish to delete their account, delete the account.
+    if (didConfirm ?? false) {
+      // Delete the user's document in the Firestore collection.
+      try {
+        await AuthenticationService(user: user!).deleteUserDocument();
+      } catch (e) {
+        debugPrint('Failed to delete user document with exception, $e');
+
+        return;
+      }
+
+      // Delete the user's account.
+      try {
+        await user?.delete();
+      } catch (e) {
+        debugPrint('Failed to delete account with exception, $e');
+
+        // TODO(Toglefritz): Handle the failure to delete the user's account.
+
+        return;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(

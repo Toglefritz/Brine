@@ -46,6 +46,35 @@ class AccountView extends StatelessWidget {
     return removeDevice;
   }
 
+  /// A dialog presented to the user to confirm that they wish to delete their account.
+  static Future<bool?> showDeleteAccountConfirmationDialog({
+    required BuildContext context,
+  }) async {
+    final bool? removeDevice = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.deleteAccount),
+          content: Text(AppLocalizations.of(context)!.deleteAccountConfirmation),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(AppLocalizations.of(context)!.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(AppLocalizations.of(context)!.delete),
+            ),
+          ],
+        );
+      },
+    );
+
+    return removeDevice;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,6 +196,16 @@ class AccountView extends StatelessWidget {
                   child: LightButton(
                     text: AppLocalizations.of(context)!.logout,
                     onPressed: state.logout,
+                  ),
+                ),
+
+                // Delete account button
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Insets.medium),
+                  child: LightButton(
+                    text: AppLocalizations.of(context)!.deleteAccount,
+                    color: Colors.red[900],
+                    onPressed: state.deleteAccount,
                   ),
                 ),
               ],
