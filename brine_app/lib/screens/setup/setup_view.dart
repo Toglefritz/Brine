@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../../components/loaders/wave_loader.dart';
 import '../../extensions/brightness_extensions.dart';
 import 'setup_controller.dart';
 import 'setup_route.dart';
@@ -25,7 +25,7 @@ class SetupView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SpinKitWave(
+            WaveLoader(
               color: Theme.of(context).primaryColorDark,
             ),
           ],

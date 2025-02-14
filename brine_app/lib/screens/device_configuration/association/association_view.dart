@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../../../components/loaders/wave_loader.dart';
 import '../../../theme/insets.dart';
 import 'association_controller.dart';
 import 'association_route.dart';
@@ -21,7 +21,7 @@ class AssociationView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SpinKitWave(
+            WaveLoader(
               color: Theme.of(context).primaryColorDark,
             ),
             Padding(
