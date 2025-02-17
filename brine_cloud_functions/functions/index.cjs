@@ -31,6 +31,7 @@ const { addDeviceToUser } = require('./src/addDeviceToUser.cjs');
 const { updateApplianceHeight } = require('./src/updateApplianceHeight.cjs');
 const { removeDeviceFromUser } = require('./src/removeDeviceFromUser.cjs');
 const { addFcmToken } = require('./src/addFcmToken.cjs');
+const { deleteUser } = require('./src/deleteUser.cjs');
 
 /**
  * @brief Cloud Function that is triggered when a new user is created.
@@ -165,5 +166,20 @@ exports.removeDeviceFromUser = functions.https.onRequest(async (req, res) => {
 exports.addFcmToken = functions.https.onRequest(async (req, res) => {
     authenticate(req, res, async () => {
         addFcmToken(req, res);
+    });
+});
+
+/**
+ * @brief Endpoint used to delete a user document from Firestore.
+ * 
+ * This endpoint allows authenticated users to delete their account data from Firestore.
+ * The request must be authenticated, and the user's UID will be used to locate and delete their document.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.deleteUser = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        deleteUser(req);
     });
 });
