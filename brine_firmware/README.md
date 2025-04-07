@@ -14,9 +14,9 @@ The Brine device is built around the ESP32, a powerful, versatile microcontrolle
 
 The primary sensor used by the Brine device is the VL53L1X distance sensor. This sensor measures the distance from the top of the water softener to the level of the salt within the appliance. By comparing this measurement to the known distance when the water softener is empty, the device can calculate an approximate percentage of salt remaining.
 
-For user feedback, the device includes an RGB LED. This LED can display different colors and patterns to indicate the device's status. This system is mainly used during the provisioning process and the LED generally remains off during normal operation so its use does not affect the battery life of the device.
+For user feedback, the device includes an LED. This LED can display different patterns to indicate the device's status. This system is mainly used during the provisioning process and the LED generally remains off during normal operation so its use does not affect the battery life of the device.
 
-The device is powered by three AA batteries. To maximize battery life, the device spends most of its time in a deep sleep state. It wakes up once every 24 hours to measure the salt level, send the data to the backend services, and then returns to the deep sleep state. This power management strategy allows the device to operate for extended periods without requiring a battery change.
+The device is powered by a rechargeable lithium polymer battery. To maximize battery life, the device spends most of its time in a deep sleep state. It wakes up once every 24 hours to measure the salt level, send the data to the backend services, and then returns to the deep sleep state. This power management strategy allows the device to operate for extended periods without requiring a battery change.
 
 The device is designed to be mounted inside the lid of a water softener, facing down towards the salt. This positioning allows the distance sensor to accurately measure the salt level.
 
@@ -41,10 +41,6 @@ graph LR
     D --> I[Distance Sensor Hardware]
     F --> K[Battery Monitor Hardware]
 ```
-
-### Device IDs
-
-
 
 ## Getting Started
 
