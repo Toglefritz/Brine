@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import '../authentication/exceptions/authentication_exception.dart';
 import '../firebase_emulator/dev_machine_ip.dart';
 import 'models/brine_device.dart';
 import 'models/pre_shared_key.dart';
@@ -166,6 +167,10 @@ class DeviceManagementService {
         }
 
         return deviceList;
+      }
+      // Handle authentication errors
+      else if (response.statusCode == HttpStatus.unauthorized) {
+        throw AuthenticationException('User is not authenticated');
       } else {
         // Handle errors or unexpected status codes
         throw Exception('Failed to load deviceIds: ${response.reasonPhrase}');

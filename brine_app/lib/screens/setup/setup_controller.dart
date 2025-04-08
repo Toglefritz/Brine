@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/analytics/analytics.dart';
+import '../../services/authentication/exceptions/authentication_exception.dart';
 import '../../services/device_management/device_management_service.dart';
 import '../../services/device_management/models/brine_device.dart';
 import '../../services/push_notifications/push_notifications_service.dart';
+import '../errors/error_route.dart';
 import '../softener_monitor/softener_monitor_route.dart';
 import '../welcome/welcome_route.dart';
 import 'setup_route.dart';
@@ -39,13 +42,18 @@ class SetupController extends State<SetupRoute> {
     } catch (e) {
       debugPrint('Failed to perform setup with exception, $e');
 
-      // TODO(Toglefritz): handle error, also sending info to Firebase would be good
+      if (!mounted) return;
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => const ErrorRoute(),
+        ),
+      );
     }
 
     // If there are no devices on the account, go to the [WelcomeRoute]
     if (deviceList == null || deviceList.isEmpty) {
       if (!mounted) return;
-
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
@@ -104,6 +112,13 @@ class SetupController extends State<SetupRoute> {
       final List<BrineDevice> deviceList = await deviceManagementService.getUserDevices();
 
       return deviceList;
+    } on AuthenticationException catch (e, s) {
+      debugPrint('Failed to get devices with exception, $e');
+
+      // ignore: unawaited_futures
+      FirebaseCrashlytics.instance.recordError('Failed to get devices with exception, $e', s);
+
+      rethrow;
     } catch (e) {
       rethrow;
     }

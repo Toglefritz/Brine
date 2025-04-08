@@ -1,6 +1,7 @@
 /// Provides image assets used throughout the app.
 // ignore_for_file: public_member_api_docs
 enum ImageAsset {
+  error('error.png'),
   logoTransparentBackground('icons/brine_transparent_background.png'),
   logoTransparentBackgroundInverse(
     'icons/brine_transparent_background_inverse.png',
