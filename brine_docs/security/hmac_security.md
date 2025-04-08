@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In all aspects of Brine’s design—from the mobile app to the Firebase backend, to the physical Brine hardware and the firmware running on it—security is of critical importance. A key component of IoT security is ensuring the authenticity and integrity of the data transmitted between devices and backend services. This is particularly challenging in IoT environments, where devices operate in potentially hostile networks.
+In all aspects of Brine’s design, from the mobile app, to the Firebase backend, to the physical Brine hardware and the firmware running on it, security is of critical importance. A key component of IoT security is ensuring the authenticity and integrity of the data transmitted between devices and backend services. This is particularly challenging in IoT environments, where devices operate in potentially hostile networks.
 
 Brine devices implement a robust security mechanism based on HMAC (Hash-based Message Authentication Code) signatures. This mechanism ensures that only authorized devices can send data to the backend by enabling the Firebase backend to verify the authenticity of incoming requests. Unlike more complex cryptographic systems that require public-private key pairs and cryptographic coprocessors, HMAC-based security provides a lightweight, efficient, and highly secure alternative that is well-suited to resource-constrained IoT devices.
 
