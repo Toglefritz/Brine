@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'footer.dart';
+
 /// A button appearing in the [Footer].
 class FooterButton extends StatelessWidget {
+  /// Creates an instance of [FooterButton].
   const FooterButton({
     required this.text,
     required this.onPressed,

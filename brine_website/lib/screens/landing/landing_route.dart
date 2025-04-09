@@ -6,8 +6,10 @@ import 'landing_controller.dart';
 /// that drive visitors to sign up for updates. Also includes supplementary resources such as press kits,
 /// resources, legal information, and other assets.
 class LandingRoute extends StatefulWidget {
+  /// The route name for the landing page.
   String get screenName => '/hello';
 
+  /// Creates an instance of [LandingRoute].
   const LandingRoute({super.key});
 
   @override

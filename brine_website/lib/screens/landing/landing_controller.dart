@@ -1,8 +1,9 @@
+import 'package:confetti/confetti.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:confetti/confetti.dart';
 
+import '../../components/primary_color_button.dart';
 import '../../services/analytics/analytics.dart';
 import '../../themes/screen_info.dart';
 import 'components/signup_dialog/email_optin_animated_dialog.dart';
@@ -12,14 +13,14 @@ import 'landing_view_handheld.dart';
 
 /// Controller for the [LandingRoute].
 ///
-/// This screen features a [PrimaryCTAButton] surrounded by two FontAwesomeIcons. The [PrimaryCTAButton] is wrapped
+/// This screen features a [PrimaryColorButton] surrounded by two FontAwesomeIcons. The [PrimaryColorButton] is wrapped
 /// in a Padding widget that has an animated [EdgeInsets].
 ///
-/// When the mouse hovers over the [PrimaryCTAButton], the horizontal padding value animates from an initial value of
+/// When the mouse hovers over the [PrimaryColorButton], the horizontal padding value animates from an initial value of
 /// 16 to a maximum value of 24 over a duration of 500ms, and then reverses from 24 back to 16 over another 500ms.
 /// This hover animation effect is achieved using an [AnimationController] and a [Tween] animation.
 ///
-/// The [MouseRegion] widget surrounding the [PrimaryCTAButton] provides two callbacks: [onEnter] and [onExit]. These
+/// The [MouseRegion] widget surrounding the [PrimaryColorButton] provides two callbacks: `onEnter` and `onExit`. These
 /// callbacks are used to start and stop the padding animation respectively.
 class LandingController extends State<LandingRoute> with SingleTickerProviderStateMixin {
   /// A controller for the decorative confetti effect launch-able from the main menu.
@@ -63,9 +64,10 @@ class LandingController extends State<LandingRoute> with SingleTickerProviderSta
   /// ultimate call to add the visitor's information to a Firebase collection succeeded. If the visitor successfully
   /// signs up, we have a little party with lots of confetti and stuff, if not, we get sad and display an error message.
   ///
-  /// The [buttonLabel] parameter is used in a [logEvent] call to Firebase Analytics so the specific button the
+  /// The [buttonLabel] parameter is used in a `logEvent` call to Firebase Analytics so the specific button the
   /// visitor pressed, of the several buttons on the landing page, can be identified.
   Future<void> letsGoooooooo(String buttonLabel) async {
+    // ignore: unawaited_futures
     Analytics.logEvent(
       name: 'landing_cta',
       parameters: {

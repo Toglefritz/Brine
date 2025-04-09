@@ -1,4 +1,3 @@
-import 'package:brinemonitor/screens/landing/components/signup_dialog/email_signup_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,9 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../values/insets.dart';
 import '../../../../values/screen.dart';
 import 'animated_dialog.dart';
+import 'email_signup_form.dart';
 
 /// Presents an [AnimatedDialog] with a form allowing the user to sign up for notifications about Brine.
 class EmailOptinAnimatedDialog extends StatelessWidget {
+  /// Creates an instance of [EmailOptinAnimatedDialog].
   const EmailOptinAnimatedDialog({
     super.key,
   });
@@ -25,7 +26,7 @@ class EmailOptinAnimatedDialog extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                AppLocalizations.of(context).landingPageEmailInvite,
+                AppLocalizations.of(context)!.landingPageEmailInvite,
                 style: GoogleFonts.changaOne().copyWith(
                   fontSize: 42,
                 ),
@@ -37,7 +38,7 @@ class EmailOptinAnimatedDialog extends StatelessWidget {
                   vertical: Insets.large,
                 ),
                 child: Text(
-                  AppLocalizations.of(context).emailOptinDescription,
+                  AppLocalizations.of(context)!.emailOptinDescription,
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),

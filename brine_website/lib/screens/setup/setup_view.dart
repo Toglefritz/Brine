@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
-/// View for the [OnboardingRoute].
+import 'setup_route.dart';
+
+/// View for the [SetupRoute].
 class SetupView extends StatelessWidget {
-  const SetupView({Key? key}) : super(key: key);
+  /// Constructor for the [SetupView].
+  const SetupView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             CircularProgressIndicator(),
           ],

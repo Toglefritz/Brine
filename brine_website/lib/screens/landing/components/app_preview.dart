@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:brine/screens/softener_monitor/softener_monitor_route.dart';
-import 'package:brine/services/firebase/models/brine_device.dart';
-import 'package:brine/theme/themes.dart';
 import 'package:flutter/material.dart';
 
+import '../../../app_preview/brine_device.dart';
+import '../../../app_preview/light_theme_data.dart';
+import '../../../app_preview/softener_monitor_view.dart';
 import '../../../values/assets.dart';
 
 /// Provides a preview of the Brine mobile app by running the app itself, which is included as a submodule, inside
@@ -14,6 +14,7 @@ import '../../../values/assets.dart';
 /// So, this preview of the Brine app is not really a preview at all. It is actually the real app running within inside
 /// an aesthetic frame. This fully takes advantage of the idea (which is wrong) that everything in Flutter is a widget.
 class AppPreview extends StatefulWidget {
+  /// Creates an instance of [AppPreview].
   const AppPreview({
     super.key,
   });
@@ -22,15 +23,22 @@ class AppPreview extends StatefulWidget {
   State<AppPreview> createState() => _AppPreviewState();
 }
 
+/// The state for [AppPreview].
 class _AppPreviewState extends State<AppPreview> {
-  /// A timer used to change values in the [SoftenerMonitorRoute] periodically.
+  /// The height of the appliance used in the [SoftenerMonitorView] as a demonstration.
+  static const double _applianceHeight = 1000;
+
+  /// A timer used to change values in the [SoftenerMonitorView] periodically.
   late Timer _timer;
 
-  /// The salt level value to use for the [SoftenerMonitorRoute] as a demonstration.
-  double saltLevel = 0.7;
+  /// The salt level value to use for the [SoftenerMonitorView] as a demonstration.
+  double _saltLevel = 0.7;
 
-  /// The battery level value to use for the [SoftenerMonitorRoute] as a demonstration.
-  double batteryLevel = 0.6;
+  /// The salt distance value to use for the [SoftenerMonitorView] as a demonstration.
+  double _saltDistance = _applianceHeight * _applianceHeight;
+
+  /// The battery level value to use for the [SoftenerMonitorView] as a demonstration.
+  double _batteryLevel = 0.6;
 
   /// Generates a random double value between a specified minimum and maximum value.
   ///
@@ -40,7 +48,7 @@ class _AppPreviewState extends State<AppPreview> {
   /// Throws an [ArgumentError] if [maxValue] is less than [minValue].
   ///
   /// Example usage:
-  /// ```
+  /// ```dart
   /// double minValue = 1.5;
   /// double maxValue = 3.5;
   /// double randomValue = generateRandomDouble(minValue, maxValue);
@@ -62,11 +70,12 @@ class _AppPreviewState extends State<AppPreview> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       setState(() {
         // Generate new values
-        saltLevel = _generateRandomDouble(0.02, 0.95);
-        batteryLevel = _generateRandomDouble(0.4, 0.8);
+        _saltLevel = _generateRandomDouble(0.02, 0.95);
+        _saltDistance = _applianceHeight * _saltLevel;
+        _batteryLevel = _generateRandomDouble(0.4, 0.8);
       });
     });
 
@@ -88,15 +97,17 @@ class _AppPreviewState extends State<AppPreview> {
               borderRadius: const BorderRadius.all(
                 Radius.circular(50),
               ),
-              child: SoftenerMonitorRoute(
-                devices: [
-                  BrineDevice(
-                    deviceId: 'slick_demo_device',
-                    saltLevel: saltLevel,
-                    batteryLevel: batteryLevel,
-                    retrievalTimestamp: DateTime.now(),
-                  )
-                ],
+              child: SoftenerMonitorView(
+                device: BrineDevice(
+                  name: 'Brine Device',
+                  deviceId: 'slick_demo_device',
+                  saltLevel: _saltLevel,
+                  batteryLevel: _batteryLevel,
+                  retrievalTimestamp: DateTime.now(),
+                  saltDistance: _saltDistance,
+                  applianceHeight: _applianceHeight,
+                  lastUpdatedTimestamp: DateTime.now(),
+                ),
               ),
             ),
           ),

@@ -10,20 +10,19 @@ import 'package:flutter/material.dart';
 /// This function accepts three parameters:
 ///   - [email]: The email address of the lead.
 ///   - [name]: The name of the lead.
-///   - [timestamp]: The timestamp indicating when the lead was created.
 ///
 /// It returns a [Future] that completes once the data has been sent to the Firebase function. If an error occurs
 /// while calling the Firebase function, this function catches the error and logs it to the console.
 ///
 /// Example usage:
 ///
-/// ```
+/// ```dart
 /// await addLead('jeb@kerbalspaceprogram.gov', 'Jeb', DateTime.now().millisecondsSinceEpoch);
 /// ```
 Future<void> callAddLeadFunction({required String name, required String email}) async {
   try {
-    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addLead');
-    final response = await callable.call(<String, dynamic>{
+    final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addLead');
+    final HttpsCallableResult<String> response = await callable.call(<String, dynamic>{
       'name': name,
       'email': email,
       'timestamp': DateTime.now().millisecondsSinceEpoch,

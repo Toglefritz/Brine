@@ -19,10 +19,10 @@ import 'package:flutter/material.dart';
 class ResponsiveSafeScaffold extends StatelessWidget {
   /// Creates a [ResponsiveSafeScaffold] with the supplied [body].
   const ResponsiveSafeScaffold({
-    Key? key,
     required this.body,
+    super.key,
     this.appBar,
-  }) : super(key: key);
+  });
 
   /// The body widget that is contained within this widget.
   final Widget body;

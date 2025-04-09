@@ -1,22 +1,23 @@
-import 'package:brinemonitor/screens/landing/components/icon_animated_button_vertical.dart';
-import 'package:brinemonitor/screens/thanks/thanks_route.dart';
-import 'package:brinemonitor/values/insets.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../../services/analytics/analytics.dart';
 import '../../../../services/authentication/sign_in_anonymously.dart';
 import '../../../../services/lead_management/add_lead_function.dart';
+import '../../../../values/insets.dart';
+import '../../../thanks/thanks_route.dart';
+import '../icon_animated_button_vertical.dart';
 
 /// A [Form] used to collect a name and email from the visitor so they can be notified about updates for Brine.
 class EmailSignupForm extends StatefulWidget {
+  /// Creates an instance of [EmailSignupForm].
   const EmailSignupForm({
     super.key,
   });
@@ -25,6 +26,7 @@ class EmailSignupForm extends StatefulWidget {
   State<EmailSignupForm> createState() => _EmailSignupFormState();
 }
 
+/// State class for [EmailSignupForm].
 class _EmailSignupFormState extends State<EmailSignupForm> {
   /// A key for the email option form.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -77,7 +79,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         },
       );
 
-      return AppLocalizations.of(context).validationNameEmpty;
+      return AppLocalizations.of(context)!.validationNameEmpty;
     }
 
     // 1. Length check - truncate if length is greater than 30
@@ -105,7 +107,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     _nameFieldController.text = validCharacters;
 
     // 3. Escape or Strip HTML (Enhanced checks)
-    RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
+    final RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
     if (htmlCharacters.hasMatch(entry)) {
       Analytics.logEvent(
         name: 'name_field_error',
@@ -114,11 +116,11 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         },
       );
 
-      return AppLocalizations.of(context).validationNameInvalidHtml;
+      return AppLocalizations.of(context)!.validationNameInvalidHtml;
     }
 
     // 4. Reject Control Characters
-    RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
+    final RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
     if (controlCharacters.hasMatch(entry)) {
       Analytics.logEvent(
         name: 'name_field_error',
@@ -127,7 +129,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         },
       );
 
-      return AppLocalizations.of(context).validationNameControlCharacters;
+      return AppLocalizations.of(context)!.validationNameControlCharacters;
     }
 
     return null;
@@ -161,9 +163,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
   String? _validateEmailField({required BuildContext context, required String? entry}) {
     // Regular expression pattern for validating email address
-    String pattern =
+    const String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = RegExp(pattern);
+    final RegExp regex = RegExp(pattern);
 
     // Check if the entry is null or empty
     if (entry == null || entry.isEmpty) {
@@ -174,7 +176,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         },
       );
 
-      return AppLocalizations.of(context).validationEmailEmpty;
+      return AppLocalizations.of(context)!.validationEmailEmpty;
     }
 
     // Check if the email address is in valid format
@@ -186,11 +188,11 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         },
       );
 
-      return AppLocalizations.of(context).validationEmailInvalid;
+      return AppLocalizations.of(context)!.validationEmailInvalid;
     }
 
     // Check for HTML characters/tags
-    RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
+    final RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
     if (htmlCharacters.hasMatch(entry)) {
       Analytics.logEvent(
         name: 'email_field_error',
@@ -199,11 +201,11 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         },
       );
 
-      return AppLocalizations.of(context).validationEmailHtmlCharacters;
+      return AppLocalizations.of(context)!.validationEmailHtmlCharacters;
     }
 
     // Reject Control Characters
-    RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
+    final RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
     if (controlCharacters.hasMatch(entry)) {
       Analytics.logEvent(
         name: 'email_field_error',
@@ -212,7 +214,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         },
       );
 
-      return AppLocalizations.of(context).validationEmailControlCharacters;
+      return AppLocalizations.of(context)!.validationEmailControlCharacters;
     }
 
     return null;
@@ -232,18 +234,20 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
       // Sign in anonymously
       try {
         await signInAnonymously();
-      } catch (error, stackTrace) {
+      }
+      // ignore: avoid_catches_without_on_clauses
+      catch (error, stackTrace) {
         debugPrint('Authentication failed for addLead function');
 
         if (kDebugMode == false) {
-          FirebaseCrashlytics.instance.recordError(
+          await FirebaseCrashlytics.instance.recordError(
             error,
             stackTrace,
             reason: 'authentication failed',
           );
         }
 
-        // TODO how should this error be handled?
+        // TODO(Toglefritz): how should this error be handled?
 
         return;
       }
@@ -260,7 +264,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
             name: _nameFieldController.text,
             email: _emailFieldController.text,
           );
-        } catch (error, stackTrace) {
+        }
+        // ignore: avoid_catches_without_on_clauses
+        catch (error, stackTrace) {
           debugPrint('Failed to add lead to Firebase');
 
           setState(() {
@@ -268,23 +274,23 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
           });
 
           if (kDebugMode == false) {
-            FirebaseCrashlytics.instance.recordError(
+            await FirebaseCrashlytics.instance.recordError(
               error,
               stackTrace,
               reason: 'failed to create lead',
             );
           }
 
-          // TODO how should this error be handled?
+          // TODO(Toglefritz): how should this error be handled?
 
           return;
         }
 
         // Update the anonymous profile
-        FirebaseAuth.instance.currentUser?.updateDisplayName(_nameFieldController.text);
+        await FirebaseAuth.instance.currentUser?.updateDisplayName(_nameFieldController.text);
 
         if (kDebugMode == false) {
-          FirebaseAnalytics.instance.logGenerateLead();
+          await FirebaseAnalytics.instance.logGenerateLead();
         }
 
         // Return true to the caller to indicate success
@@ -319,7 +325,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
                   ),
                   child: const Icon(Icons.person),
                 ),
-                labelText: AppLocalizations.of(context).nameFieldHint,
+                labelText: AppLocalizations.of(context)!.nameFieldHint,
               ),
               style: GoogleFonts.shareTechMono().copyWith(
                 color: Theme.of(context).primaryColorDark,
@@ -349,7 +355,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
                   ),
                   child: const Icon(Icons.mail),
                 ),
-                labelText: AppLocalizations.of(context).emailFieldHint,
+                labelText: AppLocalizations.of(context)!.emailFieldHint,
               ),
               style: GoogleFonts.shareTechMono().copyWith(
                 color: Theme.of(context).primaryColorDark,
@@ -368,8 +374,8 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
                 bottom: Insets.large,
               ),
               child: IconAnimatedButtonVertical(
-                buttonText: AppLocalizations.of(context).emailOptinButtonText,
-                onTap: () => _onSubmit(),
+                buttonText: AppLocalizations.of(context)!.emailOptinButtonText,
+                onTap: _onSubmit,
               ),
             ),
           if (processingLead)

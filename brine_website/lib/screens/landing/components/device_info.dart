@@ -9,9 +9,9 @@ import '../../../values/insets.dart';
 ///
 /// The [direction] parameter determines whether the image and table are displayed in a row or a column.
 class DeviceInfo extends StatefulWidget {
+  /// Creates a [DeviceInfo] widget.
   const DeviceInfo({
-    super.key,
-    required this.direction,
+    required this.direction, super.key,
   });
 
   /// The direction, either horizontal or vertical, to show the image and corresponding table.
@@ -33,9 +33,9 @@ class _DeviceInfoState extends State<DeviceInfo> {
   /// Returns the string to display on the row with the provided [index].
   String _getStringForRow({required int index, required BuildContext context}) {
     final Map<int, String> rowStrings = {
-      0: AppLocalizations.of(context).mountingExplanation,
-      1: AppLocalizations.of(context).sensorExplanation,
-      2: AppLocalizations.of(context).batteryExplanation,
+      0: AppLocalizations.of(context)!.mountingExplanation,
+      1: AppLocalizations.of(context)!.sensorExplanation,
+      2: AppLocalizations.of(context)!.batteryExplanation,
     };
 
     assert(rowStrings[index] != null, 'No string provided for device info row, $index');

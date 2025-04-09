@@ -1,4 +1,5 @@
 /// An enumeration of all the image assets used in the application.
+// ignore_for_file: public_member_api_docs
 enum Asset {
   brineLogo('brine_logo_large'),
   hair('hair'),

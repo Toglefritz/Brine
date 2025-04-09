@@ -6,16 +6,25 @@ import 'package:flutter/material.dart';
 ///
 /// The [child] argument is the content of the dialog and must not be null.
 class AnimatedDialog extends StatefulWidget {
-  const AnimatedDialog({super.key, required this.child});
+  /// Creates an instance of [AnimatedDialog].
+  const AnimatedDialog({
+    required this.child,
+    super.key,
+  });
 
+  /// The content of the dialog.
   final Widget child;
 
   @override
   AnimatedDialogState createState() => AnimatedDialogState();
 }
 
+/// State class of the AnimatedDialog Widget
 class AnimatedDialogState extends State<AnimatedDialog> with SingleTickerProviderStateMixin {
+  /// [AnimationController] to control the slide-in animation
   late AnimationController controller;
+
+  /// Animation of type Offset for moving the widget horizontally
   late Animation<Offset> offset;
 
   @override

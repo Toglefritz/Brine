@@ -6,21 +6,20 @@ import '../values/insets.dart';
 /// Presents a button that represents the primary CTA on a page. The button uses the theme's background color as its
 /// background color, with a border, and at a high elevation.
 class PrimaryColorButton extends StatelessWidget {
+  /// Creates an instance of [PrimaryColorButton].
   const PrimaryColorButton({
-    super.key,
-    required this.onPressed,
-    required this.text,
+    required this.onPressed, required this.text, super.key,
   });
 
   /// The action to perform when the button is pressed.
-  final Function() onPressed;
+  final void Function() onPressed;
 
   /// The text to display on the button.
   final String text;
 
   @override
   Widget build(BuildContext context) {
-    Color themeColor = Theme.of(context).brightness == Brightness.light
+    final Color themeColor = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).primaryColorDark
         : Theme.of(context).primaryColorLight;
 
@@ -31,7 +30,7 @@ class PrimaryColorButton extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         side: BorderSide(
           color: themeColor,
-          width: 3.0,
+          width: 3,
         ),
       ),
       child: SizedBox(

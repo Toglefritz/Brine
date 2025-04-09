@@ -19,14 +19,14 @@ Future<void> main() async {
     try {
       FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
       await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+      // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       debugPrint('Failed to initialize Firebase emulators with exception, $e');
     }
   }
 
   // Persist the authentication state, even when the browser is closed
-  FirebaseAuth auth = FirebaseAuth.instance;
-  auth.setPersistence(Persistence.LOCAL);
+  await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
   if (kIsWeb) {
     await FirebaseAuth.instance.authStateChanges().first;
   }

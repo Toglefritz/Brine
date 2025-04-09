@@ -1,4 +1,5 @@
-/// Common inset values, primarily used for [Padding] widgets throughout the app.
+/// Common inset values.
+// ignore_for_file: public_member_api_docs
 class Insets {
   static double xSmall = 2.0;
   static double small = 8.0;

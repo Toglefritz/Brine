@@ -34,7 +34,8 @@ class Screen {
 
   /// Returns the diagonal of the screen in pixels.
   static double diagonal(BuildContext c) {
-    Size s = size(c);
+    final Size s = size(c);
+
     return sqrt((s.width * s.width) + (s.height * s.height));
   }
 
@@ -42,7 +43,8 @@ class Screen {
 
   /// Returns the total screen size in inches as a `Size`.
   static Size inches(BuildContext c) {
-    Size pxSize = size(c);
+    final Size pxSize = size(c);
+
     return Size(pxSize.width / _ppi, pxSize.height / _ppi);
   }
 

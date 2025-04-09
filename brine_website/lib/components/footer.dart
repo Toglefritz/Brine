@@ -7,9 +7,10 @@ import '../screens/privacy_policy/privacy_policy_route.dart';
 import '../screens/terms_and_conditions/terms_and_conditions_route.dart';
 import 'footer_button.dart';
 
-/// THe [Footer] appears at the bottom of the [HomeView] and contains a set of navigational
+/// THe [Footer] appears at the bottom of the home screen and contains a set of navigational
 /// buttons to administrative pages on the site.
 class Footer extends StatelessWidget {
+  /// Creates a [Footer] widget.
   const Footer({
     super.key,
   });
@@ -34,13 +35,13 @@ class Footer extends StatelessWidget {
             right: Insets.medium,
           ),
           child: Text(
-            AppLocalizations.of(context).legalStuff,
+            AppLocalizations.of(context)!.legalStuff,
           ),
         ),
         Padding(
           padding: EdgeInsets.all(Insets.small),
           child: FooterButton(
-            text: AppLocalizations.of(context).termsAndConditions,
+            text: AppLocalizations.of(context)!.termsAndConditions,
             onPressed: () => _termsAndConditionsOnTap(context),
           ),
         ),
@@ -50,7 +51,7 @@ class Footer extends StatelessWidget {
             right: Insets.medium,
           ),
           child: FooterButton(
-            text: AppLocalizations.of(context).privacyPolicy,
+            text: AppLocalizations.of(context)!.privacyPolicy,
             onPressed: () => _privacyPolicyOnTap(context),
           ),
         ),

@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'terms_and_conditions_route.dart';
 import 'terms_and_conditions_view.dart';
 
-/// Controller for the [HomeRoute].
+/// Controller for the [TermsAndConditionsRoute].
 class TermsAndConditionsController extends State<TermsAndConditionsRoute> {
   @override
   void initState() {

@@ -5,13 +5,14 @@ import '../../../values/insets.dart';
 
 /// A GIF showing a super cute little frog saying "thanks," inside a container with rounded corners.
 class ThanksFrogGif extends StatelessWidget {
+  /// Creates an instance of [ThanksFrogGif].
   const ThanksFrogGif({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    Color themeColor = Theme.of(context).brightness == Brightness.light
+    final Color themeColor = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).primaryColorDark
         : Theme.of(context).primaryColor;
 

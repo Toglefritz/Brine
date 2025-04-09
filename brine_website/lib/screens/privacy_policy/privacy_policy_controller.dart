@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'privacy_policy_route.dart';
 import 'privacy_policy_view.dart';
 
-/// Controller for the [HomeRoute].
+/// Controller for the [PrivacyPolicyRoute].
 class PrivacyPolicyController extends State<PrivacyPolicyRoute> {
   @override
   void initState() {

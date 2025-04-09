@@ -1,14 +1,18 @@
-import 'package:brinemonitor/services/analytics/analytics.dart';
+import 'package:confetti/confetti.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:confetti/confetti.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../components/primary_color_button.dart';
+import '../../services/analytics/analytics.dart';
 import '../../values/insets.dart';
 import '../insider/insider_route.dart';
+import '../landing/components/signup_dialog/email_optin_animated_dialog.dart';
+import 'components/confetti_cannon.dart';
 import 'thanks_route.dart';
 import 'thanks_view.dart';
 
@@ -55,7 +59,7 @@ class ThanksController extends State<ThanksRoute> with SingleTickerProviderState
     });
   }
 
-  /// Handles taps on the [PrimaryCTAButton] on the [ThanksView].
+  /// Handles taps on the [PrimaryColorButton] on the [ThanksView].
   void onButtonPressed() {
     Analytics.logEvent(
       name: 'thanks_cta_pressed',
@@ -79,9 +83,9 @@ class ThanksController extends State<ThanksRoute> with SingleTickerProviderState
 
       partyController.play();
     } else if (_confettiCount > 8) {
-      SnackBar snackBar = SnackBar(
+      final SnackBar snackBar = SnackBar(
         content: Text(
-          AppLocalizations.of(context).enoughConfetti,
+          AppLocalizations.of(context)!.enoughConfetti,
           textAlign: TextAlign.center,
           style: GoogleFonts.changaOne().copyWith(
             fontSize: 28,

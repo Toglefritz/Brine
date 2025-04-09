@@ -1,20 +1,21 @@
 import 'dart:async';
 
-import 'package:brinemonitor/values/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../values/assets.dart';
 import '../../../values/insets.dart';
 
 /// A stateful widget to create an animated notification
 ///
 /// The notification includes a title, a message, and an icon
 class AnimatedNotification extends StatefulWidget {
+  /// Creates an instance of [AnimatedNotification].
   const AnimatedNotification({
-    super.key,
     required this.width,
     required this.title,
     required this.message,
+    super.key,
   });
 
   /// The width of the preview notification.
@@ -70,9 +71,7 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
   void _present() {
     controller.forward();
 
-    Future.delayed(const Duration(seconds: 1), () {
-      _hide();
-    });
+    Future.delayed(const Duration(seconds: 1), _hide);
   }
 
   /// Hide the notification
@@ -114,7 +113,7 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
                               left: Insets.xSmall,
                             ),
                             child: Text(
-                              AppLocalizations.of(context).brine.toUpperCase(),
+                              AppLocalizations.of(context)!.brine.toUpperCase(),
                               style: const TextStyle(
                                 color: Colors.black,
                               ),
@@ -123,7 +122,7 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
                         ],
                       ),
                       Text(
-                        AppLocalizations.of(context).now,
+                        AppLocalizations.of(context)!.now,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Colors.black,
                             ),

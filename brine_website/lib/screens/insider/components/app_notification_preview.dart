@@ -1,9 +1,9 @@
-import 'package:brine/screens/softener_monitor/softener_monitor_route.dart';
-import 'package:brine/services/firebase/models/brine_device.dart';
-import 'package:brine/theme/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../app_preview/brine_device.dart';
+import '../../../app_preview/light_theme_data.dart';
+import '../../../app_preview/softener_monitor_view.dart';
 import '../../../values/assets.dart';
 import 'animated_notification.dart';
 
@@ -13,9 +13,10 @@ import 'animated_notification.dart';
 /// The push notification within this preview is mocked up using a custom widget designed to emulate the appearance
 /// and behavior of a native push notification.
 class AppNotificationPreview extends StatefulWidget {
+  /// Creates an instance of [AppNotificationPreview].
   const AppNotificationPreview({
-    super.key,
     required this.width,
+    super.key,
   });
 
   /// Determines the width of the screen used to preview the mobile application.
@@ -26,22 +27,28 @@ class AppNotificationPreview extends StatefulWidget {
 }
 
 class _AppNotificationPreviewState extends State<AppNotificationPreview> {
-  /// The salt level value to use for the [SoftenerMonitorRoute] as a demonstration.
+  /// The height of the appliance used in the [SoftenerMonitorView] as a demonstration.
+  static const double _applianceHeight = 1000;
+
+  /// The salt level value to use for the [SoftenerMonitorView] as a demonstration.
   final double _saltLevel = 0.07;
 
-  /// The battery level value to use for the [SoftenerMonitorRoute] as a demonstration.
+  /// The salt distance value to use for the [SoftenerMonitorView] as a demonstration.
+  final double _saltDistance = _applianceHeight * _applianceHeight;
+
+  /// The battery level value to use for the [SoftenerMonitorView] as a demonstration.
   final double _batteryLevel = 0.8;
 
   /// A widget that emulates the appearance of a push notification.
   late AnimatedNotification _notificationWidget;
 
-  /// Gets a [NotificationWidget] widget for use in simulating the experience of receiving a push notification
+  /// Gets a notification widget for use in simulating the experience of receiving a push notification
   /// about salt running low from the Brine mobile app.
   void _buildNotificationWidget() {
     _notificationWidget = AnimatedNotification(
       width: widget.width * 0.85,
-      title: AppLocalizations.of(context).saltLevelLow,
-      message: '${AppLocalizations.of(context).currentSaltLevel} ${(_saltLevel * 100).round()}%.',
+      title: AppLocalizations.of(context)!.saltLevelLow,
+      message: '${AppLocalizations.of(context)!.currentSaltLevel} ${(_saltLevel * 100).round()}%.',
     );
   }
 
@@ -62,15 +69,17 @@ class _AppNotificationPreviewState extends State<AppNotificationPreview> {
               borderRadius: const BorderRadius.all(
                 Radius.circular(50),
               ),
-              child: SoftenerMonitorRoute(
-                devices: [
-                  BrineDevice(
-                    deviceId: 'slick_demo_device',
-                    saltLevel: _saltLevel,
-                    batteryLevel: _batteryLevel,
-                    retrievalTimestamp: DateTime.now(),
-                  )
-                ],
+              child: SoftenerMonitorView(
+                device: BrineDevice(
+                  name: 'Brine Device',
+                  deviceId: 'slick_demo_device',
+                  saltDistance: _saltDistance,
+                  saltLevel: _saltLevel,
+                  batteryLevel: _batteryLevel,
+                  retrievalTimestamp: DateTime.now(),
+                  applianceHeight: _applianceHeight,
+                  lastUpdatedTimestamp: DateTime.now(),
+                ),
               ),
             ),
           ),

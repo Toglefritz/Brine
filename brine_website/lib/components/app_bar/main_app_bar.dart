@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../screens/landing/landing_route.dart';
@@ -14,6 +14,7 @@ import 'dark_theme_toggle.dart';
 
 /// The main [AppBar] appearing at the top of the website for most pages.
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+  /// Creates an instance of [MainAppBar].
   const MainAppBar({
     this.displayBackButton,
     this.bottom,
@@ -43,15 +44,15 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   /// Handles taps on the dark theme toggle by setting the dark theme preference to the value of the toggle.
-  void _toggleDarkTheme({required bool value, required BuildContext context}) {
+  void _toggleDarkTheme({required bool isActive, required BuildContext context}) {
     Analytics.logEvent(
       name: 'dark_mode_toggle',
       parameters: {
-        'enabled': value.toString(),
+        'enabled': isActive.toString(),
       },
     );
 
-    Provider.of<DarkThemeProvider>(context, listen: false).darkTheme = value;
+    Provider.of<DarkThemeProvider>(context, listen: false).darkTheme = isActive;
   }
 
   @override
@@ -66,7 +67,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         child: Row(
           children: [
-            if (displayBackButton == true)
+            if (displayBackButton ?? false)
               Padding(
                 padding: EdgeInsets.only(
                   right: Insets.medium,
@@ -92,7 +93,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Text(
-              AppLocalizations.of(context).brine.toUpperCase(),
+              AppLocalizations.of(context)!.brine.toUpperCase(),
               style: GoogleFonts.bungee().copyWith(
                 fontSize: 32,
                 color: Theme.of(context).primaryColorDark,
@@ -121,10 +122,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             right: Insets.medium,
           ),
           child: DarkThemeToggle(
-            onChanged: (newValue) => _toggleDarkTheme(
-              value: newValue,
-              context: context,
-            ),
+            onChanged: _toggleDarkTheme,
           ),
         ),
       ],

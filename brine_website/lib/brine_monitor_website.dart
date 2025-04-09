@@ -1,13 +1,15 @@
-import 'package:brinemonitor/router.dart';
-import 'package:brinemonitor/themes/dark_theme.dart';
-import 'package:brinemonitor/themes/dark_theme_provider.dart';
-import 'package:brinemonitor/themes/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'router.dart';
+import 'themes/dark_theme.dart';
+import 'themes/dark_theme_provider.dart';
+import 'themes/light_theme.dart';
+
 /// Wraps the entire app and returns the root [MaterialApp] widget, along with its theme data.
 class BrineMonitorWebsite extends StatefulWidget {
+  /// Creates an instance of [BrineMonitorWebsite].
   const BrineMonitorWebsite({super.key});
 
   @override
@@ -27,7 +29,7 @@ class _BrineMonitorWebsiteState extends State<BrineMonitorWebsite> {
   }
 
   /// Gets the current dark theme preference.
-  void _getCurrentAppTheme() async {
+  Future<void> _getCurrentAppTheme() async {
     themeChangeProvider.darkTheme = await themeChangeProvider.darkThemePreference.getTheme();
   }
 

@@ -5,20 +5,22 @@ import '../../themes/dark_theme_provider.dart';
 
 /// A [Switch] used to toggle between a light and dark theme for the app/website.
 class DarkThemeToggle extends StatelessWidget {
+  /// Creates an instance of [DarkThemeToggle].
   const DarkThemeToggle({
-    super.key,
     required this.onChanged,
+    super.key,
   });
 
-  final Function(bool) onChanged;
+  /// The callback function triggered when the toggle is changed.
+  final void Function({required BuildContext context, required bool isActive}) onChanged;
 
   @override
   Widget build(BuildContext context) {
-    bool darkTheme = Provider.of<DarkThemeProvider>(context).darkTheme;
+    final bool darkTheme = Provider.of<DarkThemeProvider>(context).darkTheme;
 
     return Switch(
       value: darkTheme,
-      thumbIcon: MaterialStateProperty.resolveWith(
+      thumbIcon: WidgetStateProperty.resolveWith(
         (_) {
           if (darkTheme) {
             return Icon(
@@ -31,7 +33,10 @@ class DarkThemeToggle extends StatelessWidget {
       ),
       inactiveThumbColor: Theme.of(context).primaryColorDark,
       activeColor: Theme.of(context).primaryColor,
-      onChanged: (newValue) => onChanged(newValue),
+      onChanged: (isActive) => onChanged(
+        isActive: isActive,
+        context: context,
+      ),
     );
   }
 }

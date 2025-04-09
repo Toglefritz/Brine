@@ -1,13 +1,14 @@
 import 'dart:core';
-import 'package:brinemonitor/screens/insider/insider_route.dart';
-import 'package:brinemonitor/screens/privacy_policy/privacy_policy_route.dart';
-import 'package:brinemonitor/screens/setup/setup_route.dart';
-import 'package:brinemonitor/screens/terms_and_conditions/terms_and_conditions_route.dart';
-import 'package:brinemonitor/screens/thanks/thanks_route.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'screens/insider/insider_route.dart';
 import 'screens/landing/landing_route.dart';
+import 'screens/privacy_policy/privacy_policy_route.dart';
+import 'screens/setup/setup_route.dart';
+import 'screens/terms_and_conditions/terms_and_conditions_route.dart';
+import 'screens/thanks/thanks_route.dart';
 
 /// GoRouter configuration.
 ///
@@ -33,7 +34,8 @@ GoRouter router = GoRouter(
     GoRoute(
       path: '${ThanksRoute.screenName}/:name',
       builder: (BuildContext context, GoRouterState state) {
-        final String name = state.params['name']!;
+        final String name = state.pathParameters['name']!;
+
         return ThanksRoute(
           name: name,
         );

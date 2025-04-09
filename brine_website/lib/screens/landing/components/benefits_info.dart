@@ -1,18 +1,17 @@
-import 'package:brinemonitor/themes/dark_theme.dart';
-import 'package:brinemonitor/values/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../components/padded_flex.dart';
+import '../../../themes/dark_theme.dart';
+import '../../../values/assets.dart';
 import '../../../values/insets.dart';
 import 'benefits_item.dart';
 
 /// A list of widgets explaining the benefits of using Brine.
 class BenefitsInfo extends StatelessWidget {
+  /// Creates an instance of [BenefitsInfo].
   const BenefitsInfo({
-    super.key,
-    required this.direction,
-    required this.itemWidth,
+    required this.direction, required this.itemWidth, super.key,
   });
 
   /// The axis along which to arrange the list of widgets.
@@ -34,8 +33,8 @@ class BenefitsInfo extends StatelessWidget {
             DarkTheme.darkThemeEnabled(context) ? Asset.waterMineralsWhite.path : Asset.waterMinerals.path,
             width: 128,
           ),
-          title: AppLocalizations.of(context).reduceScaleBuildup,
-          description: AppLocalizations.of(context).reduceScaleBuildupExplanation,
+          title: AppLocalizations.of(context)!.reduceScaleBuildup,
+          description: AppLocalizations.of(context)!.reduceScaleBuildupExplanation,
         ),
         BenefitsItem(
           width: itemWidth,
@@ -43,8 +42,8 @@ class BenefitsInfo extends StatelessWidget {
             DarkTheme.darkThemeEnabled(context) ? Asset.soapHandsWhite.path : Asset.soapHands.path,
             width: 128,
           ),
-          title: AppLocalizations.of(context).increaseCleaningEffectiveness,
-          description: AppLocalizations.of(context).increaseCleaningEffectivenessExplanation,
+          title: AppLocalizations.of(context)!.increaseCleaningEffectiveness,
+          description: AppLocalizations.of(context)!.increaseCleaningEffectivenessExplanation,
         ),
         BenefitsItem(
           width: itemWidth,
@@ -52,8 +51,8 @@ class BenefitsInfo extends StatelessWidget {
             DarkTheme.darkThemeEnabled(context) ? Asset.socksWhite.path : Asset.socks.path,
             width: 128,
           ),
-          title: AppLocalizations.of(context).protectClothingAndFabrics,
-          description: AppLocalizations.of(context).protectClothingAndFabricsExplanation,
+          title: AppLocalizations.of(context)!.protectClothingAndFabrics,
+          description: AppLocalizations.of(context)!.protectClothingAndFabricsExplanation,
         ),
         BenefitsItem(
           width: itemWidth,
@@ -61,8 +60,8 @@ class BenefitsInfo extends StatelessWidget {
             DarkTheme.darkThemeEnabled(context) ? Asset.hairWhite.path : Asset.hair.path,
             width: 128,
           ),
-          title: AppLocalizations.of(context).promoteHealthySkinAndHair,
-          description: AppLocalizations.of(context).promoteHealthySkinAndHairExplanation,
+          title: AppLocalizations.of(context)!.promoteHealthySkinAndHair,
+          description: AppLocalizations.of(context)!.promoteHealthySkinAndHairExplanation,
         ),
       ],
     );

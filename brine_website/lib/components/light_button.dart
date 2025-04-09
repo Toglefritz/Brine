@@ -10,13 +10,14 @@ import '../values/insets.dart';
 /// icon can be optionally displayed on the left side of the button by providing [IconData] to the [icon] field.
 /// If this field is null, no icon is displayed on the button.
 class LightButton extends StatelessWidget {
+  /// Creates an instance of [LightButton].
   const LightButton({
-    Key? key,
     required this.text,
     required this.onPressed,
+    super.key,
     this.width,
     this.icon,
-  }) : super(key: key);
+  });
 
   /// The text displayed on the button.
   final String text;

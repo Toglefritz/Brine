@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,18 +13,21 @@ import 'components/benefits_info.dart';
 import 'components/device_info.dart';
 import 'components/icon_animated_button_horizontal.dart';
 import 'landing_controller.dart';
+import 'landing_route.dart';
 
 /// View for the [LandingRoute].
 class LandingViewDesktop extends StatelessWidget {
+  /// The [LandingController] that manages the state of this view.
   final LandingController state;
 
-  const LandingViewDesktop(this.state, {Key? key}) : super(key: key);
+  /// Creates an instance of [LandingViewDesktop].
+  const LandingViewDesktop(this.state, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return ResponsiveSafeScaffold(
       appBar: MainAppBar(
-        confettiCallback: () => state.launchConfettiBlast(),
+        confettiCallback: state.launchConfettiBlast,
       ),
       body: Stack(
         children: [
@@ -50,23 +53,23 @@ class LandingViewDesktop extends StatelessWidget {
                             childrenPadding: Insets.large,
                             children: [
                               Text(
-                                AppLocalizations.of(context).landingPageTitle,
+                                AppLocalizations.of(context)!.landingPageTitle,
                                 style: GoogleFonts.changaOne().copyWith(
                                   fontSize: 42,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
                               Text(
-                                AppLocalizations.of(context).landingPageHook,
+                                AppLocalizations.of(context)!.landingPageHook,
                                 style: Theme.of(context).textTheme.bodyLarge,
                                 textAlign: TextAlign.center,
                               ),
                               IconAnimatedButtonHorizontal(
-                                text: AppLocalizations.of(context).getStartedButton,
+                                text: AppLocalizations.of(context)!.getStartedButton,
                                 onTap: () => state.letsGoooooooo('button_1'),
                               ),
                               Text(
-                                AppLocalizations.of(context).landingPageDescription,
+                                AppLocalizations.of(context)!.landingPageDescription,
                                 style: Theme.of(context).textTheme.bodyLarge,
                                 textAlign: TextAlign.center,
                               ),
@@ -118,10 +121,8 @@ class LandingViewDesktop extends StatelessWidget {
             child: ConfettiWidget(
               maximumSize: const Size(10, 10),
               minimumSize: const Size(5, 5),
-              shouldLoop: false,
               confettiController: state.confettiController,
               blastDirection: 2.61799,
-              blastDirectionality: BlastDirectionality.directional,
               maxBlastForce: 100,
               minBlastForce: 8,
               emissionFrequency: 1,

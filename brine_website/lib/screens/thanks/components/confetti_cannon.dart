@@ -1,16 +1,17 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter/material.dart';
 
 /// A full-on cannon for firing confetti across the screen.
 ///
 /// Because this composed widget contains a [Positioned] widget, it must be placed inside a [Stack] widget.
 class ConfettiCannon extends StatelessWidget {
+  /// Creates a [ConfettiCannon] widget.
   const ConfettiCannon({
-    super.key,
     required this.controller,
     required this.blastDirection,
+    super.key,
     this.left,
     this.right,
     this.top,
@@ -50,11 +51,8 @@ class ConfettiCannon extends StatelessWidget {
       child: ConfettiWidget(
         maximumSize: const Size(20, 20),
         minimumSize: const Size(5, 5),
-        shouldLoop: false,
         confettiController: controller,
         blastDirection: blastDirection * pi / 180,
-        // Convert degrees to radians
-        blastDirectionality: BlastDirectionality.directional,
         maxBlastForce: 80,
         minBlastForce: 40,
         emissionFrequency: 1,

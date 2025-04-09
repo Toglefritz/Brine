@@ -16,16 +16,16 @@ class DarkThemePreference {
   /// This method sets the user's theme preference (dark or light mode). It takes a `bool` value, where `true`
   /// indicates dark mode and `false` indicates light mode. The preference is stored in [SharedPreferences] with a
   /// key defined by [_themeModeKey].
-  void setDarkTheme(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(_themeModeKey, value);
+  Future<void> setDarkTheme({required bool value}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_themeModeKey, value);
   }
 
   /// This method retrieves the user's theme preference from [SharedPreferences]. It returns a `Future<bool>`, which
   /// will be `true` if the user prefers dark mode and `false` if the user prefers light mode. If no preference has
   /// been set, it defaults to `false` (light mode), as this is typical default behavior for web apps.
   Future<bool> getTheme() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     return prefs.getBool(_themeModeKey) ?? false;
   }

@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 /// element in the padding with the [childrenPadding] parameter rather than having to wrap each child in a
 /// [Padding] widget.
 class PaddedFlex extends StatelessWidget {
+  /// Creates an instance of [PaddedFlex].
   const PaddedFlex({
-    super.key,
     required this.direction,
     required this.childrenPadding,
     required this.children,
+    super.key,
     this.mainAxisAlignment,
   });
 
@@ -30,9 +31,9 @@ class PaddedFlex extends StatelessWidget {
 
   /// Returns a [List<Widget>] in which each widget in the
   List<Widget> _getPaddedChildren() {
-    List<Widget> paddedWidgets = [];
+    final List<Widget> paddedWidgets = [];
 
-    Padding padding = Padding(
+    final Padding padding = Padding(
       padding: EdgeInsets.symmetric(
         horizontal: direction == Axis.horizontal ? childrenPadding : 0,
         vertical: direction == Axis.vertical ? childrenPadding : 0,
@@ -40,8 +41,9 @@ class PaddedFlex extends StatelessWidget {
     );
 
     for (int i = 0; i < children.length; i++) {
-      paddedWidgets.add(children[i]);
-      paddedWidgets.add(padding);
+      paddedWidgets
+        ..add(children[i])
+        ..add(padding);
     }
 
     return paddedWidgets;

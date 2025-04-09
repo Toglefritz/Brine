@@ -8,7 +8,7 @@ class Analytics {
   /// A wrapper for a call to the [FirebaseAnalytics] [logEvent] method that only sends data to Firebase if the
   /// app is not running in debug mode.
   ///
-  /// The [eventName] parameter defines the name of the event. The name should contain 1 to 40 alphanumeric characters
+  /// The [name] parameter defines the name of the event. The name should contain 1 to 40 alphanumeric characters
   /// or underscores. The name must start with an alphabetic character.
   ///
   /// The [parameters] parameter lists additional data to be sent with the event. Passing null indicates that the
@@ -17,7 +17,7 @@ class Analytics {
   /// can be of type String, long, or double.
   ///
   /// Exceptions thrown by the underlying call to ```FirebaseAnalytics.instance.logEvent``` are rethrown, including
-  /// exceptions resulting from invalid formats for the [eventName] or [parameters].
+  /// exceptions resulting from invalid formats for the [name] or [parameters].
   static Future<void> logEvent({required String name, Map<String, Object>? parameters}) async {
     try {
         await FirebaseAnalytics.instance.logEvent(

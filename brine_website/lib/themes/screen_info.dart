@@ -22,14 +22,16 @@ class ScreenInfo {
 
   /// The diagonal measurement of the host device's display in pixels.
   static double diagonal(BuildContext c) {
-    Size s = size(c);
+    final Size s = size(c);
+
     return sqrt((s.width * s.width) + (s.height * s.height));
   }
 
   // Inches
   /// The [Size] of the host device's display in inches.
   static Size inches(BuildContext c) {
-    Size pxSize = size(c);
+    final Size pxSize = size(c);
+
     return Size(pxSize.width / _ppi, pxSize.height / _ppi);
   }
 

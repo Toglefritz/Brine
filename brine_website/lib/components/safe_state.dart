@@ -18,24 +18,24 @@ import 'package:flutter/material.dart';
 abstract class SafeState<T extends StatefulWidget> extends State<T> {
   /// Overrides the [setState] method to check the [mounted] boolean before calling [super.setState].
   @override
-  void setState(fn) {
+  void setState(void Function() fn) {
     if (mounted) {
       super.setState(fn);
     }
   }
 
   /// Checks the [mounted] boolean before performing calls to [Navigator.pushReplacement].
-  Future<dynamic> pushReplacement(Route route) async {
+  Future<dynamic> pushReplacement(Route<void> route) async {
     if (!mounted) return;
 
-    return await Navigator.pushReplacement(context, route);
+    return Navigator.pushReplacement(context, route);
   }
 
   /// Checks the [mounted] boolean before performing calls to [Navigator.push].
-  Future<dynamic> push(Route route) async {
+  Future<dynamic> push(Route<void> route) async {
     if (!mounted) return;
 
-    return await Navigator.push(context, route);
+    return Navigator.push(context, route);
   }
 
   /// Checks the [mounted] boolean before performing calls to [Navigator.pop].
@@ -46,7 +46,7 @@ abstract class SafeState<T extends StatefulWidget> extends State<T> {
   }
 
   /// Checks the [mounted] boolean before performing calls to [Navigator.pushAndRemoveUntil].
-  void pushAndRemoveUntil(Route route, RoutePredicate predicate) {
+  void pushAndRemoveUntil(Route<void> route, RoutePredicate predicate) {
     if (!mounted) return;
 
     Navigator.pushAndRemoveUntil(context, route, predicate);

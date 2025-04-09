@@ -1,28 +1,28 @@
-import 'package:brinemonitor/values/insets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../components/primary_color_button.dart';
+import '../../../values/insets.dart';
 
 /// A CTA button with a vertical icon on either side.
 class IconAnimatedButtonVertical extends StatefulWidget {
+  /// Creates an instance of [IconAnimatedButtonVertical].
   const IconAnimatedButtonVertical({
-    super.key,
-    required this.buttonText,
-    required this.onTap,
+    required this.buttonText, required this.onTap, super.key,
   });
 
   /// The text to display on the [PrimaryColorButton].
   final String buttonText;
 
   /// The action performed when the CTA button is tapped.
-  final Function() onTap;
+  final void Function() onTap;
 
   @override
   State<IconAnimatedButtonVertical> createState() => _IconAnimatedButtonVerticalState();
 }
 
+/// The state for the [IconAnimatedButtonVertical] widget.
 class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical> with TickerProviderStateMixin {
   /// A controller for the primary CTA button animation.
   late AnimationController _animationController;
@@ -61,7 +61,7 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
 
   /// Initializes the [AnimationController] and the [Animation] for the button.
   ///
-  /// This method creates a [Tween] to animate between 16 and 24. The [addListener] callback is used to rebuild the widget
+  /// This method creates a [Tween] to animate between 16 and 24. The `addListener` callback is used to rebuild the widget
   /// tree via the [setState] call inside.
   void _initializeCTAAnimation() {
     super.initState();
@@ -75,7 +75,7 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
 
   /// A callback called on each animation frame.
   void _onTick(Duration elapsed) {
-    double roundedDouble = double.parse(_animationController.value.toStringAsFixed(2));
+    final double roundedDouble = double.parse(_animationController.value.toStringAsFixed(2));
     // Check if the animation cycle is completed and should be stopped
     if (_shouldStopOnNextCycle && roundedDouble < 0.5) {
       _animationController.stop();

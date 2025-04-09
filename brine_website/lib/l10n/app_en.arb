@@ -26,6 +26,7 @@
   "defineSpecs": "Define specs",
   "designPCB": "Design PCB",
   "developCoreFeatures": "Develop core features",
+  "device": "Device",
   "electronics": "Electronics",
   "emailFieldHint": "Email in this one",
   "emailOptinButtonText": "Make it so",

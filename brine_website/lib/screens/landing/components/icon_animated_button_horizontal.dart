@@ -10,20 +10,19 @@ import '../../../components/light_button.dart';
 /// horizontally, as if gesturing to the button. After the cursor leaves the [MouseRegion] used to trigger this
 /// animation effect, the animation is allowed to complete its current cycle before stopping.
 ///
-/// The [hideLeftIcon] boolean can be optionally supplied to determine if the left icon should be hidden. Hiding the
+/// The `hideLeftIcon` boolean can be optionally supplied to determine if the left icon should be hidden. Hiding the
 /// left icon helps to avoid overflows on smaller screens.
 class IconAnimatedButtonHorizontal extends StatefulWidget {
+  /// Creates an instance of [IconAnimatedButtonHorizontal].
   const IconAnimatedButtonHorizontal({
-    super.key,
-    required this.text,
-    required this.onTap,
+    required this.text, required this.onTap, super.key,
   });
 
   /// The text displayed in the button.
   final String text;
 
   /// The action performed when the CTA button is tapped.
-  final Function() onTap;
+  final void Function() onTap;
 
   @override
   State<IconAnimatedButtonHorizontal> createState() => _IconAnimatedButtonHorizontalState();

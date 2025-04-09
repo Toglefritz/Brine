@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+/// This function is responsible for signing in a user anonymously using Firebase Authentication.
 FirebaseAuth auth = FirebaseAuth.instance;
 
 /// Signs in the user anonymously if they are not already signed in.

@@ -1,5 +1,4 @@
 /// Provides regular expressions used throughout the app.
-
 class RegEx {
   /// Matches characters that are acceptable in text input fields.
   static RegExp textFieldsCharset = RegExp('^[ A-Za-z0-9_@!#\$%&\'*+-/=?^_`{|}~]*');

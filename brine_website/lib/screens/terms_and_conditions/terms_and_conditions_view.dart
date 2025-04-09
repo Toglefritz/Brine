@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../values/insets.dart';
 import 'terms_and_conditions_controller.dart';
+import 'terms_and_conditions_route.dart';
 
-/// View for the [HomeRoute].
+/// View for the [TermsAndConditionsRoute].
 ///
 /// Presents a series of [Card]s that showcase software developed by Splendid Endeavors.
 class TermsAndConditionsView extends StatelessWidget {
+  /// A controller for this view.
   final TermsAndConditionsController state;
 
-  const TermsAndConditionsView(this.state, {Key? key}) : super(key: key);
+  /// Creates an instance of [TermsAndConditionsView].
+  const TermsAndConditionsView(this.state, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class TermsAndConditionsView extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).primaryColorLight,
         title: Text(
-          AppLocalizations.of(context).brine,
+          AppLocalizations.of(context)!.brine,
           style: GoogleFonts.mavenPro().copyWith(
             color: Theme.of(context).primaryColorDark,
           ),
