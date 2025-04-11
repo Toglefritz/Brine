@@ -38,6 +38,8 @@ dependencies:
   google_fonts: ^6.2.1
   # Allows users to authenticate with Google
   google_sign_in: ^6.3.0
+  # Used to make REST API requests
+  http: ^1.3.0
   # Used for internationalization
   intl: any
   # Wrapper around InheritedWidget

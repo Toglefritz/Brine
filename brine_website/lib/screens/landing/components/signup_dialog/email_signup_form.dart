@@ -222,7 +222,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
   /// Handles submissions of the signup form.
   ///
-  /// If the input to the form is valid, this method calls the [callAddLeadFunction] Firebase callable function to
+  /// If the input to the form is valid, this method calls the [LeadsService] Firebase callable function to
   /// submit the lead to Firebase, which creates a new record in Firestore for the new lead. Assuming this cloud
   /// function call is successful, the method will return a `true` value via a call to [Navigator.pop].
   ///
@@ -260,7 +260,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
         try {
           // Submit the lead to Firebase
-          await callAddLeadFunction(
+          await LeadsService().submitLead(
             name: _nameFieldController.text,
             email: _emailFieldController.text,
           );

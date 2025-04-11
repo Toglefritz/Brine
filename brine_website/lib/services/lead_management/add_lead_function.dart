@@ -1,38 +1,65 @@
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-/// Submits a new lead to a Firebase Firestore vs a Firebase Cloud Function.
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
+
+/// A service class responsible for submitting leads to the backend.
 ///
-/// This function uses the Firebase Cloud Functions package to send a new lead to the 'addLead' Cloud Function. The
-/// 'addLead' Cloud Function then adds this lead to the Firestore database. Anonymous authentication is used for the
-/// `addLead` Cloud Function so this method authenticates using this method prior to calling the Cloud Function.
-///
-/// This function accepts three parameters:
-///   - [email]: The email address of the lead.
-///   - [name]: The name of the lead.
-///
-/// It returns a [Future] that completes once the data has been sent to the Firebase function. If an error occurs
-/// while calling the Firebase function, this function catches the error and logs it to the console.
-///
-/// Example usage:
-///
-/// ```dart
-/// await addLead('jeb@kerbalspaceprogram.gov', 'Jeb', DateTime.now().millisecondsSinceEpoch);
-/// ```
-Future<void> callAddLeadFunction({required String name, required String email}) async {
-  try {
-    final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addLead');
-    final HttpsCallableResult<String> response = await callable.call(<String, dynamic>{
-      'name': name,
-      'email': email,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-    debugPrint('Successfully executed addLead function: ${response.data}');
-  } on FirebaseFunctionsException catch (e) {
-    debugPrint('Failed to execute addLead function. Code: ${e.code}, Message: ${e.details}');
-    rethrow;
-  } catch (e) {
-    debugPrint('Failed to execute addLead function: $e');
-    rethrow;
+/// This service authenticates the request using anonymous sign-in and sends a
+/// POST request to the Firebase Function endpoint that creates a new lead
+/// document in Firestore.
+class LeadsService {
+  /// Submits a new lead to the backend via HTTP POST.
+  ///
+  /// [name] and [email] are the required parameters. A timestamp is automatically added.
+  Future<void> submitLead({required String name, required String email}) async {
+    try {
+      // Ensure the user is signed in anonymously.
+      final UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+      final String? idToken = await userCredential.user?.getIdToken();
+
+      // Check if the ID token is null. If it is, throw an exception.
+      if (idToken == null) {
+        throw Exception('Unable to retrieve ID token for anonymous user.');
+      }
+
+      // Define the endpoint for the add lead function.
+      final Uri uri;
+
+      // In debug mode, use the local emulator.
+      if (kDebugMode) {
+        uri = Uri.parse('http://127.0.0.1:5001/brine-3b212/us-central1/addLead');
+      }
+      // Otherwise, use the production endpoint.
+      else {
+        uri = Uri.parse('https://us-central1-brine-2c0a3.cloudfunctions.net/addLead');
+      }
+
+      final Response response = await post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $idToken',
+        },
+        body: jsonEncode({
+          'name': name,
+          'email': email,
+        }),
+      );
+
+      // Check the response status code.
+      if (response.statusCode == 200) {
+        debugPrint('Successfully submitted lead');
+      }
+      // If the status code is not 200, log the error.
+      else {
+        debugPrint('Failed to submit lead. Status: ${response.statusCode}, Body: ${response.body}');
+        throw Exception('Lead submission failed');
+      }
+    } catch (e) {
+      debugPrint('Failed to submit lead: $e');
+      rethrow;
+    }
   }
 }
