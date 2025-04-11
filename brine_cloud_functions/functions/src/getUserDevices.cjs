@@ -14,7 +14,7 @@ const admin = require('../config/adminInit.cjs');
  *  }
  * 
  * When the mobile app launches, it retrieves this list of devices via the `getUserDevicesHttp` call. This call
- * returns a JSON object with an inner list of objects representing the Brine devices on the user' saccount. For 
+ * returns a JSON object with an inner list of objects representing the Brine devices on the user' account. For 
  * example,
  * 
  * {

@@ -17,11 +17,16 @@ const admin = require('./config/adminInit.cjs');
 const { onRequest } = require("firebase-functions/v2/https");
 const functions = require('firebase-functions');
 
+// Allow all origins
+const cors = require('cors')({ origin: true });
+
 // Import the authentication middleware function that verifies the Firebase ID token.
-const authenticate = require('./middleware/authMiddleware.cjs');
+const { authenticate, authenticateAnonymous } = require('./middleware/authMiddleware.cjs');
 
 // Import the functions that handle the business logic for each endpoint. Each of these imported files contains one or
 // more functions that implements the logic for the corresponding endpoint.
+
+// Brine app functions
 const { createUser } = require('./src/createUser.cjs');
 const { getUserDevices } = require('./src/getUserDevices.cjs');
 const { generatePSK } = require('./src/generatePSK.cjs');
@@ -32,6 +37,9 @@ const { updateApplianceHeight } = require('./src/updateApplianceHeight.cjs');
 const { removeDeviceFromUser } = require('./src/removeDeviceFromUser.cjs');
 const { addFcmToken } = require('./src/addFcmToken.cjs');
 const { deleteUser } = require('./src/deleteUser.cjs');
+
+// Brine website functions
+const { addLead } = require('./src/addLead.cjs');
 
 /**
  * @brief Cloud Function that is triggered when a new user is created.
@@ -181,5 +189,22 @@ exports.addFcmToken = functions.https.onRequest(async (req, res) => {
 exports.deleteUser = functions.https.onRequest(async (req, res) => {
     authenticate(req, res, async () => {
         deleteUser(req);
+    });
+});
+
+/**
+ * @brief Endpoint used to submit a new lead to the backend.
+ * 
+ * This endpoint is called by the mobile app to submit a lead. The function
+ * sends an authenticated POST request to the Firebase Function endpoint.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.addLead = functions.https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        authenticateAnonymous(req, res, async () => {
+            addLead(req, res);
+        });
     });
 });
