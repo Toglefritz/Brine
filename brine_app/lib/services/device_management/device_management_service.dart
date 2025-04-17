@@ -170,15 +170,18 @@ class DeviceManagementService {
       }
       // Handle authentication errors
       else if (response.statusCode == HttpStatus.unauthorized) {
+        debugPrint('Failed to get user deviceIds with unauthorized status code, ${response.reasonPhrase}');
+
         throw AuthenticationException('User is not authenticated');
       } else {
-        // Handle errors or unexpected status codes
+        // TODO(Toglefritz): Handle errors or unexpected status codes
         throw Exception('Failed to load deviceIds: ${response.reasonPhrase}');
       }
     } catch (e) {
       // Handle any exceptions
       debugPrint('Failed to get user deviceIds with exception, $e');
-      throw Exception('Error getting deviceIds: $e');
+
+      rethrow;
     }
   }
 

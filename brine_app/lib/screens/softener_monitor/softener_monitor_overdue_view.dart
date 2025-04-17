@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/buttons/light_button.dart';
 import '../../components/dashed_outlines/dashed_divider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../theme/insets.dart';
 import 'components/softener_monitor_app_bar.dart';
 import 'softener_monitor_controller.dart';

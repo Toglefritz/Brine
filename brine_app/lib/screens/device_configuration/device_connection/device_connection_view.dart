@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../components/loaders/wave_loader.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../theme/insets.dart';
 import 'device_connection_controller.dart';
 import 'device_connection_route.dart';

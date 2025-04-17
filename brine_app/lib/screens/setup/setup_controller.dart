@@ -10,6 +10,7 @@ import '../../services/device_management/device_management_service.dart';
 import '../../services/device_management/models/brine_device.dart';
 import '../../services/push_notifications/push_notifications_service.dart';
 import '../errors/error_route.dart';
+import '../errors/models/error_type.dart';
 import '../softener_monitor/softener_monitor_route.dart';
 import '../welcome/welcome_route.dart';
 import 'setup_route.dart';
@@ -39,14 +40,32 @@ class SetupController extends State<SetupRoute> {
 
     try {
       deviceList = await _getDevices();
-    } catch (e) {
-      debugPrint('Failed to perform setup with exception, $e');
+    } on AuthenticationException catch(e, s) {
+      debugPrint('Failed to perform setup with authentication exception, $e');
+
+      // ignore: unawaited_futures
+      FirebaseCrashlytics.instance.recordError('Failed to perform setup with authentication exception, $e', s);
 
       if (!mounted) return;
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => const ErrorRoute(),
+          builder: (BuildContext context) => const ErrorRoute(
+            errorType: ErrorType.unauthenticated,
+          ),
+        ),
+      );
+    }
+    catch (e) {
+      debugPrint('Failed to perform setup with generic exception, $e');
+
+      if (!mounted) return;
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => const ErrorRoute(
+            errorType: ErrorType.unknown,
+          ),
         ),
       );
     }
@@ -113,13 +132,15 @@ class SetupController extends State<SetupRoute> {
 
       return deviceList;
     } on AuthenticationException catch (e, s) {
-      debugPrint('Failed to get devices with exception, $e');
+      debugPrint('Failed to get devices with authentication exception, $e');
 
       // ignore: unawaited_futures
-      FirebaseCrashlytics.instance.recordError('Failed to get devices with exception, $e', s);
+      FirebaseCrashlytics.instance.recordError('Failed to get devices with authentication exception, $e', s);
 
       rethrow;
     } catch (e) {
+      debugPrint('Failed to get devices with exception, $e, of type ${e.runtimeType}');
+
       rethrow;
     }
   }

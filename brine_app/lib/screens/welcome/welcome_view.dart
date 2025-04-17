@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/app_bar/main_app_bar.dart';
 import '../../components/buttons/light_button.dart';
+import '../../l10n/app_localizations.dart';
 import '../../theme/insets.dart';
 import 'components/add_device_button.dart';
 import 'welcome_controller.dart';

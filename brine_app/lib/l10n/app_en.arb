@@ -325,6 +325,10 @@
   "@tryAgain": {
     "description": "Text for a button that allows the user to try an action again."
   },
+  "unauthenticatedError": "Your session has expired. Please log in again.",
+  "@unauthenticatedError": {
+    "description": "Error message displayed when the user's session has expired."
+  },
   "username": "Username (email)",
   "@username": {
     "description": "Label for the field where the user must enter their username."

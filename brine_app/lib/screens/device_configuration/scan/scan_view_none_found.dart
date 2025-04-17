@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../components/buttons/light_button.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../theme/insets.dart';
 import 'scan_controller.dart';
 import 'scan_route.dart';
