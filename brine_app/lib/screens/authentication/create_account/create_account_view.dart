@@ -65,57 +65,47 @@ class CreateAccountView extends StatelessWidget {
                   additionalError: state.createAccountUsernameExceptionError,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: Insets.small),
-                child: SizedBox(
-                  width: 350,
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 120,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            width: 3,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          color: Theme.of(context).primaryColorLight,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 51),
-                        child: Divider(
-                          thickness: 3,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                      BorderlessField(
-                        hint: AppLocalizations.of(context)!.password,
-                        obscureText: true,
-                        controller: state.passwordFieldController,
-                        validator: state.validatePasswordField,
-                        errorState: state.passwordFieldError,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 57),
-                        child: BorderlessField(
-                          hint: AppLocalizations.of(context)!.confirmPassword,
-                          obscureText: true,
-                          controller: state.passwordConfirmationFieldController,
-                          validator: state.validatePasswordConfirmationField,
-                          errorState: state.passwordConfirmationFieldError,
-                          additionalError: state.createAccountPasswordExceptionError,
-                        ),
-                      ),
-                    ],
+              OnboardingField(
+                hint: AppLocalizations.of(context)!.password,
+                obscureText: true,
+                border: OutlineInputBorder(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(Insets.medium),
+                    topRight: Radius.circular(Insets.medium),
+                  ),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).primaryColorDark,
                   ),
                 ),
+                controller: state.passwordFieldController,
+                validator: state.validatePasswordField,
+                errorState: state.passwordFieldError,
               ),
-              DarkOnboardingButton(
-                onPressed: state.handleCreateAccountSubmit,
-                text: AppLocalizations.of(context)!.submit,
-                width: 350,
-                loading: state.creatingAccount,
+              OnboardingField(
+                hint: AppLocalizations.of(context)!.confirmPassword,
+                obscureText: true,
+                border: OutlineInputBorder(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(Insets.medium),
+                    bottomRight: Radius.circular(Insets.medium),
+                  ),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                ),
+                controller: state.passwordConfirmationFieldController,
+                validator: state.validatePasswordConfirmationField,
+                errorState: state.passwordConfirmationFieldError,
+                additionalError: state.createAccountPasswordExceptionError,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: Insets.small),
+                child: DarkOnboardingButton(
+                  onPressed: state.handleCreateAccountSubmit,
+                  text: AppLocalizations.of(context)!.submit,
+                  width: 350,
+                  loading: state.creatingAccount,
+                ),
               ),
             ],
           ),

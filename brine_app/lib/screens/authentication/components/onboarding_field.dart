@@ -29,6 +29,7 @@ class OnboardingField extends StatelessWidget {
     super.key,
     this.keyboardType,
     this.obscureText,
+    this.border,
     this.additionalError,
   });
 
@@ -37,6 +38,9 @@ class OnboardingField extends StatelessWidget {
 
   /// Determines if the next in the field should be obscured.
   final bool? obscureText;
+
+  /// The boarder for the field. By default, the field has a pill-shaped, dark-colored [OutlineInputBorder].
+  final OutlineInputBorder? border;
 
   /// A [TextEditingController] for the text input field.
   final TextEditingController controller;
@@ -80,12 +84,12 @@ class OnboardingField extends StatelessWidget {
           filled: true,
           fillColor: Theme.of(context).primaryColorLight,
           contentPadding: const EdgeInsets.all(Insets.small),
-          enabledBorder: defaultBorder,
-          focusedBorder: defaultBorder,
-          errorBorder: defaultBorder,
-          focusedErrorBorder: defaultBorder,
-          disabledBorder: defaultBorder,
-          border: defaultBorder,
+          enabledBorder: border ?? defaultBorder,
+          focusedBorder: border ?? defaultBorder,
+          errorBorder: border ?? defaultBorder,
+          focusedErrorBorder: border ?? defaultBorder,
+          disabledBorder: border ?? defaultBorder,
+          border: border ?? defaultBorder,
           hintText: hint,
           hintStyle: TextStyle(
             color: Theme.of(context).primaryColorDark.withValues(alpha: 0.5),
