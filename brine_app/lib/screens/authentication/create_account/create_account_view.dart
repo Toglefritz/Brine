@@ -11,7 +11,6 @@ import '../../../theme/insets.dart';
 import '../components/authentication_page.dart';
 import '../components/dark_onboarding_button.dart';
 import '../components/onboarding_field.dart';
-import 'components/borderless_field.dart';
 import 'create_account_controller.dart';
 import 'create_account_route.dart';
 
