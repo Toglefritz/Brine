@@ -105,8 +105,8 @@ class AuthenticationService {
         final UserCredential userCredential = await auth.signInWithPopup(authProvider);
 
         user = userCredential.user;
-      } catch (e) {
-        debugPrint('Failed to sign in with Google with exception, $e');
+      } catch (e, s) {
+        debugPrint('Failed to sign in with Google with exception, $e, and stack trace, $s');
       }
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn();
