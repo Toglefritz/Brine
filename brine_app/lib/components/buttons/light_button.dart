@@ -32,8 +32,8 @@ class LightButton extends StatelessWidget {
   /// If the [width] field is null, the button's width is defaulted to 350 logical pixels.
   final double? width;
 
-  /// [IconData] for an icon displayed on the left side of the button.
-  final IconData? icon;
+  /// A widget used as an icon displayed on the left side of the button.
+  final Widget? icon;
 
   /// The color of the boarder, text, and icon.
   final Color? color;
@@ -56,11 +56,7 @@ class LightButton extends StatelessWidget {
             if (icon != null)
               Padding(
                 padding: const EdgeInsets.all(Insets.small),
-                child: Icon(
-                  icon,
-                  color: color ?? Theme.of(context).primaryColorDark,
-                  size: 24,
-                ),
+                child: icon,
               ),
             Expanded(
               child: Padding(

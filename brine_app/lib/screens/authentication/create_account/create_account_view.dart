@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../components/buttons/light_button.dart';
@@ -8,6 +7,7 @@ import '../../../extensions/brightness_extensions.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/device.dart';
 import '../../../theme/insets.dart';
+import '../../../values/image_asset.dart';
 import '../components/authentication_page.dart';
 import '../components/dark_onboarding_button.dart';
 import '../components/onboarding_field.dart';
@@ -130,14 +130,24 @@ class CreateAccountView extends StatelessWidget {
               child: LightButton(
                 onPressed: state.handleGoogleCreateAccount,
                 text: AppLocalizations.of(context)!.signUpWithGoogle,
-                icon: FontAwesomeIcons.google,
+                icon: Image.asset(
+                  ImageAsset.google.path,
+                  height: 24,
+                  width: 24,
+                  color: Theme.of(context).primaryColorDark,
+                ),
               ),
             ),
             if (Device.isIOS || Device.isMacOS)
               LightButton(
                 onPressed: state.handleAppleCreateAccount,
                 text: AppLocalizations.of(context)!.signUpWithApple,
-                icon: FontAwesomeIcons.apple,
+                icon: Image.asset(
+                  ImageAsset.apple.path,
+                  height: 24,
+                  width: 24,
+                  color: Theme.of(context).primaryColorDark,
+                ),
               ),
           ],
         ),

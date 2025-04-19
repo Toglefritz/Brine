@@ -130,7 +130,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Retrieves a device ID for the Brine device.
   ///
-  /// Each Brine device has a unique device ID of the form <adjective>_<adjective>_<noun>, for example,
+  /// Each Brine device has a unique device ID of the form `<adjective>_<adjective>_<noun>`, for example,
   /// "vast_teal_elephant." The Bluetooth API used by Brine monitors include a command allowing the app to retrieve
   /// this device ID. This is necessary because the device ID is included in the account association process.
   Future<void> _getDeviceId(BleCharacteristic characteristic) async {

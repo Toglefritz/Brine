@@ -1,7 +1,7 @@
 /// An enumeration of command types that are supported by the Brine BLE API.
 enum CommandType {
   /// Requests that the Brine provide its device ID. The device ID of a Brine device has the form,
-  /// <adjective>_<adjective>_<noun>, for example, "vast_teal_elephant."
+  /// `<adjective>_<adjective>_<noun>`, for example, "vast_teal_elephant."
   getDeviceId(value: 'get_device_id', responseKey: 'device_id'),
 
   /// Used to transfer a pre-shared key (PSK) to the Brine device.

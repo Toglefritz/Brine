@@ -43,8 +43,7 @@ class SetupController extends State<SetupRoute> {
     } on AuthenticationException catch(e, s) {
       debugPrint('Failed to perform setup with authentication exception, $e');
 
-      // ignore: unawaited_futures
-      FirebaseCrashlytics.instance.recordError('Failed to perform setup with authentication exception, $e', s);
+      await FirebaseCrashlytics.instance.recordError('Failed to perform setup with authentication exception, $e', s);
 
       if (!mounted) return;
       await Navigator.pushReplacement(
@@ -134,8 +133,7 @@ class SetupController extends State<SetupRoute> {
     } on AuthenticationException catch (e, s) {
       debugPrint('Failed to get devices with authentication exception, $e');
 
-      // ignore: unawaited_futures
-      FirebaseCrashlytics.instance.recordError('Failed to get devices with authentication exception, $e', s);
+      await FirebaseCrashlytics.instance.recordError('Failed to get devices with authentication exception, $e', s);
 
       rethrow;
     } catch (e) {
