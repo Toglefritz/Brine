@@ -1,1 +1,60 @@
-{"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"emulators":{"auth":{"port":9099,"host":"0.0.0.0"},"firestore":{"port":8080,"host":"0.0.0.0"},"ui":{"enabled":true},"singleProjectMode":true},"remoteconfig":{"template":"remoteconfig.template.json"},"flutter":{"platforms":{"android":{"default":{"projectId":"brine-3b212","appId":"1:431909607108:android:f445d8bb684be5ed081b91","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"brine-3b212","appId":"1:431909607108:ios:b460491fabbdbbe7081b91","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"brine-3b212","appId":"1:431909607108:ios:418bcfcdb8a0557c081b91","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"brine-3b212","configurations":{"android":"1:431909607108:android:f445d8bb684be5ed081b91"}}}}}}
+{
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    },
+    "emulators": {
+        "auth": {
+            "port": 9099,
+            "host": "0.0.0.0"
+        },
+        "firestore": {
+            "port": 8080,
+            "host": "0.0.0.0"
+        },
+        "ui": {
+            "enabled": true
+        },
+        "singleProjectMode": true
+    },
+    "remoteconfig": {
+        "template": "remoteconfig.template.json"
+    },
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "brine-3b212",
+                    "appId": "1:431909607108:android:f445d8bb684be5ed081b91",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "ios": {
+                "default": {
+                    "projectId": "brine-3b212",
+                    "appId": "1:431909607108:ios:b460491fabbdbbe7081b91",
+                    "uploadDebugSymbols": false,
+                    "fileOutput": "ios/Runner/GoogleService-Info.plist"
+                }
+            },
+            "macos": {
+                "default": {
+                    "projectId": "brine-3b212",
+                    "appId": "1:431909607108:ios:418bcfcdb8a0557c081b91",
+                    "uploadDebugSymbols": false,
+                    "fileOutput": "macos/Runner/GoogleService-Info.plist"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "brine-3b212",
+                    "configurations": {
+                        "android": "1:431909607108:android:f445d8bb684be5ed081b91",
+                        "ios": "1:431909607108:ios:b460491fabbdbbe7081b91",
+                        "macos": "1:431909607108:ios:418bcfcdb8a0557c081b91"
+                    }
+                }
+            }
+        }
+    }
+}

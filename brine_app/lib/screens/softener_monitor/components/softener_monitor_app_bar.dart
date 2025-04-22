@@ -36,9 +36,6 @@ class SoftenerMonitorAppBar extends StatelessWidget implements PreferredSizeWidg
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).brightness == Brightness.light
-        ? const Color(0xFFFFE0A3)
-        : Theme.of(context).scaffoldBackgroundColor,
       actions: [
         if (state.widget.devices.length > 1)
           MenuAnchor(

@@ -5,14 +5,18 @@ class BatteryIndicator extends StatelessWidget {
   /// Creates an instance of [BatteryIndicator].
   const BatteryIndicator({
     required this.batteryLife,
+    this.color,
     super.key,
   });
 
   /// The percentage of battery life remaining on the device.
   final double batteryLife;
 
+  /// The color of the battery indicator.
+  final Color? color;
+
   /// Returns an icon to indicate the current battery life.
-  IconData _getBatteryIndicator() {
+  IconData getBatteryIndicator() {
     if (batteryLife < 0.14) {
       return Icons.battery_1_bar;
     } else if (batteryLife < .28) {
@@ -30,22 +34,13 @@ class BatteryIndicator extends StatelessWidget {
     }
   }
 
-  /// Returns the color to use for the battery indicator icon.
-  Color _getBatteryColor(BuildContext context) {
-    if (batteryLife < 0.14) {
-      return Colors.red[900]!;
-    } else {
-      return const Color(0xFF212121);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return RotatedBox(
       quarterTurns: 1,
       child: Icon(
-        _getBatteryIndicator(),
-        color: _getBatteryColor(context),
+        getBatteryIndicator(),
+        color: color ?? const Color(0xFF212121),
         size: 56,
       ),
     );
