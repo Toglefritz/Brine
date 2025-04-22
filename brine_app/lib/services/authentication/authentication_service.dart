@@ -113,6 +113,7 @@ class AuthenticationService {
 
       final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
 
+      // If the login was successful, the GoogleSignInAccount will not be null.
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
@@ -134,10 +135,26 @@ class AuthenticationService {
             rethrow;
           }
         } catch (e) {
+          debugPrint('Failed to sign in with Google with exception, $e');
+
           // TODO(Toglefritz): ...
           rethrow;
         }
       }
+      // If the user is null, it means the sign-in process was cancelled or failed.
+      else {
+        // The user cancelled the sign-in process.
+        debugPrint('Google sign-in was cancelled by the user.');
+
+        throw Exception('Google sign-in was cancelled by the user.');
+      }
+    }
+
+    // If the user is null, it means the sign-in process failed.
+    if (user == null) {
+      debugPrint('Failed to sign in with Google. User is null.');
+
+      throw Exception('Failed to sign in with Google. User is null.');
     }
 
     return user;

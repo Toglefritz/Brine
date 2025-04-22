@@ -47,7 +47,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  /// Firebase configuration for Android.
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC6Er8QPJGPl5PZy-9unKz95YnGcK8_IH0',
     appId: '1:431909607108:android:f445d8bb684be5ed081b91',
@@ -56,6 +55,8 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://brine-3b212-default-rtdb.firebaseio.com',
     storageBucket: 'brine-3b212.appspot.com',
   );
+
+  /// Firebase configuration for Android.
 
   /// Firebase options for iOS.
   static const FirebaseOptions ios = FirebaseOptions(

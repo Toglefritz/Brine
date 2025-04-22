@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "431909607108-s4f7go66fbohrcfrea75i3ulg6s7d9s7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.splendidendeavors.brine",
+            "certificate_hash": "403f8a86c926372c8f737344bf7baaea9dc6ec13"
+          }
+        },
+        {
           "client_id": "431909607108-aglqu028ssgr4nfvcmose16hk02stpei.apps.googleusercontent.com",
           "client_type": 3
         }
