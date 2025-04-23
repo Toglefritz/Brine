@@ -7,6 +7,7 @@ import '../../services/analytics/analytics.dart';
 import '../../services/authentication/authentication_service.dart';
 import '../../services/device_management/device_management_service.dart';
 import '../../services/device_management/models/brine_device.dart';
+import '../authentication/onboarding/onboarding_route.dart';
 import '../welcome/welcome_route.dart';
 import 'account_route.dart';
 import 'account_view.dart';
@@ -329,6 +330,15 @@ class AccountController extends State<AccountRoute> {
     Analytics.trackLogout();
 
     await AuthenticationService.signOut();
+
+    // Navigate back to the OnboardingRoute.
+    if (!mounted) return;
+    await Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const OnboardingRoute(),
+      ),
+      (Route<dynamic> route) => false,
+    );
   }
 
   /// Allows a user to delete their account.
