@@ -114,7 +114,6 @@ class ScanController extends State<ScanRoute> {
   ///
   /// Speaking of the timeout, the scan will run for a maximum of 8 seconds. If a Brine device is not found within this
   /// time period, the scan will be stopped and the user will be notified that no devices were found.
-  // TODO(Toglefritz): implement ability to filter out devices (e.g. ones that are already on the account)
   // TODO(Toglefritz): implement a screen with instructions for starting advertisement on the Brine device
   Future<void> _startScan() async {
     debugPrint('Starting scan');

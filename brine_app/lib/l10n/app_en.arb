@@ -170,7 +170,7 @@
   "@installationTitle": {
     "description": "Title for the screen presenting the installation instructions for the Brine device."
   },
-  "lastUpdated": "Last updated",
+  "lastUpdated": "Last Updated",
   "@lastUpdated": {
     "description": "Label for the date and time when the Brine device last sent an update."
   },

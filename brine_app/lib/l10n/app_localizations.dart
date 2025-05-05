@@ -336,7 +336,7 @@ abstract class AppLocalizations {
   /// Label for the date and time when the Brine device last sent an update.
   ///
   /// In en, this message translates to:
-  /// **'Last updated'**
+  /// **'Last Updated'**
   String get lastUpdated;
 
   /// Text for a button that allows the user to log in to their account.

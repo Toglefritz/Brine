@@ -133,7 +133,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get installationTitle => 'Install Brine';
 
   @override
-  String get lastUpdated => 'Last updated';
+  String get lastUpdated => 'Last Updated';
 
   @override
   String get login => 'login';
