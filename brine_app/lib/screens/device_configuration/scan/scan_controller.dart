@@ -9,6 +9,8 @@ import 'package:flutter_splendid_ble/shared/models/bluetooth_status.dart';
 
 import '../../../services/analytics/analytics.dart';
 import '../../../services/ble/ble_communication_service.dart';
+import '../../errors/error_route.dart';
+import '../../errors/models/error_type.dart';
 import '../../setup/setup_route.dart';
 import '../device_confirmation/device_confirmation_route.dart';
 import 'scan_route.dart';
@@ -57,7 +59,7 @@ class ScanController extends State<ScanRoute> {
   /// This method sets up a listener to monitor the current status of the Bluetooth permissions on the host platform.
   void _initBluetoothPermissionStatusMonitor() {
     _bluetoothPermissionStream = BleCommunicationService.ble.emitCurrentPermissionStatus().listen(
-      (status) {
+      (BluetoothPermissionStatus status) {
         _bluetoothPermissionStatus = status;
 
         // If permissions are granted, start monitoring the Bluetooth adapter status.
@@ -65,8 +67,19 @@ class ScanController extends State<ScanRoute> {
           _initBluetoothAdapterStatusMonitor();
         }
       },
-      onError: (error) {
-        // TODO(Toglefritz): go to a Bluetooth error screen
+      onError: (dynamic error) async {
+        debugPrint('Unable to get Bluetooth permission status with exception, $error');
+
+        // Navigate to the error screen if the Bluetooth permission status cannot be determined.
+        if (!mounted) return;
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => const ErrorRoute(
+              errorType: ErrorType.bluetoothPermissions,
+            ),
+          ),
+        );
       },
     );
 

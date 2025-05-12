@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+
+import '../../../l10n/app_localizations.dart';
+
 /// An enumeration of error types that can be encountered in any part of the app.
 ///
 /// This enumeration is used to categorize errors and provide specific error handling or user feedback based on the
@@ -7,6 +11,22 @@ enum ErrorType {
   /// An error resulting from the user being unauthenticated when the app attempts to access cloud resources.
   unauthenticated,
 
+  /// An error related to checking the Bluetooth permissions status. Note that this error is not necessarily related to
+  /// Bluetooth permissions being denied. Rather, it is related to checking the status of the permissions.
+  bluetoothPermissions,
+
   /// An error with an unknown cause.
   unknown;
+
+  /// Returns an error message to be displayed to the user based on the error type.
+  String errorMessage(BuildContext context) {
+    switch (this) {
+      case ErrorType.unauthenticated:
+        return AppLocalizations.of(context)!.unauthenticatedError;
+      case ErrorType.bluetoothPermissions:
+        return AppLocalizations.of(context)!.bluetoothPermissionsError;
+      case ErrorType.unknown:
+        return AppLocalizations.of(context)!.unknownError;
+    }
+  }
 }

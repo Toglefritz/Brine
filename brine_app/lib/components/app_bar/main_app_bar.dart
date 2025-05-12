@@ -48,6 +48,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: backgroundColor,
+      automaticallyImplyLeading: false,
       actions: [
         PopupMenuButton<String>(
           onSelected: (value) => _onAccountTap(),

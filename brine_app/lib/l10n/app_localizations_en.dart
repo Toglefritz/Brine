@@ -42,6 +42,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get done => 'Done';
 
   @override
+  String get bluetoothPermissionsError => 'Bluetooth permissions are required to set up your Brine device.';
+
+  @override
   String get brine => 'Brine';
 
   @override
@@ -250,6 +253,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unauthenticatedError => 'Your session has expired. Please log in again.';
+
+  @override
+  String get unknownError => 'An unknown error occurred. Please try again.';
 
   @override
   String get username => 'Username (email)';

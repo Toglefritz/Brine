@@ -159,6 +159,12 @@ abstract class AppLocalizations {
   /// **'Done'**
   String get done;
 
+  /// Error message displayed when the app does not have the required Bluetooth permissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth permissions are required to set up your Brine device.'**
+  String get bluetoothPermissionsError;
+
   /// The name of the app and the product.
   ///
   /// In en, this message translates to:
@@ -566,6 +572,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your session has expired. Please log in again.'**
   String get unauthenticatedError;
+
+  /// Error message displayed when an unknown error occurs.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred. Please try again.'**
+  String get unknownError;
 
   /// Label for the field where the user must enter their username.
   ///

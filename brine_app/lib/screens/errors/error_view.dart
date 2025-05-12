@@ -44,24 +44,23 @@ class ErrorView extends StatelessWidget {
               height: 256,
             ),
 
-            // If an authentication error occurred, display a message requesting that the user log in again.
-            if (state.widget.errorType == ErrorType.unauthenticated) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Insets.medium,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.unauthenticatedError,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).primaryColorLight,
-                      ),
-                ),
+            // Display a message to the user based on the error type.
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Insets.medium,
               ),
+              child: Text(
+                state.widget.errorType.errorMessage(context),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).primaryColorLight,
+                    ),
+              ),
+            ),
+            if (state.widget.errorType == ErrorType.unauthenticated)
               LightButton(
                 text: AppLocalizations.of(context)!.login,
                 onPressed: state.onLoginAgain,
               ),
-            ],
           ],
         ),
       ),
