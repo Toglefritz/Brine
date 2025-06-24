@@ -18,6 +18,18 @@ enum ErrorType {
   /// An error with an unknown cause.
   unknown;
 
+  /// Returns a title for the error type, which can be used in screens communicating the error to the user.
+  String errorTitle(BuildContext context) {
+    switch (this) {
+      case ErrorType.unauthenticated:
+        return AppLocalizations.of(context)!.unauthenticatedErrorTitle;
+      case ErrorType.bluetoothPermissions:
+        return AppLocalizations.of(context)!.bluetoothPermissionsErrorTitle;
+      case ErrorType.unknown:
+        return AppLocalizations.of(context)!.unknownErrorTitle;
+    }
+  }
+
   /// Returns an error message to be displayed to the user based on the error type.
   String errorMessage(BuildContext context) {
     switch (this) {

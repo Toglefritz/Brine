@@ -163,8 +163,14 @@ abstract class AppLocalizations {
   /// Error message displayed when the app does not have the required Bluetooth permissions.
   ///
   /// In en, this message translates to:
-  /// **'Bluetooth permissions are required to set up your Brine device.'**
+  /// **'Bluetooth permissions are required to set up your Brine device. Once your Brine device is ready to go, feel free to switch it off again if you prefer.'**
   String get bluetoothPermissionsError;
+
+  /// Title for the error message displayed when the app does not have the required Bluetooth permissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth Permissions Required'**
+  String get bluetoothPermissionsErrorTitle;
 
   /// The name of the app and the product.
   ///
@@ -574,11 +580,23 @@ abstract class AppLocalizations {
   /// **'Your session has expired. Please log in again.'**
   String get unauthenticatedError;
 
+  /// Title for the error message displayed when the user's session has expired.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication Error'**
+  String get unauthenticatedErrorTitle;
+
   /// Error message displayed when an unknown error occurs.
   ///
   /// In en, this message translates to:
-  /// **'An unknown error occurred. Please try again.'**
+  /// **'Yikes! A mysterious glitch just occurred. The Brine team has been alerted and will get things sorted out ASAP. Thanks for your patience!'**
   String get unknownError;
+
+  /// No description provided for @unknownErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Oh no!'**
+  String get unknownErrorTitle;
 
   /// Label for the field where the user must enter their username.
   ///

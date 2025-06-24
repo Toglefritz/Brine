@@ -43,10 +43,14 @@
   "@done": {
     "description": "Text indicating that a process has been completed."
   },
-  "bluetoothPermissionsError": "Bluetooth permissions are required to set up your Brine device.",
+  "bluetoothPermissionsError": "Bluetooth permissions are required to set up your Brine device. Once your Brine device is ready to go, feel free to switch it off again if you prefer.",
   "@bluetoothPermissionsError": {
     "description": "Error message displayed when the app does not have the required Bluetooth permissions."
   },
+  "bluetoothPermissionsErrorTitle": "Bluetooth Permissions Required",
+    "@bluetoothPermissionsErrorTitle": {
+        "description": "Title for the error message displayed when the app does not have the required Bluetooth permissions."
+    },
   "brine": "Brine",
   "@brine": {
     "description": "The name of the app and the product."
@@ -333,10 +337,15 @@
   "@unauthenticatedError": {
     "description": "Error message displayed when the user's session has expired."
   },
-  "unknownError": "An unknown error occurred. Please try again.",
+  "unauthenticatedErrorTitle": "Authentication Error",
+  "@unauthenticatedErrorTitle": {
+    "description": "Title for the error message displayed when the user's session has expired."
+  },
+  "unknownError": "Yikes! A mysterious glitch just occurred. The Brine team has been alerted and will get things sorted out ASAP. Thanks for your patience!",
   "@unknownError": {
     "description": "Error message displayed when an unknown error occurs."
   },
+  "unknownErrorTitle": "Oh no!",
   "username": "Username (email)",
   "@username": {
     "description": "Label for the field where the user must enter their username."

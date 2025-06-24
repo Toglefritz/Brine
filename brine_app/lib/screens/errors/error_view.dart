@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../components/app_bar/main_app_bar.dart';
 import '../../components/buttons/light_button.dart';
@@ -38,24 +39,41 @@ class ErrorView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
-              ImageAsset.error.path,
-              width: 256,
-              height: 256,
+            // Error title
+            Text(
+              state.widget.errorType.errorTitle(context),
+              style: GoogleFonts.bungee().copyWith(
+                fontSize: 52,
+                color: Theme.of(context).primaryColorLight,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Insets.medium,
+              ),
+              child: Image.asset(
+                ImageAsset.error.path,
+                width: 256,
+                height: 256,
+              ),
             ),
 
             // Display a message to the user based on the error type.
             Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: Insets.medium,
+                horizontal: Insets.medium,
               ),
               child: Text(
                 state.widget.errorType.errorMessage(context),
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Theme.of(context).primaryColorLight,
                     ),
+                textAlign: TextAlign.center,
               ),
             ),
+
+            // Show a button for some error types allowing the user to take action.
             if (state.widget.errorType == ErrorType.unauthenticated)
               LightButton(
                 text: AppLocalizations.of(context)!.login,

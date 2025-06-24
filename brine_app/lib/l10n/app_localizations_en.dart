@@ -44,7 +44,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bluetoothPermissionsError =>
-      'Bluetooth permissions are required to set up your Brine device.';
+      'Bluetooth permissions are required to set up your Brine device. Once your Brine device is ready to go, feel free to switch it off again if you prefer.';
+
+  @override
+  String get bluetoothPermissionsErrorTitle => 'Bluetooth Permissions Required';
 
   @override
   String get brine => 'Brine';
@@ -263,7 +266,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your session has expired. Please log in again.';
 
   @override
-  String get unknownError => 'An unknown error occurred. Please try again.';
+  String get unauthenticatedErrorTitle => 'Authentication Error';
+
+  @override
+  String get unknownError =>
+      'Yikes! A mysterious glitch just occurred. The Brine team has been alerted and will get things sorted out ASAP. Thanks for your patience!';
+
+  @override
+  String get unknownErrorTitle => 'Oh no!';
 
   @override
   String get username => 'Username (email)';
