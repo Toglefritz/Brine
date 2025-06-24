@@ -4,6 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 
 import '../firebase_emulator/dev_machine_ip.dart';
+import 'exceptions/firebase_auth_creation_exception.dart';
+import 'exceptions/user_document_creation_exception.dart';
 import 'models/auth_methods.dart';
 
 /// A service class that handles authentication tasks with Firebase Auth.
@@ -51,20 +53,19 @@ class AuthenticationService {
     }
   }
 
-  /// Creates a new user via Firebase Authentication.
+  /// Creates a new user via Firebase Authentication and creates a user document.
   ///
-  /// If an error occurs during the process, the error code and message are printed. Exceptions are rethrown.
+  /// Throws a distinct exception if Firebase Auth user creation or user document creation fails.
   static Future<void> createUser({required AuthMethod method, String? emailAddress, String? password}) async {
-    try {
-      User? user;
+    User? user;
 
+    try {
       switch (method) {
         case AuthMethod.basicAuth:
           assert(
             emailAddress != null && password != null,
             'For authenticating with basic auth, the email and password must be provided',
           );
-
           user = await _createBasicAuthAccount(emailAddress: emailAddress!, password: password!);
           break;
         case AuthMethod.google:
@@ -74,12 +75,49 @@ class AuthenticationService {
           // TODO(Toglefritz): Handle this case.
           break;
       }
-
-      debugPrint('Authenticated with UID, ${user?.uid}');
     } catch (e) {
-      debugPrint('Failed to create user with exception, $e');
+      debugPrint('Failed to create Firebase Auth user: $e');
+      throw FirebaseAuthCreationException();
+    }
 
-      rethrow;
+    // If the user is successfully authenticated, create a Firestore user document.
+    if (user != null) {
+      try {
+        await _createUserDocument(user);
+      } catch (e) {
+        debugPrint('Failed to create Firestore user document: $e');
+        throw UserDocumentCreationException();
+      }
+
+      debugPrint('Authenticated with UID, ${user.uid}');
+    }
+  }
+
+  /// Creates a Firestore user document for the authenticated user via backend endpoint.
+  static Future<void> _createUserDocument(User user) async {
+    final String? idToken = await user.getIdToken();
+
+    // Ensure the user is authenticated and has an ID token
+    if (idToken == null) {
+      throw Exception('Missing ID token for authenticated user.');
+    }
+
+    // Define the backend endpoint URL for creating a user document
+    const String endpoint = '/createUserDocument';
+    final Uri url = Uri.parse(baseUrl + endpoint);
+
+    // Make an authenticated HTTP POST request to create the user document
+    final Response response = await post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $idToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    // Check the response status code
+    if (response.statusCode != 200) {
+      throw Exception('Failed to create user document: ${response.reasonPhrase}');
     }
   }
 

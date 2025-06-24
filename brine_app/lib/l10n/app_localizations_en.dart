@@ -18,7 +18,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addADevice => 'Add a device';
 
   @override
-  String get addDeviceInvitation => 'Get started by linking your Brine device to the app.';
+  String get addDeviceInvitation =>
+      'Get started by linking your Brine device to the app.';
 
   @override
   String get and => ' and ';
@@ -42,7 +43,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get done => 'Done';
 
   @override
-  String get bluetoothPermissionsError => 'Bluetooth permissions are required to set up your Brine device.';
+  String get bluetoothPermissionsError =>
+      'Bluetooth permissions are required to set up your Brine device.';
 
   @override
   String get brine => 'Brine';
@@ -72,10 +74,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAccount => 'Delete Account';
 
   @override
-  String get deleteAccountConfirmation => 'Are you sure you want to delete your account?';
+  String get deleteAccountConfirmation =>
+      'Are you sure you want to delete your account?';
 
   @override
-  String get detectedDeviceConfirmation => 'Is this the device you wish to add?';
+  String get detectedDeviceConfirmation =>
+      'Is this the device you wish to add?';
 
   @override
   String get device => 'Device';
@@ -84,7 +88,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deviceDetected => 'Device detected';
 
   @override
-  String get deviceOverdueMessageDescription => 'It has been a while since your Brine device has sent an update. It appears to be offline.';
+  String get deviceOverdueMessageDescription =>
+      'It has been a while since your Brine device has sent an update. It appears to be offline.';
 
   @override
   String get deviceId => 'Device ID';
@@ -160,7 +165,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noNetworksDetected => 'No networks detected';
 
   @override
-  String get noDevicesFoundDescription => 'Please make sure your Brine device is powered on, nearby, and that you\'ve pressed the pairing button. The light on the Brine monitor should be blinking.';
+  String get noDevicesFoundDescription =>
+      'Please make sure your Brine device is powered on, nearby, and that you\'ve pressed the pairing button. The light on the Brine monitor should be blinking.';
 
   @override
   String get ok => 'OK';
@@ -196,7 +202,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileUpdateSuccess => 'Profile updated successfully';
 
   @override
-  String get reauthenticationFailed => 'Authentication failed. We are unable to update your account information at this time.';
+  String get reauthenticationFailed =>
+      'Authentication failed. We are unable to update your account information at this time.';
 
   @override
   String get reconnect => 'Reconnect';
@@ -252,7 +259,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryAgain => 'Try again';
 
   @override
-  String get unauthenticatedError => 'Your session has expired. Please log in again.';
+  String get unauthenticatedError =>
+      'Your session has expired. Please log in again.';
 
   @override
   String get unknownError => 'An unknown error occurred. Please try again.';
@@ -270,5 +278,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wifiConnecting => 'Connecting to WiFi...';
 
   @override
-  String get wifiSetupInstructions => 'Select the WiFi network to which your Brine monitor should connect.';
+  String get wifiSetupInstructions =>
+      'Select the WiFi network to which your Brine monitor should connect.';
 }
