@@ -42,15 +42,21 @@ const { deleteUser } = require('./src/deleteUser.cjs');
 const { addLead } = require('./src/addLead.cjs');
 
 /**
- * @brief Cloud Function that is triggered when a new user is created.
+ * @brief HTTP endpoint to manually create a user document.
  * 
- * This function is triggered automatically when a new user is created using  Firebase Authentication. It creates a new
- * document in the "users" collection in Firestore to store the user's information.
+ * This function is called by the client after a user is created via Firebase Authentication. It expects the request
+ * to be authenticated and include any necessary user info in the body.
  * 
- * @param {Object} user The user object containing the user's information.
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
  */
-exports.createUserDocument = functions.auth.user().onCreate((user) => {
-    createUser(user);
+exports.createUserDocument = functions.https.onRequest(async (req, res) => {
+    authenticate(req, res, async () => {
+        const user = req.body;
+        await createUser(req);
+
+        res.status(200).send({ message: "User document created." });
+    });
 });
 
 /**

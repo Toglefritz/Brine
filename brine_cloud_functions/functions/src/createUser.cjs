@@ -9,9 +9,9 @@ const admin = require('../config/adminInit.cjs');
  * empty since this function is only responsible for creating the user document right after the user's account is
  * created. Other functions will be responsible for updating these arrays as the user interacts with the app.
  */
-async function createUser(user) {
-    // Get the user's UID from the user object.
-    const uid = user.uid;
+async function createUser(req) {
+    // Get the user's UID from the request object.
+    const uid = req.user.uid;
 
     try {
         // Create a new document in the "users" collection with the user's UID.
