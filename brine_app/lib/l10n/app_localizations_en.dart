@@ -135,6 +135,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailUpdateDialogTitle => 'Confirmation required';
 
   @override
+  String get firebaseAuthCreationError =>
+      'Something went wrong while setting up your login credentials. This could be due to a network hiccup, an issue with the email or password, or just some temporary turbulence. Just give it another go, and if the problem sticks around, our team is here to help and they have, in fact, already been alerted.';
+
+  @override
+  String get firebaseAuthCreationErrorTitle =>
+      'We Hit a Snag Creating Your Account';
+
+  @override
   String get getOneNow => 'Get one now';
 
   @override
@@ -277,6 +285,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get username => 'Username (email)';
+
+  @override
+  String get userDocumentCreationError =>
+      'Your account was created, but we couldn’t finish setting up your profile behind the scenes. This is likely a temporary issue, and the Brine team has already been alerted. You can try again in a moment, and we’ll make sure everything’s running smoothly.';
+
+  @override
+  String get userDocumentCreationErrorTitle => 'Almost There… But Not Quite';
 
   @override
   String get waterSoftenerHeight => 'Water softener height';

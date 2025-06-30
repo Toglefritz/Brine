@@ -15,6 +15,13 @@ enum ErrorType {
   /// Bluetooth permissions being denied. Rather, it is related to checking the status of the permissions.
   bluetoothPermissions,
 
+  /// An error related to a failure to create a new account in Firebase Auth.
+  firebaseAuthCreationFailed,
+
+  /// An error related to a failure to create a new document for the user's account in Firestore. This error occurs
+  /// after the user has successfully created an account in Firebase Auth.
+  userDocumentCreationFailed,
+
   /// An error with an unknown cause.
   unknown;
 
@@ -25,6 +32,10 @@ enum ErrorType {
         return AppLocalizations.of(context)!.unauthenticatedErrorTitle;
       case ErrorType.bluetoothPermissions:
         return AppLocalizations.of(context)!.bluetoothPermissionsErrorTitle;
+      case ErrorType.firebaseAuthCreationFailed:
+        return AppLocalizations.of(context)!.firebaseAuthCreationErrorTitle;
+      case ErrorType.userDocumentCreationFailed:
+        return AppLocalizations.of(context)!.userDocumentCreationErrorTitle;
       case ErrorType.unknown:
         return AppLocalizations.of(context)!.unknownErrorTitle;
     }
@@ -37,6 +48,10 @@ enum ErrorType {
         return AppLocalizations.of(context)!.unauthenticatedError;
       case ErrorType.bluetoothPermissions:
         return AppLocalizations.of(context)!.bluetoothPermissionsError;
+      case ErrorType.firebaseAuthCreationFailed:
+        return AppLocalizations.of(context)!.firebaseAuthCreationError;
+      case ErrorType.userDocumentCreationFailed:
+        return AppLocalizations.of(context)!.userDocumentCreationError;
       case ErrorType.unknown:
         return AppLocalizations.of(context)!.unknownError;
     }

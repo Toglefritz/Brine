@@ -6,8 +6,12 @@ import 'package:flutter/material.dart';
 
 import '../../../services/analytics/analytics.dart';
 import '../../../services/authentication/authentication_service.dart';
+import '../../../services/authentication/exceptions/firebase_auth_creation_exception.dart';
+import '../../../services/authentication/exceptions/user_document_creation_exception.dart';
 import '../../../services/authentication/models/auth_methods.dart';
 import '../../../values/regex.dart';
+import '../../errors/error_route.dart';
+import '../../errors/models/error_type.dart';
 import '../../setup/setup_route.dart';
 import '../onboarding/onboarding_route.dart';
 import 'create_account_route.dart';
@@ -259,20 +263,41 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
   /// Handles taps on the Google sign in button.
   Future<void> handleGoogleCreateAccount() async {
-    // TODO(Toglefritz): catch exceptions
-    await AuthenticationService.createUser(method: AuthMethod.google);
-
     Analytics.trackSignUp(AuthMethod.google);
 
-    _navigateToSetup();
+    try {
+      await AuthenticationService.createUser(method: AuthMethod.google);
+
+      _navigateToSetup();
+    } on FirebaseAuthCreationException catch (_) {
+      _showErrorPage(errorType: ErrorType.firebaseAuthCreationFailed);
+    } on UserDocumentCreationException catch (_) {
+      _showErrorPage(errorType: ErrorType.userDocumentCreationFailed);
+    } catch (e) {
+      _showErrorPage(errorType: ErrorType.unknown);
+    }
+  }
+
+  /// Displays an error page with information about the error that occurred during account creation.
+  void _showErrorPage({required ErrorType errorType}) {
+    // TODO(Toglefritz): should this be a push?
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => ErrorRoute(
+          errorType: errorType,
+        ),
+      ),
+    );
   }
 
   /// Handles taps on the Apple sign in button.
   Future<void> handleAppleCreateAccount() async {
-    // TODO(Toglefritz): catch exceptions
-    await AuthenticationService.createUser(method: AuthMethod.apple);
-
     Analytics.trackSignUp(AuthMethod.apple);
+
+    // TODO(Toglefritz): catch exceptions
+
+    await AuthenticationService.createUser(method: AuthMethod.apple);
 
     _navigateToSetup();
   }

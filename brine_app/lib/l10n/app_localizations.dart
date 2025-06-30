@@ -328,6 +328,18 @@ abstract class AppLocalizations {
   /// **'Confirmation required'**
   String get emailUpdateDialogTitle;
 
+  /// No description provided for @firebaseAuthCreationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong while setting up your login credentials. This could be due to a network hiccup, an issue with the email or password, or just some temporary turbulence. Just give it another go, and if the problem sticks around, our team is here to help and they have, in fact, already been alerted.'**
+  String get firebaseAuthCreationError;
+
+  /// Title for the error message displayed when the app fails to create a Firebase authentication account.
+  ///
+  /// In en, this message translates to:
+  /// **'We Hit a Snag Creating Your Account'**
+  String get firebaseAuthCreationErrorTitle;
+
   /// Text for a button that allows the user to purchase a Brine device.
   ///
   /// In en, this message translates to:
@@ -603,6 +615,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Username (email)'**
   String get username;
+
+  /// Error message displayed when the app fails to create a user document in Firestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was created, but we couldn’t finish setting up your profile behind the scenes. This is likely a temporary issue, and the Brine team has already been alerted. You can try again in a moment, and we’ll make sure everything’s running smoothly.'**
+  String get userDocumentCreationError;
+
+  /// Title for the error message displayed when the app fails to create a user document in Firestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost There… But Not Quite'**
+  String get userDocumentCreationErrorTitle;
 
   /// Label for field used to collect the height of the water softener.
   ///
