@@ -31,7 +31,7 @@ const admin = require('../config/adminInit.cjs');
  * displaying them to the user.
  * 
  * This function is called during the provisioning process when a new device is added to the user's account. It is 
- * reponsible for creating/adding the device to the user's list of devices and creating a record for the device itself.
+ * responsible for creating/adding the device to the user's list of devices and creating a record for the device itself.
  * 
  * The function is provided with the device ID and device name in the request body. It first verifies the Firebase ID
  * token in the Authorization header to get the UID of the user. It then retrieves the user document from Firestore and
