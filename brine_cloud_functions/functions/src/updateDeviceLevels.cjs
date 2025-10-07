@@ -1,6 +1,6 @@
 const admin = require('../config/adminInit.cjs');
 const crypto = require('crypto');
-const NotificationService = require('./notificationService.cjs');
+const { sendNotification } = require('./sendNotification.cjs');
 
 /**
  * @brief Updates the battery level and salt level of a device in a Firestore document.
@@ -120,7 +120,7 @@ async function updateDeviceLevels(req, res) {
                         }
 
                         // Send push notification
-                        await NotificationService.sendNotification(fcmTokens, notificationTitle, notificationBody);
+                        await sendNotification(fcmTokens, notificationTitle, notificationBody);
                     } else {
                         console.warn(`No FCM tokens found for user ${userDoc.id}. No notification sent.`);
                     }

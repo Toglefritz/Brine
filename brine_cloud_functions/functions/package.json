@@ -10,7 +10,17 @@
     "logs": "firebase functions:log",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:addDevice": "jest addDeviceToUser.test.cjs"
+    "test:addDevice": "jest addDeviceToUser.test.cjs",
+    "test:addFcmToken": "jest addFcmToken.test.cjs",
+    "test:addLead": "jest addLead.test.cjs",
+    "test:createUser": "jest createUser.test.cjs",
+    "test:deleteUser": "jest deleteUser.test.cjs",
+    "test:generatePSK": "jest generatePSK.test.cjs",
+    "test:getDevice": "jest getDevice.test.cjs",
+    "test:getUserDevices": "jest getUserDevices.test.cjs",
+    "test:removeDevice": "jest removeDeviceFromUser.test.cjs",
+    "test:updateApplianceHeight": "jest updateApplianceHeight.test.cjs",
+    "test:updateDeviceLevels": "jest updateDeviceLevels.test.cjs"
   },
   "engines": {
     "node": "22"
