@@ -37,6 +37,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bleConnecting => 'Establishing connection...';
 
   @override
+  String get bluetoothConnectionError =>
+      'We had a bit of trouble connecting to your Brine device over Bluetooth. Make sure it\'s powered on, nearby, and ready to pair, then give it another try.';
+
+  @override
+  String get bluetoothConnectionErrorTitle => 'Bluetooth Connection Failed';
+
+  @override
   String get cancel => 'Cancel';
 
   @override

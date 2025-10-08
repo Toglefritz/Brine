@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/analytics/analytics.dart';
 import '../../services/authentication/authentication_service.dart';
 import '../authentication/onboarding/onboarding_route.dart';
+import '../device_configuration/scan/scan_route.dart';
 import 'error_route.dart';
 import 'error_view.dart';
+import 'models/error_action.dart';
+import 'models/error_type.dart';
 
 /// Controller for the [ErrorRoute].
 class ErrorController extends State<ErrorRoute> {
@@ -15,8 +19,35 @@ class ErrorController extends State<ErrorRoute> {
     super.initState();
   }
 
+  /// Returns the appropriate action for the current error type, if any.
+  ErrorAction? getErrorAction() {
+    switch (widget.errorType) {
+      case ErrorType.unauthenticated:
+        return ErrorAction(
+          label: AppLocalizations.of(context)!.login,
+          onPressed: _onLoginAgain,
+        );
+      case ErrorType.bluetoothPermissions:
+        return null;
+      case ErrorType.firebaseAuthCreationFailed:
+        return ErrorAction(
+          label: AppLocalizations.of(context)!.tryAgain,
+          onPressed: _onLoginAgain,
+        );
+      case ErrorType.userDocumentCreationFailed:
+        return null;
+      case ErrorType.bluetoothConnection:
+        return ErrorAction(
+          label: AppLocalizations.of(context)!.tryAgain,
+          onPressed: _onRetryBluetoothConnection,
+        );
+      case ErrorType.unknown:
+        return null; // No action for unknown errors
+    }
+  }
+
   /// Handles taps on the button used to log into the Brine app again following an authentication error.
-  Future<void> onLoginAgain() async {
+  Future<void> _onLoginAgain() async {
     // First ensure that the current session is disposed.
     await AuthenticationService.signOut();
 
@@ -26,6 +57,18 @@ class ErrorController extends State<ErrorRoute> {
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => const OnboardingRoute(),
+      ),
+    );
+  }
+
+  /// Handles retrying Bluetooth connection.
+  Future<void> _onRetryBluetoothConnection() async {
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const ScanRoute(
+          excludedDeviceNames: [], // By definition, there are no excluded devices from this route
+        ),
       ),
     );
   }

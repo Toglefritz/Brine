@@ -5,12 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../components/app_bar/main_app_bar.dart';
 import '../../components/buttons/light_button.dart';
 import '../../extensions/brightness_extensions.dart';
-import '../../l10n/app_localizations.dart';
 import '../../theme/insets.dart';
-import '../../values/image_asset.dart';
 import 'error_controller.dart';
 import 'error_route.dart';
-import 'models/error_type.dart';
 
 /// View for the [ErrorRoute].
 class ErrorView extends StatelessWidget {
@@ -53,7 +50,7 @@ class ErrorView extends StatelessWidget {
                 vertical: Insets.medium,
               ),
               child: Image.asset(
-                ImageAsset.error.path,
+                state.widget.errorType.errorImage().path,
                 width: 256,
                 height: 256,
               ),
@@ -73,11 +70,11 @@ class ErrorView extends StatelessWidget {
               ),
             ),
 
-            // Show a button for some error types allowing the user to take action.
-            if (state.widget.errorType == ErrorType.unauthenticated)
+            // Show a button for error types that have an associated action.
+            if (state.getErrorAction() != null)
               LightButton(
-                text: AppLocalizations.of(context)!.login,
-                onPressed: state.onLoginAgain,
+                text: state.getErrorAction()!.label,
+                onPressed: state.getErrorAction()!.onPressed,
               ),
           ],
         ),

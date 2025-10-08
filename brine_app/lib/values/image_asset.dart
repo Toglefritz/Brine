@@ -2,6 +2,7 @@
 // ignore_for_file: public_member_api_docs
 enum ImageAsset {
   apple('apple.png'),
+  bluetoothError('bluetooth_error.png'),
   error('error.png'),
   google('google.png'),
   logoTransparentBackground('icons/brine_transparent_background.png'),

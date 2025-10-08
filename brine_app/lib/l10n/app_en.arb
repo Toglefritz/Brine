@@ -35,6 +35,14 @@
   "@bleConnecting": {
     "description": "Text displayed while the app is establishing a Bluetooth connection to a device."
   },
+  "bluetoothConnectionError": "We had a bit of trouble connecting to your Brine device over Bluetooth. Make sure it's powered on, nearby, and ready to pair, then give it another try.",
+  "@bluetoothConnectionError": {
+    "description": "Error message displayed when the app fails to establish a Bluetooth connection with a Brine device."
+  },
+  "bluetoothConnectionErrorTitle": "Bluetooth Connection Failed",
+  "@bluetoothConnectionErrorTitle": {
+    "description": "Title for the error message displayed when the app fails to establish a Bluetooth connection with a Brine device."
+  },
   "cancel": "Cancel",
   "@cancel": {
     "description": "Generic text for a button that allows the user to cancel an action."

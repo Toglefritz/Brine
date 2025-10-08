@@ -16,6 +16,8 @@ import '../../../services/ble/models/device_id_response.dart';
 import '../../../services/ble/models/response.dart';
 import '../../../services/device_management/models/brine_device.dart';
 import '../association/association_route.dart';
+import '../../errors/error_route.dart';
+import '../../errors/models/error_type.dart';
 import 'device_connection_route.dart';
 import 'device_connection_view.dart';
 
@@ -39,6 +41,12 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// The device ID of the Brine device.
   late String _deviceId;
 
+  /// Timer for connection timeout.
+  Timer? _connectionTimeout;
+
+  /// Connection timeout duration in seconds.
+  static const int _connectionTimeoutSeconds = 30;
+
   @override
   void initState() {
     Analytics.trackPageView('device_connection');
@@ -54,21 +62,54 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   void _connectToDevice() {
     debugPrint('Connecting to device: ${widget.device.address}');
 
+    // Start connection timeout timer
+    _startConnectionTimeout();
+
     try {
-      _connectionStream = _ble.connect(deviceAddress: widget.device.address).listen(
-            _onConnectionStateUpdate,
-          );
+      _connectionStream =
+          _ble.connect(deviceAddress: widget.device.address).listen(
+                _onConnectionStateUpdate,
+              );
     } catch (e) {
       debugPrint(
         'Failed to connect to device, ${widget.device.address}, with exception, $e',
       );
 
-      _handleConnectionError(e);
+      _onConnectionError(e);
     }
   }
 
+  /// Starts the connection timeout timer.
+  void _startConnectionTimeout() {
+    _connectionTimeout = Timer(
+      const Duration(seconds: _connectionTimeoutSeconds),
+      () {
+        debugPrint(
+            'Connection timeout reached for device: ${widget.device.address}');
+        _onConnectionTimeout();
+      },
+    );
+  }
+
+  /// Handles connection timeout by navigating to the error screen.
+  void _onConnectionTimeout() {
+    // Cancel any ongoing streams
+    _connectionStream?.cancel();
+    _servicesDiscoveredStream?.cancel();
+
+    // Navigate to error screen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const ErrorRoute(
+          errorType: ErrorType.bluetoothConnection,
+        ),
+      ),
+    );
+  }
+
   /// Handles errors resulting from an attempt to connect to a peripheral.
-  void _handleConnectionError(Object error) {
+  void _onConnectionError(Object error) {
     // Handle errors in connecting to a peripheral.
   }
 
@@ -76,13 +117,14 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   ///
   /// The app waits for a connection to the Brine device to be established before moving on to performing service
   /// and characteristic discovery.
-  // TODO(Toglefritz): add a timeout
   void _onConnectionStateUpdate(BleConnectionState state) {
     debugPrint(
       'Connection state update for ${widget.device.name}: ${state.name}',
     );
 
     if (state == BleConnectionState.connected) {
+      // Cancel the connection timeout since we've successfully connected
+      _connectionTimeout?.cancel();
       _discoverServices();
     }
   }
@@ -91,14 +133,16 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   void _discoverServices() {
     debugPrint('Discovering services');
 
-    _servicesDiscoveredStream = _ble.discoverServices(widget.device.address).listen(
-          _onServiceDiscovered,
-        );
+    _servicesDiscoveredStream =
+        _ble.discoverServices(widget.device.address).listen(
+              _onServiceDiscovered,
+            );
   }
 
   /// Called when a services are successfully discovered.
   void _onServiceDiscovered(List<BleService> services) {
-    debugPrint('Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
+    debugPrint(
+        'Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
 
     // Ensure that the expected single service containing a single characteristic were discovered.
     if (services.length != 1 || services.first.characteristics.length != 1) {
@@ -110,16 +154,19 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     }
 
     // Get the single characteristic available from the Brine monitor.
-    final BleCharacteristic characteristic = services.first.characteristics.first;
+    final BleCharacteristic characteristic =
+        services.first.characteristics.first;
 
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
     _createBleCommunicationManager(characteristic);
   }
 
   /// Subscribes to the single characteristic available from Brine devices.
-  Future<void> _createBleCommunicationManager(BleCharacteristic characteristic) async {
+  Future<void> _createBleCommunicationManager(
+      BleCharacteristic characteristic) async {
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
-    _bleCommunicationManager = BleCommunicationService(characteristic: characteristic);
+    _bleCommunicationManager =
+        BleCommunicationService(characteristic: characteristic);
 
     // Register a callback for changes in the value of the characteristic.
     _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);
@@ -137,7 +184,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     debugPrint('Requesting device ID');
 
     // Get the command for requesting the device ID.
-    final Command deviceIdCommand = Command(commandType: CommandType.getDeviceId);
+    final Command deviceIdCommand =
+        Command(commandType: CommandType.getDeviceId);
     final String commandString = deviceIdCommand.toJsonString();
 
     try {
@@ -206,6 +254,9 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   @override
   void dispose() {
+    // Cancel the connection timeout timer.
+    _connectionTimeout?.cancel();
+
     // Cancel the connection state stream.
     _connectionStream?.cancel();
 

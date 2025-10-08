@@ -148,6 +148,18 @@ abstract class AppLocalizations {
   /// **'Establishing connection...'**
   String get bleConnecting;
 
+  /// Error message displayed when the app fails to establish a Bluetooth connection with a Brine device.
+  ///
+  /// In en, this message translates to:
+  /// **'We had a bit of trouble connecting to your Brine device over Bluetooth. Make sure it\'s powered on, nearby, and ready to pair, then give it another try.'**
+  String get bluetoothConnectionError;
+
+  /// Title for the error message displayed when the app fails to establish a Bluetooth connection with a Brine device.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth Connection Failed'**
+  String get bluetoothConnectionErrorTitle;
+
   /// Generic text for a button that allows the user to cancel an action.
   ///
   /// In en, this message translates to:

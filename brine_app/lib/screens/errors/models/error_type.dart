@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../../values/image_asset.dart';
 
 /// An enumeration of error types that can be encountered in any part of the app.
 ///
@@ -22,6 +23,9 @@ enum ErrorType {
   /// after the user has successfully created an account in Firebase Auth.
   userDocumentCreationFailed,
 
+  /// An error related to establishing a Bluetooth connection with a Brine device.
+  bluetoothConnection,
+
   /// An error with an unknown cause.
   unknown;
 
@@ -36,6 +40,8 @@ enum ErrorType {
         return AppLocalizations.of(context)!.firebaseAuthCreationErrorTitle;
       case ErrorType.userDocumentCreationFailed:
         return AppLocalizations.of(context)!.userDocumentCreationErrorTitle;
+      case ErrorType.bluetoothConnection:
+        return AppLocalizations.of(context)!.bluetoothConnectionErrorTitle;
       case ErrorType.unknown:
         return AppLocalizations.of(context)!.unknownErrorTitle;
     }
@@ -52,8 +58,24 @@ enum ErrorType {
         return AppLocalizations.of(context)!.firebaseAuthCreationError;
       case ErrorType.userDocumentCreationFailed:
         return AppLocalizations.of(context)!.userDocumentCreationError;
+      case ErrorType.bluetoothConnection:
+        return AppLocalizations.of(context)!.bluetoothConnectionError;
       case ErrorType.unknown:
         return AppLocalizations.of(context)!.unknownError;
+    }
+  }
+
+  /// Returns an [ImageAsset] object to be displayed with each error message.
+  ImageAsset errorImage() {
+    switch (this) {
+      case ErrorType.bluetoothConnection:
+        return ImageAsset.bluetoothError;
+      case ErrorType.unauthenticated:
+      case ErrorType.bluetoothPermissions:
+      case ErrorType.firebaseAuthCreationFailed:
+      case ErrorType.userDocumentCreationFailed:
+      case ErrorType.unknown:
+        return ImageAsset.error;
     }
   }
 }
