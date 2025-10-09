@@ -14,8 +14,7 @@ class BrineApp extends StatelessWidget {
   const BrineApp({super.key});
 
   /// A key used for the [Navigator] provided by the [MaterialApp] widget.
-  static final GlobalKey<NavigatorState> navigatorKey =
-      GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +30,7 @@ class BrineApp extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
-          builder:
-              (BuildContext context, AsyncSnapshot<User?> authStateSnapshot) {
+          builder: (BuildContext context, AsyncSnapshot<User?> authStateSnapshot) {
             if (authStateSnapshot.hasData) {
               return const SetupRoute();
             }

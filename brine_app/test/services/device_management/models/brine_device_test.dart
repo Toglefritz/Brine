@@ -15,8 +15,7 @@ void main() {
     group('fromJson', () {
       /// This test verifies that the `fromJson` factory constructor successfully creates a [BrineDevice] object from a
       /// JSON map. In this test, the salt and battery levels are both decimals.
-      test('should successfully create a BrineDevice object from a JSON map',
-          () {
+      test('should successfully create a BrineDevice object from a JSON map', () {
         // Set up the JSON map.
         final Map<String, dynamic> json = {
           'device_id': 'shadowy_scarlet_owl',
@@ -37,9 +36,7 @@ void main() {
 
       /// This test verifies that the `fromJson` factory constructor successfully creates a [BrineDevice] object from a
       /// JSON map. In this test, the salt and battery levels are both integers.
-      test(
-          'should successfully create a BrineDevice object from a JSON map with integer salt and battery levels',
-          () {
+      test('should successfully create a BrineDevice object from a JSON map with integer salt and battery levels', () {
         // Set up the JSON map.
         final Map<String, dynamic> json = {
           'device_id': 'swift_onyx_hawk',

@@ -18,8 +18,7 @@ class AddDeviceButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor:
-            WidgetStateProperty.all(Theme.of(context).primaryColorLight),
+        backgroundColor: WidgetStateProperty.all(Theme.of(context).primaryColorLight),
         shape: WidgetStateProperty.all<CircleBorder>(const CircleBorder()),
         side: WidgetStateProperty.all(
           BorderSide(

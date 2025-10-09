@@ -155,16 +155,13 @@ class ScanController extends State<ScanRoute> {
     debugPrint('Discovered Brine device, ${device.name}');
 
     // Check if the discovered device is among the excluded devices
-    final bool isExcluded = widget.excludedDeviceNames
-        .where((String excludedDeviceName) => excludedDeviceName == device.name)
-        .isNotEmpty;
+    final bool isExcluded =
+        widget.excludedDeviceNames.where((String excludedDeviceName) => excludedDeviceName == device.name).isNotEmpty;
 
     // Check that the discovered device is not excluded. If it is, ignore the device. If it is not excluded, double
     // check that the device has a name that contains Brine. This is not a robust security feature, just a simple tool
     // that avoids issues if another BLE device within range happened to use the same UUID as Brine devices.
-    if (!isExcluded &&
-        (device.name?.isNotEmpty ?? false) &&
-        (device.name?.contains('Brine') ?? false)) {
+    if (!isExcluded && (device.name?.isNotEmpty ?? false) && (device.name?.contains('Brine') ?? false)) {
       // Cancel the timeout timer.
       _scanTimeout.cancel();
 
@@ -227,8 +224,7 @@ class ScanController extends State<ScanRoute> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      _scanTimeoutReached ? ScanViewNoneFound(this) : ScanView(this);
+  Widget build(BuildContext context) => _scanTimeoutReached ? ScanViewNoneFound(this) : ScanView(this);
 
   @override
   void dispose() {

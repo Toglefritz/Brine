@@ -15,9 +15,9 @@ import '../../../services/ble/models/command_type.dart';
 import '../../../services/ble/models/device_id_response.dart';
 import '../../../services/ble/models/response.dart';
 import '../../../services/device_management/models/brine_device.dart';
-import '../association/association_route.dart';
 import '../../errors/error_route.dart';
 import '../../errors/models/error_type.dart';
+import '../association/association_route.dart';
 import 'device_connection_route.dart';
 import 'device_connection_view.dart';
 
@@ -66,10 +66,9 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     _startConnectionTimeout();
 
     try {
-      _connectionStream =
-          _ble.connect(deviceAddress: widget.device.address).listen(
-                _onConnectionStateUpdate,
-              );
+      _connectionStream = _ble.connect(deviceAddress: widget.device.address).listen(
+            _onConnectionStateUpdate,
+          );
     } catch (e) {
       debugPrint(
         'Failed to connect to device, ${widget.device.address}, with exception, $e',
@@ -85,7 +84,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
       const Duration(seconds: _connectionTimeoutSeconds),
       () {
         debugPrint(
-            'Connection timeout reached for device: ${widget.device.address}');
+          'Connection timeout reached for device: ${widget.device.address}',
+        );
         _onConnectionTimeout();
       },
     );
@@ -133,16 +133,14 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   void _discoverServices() {
     debugPrint('Discovering services');
 
-    _servicesDiscoveredStream =
-        _ble.discoverServices(widget.device.address).listen(
-              _onServiceDiscovered,
-            );
+    _servicesDiscoveredStream = _ble.discoverServices(widget.device.address).listen(
+          _onServiceDiscovered,
+        );
   }
 
   /// Called when a services are successfully discovered.
   void _onServiceDiscovered(List<BleService> services) {
-    debugPrint(
-        'Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
+    debugPrint('Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
 
     // Ensure that the expected single service containing a single characteristic were discovered.
     if (services.length != 1 || services.first.characteristics.length != 1) {
@@ -154,25 +152,24 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     }
 
     // Get the single characteristic available from the Brine monitor.
-    final BleCharacteristic characteristic =
-        services.first.characteristics.first;
+    final BleCharacteristic characteristic = services.first.characteristics.first;
 
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
     _createBleCommunicationManager(characteristic);
   }
 
   /// Subscribes to the single characteristic available from Brine devices.
-  Future<void> _createBleCommunicationManager(
-      BleCharacteristic characteristic) async {
+  Future<void> _createBleCommunicationManager(BleCharacteristic characteristic) async {
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
-    _bleCommunicationManager =
-        BleCommunicationService(characteristic: characteristic);
+    _bleCommunicationManager = BleCommunicationService(characteristic: characteristic);
 
     // Register a callback for changes in the value of the characteristic.
     _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);
 
     // With the subscription established, request the device ID.
-    await _getDeviceId(_bleCommunicationManager!.characteristic);
+    await _getDeviceId(
+      _bleCommunicationManager!.characteristic,
+    );
   }
 
   /// Retrieves a device ID for the Brine device.
@@ -184,8 +181,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     debugPrint('Requesting device ID');
 
     // Get the command for requesting the device ID.
-    final Command deviceIdCommand =
-        Command(commandType: CommandType.getDeviceId);
+    final Command deviceIdCommand = Command(commandType: CommandType.getDeviceId);
     final String commandString = deviceIdCommand.toJsonString();
 
     try {

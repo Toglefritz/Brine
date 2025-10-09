@@ -5,21 +5,23 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "brine_app (Firebase Emulator)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define=USE_FIREBASE_EMULATOR=true"
+            ]
+        },
+        {
             "name": "brine_app",
             "request": "launch",
             "type": "dart"
-        },
-        {
-            "name": "brine_app (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
         },
         {
             "name": "brine_app (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
-        }
+        },
     ]
 }

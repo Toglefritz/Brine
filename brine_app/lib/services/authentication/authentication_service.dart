@@ -20,7 +20,7 @@ class AuthenticationService {
   AuthenticationService({required this.user});
 
   /// The host for the Firebase Functions base URL.
-  static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
+  static final String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
 
   /// The base URL for all endpoints used by this service.
   static String baseUrl = kDebugMode
@@ -67,10 +67,8 @@ class AuthenticationService {
             'For authenticating with basic auth, the email and password must be provided',
           );
           user = await _createBasicAuthAccount(emailAddress: emailAddress!, password: password!);
-          break;
         case AuthMethod.google:
           user = await signInWithGoogle();
-          break;
         case AuthMethod.apple:
           // TODO(Toglefritz): Handle this case.
           break;

@@ -26,7 +26,7 @@ class PushNotificationsService {
   PushNotificationsService({required this.user});
 
   /// The host for the Firebase Functions base URL.
-  static const String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
+  static final String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
 
   /// The base URL for all endpoints used by this service.
   static String baseUrl = kDebugMode

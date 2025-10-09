@@ -42,7 +42,8 @@ class DashedLinePainter extends CustomPainter {
     final path = Path();
 
     while (startX < size.width) {
-      path..moveTo(startX, size.height / 2)
+      path
+        ..moveTo(startX, size.height / 2)
         ..lineTo(startX + dashWidth, size.height / 2);
       startX += dashWidth + dashGap;
     }

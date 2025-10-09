@@ -40,7 +40,7 @@ class SetupController extends State<SetupRoute> {
 
     try {
       deviceList = await _getDevices();
-    } on AuthenticationException catch(e, s) {
+    } on AuthenticationException catch (e, s) {
       debugPrint('Failed to perform setup with authentication exception, $e');
 
       await FirebaseCrashlytics.instance.recordError('Failed to perform setup with authentication exception, $e', s);
@@ -54,8 +54,7 @@ class SetupController extends State<SetupRoute> {
           ),
         ),
       );
-    }
-    catch (e) {
+    } catch (e) {
       debugPrint('Failed to perform setup with generic exception, $e');
 
       if (!mounted) return;
@@ -121,7 +120,11 @@ class SetupController extends State<SetupRoute> {
 
     try {
       // Get the current user.
-      final User user = FirebaseAuth.instance.currentUser!;
+      final User? user = FirebaseAuth.instance.currentUser;
+
+      if(user == null) {
+        throw AuthenticationException('No current user for the authentication session.');
+      }
 
       // Get an instance of the device management service for the current user.
       final DeviceManagementService deviceManagementService = DeviceManagementService(user: user);
@@ -131,7 +134,7 @@ class SetupController extends State<SetupRoute> {
 
       return deviceList;
     } on AuthenticationException catch (e, s) {
-      debugPrint('Failed to get devices with authentication exception, $e');
+      debugPrint('Failed to get devices with authentication exception, $e; $s');
 
       await FirebaseCrashlytics.instance.recordError('Failed to get devices with authentication exception, $e', s);
 

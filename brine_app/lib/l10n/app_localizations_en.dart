@@ -18,8 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addADevice => 'Add a device';
 
   @override
-  String get addDeviceInvitation =>
-      'Get started by linking your Brine device to the app.';
+  String get addDeviceInvitation => 'Get started by linking your Brine device to the app.';
 
   @override
   String get and => ' and ';
@@ -84,12 +83,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAccount => 'Delete Account';
 
   @override
-  String get deleteAccountConfirmation =>
-      'Are you sure you want to delete your account?';
+  String get deleteAccountConfirmation => 'Are you sure you want to delete your account?';
 
   @override
-  String get detectedDeviceConfirmation =>
-      'Is this the device you wish to add?';
+  String get detectedDeviceConfirmation => 'Is this the device you wish to add?';
 
   @override
   String get device => 'Device';
@@ -146,8 +143,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong while setting up your login credentials. This could be due to a network hiccup, an issue with the email or password, or just some temporary turbulence. Just give it another go, and if the problem sticks around, our team is here to help and they have, in fact, already been alerted.';
 
   @override
-  String get firebaseAuthCreationErrorTitle =>
-      'We Hit a Snag Creating Your Account';
+  String get firebaseAuthCreationErrorTitle => 'We Hit a Snag Creating Your Account';
 
   @override
   String get getOneNow => 'Get one now';
@@ -277,8 +273,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryAgain => 'Try again';
 
   @override
-  String get unauthenticatedError =>
-      'Your session has expired. Please log in again.';
+  String get unauthenticatedError => 'Your session has expired. Please log in again.';
 
   @override
   String get unauthenticatedErrorTitle => 'Authentication Error';
@@ -310,6 +305,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wifiConnecting => 'Connecting to WiFi...';
 
   @override
-  String get wifiSetupInstructions =>
-      'Select the WiFi network to which your Brine monitor should connect.';
+  String get wifiSetupInstructions => 'Select the WiFi network to which your Brine monitor should connect.';
 }

@@ -7,8 +7,7 @@ import 'dart:async' as _i5;
 
 import 'package:firebase_core/firebase_core.dart' as _i2;
 import 'package:firebase_messaging/firebase_messaging.dart' as _i4;
-import 'package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart'
-    as _i3;
+import 'package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -34,8 +33,7 @@ class _FakeFirebaseApp_0 extends _i1.SmartFake implements _i2.FirebaseApp {
         );
 }
 
-class _FakeNotificationSettings_1 extends _i1.SmartFake
-    implements _i3.NotificationSettings {
+class _FakeNotificationSettings_1 extends _i1.SmartFake implements _i3.NotificationSettings {
   _FakeNotificationSettings_1(
     Object parent,
     Invocation parentInvocation,
@@ -137,14 +135,12 @@ class MockFirebaseMessaging extends _i1.Mock implements _i4.FirebaseMessaging {
       ) as _i5.Future<bool>);
 
   @override
-  _i5.Future<_i3.NotificationSettings> getNotificationSettings() =>
-      (super.noSuchMethod(
+  _i5.Future<_i3.NotificationSettings> getNotificationSettings() => (super.noSuchMethod(
         Invocation.method(
           #getNotificationSettings,
           [],
         ),
-        returnValue: _i5.Future<_i3.NotificationSettings>.value(
-            _FakeNotificationSettings_1(
+        returnValue: _i5.Future<_i3.NotificationSettings>.value(_FakeNotificationSettings_1(
           this,
           Invocation.method(
             #getNotificationSettings,
@@ -179,8 +175,7 @@ class MockFirebaseMessaging extends _i1.Mock implements _i4.FirebaseMessaging {
             #providesAppNotificationSettings: providesAppNotificationSettings,
           },
         ),
-        returnValue: _i5.Future<_i3.NotificationSettings>.value(
-            _FakeNotificationSettings_1(
+        returnValue: _i5.Future<_i3.NotificationSettings>.value(_FakeNotificationSettings_1(
           this,
           Invocation.method(
             #requestPermission,
@@ -236,8 +231,7 @@ class MockFirebaseMessaging extends _i1.Mock implements _i4.FirebaseMessaging {
       ) as _i5.Future<void>);
 
   @override
-  _i5.Future<void> setDeliveryMetricsExportToBigQuery(bool? enabled) =>
-      (super.noSuchMethod(
+  _i5.Future<void> setDeliveryMetricsExportToBigQuery(bool? enabled) => (super.noSuchMethod(
         Invocation.method(
           #setDeliveryMetricsExportToBigQuery,
           [enabled],

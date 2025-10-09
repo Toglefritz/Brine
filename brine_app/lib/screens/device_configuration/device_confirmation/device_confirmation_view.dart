@@ -62,14 +62,12 @@ class DeviceConfirmationView extends StatelessWidget {
                 ),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    state.widget.device.name?.substring(6) ??
-                        state.widget.device.address,
+                    state.widget.device.name?.substring(6) ?? state.widget.device.address,
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                           fontSize: 52,
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Theme.of(context).primaryColorDark
-                                  : Theme.of(context).primaryColor,
+                          color: Theme.of(context).brightness == Brightness.light
+                              ? Theme.of(context).primaryColorDark
+                              : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                     textAlign: TextAlign.center,
