@@ -10,7 +10,7 @@
 #include <DeviceConfigurationManager.h>
 #include <DistanceSensor.h>
 #include <I2CButton.h>
-#include <I2CLED.h>
+#include <LEDService.h>
 #include <Wire.h>
 
 /// An I2CButton instance used to handle button presses.
@@ -201,7 +201,7 @@ void onProvisioningComplete() {
   DeviceConfigurationManager::getInstance().stopProvisioning();
 
   // Turn off the LED in case it was on at the time of the timeout.
-  I2CLED::getInstance().turnOff();
+  LEDService::getInstance().turnOff();
 
   // Upload the salt and battery levels to the cloud.
   _updateDeviceLevels(true);
@@ -240,7 +240,7 @@ void startProvisioning() {
   // Set external callbacks
   deviceConfigManager.setExternalConnectionCallback([](BLEServer *pServer) {
     // Turn on the LED.
-    I2CLED::getInstance().turnOn();
+    LEDService::getInstance().turnOn();
 
     // Set the flag to indicate that a client is connected.
     clientConnected = true;
@@ -253,7 +253,7 @@ void startProvisioning() {
     DeviceConfigurationManager::getInstance().stopProvisioning();
 
     // Turn off the LED in case it was on at the time of the timeout.
-    I2CLED::getInstance().turnOff();
+    LEDService::getInstance().turnOff();
 
     // Reset the provisioning start time and button pressed flags.
     provisioningStartTime = 0;
@@ -312,10 +312,11 @@ void setup() {
   button.begin(Wire, button_isr);
 
   // Initialize the LED service.
-  I2CLED::getInstance().begin(Wire);
+  LEDService::getInstance().begin(Wire);
+  DebugService::getInstance().debugPrintln("LED Service initialized with " + LEDService::getInstance().getLEDType() + " LED.");
 
   // Turn the LED off initially.
-  I2CLED::getInstance().turnOff();
+  LEDService::getInstance().turnOff();
 
   // Initialize the distance sensor.
   bool sensorInitialized = sensor.begin(Wire);
@@ -420,7 +421,7 @@ void loop() {
       DeviceConfigurationManager::getInstance().stopProvisioning();
 
       // Turn off the LED in case it was on at the time of the timeout.
-      I2CLED::getInstance().turnOff();
+      LEDService::getInstance().turnOff();
 
       // Reset the provisioning start time and button pressed flags.
       provisioningStartTime = 0;
@@ -430,7 +431,7 @@ void loop() {
       I2CButton::getInstance().clearEventBits();
     } else if (!clientConnected) {
       // Blink LED while provisioning
-      I2CLED::getInstance().blink(millis());
+      LEDService::getInstance().blink(millis());
     }
   }
 
@@ -449,11 +450,11 @@ void loop() {
 
   // If the provisioning process is currently running, but a client is not connected yet, blink the LED.
   if (provisioningStartTime != 0 && !clientConnected) {
-    I2CLED::getInstance().blink(millis());
+    LEDService::getInstance().blink(millis());
   }
 
   // Ensure that the LED is off when provisioning is not running.
   if (provisioningStartTime == 0) {
-    I2CLED::getInstance().turnOff();
+    LEDService::getInstance().turnOff();
   }
 }
