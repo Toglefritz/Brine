@@ -1,24 +1,24 @@
-#ifndef DISTANCE_SENSOR_H
-#define DISTANCE_SENSOR_H
+#ifndef VL53L1X_SENSOR_H
+#define VL53L1X_SENSOR_H
 
 #include <SparkFun_VL53L1X.h>
 #include <Wire.h>
 
 /**
- * @class DistanceSensor
+ * @class VL53L1XSensor
  * @brief Provides services for interacting with the VL53L1X distance sensor.
  *
  * This class encapsulates functions for initializing the sensor, starting
  * a distance measurement, and retrieving the distance measurement data.
  */
-class DistanceSensor {
+class VL53L1XSensor {
 public:
   /**
-   * @brief Constructor for DistanceSensor.
+   * @brief Constructor for VL53L1XSensor.
    *
    * Initializes the sensor object.
    */
-  DistanceSensor();
+  VL53L1XSensor();
 
   /**
    * @brief Initializes the distance sensor.
@@ -71,4 +71,4 @@ private:
   SFEVL53L1X sensor; /// Instance of the sensor class.
 };
 
-#endif // VL53L1XService_h
+#endif // VL53L1X_SENSOR_H

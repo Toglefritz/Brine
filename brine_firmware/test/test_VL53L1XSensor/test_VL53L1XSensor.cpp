@@ -1,12 +1,12 @@
-#include "DistanceSensor.h"
+#include "VL53L1XSensor.h"
 #include <unity.h>
 
 /*
- * Test file for the DistanceSensor class. This test file tests the
- * functionality of the VLX53L1X distance sensor by verifying that it
+ * Test file for the VL53L1XSensor class. This test file tests the
+ * functionality of the VL53L1X distance sensor by verifying that it
  * initializes correctly and is able to obtain a distance reading.
  *
- *  Run this test with the command `pio test --filter test_DistanceSensor`.
+ *  Run this test with the command `pio test --filter test_VL53L1XSensor`.
  */
 
 // Define pins for the main I2C bus
@@ -16,7 +16,7 @@
 // The I2C interface for this test.
 TwoWire mainI2C = TwoWire(0);
 
-DistanceSensor sensor;
+VL53L1XSensor sensor;
 
 /**
  * @brief Test case for sensor initialization.
@@ -29,7 +29,7 @@ void test_sensor_initialization(void) {
 }
 
 /**
- * @brief Test the startMeasurement function of the DistanceSensor class.
+ * @brief Test the startMeasurement function of the VL53L1XSensor class.
  *
  * This test verifies that the sensor starts the measurement correctly and
  * obtains a valid range status.

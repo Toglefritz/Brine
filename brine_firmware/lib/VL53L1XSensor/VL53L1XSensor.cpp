@@ -1,8 +1,8 @@
-#include "DistanceSensor.h"
+#include "VL53L1XSensor.h"
 #include "DebugService.h" // For debugging output
 
 // Constructor
-DistanceSensor::DistanceSensor() : sensor() {}
+VL53L1XSensor::VL53L1XSensor() : sensor() {}
 
 /**
  * @brief Initializes the VL53L1X sensor.
@@ -10,7 +10,7 @@ DistanceSensor::DistanceSensor() : sensor() {}
  * Begins I2C communication and checks the sensor's initial status.
  * If initialization fails, it enters an infinite loop after logging the error.
  */
-bool DistanceSensor::begin(TwoWire &i2cBus) {
+bool VL53L1XSensor::begin(TwoWire &i2cBus) {
   // Initialize the sensor
   bool status = sensor.begin(i2cBus);
 
@@ -28,7 +28,7 @@ bool DistanceSensor::begin(TwoWire &i2cBus) {
 /**
  * @brief Starts the ranging process to measure distance.
  */
-void DistanceSensor::startMeasurement() { sensor.startRanging(); }
+void VL53L1XSensor::startMeasurement() { sensor.startRanging(); }
 
 /**
  * @brief Retrieves the range status of the sensor.
@@ -39,7 +39,7 @@ void DistanceSensor::startMeasurement() { sensor.startRanging(); }
  *  - 2: Sigma fail
  *  - 7: Wrapped target fail
  */
-int DistanceSensor::getRangeStatus() { return sensor.getRangeStatus(); }
+int VL53L1XSensor::getRangeStatus() { return sensor.getRangeStatus(); }
 
 /**
  * @brief Retrieves the current distance measurement.
@@ -49,7 +49,7 @@ int DistanceSensor::getRangeStatus() { return sensor.getRangeStatus(); }
  *
  * @return Distance in millimeters as an integer.
  */
-int DistanceSensor::getDistance() {
+int VL53L1XSensor::getDistance() {
   while (!sensor.checkForDataReady()) {
     delay(1); // Wait for measurement to be ready
   }
@@ -75,7 +75,7 @@ int DistanceSensor::getDistance() {
  * This method should be called after retrieving the distance measurement
  * to ensure the sensor does not interfere with other I2C operations.
  */
-void DistanceSensor::stopMeasurement() {
+void VL53L1XSensor::stopMeasurement() {
   DebugService::getInstance().debugPrint("Stopping distance sensor");
   sensor.stopRanging(); // Safely stop the sensor
 }
