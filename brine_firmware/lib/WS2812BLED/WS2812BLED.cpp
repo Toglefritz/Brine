@@ -22,7 +22,8 @@ bool WS2812BLED::begin(uint16_t numLeds) {
     this->numLeds = numLeds;
     
     // Initialize FastLED with compile-time pin specification
-    FastLED.addLeds<WS2812B, WS2812B_DATA_PIN, GRB>(leds, numLeds).setCorrection(TypicalLEDStrip);
+    // Try GRB color order (most common for WS2812B)
+    FastLED.addLeds<WS2812B, WS2812B_DATA_PIN, GRB>(leds, numLeds);
     FastLED.setBrightness(brightness);
     
     // Turn off all LEDs initially

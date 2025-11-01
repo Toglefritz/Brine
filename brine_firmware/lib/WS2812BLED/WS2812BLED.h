@@ -162,7 +162,7 @@ class WS2812BLED {
     /**
      * @brief Current brightness level (0-255).
      */
-    uint8_t brightness = 32; // ~12.5% brightness
+    uint8_t brightness = 128; // 50% brightness for better color visibility
 
     /**
      * @brief Current color of the LED.

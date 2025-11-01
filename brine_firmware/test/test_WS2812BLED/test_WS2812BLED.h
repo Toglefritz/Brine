@@ -52,15 +52,19 @@ void test_ws2812b_set_color_rgb(void) {
   // Test setting red color
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(255, 0, 0));
   WS2812BLED::getInstance().turnOn();
+  delay(1500); // Give time to observe red
   
   // Test setting green color
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(0, 255, 0));
+  delay(1500); // Give time to observe green
   
   // Test setting blue color
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(0, 0, 255));
+  delay(1500); // Give time to observe blue
   
   // Test setting white color
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(255, 255, 255));
+  delay(1500); // Give time to observe white
 }
 
 /**
@@ -69,12 +73,17 @@ void test_ws2812b_set_color_rgb(void) {
 void test_ws2812b_set_color_crgb(void) {
   // Test setting predefined colors
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(CRGB::Red));
+  delay(1000);
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(CRGB::Green));
+  delay(1000);
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(CRGB::Blue));
+  delay(1000);
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(CRGB::White));
+  delay(1000);
   
-  // Test custom CRGB color
+  // Test custom CRGB color (purple)
   TEST_ASSERT_TRUE(WS2812BLED::getInstance().setColor(CRGB(128, 64, 192)));
+  delay(1000);
 }
 
 /**

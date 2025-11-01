@@ -6,7 +6,7 @@
 #include <Wire.h>
 
 /*
- *  This test file tests the I2CLED class. The I2CLED class is a singleton class
+ * This test file tests the I2CLED class. The I2CLED class is a singleton class
  * that controls an LED connected to an I2C bus. The I2CLED class has two
  * methods: turnOn() and turnOff(). The turnOn() method turns the LED on, and
  * the turnOff() method turns the LED off. This test file tests the
