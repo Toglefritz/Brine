@@ -8,7 +8,7 @@
 #include <BatteryMonitor.h>
 #include <DeepSleepService.h>
 #include <DeviceConfigurationManager.h>
-#include <VL53L1XSensor.h>
+#include <DistanceSensor.h>
 #include <I2CButton.h>
 #include <LEDService.h>
 #include <Wire.h>
@@ -54,9 +54,10 @@ NVSService &nvsService = NVSService::getInstance();
 // A service for sending information to the Firebase cloud backend.
 FirebaseService firebaseService;
 
-// A service for getting readings from the VL53L1X distance sensor used to determine the salt level in the water softener based
+// A service for getting readings from the distance sensor used to determine the salt level in the water softener based
 // on the distance of the salt level from the sensor compared to the overall height of the water softener.
-VL53L1XSensor sensor;
+// Sensor type (VL53L0X or VL53L1X) is determined by compile-time configuration.
+DistanceSensor sensor;
 
 /**
  * @brief Configures the deep sleep management service.

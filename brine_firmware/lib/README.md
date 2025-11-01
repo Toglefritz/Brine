@@ -16,7 +16,11 @@ The directory typically contains subdirectories for each library or module, whic
 
 - **I2CButton**: Contains the driver for interfacing with the Qwiic Button module, encapsulating all the functionality needed to interact with the button.
 
+- **DistanceSensor**: Unified interface for distance sensors that supports both VL53L0X and VL53L1X sensors based on compile-time configuration. Use `-DVL53L0X_SENSOR` build flag to use VL53L0X, otherwise VL53L1X is used by default.
+
 - **VL53L1XSensor**: Houses the code required for interfacing with the Qwiic VL53L1X distance sensor, providing an API for measuring distances.
+
+- **VL53L0XSensor**: Contains the driver for interfacing with the VL53L0X distance sensor using the Adafruit library, providing the same API interface as VL53L1XSensor for compatibility.
 
 - **FirebaseModule**: A library that encapsulates the functionality required for interacting with Firebase, offering a simplified interface for database operations.
 
