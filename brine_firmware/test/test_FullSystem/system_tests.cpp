@@ -26,9 +26,8 @@
  * To run this combined test, use the command, `pio test --filter test_FullSystem`
  */
 
-// Define pins for the main I2C bus
-#define MAIN_SDA_PIN 21
-#define MAIN_SCL_PIN 22
+// I2C pins are defined in platformio.ini build flags
+// Use I2C_SDA_PIN and I2C_SCL_PIN from build configuration
 
 // The I2C interface for this test.
 TwoWire mainI2C = TwoWire(0);
@@ -42,8 +41,8 @@ void test_main_I2C_devices_detected(void) { test_main_I2C_devices_detected(mainI
 void test_battery_life_percentage(void) { test_battery_life_percentage(mainI2C); }
 
 void setup() {
-  // Initialize the I2C busses for the main instances
-  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
+  // Initialize the I2C busses for the main instances using pins from build configuration
+  mainI2C.begin(I2C_SDA_PIN, I2C_SCL_PIN);
 
   // Start Unity framework
   UNITY_BEGIN();

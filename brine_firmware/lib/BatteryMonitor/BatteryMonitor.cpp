@@ -32,7 +32,9 @@ bool BatteryMonitor::begin(TwoWire &i2cBus) {
 #ifdef BATTERY_MONITOR_MAX17048
   DebugService::getInstance().debugPrintln("Initializing MAX17048 battery monitor");
   _i2cBus = &i2cBus;
-  return monitor.begin(i2cBus);
+  // Create new MAX17048Monitor instance with the correct I2C bus
+  monitor = MAX17048Monitor(i2cBus);
+  return monitor.isAvailable();
 #else
   DebugService::getInstance().debugPrintln("Initializing voltage divider battery monitor");
   return monitor.begin();

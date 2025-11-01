@@ -13,10 +13,6 @@
  *  Run this test with the command `pio test --filter test_BatteryMonitor`.
  */
 
-// Define pins for the main I2C bus (only used for MAX17048)
-#define MAIN_SDA_PIN 21
-#define MAIN_SCL_PIN 22
-
 // Global test variables
 BatteryMonitor batteryMonitor;
 bool monitorInitialized = false;
@@ -25,8 +21,8 @@ void setup() {
   delay(2000); // Wait for serial monitor to connect
   
 #ifdef BATTERY_MONITOR_MAX17048
-  // Initialize I2C for MAX17048 communication
-  Wire.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
+  // Initialize I2C for MAX17048 communication using pins from build configuration
+  Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
 #endif
 
   // Start the Unity test framework

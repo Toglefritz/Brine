@@ -13,9 +13,8 @@
  *  Run this test with the command `pio test --filter test_MAX17048Monitor`.
  */
 
-// Define pins for the main I2C bus (used for MAX17048 communication)
-#define MAIN_SDA_PIN 21
-#define MAIN_SCL_PIN 22
+// I2C pins are defined in platformio.ini build flags
+// Use I2C_SDA_PIN and I2C_SCL_PIN from build configuration
 
 // The I2C interface for this test.
 TwoWire mainI2C = TwoWire(0);
@@ -44,8 +43,8 @@ void test_battery_reading_consistency_wrapper(void) {
 void setup() {
   delay(2000); // Wait for serial monitor to connect
   
-  // Initialize I2C for MAX17048 communication
-  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
+  // Initialize I2C for MAX17048 communication using pins from build configuration
+  mainI2C.begin(I2C_SDA_PIN, I2C_SCL_PIN);
 
   // Start the Unity test framework
   UNITY_BEGIN();

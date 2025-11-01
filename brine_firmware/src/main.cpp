@@ -305,8 +305,8 @@ void startProvisioning() {
  * @brief The setup function for the Brine monitor firmware.
  */
 void setup() {
-  // Initialize the main I2C bus for general peripherals
-  Wire.begin();
+  // Initialize the main I2C bus for general peripherals using pins from build configuration
+  Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
   DebugService::getInstance().debugPrintln("I2C bus initialized.");
 
   // Initialize the button service, setting the buttonCallback function as the callback for button presses.

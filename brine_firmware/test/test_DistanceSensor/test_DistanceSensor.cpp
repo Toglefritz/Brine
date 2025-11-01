@@ -10,9 +10,8 @@
  * Use -DVL53L0X_SENSOR build flag to test VL53L0X, otherwise VL53L1X is tested.
  */
 
-// Define pins for the main I2C bus
-#define MAIN_SDA_PIN 5
-#define MAIN_SCL_PIN 6
+// I2C pins are defined in platformio.ini build flags
+// Use I2C_SDA_PIN and I2C_SCL_PIN from build configuration
 
 TwoWire mainI2C = TwoWire(0);
 DistanceSensor sensor;
@@ -148,8 +147,8 @@ void test_stop_measurement(void) {
 void setup() {
   delay(2000); // Wait for serial monitor to connect
   
-  // Initialize the I2C bus with specified pins
-  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
+  // Initialize the I2C bus with pins from build configuration
+  mainI2C.begin(I2C_SDA_PIN, I2C_SCL_PIN);
   
   UNITY_BEGIN();
   
