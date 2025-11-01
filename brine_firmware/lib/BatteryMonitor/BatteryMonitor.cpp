@@ -1,33 +1,74 @@
 #include "BatteryMonitor.h"
-#include <SparkFun_MAX1704x_Fuel_Gauge_Arduino_Library.h>
-#include <DebugService.h>
+#include "DebugService.h"
 
-// Constructor
-BatteryMonitor::BatteryMonitor(TwoWire &i2cBus) {
-  // Initialize the MAX17048
-  if (!_fuelGauge.begin(i2cBus)) {
-    DebugService::getInstance().debugPrintln("MAX17048 initialization failed! Check wiring.");
-  } else {
-    DebugService::getInstance().debugPrintln("MAX17048 initialized successfully.");
-  }
+// Default constructor
+BatteryMonitor::BatteryMonitor() 
+#ifdef BATTERY_MONITOR_MAX17048
+  : monitor(Wire), _i2cBus(&Wire) 
+#else
+  : monitor() // Use default voltage divider parameters
+#endif
+{
+}
+
+#ifdef BATTERY_MONITOR_MAX17048
+// Constructor for MAX17048
+BatteryMonitor::BatteryMonitor(TwoWire &i2cBus) 
+  : monitor(i2cBus), _i2cBus(&i2cBus) {
+}
+#else
+// Constructor for voltage divider
+BatteryMonitor::BatteryMonitor(int adcPin, float r1, float r2, float maxVoltage, float minVoltage) 
+  : monitor(adcPin, r1, r2, maxVoltage, minVoltage) {
+}
+#endif
+
+/**
+ * @brief Initializes the battery monitor.
+ *
+ * The specific monitor type is determined by compile-time configuration.
+ */
+bool BatteryMonitor::begin(TwoWire &i2cBus) {
+#ifdef BATTERY_MONITOR_MAX17048
+  DebugService::getInstance().debugPrintln("Initializing MAX17048 battery monitor");
+  _i2cBus = &i2cBus;
+  return monitor.begin(i2cBus);
+#else
+  DebugService::getInstance().debugPrintln("Initializing voltage divider battery monitor");
+  return monitor.begin();
+#endif
 }
 
 /**
- * Calculates and returns the battery life percentage using the MAX17048.
- *
- * This function directly retrieves the battery life percentage from the MAX17048
- * fuel gauge chip, which internally calculates the remaining capacity of the
- * LiPo battery.
- *
- * @return The battery life percentage as a float value between 0 and 100.
+ * @brief Gets the battery life percentage.
  */
 float BatteryMonitor::getBatteryLifePercent() {
-  float batteryLife = _fuelGauge.getSOC(); // State of charge in percentage
-  // Ensure the percentage is between 0 and 100
-  batteryLife = constrain(batteryLife, 0, 100);
-
-  DebugService::getInstance().debugPrint("Battery life: ");
-  DebugService::getInstance().debugPrintln(String(batteryLife) + "%");
-
-  return batteryLife;
+  return monitor.getBatteryLifePercent();
 }
+
+/**
+ * @brief Check if the battery monitor is available.
+ */
+bool BatteryMonitor::isAvailable() const {
+  return monitor.isAvailable();
+}
+
+/**
+ * @brief Gets the monitor type being used.
+ */
+String BatteryMonitor::getMonitorType() const {
+#ifdef BATTERY_MONITOR_MAX17048
+  return "MAX17048";
+#else
+  return "VoltageDivider";
+#endif
+}
+
+#ifndef BATTERY_MONITOR_MAX17048
+/**
+ * @brief Get the raw battery voltage (voltage divider only).
+ */
+float BatteryMonitor::getBatteryVoltage() {
+  return monitor.getBatteryVoltage();
+}
+#endif

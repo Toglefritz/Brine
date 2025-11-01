@@ -3,35 +3,44 @@
 #include "test_BatteryMonitor.h"
 
 /*
- *  This test file tests the BatteryMonitor class. The BatteryMonitor class
- * provides functionality to monitor the battery level of an IoT device.
- * It utilizes the MAX17048 fuel gauge chip to calculate the remaining battery
- * life as a percentage. This test file verifies the functionality of the
- * BatteryMonitor class by checking if the battery life percentage is within
- * a reasonable range and that the MAX17048 initializes correctly.
+ *  This test file tests the unified BatteryMonitor class. The BatteryMonitor class
+ * provides a unified interface for battery monitoring that automatically adapts to
+ * different hardware configurations based on build flags.
+ * 
+ * The tests gracefully handle cases where hardware is not available
+ * by skipping hardware-dependent tests with appropriate messages.
  *
  *  Run this test with the command `pio test --filter test_BatteryMonitor`.
  */
 
-// Define pins for the main I2C bus
+// Define pins for the main I2C bus (only used for MAX17048)
 #define MAIN_SDA_PIN 21
 #define MAIN_SCL_PIN 22
 
-// The I2C interface for this test.
-TwoWire mainI2C = TwoWire(0);
-
-/**
- * Checks that the battery monitor is able to obtain a battery level.
- */
-void test_battery_life_percentage(void) { test_battery_life_percentage(mainI2C); }
+// Global test variables
+BatteryMonitor batteryMonitor;
+bool monitorInitialized = false;
 
 void setup() {
-  // Initialize the custom I2C instance with specified SDA and SCL pins
-  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
+  delay(2000); // Wait for serial monitor to connect
+  
+#ifdef BATTERY_MONITOR_MAX17048
+  // Initialize I2C for MAX17048 communication
+  Wire.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
+#endif
 
   // Start the Unity test framework
   UNITY_BEGIN();
+  
+  // Run all battery monitor tests
+  RUN_TEST(test_battery_monitor_initialization);
+  RUN_TEST(test_get_monitor_type);
   RUN_TEST(test_battery_life_percentage);
+  RUN_TEST(test_battery_reading_consistency);
+  
+#ifndef BATTERY_MONITOR_MAX17048
+  RUN_TEST(test_voltage_reading);
+#endif
 
   // End the Unity test framework
   UNITY_END();
