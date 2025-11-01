@@ -10,18 +10,11 @@
  * Use -DVL53L0X_SENSOR build flag to test VL53L0X, otherwise VL53L1X is tested.
  */
 
-/**
- * @brief Sets up the test environment.
- *
- * This function is called before each test case and initializes the I2C bus.
- */
-void setUp(void) {
-  // Initialize I2C
-  Wire.begin();
-}
+// Define pins for the main I2C bus
+#define MAIN_SDA_PIN 5
+#define MAIN_SCL_PIN 6
 
 TwoWire mainI2C = TwoWire(0);
-
 DistanceSensor sensor;
 bool sensorInitialized = false;
 
@@ -154,6 +147,9 @@ void test_stop_measurement(void) {
  */
 void setup() {
   delay(2000); // Wait for serial monitor to connect
+  
+  // Initialize the I2C bus with specified pins
+  mainI2C.begin(MAIN_SDA_PIN, MAIN_SCL_PIN);
   
   UNITY_BEGIN();
   
