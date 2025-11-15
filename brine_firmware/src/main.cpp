@@ -101,7 +101,8 @@ bool _updateDeviceLevels(bool sleepOnSuccess = false) {
   sensor.stopMeasurement();
 
   // Initialize the battery monitor
-  BatteryMonitor batteryMonitor = BatteryMonitor(Wire);
+  BatteryMonitor batteryMonitor;
+  batteryMonitor.begin(Wire);
 
   // Get the remaining battery life percentage using the BatteryMonitor
   float batteryLife = batteryMonitor.getBatteryLifePercent();
