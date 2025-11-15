@@ -6,12 +6,12 @@ import 'command_type.dart';
 /// Represents a command sent to the Brine BLE device.
 ///
 /// The [Command] class is the base class for all commands that can be sent to the Brine device. Each command is
-/// represented by a specific [CommandType] and can be serialized to a JSON format to be communicated over Bluetooth
-/// Low Energy (BLE).
+/// represented by a specific [CommandType] and can be serialized to a JSON format to be communicated over Bluetooth Low
+/// Energy (BLE).
 ///
-/// The [CommandType] enum defines the types of commands that can be issued. Each command type corresponds to a
-/// specific operation that the Brine device can perform, such as retrieving the device ID or other functionalities to
-/// be implemented.
+/// The [CommandType] enum defines the types of commands that can be issued. Each command type corresponds to a specific
+/// operation that the Brine device can perform, such as retrieving the device ID or other functionalities to be
+/// implemented.
 class Command {
   /// Creates an instance of [Command] with the provided [CommandType]
   Command({

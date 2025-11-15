@@ -27,8 +27,8 @@ class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
     super.initState();
   }
 
-  /// Sends a command to the Brine device to complete the provisioning process. This will cause the device to upload
-  /// its battery and salt level readings to the cloud backend before discontinuing Bluetooth communication.
+  /// Sends a command to the Brine device to complete the provisioning process. This will cause the device to upload its
+  /// battery and salt level readings to the cloud backend before discontinuing Bluetooth communication.
   Future<void> _completeProvisioning() async {
     // Register a callback to handle the response from the Brine device.
     widget.bleCommunicationManager.registerCallback(_onProvisioningComplete);
@@ -53,12 +53,12 @@ class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
   /// A callback that is invoked when the Brine device returns a response to the "complete_provisioning" command.
   ///
   /// The Brine device can send a response indicating the success or failure of the attempt to conclude the provisioning
-  /// process. Each of these responses will contain a different value for the "response" key. For successful connections, the value will be
-  /// a JSON object with a format like the following:
+  /// process. Each of these responses will contain a different value for the "response" key. For successful
+  /// connections, the value will be a JSON object with a format like the following:
   ///
   /// ```json
   /// {
-  ///    "response": "provisioning_complete",
+  /// "response": "provisioning_complete",
   /// }
   /// ```
   ///
@@ -68,8 +68,8 @@ class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
   ///
   /// ```json
   /// {
-  ///   "response": "complete_provisioning_error",
-  ///   "message": "<error message>"
+  /// "response": "complete_provisioning_error",
+  /// "message": "<error message>"
   /// }
   /// ```
   Future<void> _onProvisioningComplete(JSON value) async {

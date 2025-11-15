@@ -24,11 +24,9 @@ class DashedDivider extends StatelessWidget {
 
   /// Creates a dashed divider with the given properties.
   ///
-  /// The [height] specifies the height of the divider.
-  /// The [dashWidth] specifies the width of each dash segment.
-  /// The [dashGap] specifies the gap between each dash segment.
-  /// The [strokeWidth] specifies the width of the divider stroke.
-  /// The [color] specifies the color of the dashed divider.
+  /// The [height] specifies the height of the divider. The [dashWidth] specifies the width of each dash segment. The
+  /// [dashGap] specifies the gap between each dash segment. The [strokeWidth] specifies the width of the divider
+  /// stroke. The [color] specifies the color of the dashed divider.
   const DashedDivider({
     super.key,
     this.height = 1.0,

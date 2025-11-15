@@ -115,8 +115,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Called when the connection state is updated.
   ///
-  /// The app waits for a connection to the Brine device to be established before moving on to performing service
-  /// and characteristic discovery.
+  /// The app waits for a connection to the Brine device to be established before moving on to performing service and
+  /// characteristic discovery.
   void _onConnectionStateUpdate(BleConnectionState state) {
     debugPrint(
       'Connection state update for ${widget.device.name}: ${state.name}',
@@ -175,8 +175,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// Retrieves a device ID for the Brine device.
   ///
   /// Each Brine device has a unique device ID of the form `<adjective>_<adjective>_<noun>`, for example,
-  /// "vast_teal_elephant." The Bluetooth API used by Brine monitors include a command allowing the app to retrieve
-  /// this device ID. This is necessary because the device ID is included in the account association process.
+  /// "vast_teal_elephant." The Bluetooth API used by Brine monitors include a command allowing the app to retrieve this
+  /// device ID. This is necessary because the device ID is included in the account association process.
   Future<void> _getDeviceId(BleCharacteristic characteristic) async {
     debugPrint('Requesting device ID');
 
@@ -197,8 +197,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Handles changes in the value of a [BleCharacteristic].
   ///
-  /// This controller requests the device ID from the Brine monitor. Once the device ID is obtained, it continues
-  /// to the next step.
+  /// This controller requests the device ID from the Brine monitor. Once the device ID is obtained, it continues to the
+  /// next step.
   Future<void> _onCharacteristicChanged(JSON value) async {
     // Get a Response object from the characteristic value.
     final Response response = Response.fromJson(value);

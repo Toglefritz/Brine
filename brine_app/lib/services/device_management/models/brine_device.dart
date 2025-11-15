@@ -9,10 +9,9 @@ class BrineDevice {
   /// The name of the Brine BLE device, which is based on the device's Bluetooth MAC address.
   final String name;
 
-  /// The distance from the top of the salt in the water softener to the top of the water softener, in millimeters.
-  /// This distance represents the raw sensor value from the Brine device. This distance is used to calculate the
-  /// salt level in the water softener as a percentage, using the total height of the water softener as the
-  /// denominator.
+  /// The distance from the top of the salt in the water softener to the top of the water softener, in millimeters. This
+  /// distance represents the raw sensor value from the Brine device. This distance is used to calculate the salt level
+  /// in the water softener as a percentage, using the total height of the water softener as the denominator.
   final double saltDistance;
 
   /// The total height of the water softener, in millimeters. This value is used to calculate the salt level in the
@@ -82,11 +81,11 @@ class BrineDevice {
   /// A helper function used to determine if an update from a Brine device is overdue.
   ///
   /// The [lastUpdatedTimestamp] field determine the last date when the Brine device successfully updated its
-  /// information in the Firestore database. There are a number of reasons why a Brine device might stop sending updates.
-  /// This getter determines if the most recent update was more than three days in the past.
+  /// information in the Firestore database. There are a number of reasons why a Brine device might stop sending
+  /// updates. This getter determines if the most recent update was more than three days in the past.
   bool get isUpdateOverdue => DateTime.now().difference(lastUpdatedTimestamp).inDays > 3;
 
-  /// A helper function for getting the last updated timestamp in a human-readable format.
-  /// A getter for the last update time of the device, in the form, MM/DD/YYYY.
+  /// A helper function for getting the last updated timestamp in a human-readable format. A getter for the last update
+  /// time of the device, in the form, MM/DD/YYYY.
   String get lastUpdateTime => '${lastUpdatedTimestamp.month}/${lastUpdatedTimestamp.day}/${lastUpdatedTimestamp.year}';
 }

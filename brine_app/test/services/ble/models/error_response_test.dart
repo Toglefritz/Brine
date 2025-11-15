@@ -13,7 +13,8 @@ void main() {
   group('ErrorResponse', () {
     /// This group contains tests for the `toJson` method.
     group('toJson', () {
-      /// This test verifies that the `toJson` method successfully converts an [ErrorResponse] object to a JSON-serializable map.
+      /// This test verifies that the `toJson` method successfully converts an [ErrorResponse] object to a
+      /// JSON-serializable map.
       test('should successfully convert an ErrorResponse object to a JSON-serializable map', () {
         // Create an ErrorResponse object with an error message.
         final ErrorResponse response = ErrorResponse('mock_error_message');

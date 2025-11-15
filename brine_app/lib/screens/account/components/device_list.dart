@@ -13,8 +13,7 @@ class DeviceList extends StatelessWidget {
   /// The list of devices to display.
   final List<BrineDevice> devices;
 
-  /// Callback function called when a device should be removed.
-  /// Takes the device ID as a parameter.
+  /// Callback function called when a device should be removed. Takes the device ID as a parameter.
   final void Function(String deviceId) onRemoveDevice;
 
   @override

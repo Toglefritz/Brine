@@ -111,8 +111,8 @@ class SetupController extends State<SetupRoute> {
     }
   }
 
-  /// First, gets a list of [BrineDevice]s on the users account. Second, for each device on the user's account, get
-  /// the salt and battery levels of the device.
+  /// First, gets a list of [BrineDevice]s on the users account. Second, for each device on the user's account, get the
+  /// salt and battery levels of the device.
   Future<List<BrineDevice>> _getDevices() async {
     debugPrint(
       'Getting devices for user, ${FirebaseAuth.instance.currentUser?.uid}',

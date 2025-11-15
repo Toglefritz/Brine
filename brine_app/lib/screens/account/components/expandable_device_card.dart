@@ -5,8 +5,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../services/device_management/models/brine_device.dart';
 import '../../../theme/insets.dart';
 
-/// A card widget that expands when tapped to reveal additional information
-/// about an IoT device.
+/// A card widget that expands when tapped to reveal additional information about an IoT device.
 ///
 /// This widget initially displays only the device's name. When tapped, the card smoothly increases in height, revealing
 /// details such as salt level, battery level, and last updated timestamp.
@@ -14,10 +13,10 @@ import '../../../theme/insets.dart';
 /// Example usage:
 /// ```dart
 /// ExpandableDeviceCard(
-///   name: "Brine Device 1",
-///   saltLevel: 0.75,
-///   batteryLevel: 90,
-///   lastUpdatedTimestamp: "2025-01-30 12:00 PM",
+/// name: "Brine Device 1",
+/// saltLevel: 0.75,
+/// batteryLevel: 90,
+/// lastUpdatedTimestamp: "2025-01-30 12:00 PM",
 /// )
 /// ```
 class ExpandableDeviceCard extends StatefulWidget {
@@ -59,9 +58,9 @@ class ExpandableDeviceCardState extends State<ExpandableDeviceCard> {
 
   /// Toggles the expansion state of the card.
   ///
-  /// When the card is tapped, this method is called to either expand or collapse the card, and show or hide the
-  /// content within the card. The order in which the card is expanded or collapsed and the content is shown or hidden
-  /// is important to ensure a smooth transition.
+  /// When the card is tapped, this method is called to either expand or collapse the card, and show or hide the content
+  /// within the card. The order in which the card is expanded or collapsed and the content is shown or hidden is
+  /// important to ensure a smooth transition.
   ///
   /// If the card is going from expanded to collapsed, the content is hidden first, then the card is collapsed. If the
   /// card is going from collapsed to expanded, the card is expanded first, then the content is shown.

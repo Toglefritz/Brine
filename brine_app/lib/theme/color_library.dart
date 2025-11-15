@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// A library of custom colors used in the app. This [ThemeExtension] can be added to a [ThemeData] object to
-/// provide custom colors using the `copyWith` method of [ThemeData].
+/// A library of custom colors used in the app. This [ThemeExtension] can be added to a [ThemeData] object to provide
+/// custom colors using the `copyWith` method of [ThemeData].
 @immutable
 class ColorLibrary extends ThemeExtension<ColorLibrary> {
   /// Creates a [ColorLibrary] with the given colors.

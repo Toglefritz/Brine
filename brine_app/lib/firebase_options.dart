@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatf
 /// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
-///   options: DefaultFirebaseOptions.currentPlatform,
+/// options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
 class DefaultFirebaseOptions {

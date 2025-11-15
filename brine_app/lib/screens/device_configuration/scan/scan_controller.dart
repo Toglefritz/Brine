@@ -21,8 +21,8 @@ import 'scan_view_none_found.dart';
 class ScanController extends State<ScanRoute> {
   /// A [StreamSubscription] used to listen for changes in the state of the Bluetooth adapter.
   ///
-  /// This subscription listens for updates on the current status of the Bluetooth adapter,
-  /// such as whether it is turned on or off.
+  /// This subscription listens for updates on the current status of the Bluetooth adapter, such as whether it is turned
+  /// on or off.
   StreamSubscription<BluetoothStatus>? _bluetoothStatusStream;
 
   /// The current status of the Bluetooth adapter, represented by the [BluetoothStatus] enum.
@@ -148,9 +148,9 @@ class ScanController extends State<ScanRoute> {
     );
   }
 
-  /// Receives [BleDevice] instances from the [SplendidBle] service that represent BLE devices discovered during
-  /// the scan. Since the scan is filtered to only show devices with the Brine service UUID, this method will only be
-  /// called when Brine devices are discovered.
+  /// Receives [BleDevice] instances from the [SplendidBle] service that represent BLE devices discovered during the
+  /// scan. Since the scan is filtered to only show devices with the Brine service UUID, this method will only be called
+  /// when Brine devices are discovered.
   void _onDeviceDiscovered(BleDevice device) {
     debugPrint('Discovered Brine device, ${device.name}');
 

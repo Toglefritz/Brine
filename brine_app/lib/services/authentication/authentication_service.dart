@@ -29,8 +29,8 @@ class AuthenticationService {
 
   /// Creates a password-based account with Firebase Auth.
   ///
-  /// As part of creating a password-based account with Firebase Auth, a [FirebaseAuthException] can be thrown if
-  /// issues with the provided username or password are discovered.
+  /// As part of creating a password-based account with Firebase Auth, a [FirebaseAuthException] can be thrown if issues
+  /// with the provided username or password are discovered.
   static Future<User?> _createBasicAuthAccount({
     required String emailAddress,
     required String password,

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 
-/// A sentence built with a [RichText] widget prompting the user to view the terms and conditions and
-/// the privacy policy before using the app.
+/// A sentence built with a [RichText] widget prompting the user to view the terms and conditions and the privacy policy
+/// before using the app.
 class OnboardingLegalPrompt extends StatelessWidget {
   /// Creates an [OnboardingLegalPrompt].
   const OnboardingLegalPrompt({

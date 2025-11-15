@@ -20,10 +20,8 @@ class DashedLinePainter extends CustomPainter {
 
   /// Creates a dashed line painter with the given properties.
   ///
-  /// The [dashWidth] specifies the width of each dash segment.
-  /// The [dashGap] specifies the gap between each dash segment.
-  /// The [strokeWidth] specifies the width of the stroke.
-  /// The [color] specifies the color of the dashed line.
+  /// The [dashWidth] specifies the width of each dash segment. The [dashGap] specifies the gap between each dash
+  /// segment. The [strokeWidth] specifies the width of the stroke. The [color] specifies the color of the dashed line.
   DashedLinePainter({
     required this.dashWidth,
     required this.dashGap,

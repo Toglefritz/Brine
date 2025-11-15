@@ -12,8 +12,8 @@ import 'models/pre_shared_key.dart';
 ///
 /// This class provides static methods to interact with devices associated with the authenticated user's account. It
 /// utilizes Firebase Functions to communicate with the backend for adding devices to the user's account, retrieving
-/// device information such as device IDs, and levels of salt and battery. All of this information about the devices
-/// is stored in Firestore.
+/// device information such as device IDs, and levels of salt and battery. All of this information about the devices is
+/// stored in Firestore.
 class DeviceManagementService {
   /// The Firebase Auth [User] object representing the current user.
   final User user;
@@ -38,13 +38,13 @@ class DeviceManagementService {
   ///
   /// ```json
   /// {
-  ///  "uid": "1234567890",
-  ///  "devices": ["vast_teal_elephant",]
-  ///  }
-  ///  ```
+  /// "uid": "1234567890",
+  /// "devices": ["vast_teal_elephant",]
+  /// }
+  /// ```
   ///
-  /// Information about the devices themselves is stored in the "devices" collection. The device ID of each device
-  /// ties these two collections together. For example,
+  /// Information about the devices themselves is stored in the "devices" collection. The device ID of each device ties
+  /// these two collections together. For example,
   ///
   /// ```json
   /// {
@@ -94,8 +94,8 @@ class DeviceManagementService {
 
   /// In order to calculate the salt level in the water softener in terms of a percentage, the Brine system needs to
   /// know the height of the water softener. This allows the distance measurements from the Brine device to be
-  /// translated into a percentage of remaining salt in the water softener. This function sends the height of the
-  /// water softener to the Firestore backend where it is stored and used in the calculation.
+  /// translated into a percentage of remaining salt in the water softener. This function sends the height of the water
+  /// softener to the Firestore backend where it is stored and used in the calculation.
   Future<void> updateApplianceHeight({required String deviceId, required int height}) async {
     try {
       // Get the user's ID token
@@ -131,8 +131,8 @@ class DeviceManagementService {
     }
   }
 
-  /// Calls the *getUserDevicesHttp* endpoint to retrieve the list of devices for the current user. Assumes the user
-  /// is already authenticated with Firebase Auth. Returns a list of devices or throws an exception if an error occurs.
+  /// Calls the *getUserDevicesHttp* endpoint to retrieve the list of devices for the current user. Assumes the user is
+  /// already authenticated with Firebase Auth. Returns a list of devices or throws an exception if an error occurs.
   Future<List<BrineDevice>> getUserDevices() async {
     try {
       // Get the user's ID token
@@ -185,15 +185,15 @@ class DeviceManagementService {
     }
   }
 
-  /// Retrieves the salt level and battery level for the specified IoT device associated with the authenticated user
-  /// by calling the [getDeviceLevels] Firebase callable function.
+  /// Retrieves the salt level and battery level for the specified IoT device associated with the authenticated user by
+  /// calling the [getDeviceLevels] Firebase callable function.
   ///
   /// The Firestore structure consists of a "users" collection that stores user documents with an array of associated
   /// device IDs, and a "devices" collection that stores device documents with device ID, salt level, and battery level.
   ///
-  /// This function returns a [Future<BrineDevice>] containing the battery level and salt level for the specified
-  /// IoT device, along with the device ID and a timestamp for when the salt and battery levels were last retrieved,
-  /// which is the time when this function was last called.
+  /// This function returns a [Future<BrineDevice>] containing the battery level and salt level for the specified IoT
+  /// device, along with the device ID and a timestamp for when the salt and battery levels were last retrieved, which
+  /// is the time when this function was last called.
   ///
   /// It throws an error if there is an issue while calling the Firebase function, such as an unauthenticated user or
   /// lack of access to the specified device.
@@ -235,20 +235,18 @@ class DeviceManagementService {
 
   /// Calls the Firebase endpoint to generate a new pre-shared key (PSK) for a Brine device during provisioning.
   ///
-  /// This function sends a POST request to the `generatePSK` Firebase Cloud Function endpoint with the
-  /// unique device ID of the Brine device. The backend generates a secure random PSK, stores it in Firestore,
-  /// and returns it to the mobile app. The mobile app then transfers this PSK securely to the Brine device
-  /// over Bluetooth.
+  /// This function sends a POST request to the `generatePSK` Firebase Cloud Function endpoint with the unique device ID
+  /// of the Brine device. The backend generates a secure random PSK, stores it in Firestore, and returns it to the
+  /// mobile app. The mobile app then transfers this PSK securely to the Brine device over Bluetooth.
   ///
-  /// A **pre-shared key (PSK)** is a secret key used for authenticating and securing communication between
-  /// the Brine device and the Firebase backend. The Brine device uses the PSK to sign requests using an
-  /// HMAC (Hash-Based Message Authentication Code). When the device sends a request, the backend verifies
-  /// the HMAC signature using the stored PSK, ensuring that only devices with valid keys can access protected
-  /// resources.
+  /// A **pre-shared key (PSK)** is a secret key used for authenticating and securing communication between the Brine
+  /// device and the Firebase backend. The Brine device uses the PSK to sign requests using an HMAC (Hash-Based Message
+  /// Authentication Code). When the device sends a request, the backend verifies the HMAC signature using the stored
+  /// PSK, ensuring that only devices with valid keys can access protected resources.
   ///
   /// **Security Notes**:
   /// - The PSK is handled only ephemerally by the mobile app during the provisioning process; it is not stored
-  ///   persistently on the app.
+  /// persistently on the app.
   /// - The backend stores the PSK along with metadata such as the creation timestamp and validity status.
   /// - If a device is compromised, the PSK can be revoked, and a new PSK can be issued through re-provisioning.
   Future<PreSharedKey> generatePreSharedKey({required String deviceId}) async {
@@ -296,9 +294,9 @@ class DeviceManagementService {
 
   /// Calls the *removeDeviceFromUser* endpoint to remove a device from the authenticated user's account.
   ///
-  /// This function sends a DELETE request to the Firebase backend, which removes the device ID from the user's list
-  /// of devices in Firestore. If no other users are associated with the device, the backend also deletes the device
-  /// record from the "devices" collection.
+  /// This function sends a DELETE request to the Firebase backend, which removes the device ID from the user's list of
+  /// devices in Firestore. If no other users are associated with the device, the backend also deletes the device record
+  /// from the "devices" collection.
   ///
   /// If successful, the function completes without returning a value. Otherwise, it throws an exception.
   ///

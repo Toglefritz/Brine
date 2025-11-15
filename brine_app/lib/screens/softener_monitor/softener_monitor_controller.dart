@@ -51,8 +51,8 @@ class SoftenerMonitorController extends State<SoftenerMonitorRoute> {
   /// Called when the "Reconnect" button is tapped.
   ///
   /// Brine devices may go offline for a number of reasons. When the last update received from a Brine device is
-  /// overdue, the user may need to take actions to reconnect the device. This function is called when the user taps
-  /// the "Reconnect" button.
+  /// overdue, the user may need to take actions to reconnect the device. This function is called when the user taps the
+  /// "Reconnect" button.
   Future<void> onReconnectDevice() async {
     // Get a list of device names to be excluded from the Bluetooth scan on the next screen.
     final List<String> deviceExclusionList = [

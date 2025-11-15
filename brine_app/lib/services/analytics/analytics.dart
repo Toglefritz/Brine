@@ -5,9 +5,9 @@ import '../authentication/models/auth_methods.dart';
 
 /// Provides methods for tracking user interactions, app usage, errors, metadata, and other information for analytics.
 ///
-/// The methods within this class only send analytics information to the analytics provider if the app is running
-/// in release mode. In debug mode, the firing of analytics calls is indicated by print statements but the calls
-/// themselves are not sent.
+/// The methods within this class only send analytics information to the analytics provider if the app is running in
+/// release mode. In debug mode, the firing of analytics calls is indicated by print statements but the calls themselves
+/// are not sent.
 class Analytics {
   /// Tracks a page view event.
   static void trackPageView(String pageName) {

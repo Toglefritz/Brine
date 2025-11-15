@@ -32,13 +32,13 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
     super.initState();
   }
 
-  /// Sends a command to the Brine device to scan for available WiFi networks and return the list of networks
-  /// to the app.
+  /// Sends a command to the Brine device to scan for available WiFi networks and return the list of networks to the
+  /// app.
   ///
   /// This function performs two tasks:
-  ///   1. It establishes a callback to handle the response from the Brine device. This is done before sending the
-  ///      command so that this controller is prepared to handle the response when it arrives.
-  ///   2. It sends a command to the Brine device to scan for available WiFi networks.
+  /// 1. It establishes a callback to handle the response from the Brine device. This is done before sending the
+  /// command so that this controller is prepared to handle the response when it arrives.
+  /// 2. It sends a command to the Brine device to scan for available WiFi networks.
   void _sendScanCommand() {
     // Register a callback to handle the response from the Brine device.
     widget.bleCommunicationManager.registerCallback(_onScanCompleted);

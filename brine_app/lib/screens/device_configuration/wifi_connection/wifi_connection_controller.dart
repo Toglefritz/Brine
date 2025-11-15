@@ -57,13 +57,13 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
   /// A callback that is invoked when the Brine device returns a response to the "wifi_connect" command.
   ///
   /// The Brine device can send a response indicating the success or failure of the connection attempt. Each of these
-  /// responses will contain a different value for the "response" key. For successful connections, the value will be
-  /// a JSON object with a format like the following:
+  /// responses will contain a different value for the "response" key. For successful connections, the value will be a
+  /// JSON object with a format like the following:
   ///
   /// ```json
   /// {
-  ///    "response": "wifi_connected",
-  ///    "ssid": "<SSID>"
+  /// "response": "wifi_connected",
+  /// "ssid": "<SSID>"
   /// }
   /// ```
   ///
@@ -72,8 +72,8 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
   ///
   /// ```json
   /// {
-  ///   "response": "wifi_connect_failed",
-  ///   "message": "<error message>"
+  /// "response": "wifi_connect_failed",
+  /// "message": "<error message>"
   /// }
   /// ```
   Future<void> _onWiFiConnectCompleted(JSON value) async {

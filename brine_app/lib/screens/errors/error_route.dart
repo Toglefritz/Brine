@@ -5,8 +5,8 @@ import 'models/error_type.dart';
 
 /// Displays information about an error that occurred in the app.
 ///
-/// This route is displayed when an error occurs in the app. It provides information about the error and allows the
-/// user to attempt to recover from the error.
+/// This route is displayed when an error occurs in the app. It provides information about the error and allows the user
+/// to attempt to recover from the error.
 class ErrorRoute extends StatefulWidget {
   /// Creates an instance of [ErrorRoute].
   const ErrorRoute({

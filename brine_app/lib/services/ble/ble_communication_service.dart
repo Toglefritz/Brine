@@ -7,16 +7,16 @@ import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 import '../../extensions/json.dart';
 
-/// This class acts as a central manager for all BLE communication between the app and a Brine BLE peripheral for
-/// which a connection has been established and service discovery has been performed.
+/// This class acts as a central manager for all BLE communication between the app and a Brine BLE peripheral for which
+/// a connection has been established and service discovery has been performed.
 ///
-/// When this app connects to a Brine BLE device, it will first discover the services and characteristics of the
-/// device. Brine devices are expected to have a single service with a single characteristic. That single characteristic
-/// is provided to this class during initialization. This service will first subscribe to this characteristic so it
-/// can receive updates from the device in the form of changes in the value of the characteristic. Then, the app can
-/// send write requests to the characteristic to send commands to the Brine device. When the Brine device processes
-/// those commands, whether it does so successfully or not, it will send a response back to the app in the form of a
-/// change in the value of the characteristic. The app can then listen for these changes and respond accordingly.
+/// When this app connects to a Brine BLE device, it will first discover the services and characteristics of the device.
+/// Brine devices are expected to have a single service with a single characteristic. That single characteristic is
+/// provided to this class during initialization. This service will first subscribe to this characteristic so it can
+/// receive updates from the device in the form of changes in the value of the characteristic. Then, the app can send
+/// write requests to the characteristic to send commands to the Brine device. When the Brine device processes those
+/// commands, whether it does so successfully or not, it will send a response back to the app in the form of a change in
+/// the value of the characteristic. The app can then listen for these changes and respond accordingly.
 ///
 /// So, this class will hold a reference to the characteristic subscription, in the form of a [StreamSubscription] and
 /// listen for changes in the value of the characteristic. This class will also maintain a list of callbacks that other
@@ -24,19 +24,17 @@ import '../../extensions/json.dart';
 /// characteristic changes, this class will notify all registered callbacks.
 ///
 /// Also, the Brine device is limited in the total length of the data it can send in a single write request. Therefore,
-/// the Brine device will split characteristic values into chunks of 512 bytes or less. The final chunk in each
-/// sequence will be terminated by a 0x0A character. Therefore, when it receives a characteristic value, this class
-/// will add it to a cache of received chunks. When it receives a chunk that ends with a 0x0A character, it will
-/// concatenate all the chunks in the cache and notify the registered callbacks with the concatenated value. This
-/// ensures that the app will receive the full response from the Brine device, even if it is split into multiple
-/// chunks.
+/// the Brine device will split characteristic values into chunks of 512 bytes or less. The final chunk in each sequence
+/// will be terminated by a 0x0A character. Therefore, when it receives a characteristic value, this class will add it
+/// to a cache of received chunks. When it receives a chunk that ends with a 0x0A character, it will concatenate all the
+/// chunks in the cache and notify the registered callbacks with the concatenated value. This ensures that the app will
+/// receive the full response from the Brine device, even if it is split into multiple chunks.
 ///
-/// This class also exposes methods to send read and write requests to the characteristic. With the write requests
-/// in particular, by listening for changes in the value of the characteristic before sending the request, the app
-/// will be able to listen for the response from the Brine device and respond accordingly. This is preferable to
-/// requiring manual read requests to be sent after each write request to check the status of the Brine device, because
-/// race conditions in which the app will not know when the Brine device has finished processing a command can be
-/// avoided.
+/// This class also exposes methods to send read and write requests to the characteristic. With the write requests in
+/// particular, by listening for changes in the value of the characteristic before sending the request, the app will be
+/// able to listen for the response from the Brine device and respond accordingly. This is preferable to requiring
+/// manual read requests to be sent after each write request to check the status of the Brine device, because race
+/// conditions in which the app will not know when the Brine device has finished processing a command can be avoided.
 class BleCommunicationService {
   /// An instance of [SplendidBleCentral] used for communication with the Brine BLE peripheral.
   static SplendidBleCentral ble = SplendidBleCentral();
@@ -55,8 +53,7 @@ class BleCommunicationService {
 
   /// A list of callbacks that will be notified when the value of the characteristic changes.
   ///
-  /// This class will handle converting the [BleCharacteristicValue] into JSON format to be returned to the
-  /// callbacks.
+  /// This class will handle converting the [BleCharacteristicValue] into JSON format to be returned to the callbacks.
   final List<void Function(JSON)> _callbacks = [];
 
   /// Registers a callback to be notified when the value of the characteristic changes.

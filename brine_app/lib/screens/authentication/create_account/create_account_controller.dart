@@ -43,12 +43,12 @@ class CreateAccountController extends State<CreateAccountRoute> {
   /// [validatePasswordConfirmationField] method.
   bool passwordConfirmationFieldError = false;
 
-  /// An additional form validation error string set by exceptions thrown during the account creation process related
-  /// to the username entry.
+  /// An additional form validation error string set by exceptions thrown during the account creation process related to
+  /// the username entry.
   String? createAccountUsernameExceptionError;
 
-  /// An additional form validation error string set by exceptions thrown during the account creation process related
-  /// to the password entry.
+  /// An additional form validation error string set by exceptions thrown during the account creation process related to
+  /// the password entry.
   String? createAccountPasswordExceptionError;
 
   /// Determines if the account creation process is in progress

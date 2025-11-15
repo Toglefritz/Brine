@@ -10,8 +10,7 @@ import 'wave_loader_type.dart';
 class WaveLoader extends StatefulWidget {
   /// Creates a [WaveLoader] animation.
   ///
-  /// Either [color] or [itemBuilder] must be specified.
-  /// The [itemCount] must be at least 2.
+  /// Either [color] or [itemBuilder] must be specified. The [itemCount] must be at least 2.
   const WaveLoader({
     super.key,
     this.color,

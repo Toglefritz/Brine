@@ -11,16 +11,16 @@ class OnboardingField extends StatelessWidget {
   ///
   /// The [OnboardingField] is intended to be used inside a [Form] widget. The [TextFormField] widget at the base of
   /// this composed widget uses a [TextEditingController] provided by the [controller] field. Validation of the
-  /// [OnboardingField]'s value is performed by a function provided by the [validator] field. The [OnboardingField]
-  /// uses an [InputDecoration] widget to style the field and provide useful information to the user. The hint
-  /// text is provided by the [hint] field. The [OnboardingField] is designed with a pill-shaped, dark-colored
+  /// [OnboardingField]'s value is performed by a function provided by the [validator] field. The [OnboardingField] uses
+  /// an [InputDecoration] widget to style the field and provide useful information to the user. The hint text is
+  /// provided by the [hint] field. The [OnboardingField] is designed with a pill-shaped, dark-colored
   /// [OutlineInputBorder]. The border is the same regardless of the state of the field. The field has a light-colored
   /// fill. When form validation returns an error, an suffix icon is displayed on the right side of the field. This
   /// behavior is set by the [errorState] boolean. When [errorState] is true, the icon is displayed. No icon is
-  /// displayed when [errorState] is false. The text in the [OnboardingField] will be obscured if the
-  /// [obscureText] boolean is true. The [additionalError] field provides text to display in an error state for errors
-  /// returned by errors other than the [validator]. Typically, these errors result from actions performed after the
-  /// surrounding [Form] is submitted.
+  /// displayed when [errorState] is false. The text in the [OnboardingField] will be obscured if the [obscureText]
+  /// boolean is true. The [additionalError] field provides text to display in an error state for errors returned by
+  /// errors other than the [validator]. Typically, these errors result from actions performed after the surrounding
+  /// [Form] is submitted.
   const OnboardingField({
     required this.hint,
     required this.controller,

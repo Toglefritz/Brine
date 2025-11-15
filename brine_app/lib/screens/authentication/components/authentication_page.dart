@@ -17,8 +17,7 @@ class AuthenticationPage extends StatelessWidget {
   /// The action to perform when the back button in the [AppBar] is pressed.
   final VoidCallback backOnTap;
 
-  /// The main content of the page between the [AppBar] and the legal links
-  /// at the bottom of the page.
+  /// The main content of the page between the [AppBar] and the legal links at the bottom of the page.
   final List<Widget> content;
 
   @override

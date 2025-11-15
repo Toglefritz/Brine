@@ -69,9 +69,9 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
 
   /// Transfers the pre-shared key to the Brine device.
   ///
-  /// The mobile app does not hold the PSK for the Brine device except in this controller. Once the navigation call
-  /// made in response to receiving confirmation of the PSK transfer is made, the PSK is no longer stored in the app.
-  /// From that point forward, the PSK is only used for securing communication between the Brine device and the Firebase
+  /// The mobile app does not hold the PSK for the Brine device except in this controller. Once the navigation call made
+  /// in response to receiving confirmation of the PSK transfer is made, the PSK is no longer stored in the app. From
+  /// that point forward, the PSK is only used for securing communication between the Brine device and the Firebase
   /// backend.
   void _transferPsk(PreSharedKey psk) {
     // Register a callback to handle the response from the Brine device.

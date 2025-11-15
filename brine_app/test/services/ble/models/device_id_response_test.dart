@@ -13,7 +13,8 @@ void main() {
   group('DeviceIdResponse', () {
     /// This group contains tests for the `toJson` method.
     group('toJson', () {
-      /// This test verifies that the `toJson` method successfully converts a [DeviceIdResponse] object to a JSON-serializable map.
+      /// This test verifies that the `toJson` method successfully converts a [DeviceIdResponse] object to a
+      /// JSON-serializable map.
       test('should successfully convert a DeviceIdResponse object to a JSON-serializable map', () {
         // Create a DeviceIdResponse object with a device ID.
         final DeviceIdResponse response = DeviceIdResponse('mock_device_id');

@@ -13,7 +13,8 @@ void main() {
   group('WiFiConnectedResponse', () {
     /// This group contains tests for the `toJson` method.
     group('toJson', () {
-      /// This test verifies that the `toJson` method successfully converts a [WiFiConnectedResponse] object to a JSON-serializable map.
+      /// This test verifies that the `toJson` method successfully converts a [WiFiConnectedResponse] object to a
+      /// JSON-serializable map.
       test('should successfully convert a WiFiConnectedResponse object to a JSON-serializable map', () {
         // Create a WiFiConnectedResponse object with an SSID.
         final WiFiConnectedResponse response = WiFiConnectedResponse('mock_ssid');

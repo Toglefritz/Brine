@@ -11,15 +11,14 @@ class BorderlessField extends StatelessWidget {
   ///
   /// The [BorderlessField] is intended to be used inside a [Form] widget. The [TextFormField] widget at the base of
   /// this composed widget uses a [TextEditingController] provided by the [controller] field. Validation of the
-  /// [BorderlessField]'s value is performed by a function provided by the [validator] field. The [BorderlessField]
-  /// uses an [InputDecoration] widget to style the field and provide useful information to the user. The hint
-  /// text is provided by the [hint] field. The [BorderlessField] is designed without a border, underline, or fill
-  /// color. When form validation returns an error, an suffix icon is displayed on the right side of the field. This
-  /// behavior is set by the [errorState] boolean. When [errorState] is true, the icon is displayed. No icon is
-  /// displayed when [errorState] is false. The text in the [BorderlessField] will be obscured if the
-  /// [obscureText] boolean is true. The [additionalError] field provides text to display in an error state for errors
-  /// returned by errors other than the [validator]. Typically, these errors result from actions performed after the
-  /// surrounding [Form] is submitted.
+  /// [BorderlessField]'s value is performed by a function provided by the [validator] field. The [BorderlessField] uses
+  /// an [InputDecoration] widget to style the field and provide useful information to the user. The hint text is
+  /// provided by the [hint] field. The [BorderlessField] is designed without a border, underline, or fill color. When
+  /// form validation returns an error, an suffix icon is displayed on the right side of the field. This behavior is set
+  /// by the [errorState] boolean. When [errorState] is true, the icon is displayed. No icon is displayed when
+  /// [errorState] is false. The text in the [BorderlessField] will be obscured if the [obscureText] boolean is true.
+  /// The [additionalError] field provides text to display in an error state for errors returned by errors other than
+  /// the [validator]. Typically, these errors result from actions performed after the surrounding [Form] is submitted.
   const BorderlessField({
     required this.hint,
     required this.controller,

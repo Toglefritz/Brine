@@ -132,8 +132,8 @@ class LoginController extends State<LoginRoute> {
   ///
   /// Various exceptions can be thrown from the [FirebaseAuth] `signInWithEmailAndPassword` method that indicate
   /// different problems with the login. The codes from these exceptions are used to set the
-  /// [loginUsernameExceptionError] and [loginPasswordExceptionError] fields. These show up in the UI the same way
-  /// as form validation errors.
+  /// [loginUsernameExceptionError] and [loginPasswordExceptionError] fields. These show up in the UI the same way as
+  /// form validation errors.
   Future<UserCredential?> login({required String emailAddress, required String password}) async {
     try {
       final UserCredential credential =
