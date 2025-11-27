@@ -82,7 +82,7 @@ class ScanController extends State<ScanRoute> {
     );
 
     // Request Bluetooth permissions. If they have already been granted, this method will do nothing.
-    BleCommunicationService.ble.requestBluetoothPermissions();
+    await BleCommunicationService.ble.requestBluetoothPermissions();
   }
 
   /// Initializes Bluetooth status monitoring.
