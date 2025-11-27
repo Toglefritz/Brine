@@ -37,6 +37,7 @@ const { updateApplianceHeight } = require('./src/updateApplianceHeight.cjs');
 const { removeDeviceFromUser } = require('./src/removeDeviceFromUser.cjs');
 const { addFcmToken } = require('./src/addFcmToken.cjs');
 const { deleteUser } = require('./src/deleteUser.cjs');
+const { checkFirmwareUpdate } = require('./src/checkFirmwareUpdate.cjs');
 
 // Brine website functions
 const { addLead } = require('./src/addLead.cjs');
@@ -213,4 +214,18 @@ exports.addLead = functions.https.onRequest(async (req, res) => {
             addLead(req, res);
         });
     });
+});
+
+/**
+ * @brief Endpoint used to check for firmware updates.
+ * 
+ * This endpoint is called by the Brine device to check if a newer firmware version
+ * is available. The device sends its current firmware version, and the function
+ * compares it against the latest available version stored in Firestore.
+ * 
+ * @param {Object} req The HTTP request object.
+ * @param {Object} res The HTTP response object.
+ */
+exports.checkFirmwareUpdate = onRequest(async (req, res) => {
+    checkFirmwareUpdate(req, res);
 });
