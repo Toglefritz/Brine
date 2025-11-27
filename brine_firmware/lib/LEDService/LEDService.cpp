@@ -16,9 +16,9 @@ bool LEDService::begin(TwoWire &i2cBus, uint16_t numLeds) {
     bool success = WS2812BLED::getInstance().begin(numLeds);
     
     if (success) {
-        // Set default color to white for compatibility with I2C LED behavior
-        WS2812BLED::getInstance().setColor(255, 255, 255);
-        WS2812BLED::getInstance().setBrightness(32); // ~12.5% brightness
+        // Set default color to blue with very low brightness
+        WS2812BLED::getInstance().setColor(0, 0, 128); // Dark blue (R=0, G=0, B=128)
+        WS2812BLED::getInstance().setBrightness(10); // Very low brightness (~4%)
         initialized = true;
         debugService.debugPrintln("WS2812B LED initialized successfully.");
     } else {
