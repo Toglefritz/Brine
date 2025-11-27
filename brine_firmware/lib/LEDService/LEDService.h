@@ -2,13 +2,13 @@
 #define LEDSERVICE_H
 
 #include "../../include/DebugService.h"
+#include <Wire.h>
 
 // Conditional includes based on build configuration
 #ifdef WS2812B_LED
 #include <WS2812BLED.h>
 #else
 #include <I2CLED.h>
-#include <Wire.h>
 #endif
 
 /**

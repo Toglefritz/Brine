@@ -19,7 +19,8 @@ bool GPIOButton::begin(void (*buttonHandler)()) {
     pinMode(buttonPin, INPUT_PULLUP);
     
     // Initialize button state
-    lastButtonState = digitalRead(buttonPin);
+    lastReading = digitalRead(buttonPin);
+    lastButtonState = lastReading;
     lastDebounceTime = millis();
     
     // Attach interrupt if handler is provided
@@ -53,20 +54,17 @@ bool GPIOButton::isPressed() {
     unsigned long currentTime = millis();
     
     // If the reading has changed, reset the debounce timer
-    if (currentReading != lastButtonState) {
+    if (currentReading != lastReading) {
         lastDebounceTime = currentTime;
+        lastReading = currentReading;
     }
     
-    // If enough time has passed since the last change, consider it a valid state change
+    // If enough time has passed since the last change, update the stable button state
     if ((currentTime - lastDebounceTime) > debounceDelay) {
-        // Update the last button state
         lastButtonState = currentReading;
-        
-        // Button is pressed when pin is LOW (connected to GND)
-        return (currentReading == LOW);
     }
     
-    // Return the previous stable state during debounce period
+    // Button is pressed when pin is LOW (connected to GND)
     return (lastButtonState == LOW);
 }
 
@@ -80,7 +78,8 @@ void GPIOButton::clearEventBits() {
         return;
     }
     
-    lastButtonState = digitalRead(buttonPin);
+    lastReading = digitalRead(buttonPin);
+    lastButtonState = lastReading;
     lastDebounceTime = millis();
     
     debugService.debugPrintln("GPIO Button event bits cleared.");

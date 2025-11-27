@@ -120,7 +120,8 @@ private:
   /**
    * @brief Button state tracking for debouncing.
    */
-  bool lastButtonState = HIGH;
+  bool lastButtonState = HIGH;      // The stable, debounced button state
+  bool lastReading = HIGH;           // The last raw reading from the pin
   unsigned long lastDebounceTime = 0;
   static const unsigned long debounceDelay = 50; // 50ms debounce delay
 

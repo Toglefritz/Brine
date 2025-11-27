@@ -123,4 +123,7 @@ void loop() {
         // End the Unity test framework
         UNITY_END();
     }
+    
+    // Small delay to avoid overwhelming the system
+    delay(10);
 }
