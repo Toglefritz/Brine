@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -199,11 +201,9 @@ class AccountController extends State<AccountRoute> {
 
     // If none of the profile updates failed, display a success SnackBar.
     if (!hasFailed && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.profileUpdateSuccess),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.profileUpdateSuccess)));
     }
 
     // Disable editing mode.
@@ -228,18 +228,37 @@ class AccountController extends State<AccountRoute> {
         );
       } else if (providerId == GoogleAuthProvider.PROVIDER_ID) {
         // User signed in with Google - use Google Sign-In to obtain a credential
-        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-        if (googleUser == null) {
-          throw FirebaseAuthException(
-            code: 'google-sign-in-cancelled',
-            message: 'Google sign-in was canceled.',
-          );
+        final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+
+        // Initialize if needed
+        try {
+          await googleSignIn.initialize();
+        } catch (e) {
+          // May already be initialized
+          debugPrint('GoogleSignIn initialization: $e');
         }
-        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-        credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
+
+        // Authenticate
+        try {
+          await googleSignIn.authenticate();
+        } catch (e) {
+          throw FirebaseAuthException(code: 'google-sign-in-cancelled', message: 'Google sign-in was canceled.');
+        }
+
+        // Wait for authentication event
+        final completer = Completer<AuthCredential>();
+        late StreamSubscription<GoogleSignInAuthenticationEvent> subscription;
+
+        subscription = googleSignIn.authenticationEvents.listen((event) async {
+          if (event is GoogleSignInAuthenticationEventSignIn) {
+            final googleAuth = event.user.authentication;
+            final authCredential = GoogleAuthProvider.credential(idToken: googleAuth.idToken);
+            completer.complete(authCredential);
+            await subscription.cancel();
+          }
+        });
+
+        credential = await completer.future;
       } else if (providerId == AppleAuthProvider.PROVIDER_ID) {
         // TODO(Toglefritz): Implement Apple Sign-In re-authentication
         throw FirebaseAuthException(
@@ -264,11 +283,7 @@ class AccountController extends State<AccountRoute> {
 
   /// Shows a [SnackBar] to the user when an update to their profile fails.
   void _showProfileUpdateFailedSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
   /// Handles requests to remove a device from an account.
@@ -278,10 +293,7 @@ class AccountController extends State<AccountRoute> {
   /// Firebase Functions endpoint.
   Future<void> removeDevice(String deviceId) async {
     // Present a dialog to the user to confirm that they wish to remove the device.
-    final bool? didConfirm = await AccountView.showRemoveDeviceConfirmationDialog(
-      context: context,
-      deviceId: deviceId,
-    );
+    final bool? didConfirm = await AccountView.showRemoveDeviceConfirmationDialog(context: context, deviceId: deviceId);
 
     // If the user confirmed that they wish to remove the device, remove the device.
     if (didConfirm ?? false) {
@@ -305,9 +317,7 @@ class AccountController extends State<AccountRoute> {
       if (updatedDevices.isEmpty) {
         if (!mounted) return;
         await Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => const WelcomeRoute(),
-          ),
+          MaterialPageRoute<void>(builder: (BuildContext context) => const WelcomeRoute()),
           (Route<dynamic> route) => false,
         );
         return;
@@ -317,9 +327,7 @@ class AccountController extends State<AccountRoute> {
         // Refresh this route.
         if (!mounted) return;
         await Navigator.of(context).pushReplacement(
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => AccountRoute(devices: updatedDevices),
-          ),
+          MaterialPageRoute<void>(builder: (BuildContext context) => AccountRoute(devices: updatedDevices)),
         );
       }
     }
@@ -334,9 +342,7 @@ class AccountController extends State<AccountRoute> {
     // Navigate back to the OnboardingRoute.
     if (!mounted) return;
     await Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const OnboardingRoute(),
-      ),
+      MaterialPageRoute<void>(builder: (BuildContext context) => const OnboardingRoute()),
       (Route<dynamic> route) => false,
     );
   }

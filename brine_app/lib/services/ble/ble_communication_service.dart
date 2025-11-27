@@ -72,37 +72,35 @@ class BleCommunicationService {
   /// The Brine device will divide characteristic values into chunks of 512 bytes or less. The final chunk in each
   /// sequence will be terminated by a 0x0A character. This method will concatenate all the chunks in the cache and
   /// notify the registered callbacks with the concatenated value.
-  void _subscribeToCharacteristic() {
+  Future<void> _subscribeToCharacteristic() async {
     // The full value of the characteristic will be built up from the chunks received from the Brine device.
     String characteristicValue = '';
 
     // Listen for changes in the value of the characteristic.
-    _characteristicValueListener = characteristic.subscribe().listen(
-      (value) {
-        // Add the new chunk to the cache.
-        characteristicValue += value.valueString;
+    _characteristicValueListener = (await characteristic.subscribe()).listen((value) {
+      // Add the new chunk to the cache.
+      characteristicValue += value.valueString;
 
-        // If the chunk ends with a 0x0A character, it is the final chunk in the sequence.
-        if (value.value.last == 0x0A) {
-          // Notify all registered callbacks when the value of the characteristic changes.
-          for (final void Function(JSON) callback in _callbacks) {
-            try {
-              // Convert the full value of the characteristic to a JSON object and pass it to the callback.
-              final JSON characteristicValueJson = json.decode(characteristicValue) as JSON;
+      // If the chunk ends with a 0x0A character, it is the final chunk in the sequence.
+      if (value.value.last == 0x0A) {
+        // Notify all registered callbacks when the value of the characteristic changes.
+        for (final void Function(JSON) callback in _callbacks) {
+          try {
+            // Convert the full value of the characteristic to a JSON object and pass it to the callback.
+            final JSON characteristicValueJson = json.decode(characteristicValue) as JSON;
 
-              callback(characteristicValueJson);
-            } catch (e) {
-              debugPrint('Failed to decode characteristic value, $characteristicValue, with exception, $e');
+            callback(characteristicValueJson);
+          } catch (e) {
+            debugPrint('Failed to decode characteristic value, $characteristicValue, with exception, $e');
 
-              rethrow;
-            }
+            rethrow;
           }
-
-          // Clear the cache for the next sequence of chunks.
-          characteristicValue = '';
         }
-      },
-    );
+
+        // Clear the cache for the next sequence of chunks.
+        characteristicValue = '';
+      }
+    });
   }
 
   /// Sends a write request to the characteristic with the given [value].

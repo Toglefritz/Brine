@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -31,10 +33,7 @@ class AuthenticationService {
   ///
   /// As part of creating a password-based account with Firebase Auth, a [FirebaseAuthException] can be thrown if issues
   /// with the provided username or password are discovered.
-  static Future<User?> _createBasicAuthAccount({
-    required String emailAddress,
-    required String password,
-  }) async {
+  static Future<User?> _createBasicAuthAccount({required String emailAddress, required String password}) async {
     try {
       final UserCredential credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress,
@@ -107,10 +106,7 @@ class AuthenticationService {
     // Make an authenticated HTTP POST request to create the user document
     final Response response = await post(
       url,
-      headers: {
-        'Authorization': 'Bearer $idToken',
-        'Content-Type': 'application/json',
-      },
+      headers: {'Authorization': 'Bearer $idToken', 'Content-Type': 'application/json'},
     );
 
     // Check the response status code
@@ -145,35 +141,57 @@ class AuthenticationService {
         debugPrint('Failed to sign in with Google with exception, $e, and stack trace, $s');
       }
     } else {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
-      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication.accessToken,
-          idToken: googleSignInAuthentication.idToken,
-        );
-
-        try {
-          final UserCredential userCredential = await auth.signInWithCredential(credential);
-
-          user = userCredential.user;
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'account-exists-with-different-credential') {
-            // TODO(Toglefritz): ...
-            rethrow;
-          } else if (e.code == 'invalid-credential') {
-            // TODO(Toglefritz): ...
-            rethrow;
-          }
-        } catch (e) {
-          // TODO(Toglefritz): ...
-          rethrow;
-        }
+      // Initialize GoogleSignIn if not already initialized
+      try {
+        await googleSignIn.initialize();
+      } catch (e) {
+        // May already be initialized, which is fine
+        debugPrint('GoogleSignIn initialization: $e');
       }
+
+      // Authenticate the user
+      try {
+        await googleSignIn.authenticate();
+      } catch (e) {
+        debugPrint('Failed to authenticate with Google: $e');
+        return null;
+      }
+
+      // Wait for the authentication event
+      final Completer<User?> completer = Completer<User?>();
+      late StreamSubscription<GoogleSignInAuthenticationEvent> subscription;
+
+      subscription = googleSignIn.authenticationEvents.listen(( GoogleSignInAuthenticationEvent event) async {
+        if (event is GoogleSignInAuthenticationEventSignIn) {
+          final GoogleSignInAccount googleUser = event.user;
+          final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+          final AuthCredential credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken);
+
+          try {
+            final UserCredential userCredential = await auth.signInWithCredential(credential);
+            completer.complete(userCredential.user);
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'account-exists-with-different-credential') {
+              // TODO(Toglefritz): ...
+              completer.completeError(e);
+            } else if (e.code == 'invalid-credential') {
+              // TODO(Toglefritz): ...
+              completer.completeError(e);
+            } else {
+              completer.completeError(e);
+            }
+          } catch (e) {
+            completer.completeError(e);
+          } finally {
+            await subscription.cancel();
+          }
+        }
+      });
+
+      user = await completer.future;
     }
 
     return user;
@@ -181,7 +199,7 @@ class AuthenticationService {
 
   /// Logs the user out of the app via Firebase Auth.
   static Future<void> signOut() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
     try {
       if (!kIsWeb) {
@@ -209,10 +227,7 @@ class AuthenticationService {
       // Make an authenticated HTTP DELETE request
       final Response response = await delete(
         Uri.parse(baseUrl + endpoint),
-        headers: {
-          'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json',
-        },
+        headers: {'Authorization': 'Bearer $idToken', 'Content-Type': 'application/json'},
       );
 
       // Check the response status code

@@ -59,20 +59,16 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   }
 
   /// Attempt to connect to the [BleDevice] that is targeted for provisioning.
-  void _connectToDevice() {
+  Future<void> _connectToDevice() async {
     debugPrint('Connecting to device: ${widget.device.address}');
 
     // Start connection timeout timer
     _startConnectionTimeout();
 
     try {
-      _connectionStream = _ble.connect(deviceAddress: widget.device.address).listen(
-            _onConnectionStateUpdate,
-          );
+      _connectionStream = (await _ble.connect(deviceAddress: widget.device.address)).listen(_onConnectionStateUpdate);
     } catch (e) {
-      debugPrint(
-        'Failed to connect to device, ${widget.device.address}, with exception, $e',
-      );
+      debugPrint('Failed to connect to device, ${widget.device.address}, with exception, $e');
 
       _onConnectionError(e);
     }
@@ -80,15 +76,10 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Starts the connection timeout timer.
   void _startConnectionTimeout() {
-    _connectionTimeout = Timer(
-      const Duration(seconds: _connectionTimeoutSeconds),
-      () {
-        debugPrint(
-          'Connection timeout reached for device: ${widget.device.address}',
-        );
-        _onConnectionTimeout();
-      },
-    );
+    _connectionTimeout = Timer(const Duration(seconds: _connectionTimeoutSeconds), () {
+      debugPrint('Connection timeout reached for device: ${widget.device.address}');
+      _onConnectionTimeout();
+    });
   }
 
   /// Handles connection timeout by navigating to the error screen.
@@ -101,9 +92,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const ErrorRoute(
-          errorType: ErrorType.bluetoothConnection,
-        ),
+        builder: (BuildContext context) => const ErrorRoute(errorType: ErrorType.bluetoothConnection),
       ),
     );
   }
@@ -118,9 +107,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// The app waits for a connection to the Brine device to be established before moving on to performing service and
   /// characteristic discovery.
   void _onConnectionStateUpdate(BleConnectionState state) {
-    debugPrint(
-      'Connection state update for ${widget.device.name}: ${state.name}',
-    );
+    debugPrint('Connection state update for ${widget.device.name}: ${state.name}');
 
     if (state == BleConnectionState.connected) {
       // Cancel the connection timeout since we've successfully connected
@@ -130,12 +117,11 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   }
 
   /// Discovers services and characteristics from the Brine monitor.
-  void _discoverServices() {
+  Future<void> _discoverServices() async {
     debugPrint('Discovering services');
 
-    _servicesDiscoveredStream = _ble.discoverServices(widget.device.address).listen(
-          _onServiceDiscovered,
-        );
+    final Stream<List<BleService>> servicesStream = await _ble.discoverServices(widget.device.address);
+    _servicesDiscoveredStream = servicesStream.listen(_onServiceDiscovered);
   }
 
   /// Called when a services are successfully discovered.
@@ -167,9 +153,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     _bleCommunicationManager!.registerCallback(_onCharacteristicChanged);
 
     // With the subscription established, request the device ID.
-    await _getDeviceId(
-      _bleCommunicationManager!.characteristic,
-    );
+    await _getDeviceId(_bleCommunicationManager!.characteristic);
   }
 
   /// Retrieves a device ID for the Brine device.
@@ -185,9 +169,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     final String commandString = deviceIdCommand.toJsonString();
 
     try {
-      await _bleCommunicationManager!.writeValue(
-        value: commandString,
-      );
+      await _bleCommunicationManager!.writeValue(value: commandString);
     } catch (e) {
       debugPrint('Failed to request device ID with exception, $e');
 
@@ -237,10 +219,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => AssociationRoute(
-          bleCommunicationManager: _bleCommunicationManager!,
-          device: device,
-        ),
+        builder: (BuildContext context) =>
+            AssociationRoute(bleCommunicationManager: _bleCommunicationManager!, device: device),
       ),
     );
   }

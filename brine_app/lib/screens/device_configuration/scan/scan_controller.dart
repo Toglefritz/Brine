@@ -57,8 +57,8 @@ class ScanController extends State<ScanRoute> {
   /// Initializes Bluetooth permission status monitoring.
   ///
   /// This method sets up a listener to monitor the current status of the Bluetooth permissions on the host platform.
-  void _initBluetoothPermissionStatusMonitor() {
-    _bluetoothPermissionStream = BleCommunicationService.ble.emitCurrentPermissionStatus().listen(
+  Future<void> _initBluetoothPermissionStatusMonitor() async {
+    _bluetoothPermissionStream = (await BleCommunicationService.ble.emitCurrentPermissionStatus()).listen(
       (BluetoothPermissionStatus status) {
         _bluetoothPermissionStatus = status;
 
@@ -75,9 +75,7 @@ class ScanController extends State<ScanRoute> {
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute<void>(
-            builder: (BuildContext context) => const ErrorRoute(
-              errorType: ErrorType.bluetoothPermissions,
-            ),
+            builder: (BuildContext context) => const ErrorRoute(errorType: ErrorType.bluetoothPermissions),
           ),
         );
       },
@@ -91,10 +89,10 @@ class ScanController extends State<ScanRoute> {
   ///
   /// This method sets up a listener to monitor the current status of the Bluetooth adapter. It is typically called
   /// during the initialization phase of the app or when Bluetooth monitoring is required.
-  void _initBluetoothAdapterStatusMonitor() {
+  Future<void> _initBluetoothAdapterStatusMonitor() async {
     try {
-      _bluetoothStatusStream = BleCommunicationService.ble.emitCurrentBluetoothStatus().listen(
-        (status) {
+      _bluetoothStatusStream = (await BleCommunicationService.ble.emitCurrentBluetoothStatus()).listen(
+        (BluetoothStatus status) {
           _bluetoothAdapterStatus = status;
 
           // Start the scan if the Bluetooth adapter is available and if permissions have been granted.
@@ -103,7 +101,7 @@ class ScanController extends State<ScanRoute> {
             _startScan();
           }
         },
-        onError: (error) {
+        onError: (dynamic error) {
           // TODO(Toglefritz): go to a Bluetooth error screen
         },
       );
@@ -132,20 +130,15 @@ class ScanController extends State<ScanRoute> {
     debugPrint('Starting scan');
 
     // Start the scan
-    _discoveredDeviceSubscription = BleCommunicationService.ble.startScan(
+    _discoveredDeviceSubscription = (await BleCommunicationService.ble.startScan(
       filters: <ScanFilter>[
-        ScanFilter(
-          serviceUuids: ['6272696e-6573-616c-746d-6f6e69746f72'],
-        ),
+        ScanFilter(serviceUuids: ['6272696e-6573-616c-746d-6f6e69746f72']),
       ],
-    ).listen(_onDeviceDiscovered);
+    )).listen(_onDeviceDiscovered);
 
     // Start a timer to create a timeout for the scan. If a Brine device is not found within the timeout period, the
     // timer will be cancelled.
-    _scanTimeout = Timer(
-      const Duration(seconds: 8),
-      () => _stopScan(scanTimeout: true),
-    );
+    _scanTimeout = Timer(const Duration(seconds: 8), () => _stopScan(scanTimeout: true));
   }
 
   /// Receives [BleDevice] instances from the [SplendidBle] service that represent BLE devices discovered during the
@@ -155,8 +148,9 @@ class ScanController extends State<ScanRoute> {
     debugPrint('Discovered Brine device, ${device.name}');
 
     // Check if the discovered device is among the excluded devices
-    final bool isExcluded =
-        widget.excludedDeviceNames.where((String excludedDeviceName) => excludedDeviceName == device.name).isNotEmpty;
+    final bool isExcluded = widget.excludedDeviceNames
+        .where((String excludedDeviceName) => excludedDeviceName == device.name)
+        .isNotEmpty;
 
     // Check that the discovered device is not excluded. If it is, ignore the device. If it is not excluded, double
     // check that the device has a name that contains Brine. This is not a robust security feature, just a simple tool
@@ -172,10 +166,8 @@ class ScanController extends State<ScanRoute> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => DeviceConfirmationRoute(
-            device: device,
-            excludedDevices: widget.excludedDeviceNames,
-          ),
+          builder: (BuildContext context) =>
+              DeviceConfirmationRoute(device: device, excludedDevices: widget.excludedDeviceNames),
         ),
       );
     }
@@ -188,12 +180,7 @@ class ScanController extends State<ScanRoute> {
 
     _stopScan();
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const SetupRoute(),
-      ),
-    );
+    Navigator.pushReplacement(context, MaterialPageRoute<void>(builder: (BuildContext context) => const SetupRoute()));
   }
 
   /// Handles taps on the "try again" button used to restart the scan.
