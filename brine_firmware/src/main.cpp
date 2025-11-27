@@ -9,12 +9,23 @@
 #include <DeepSleepService.h>
 #include <DeviceConfigurationManager.h>
 #include <DistanceSensor.h>
-#include <I2CButton.h>
 #include <LEDService.h>
 #include <Wire.h>
 
-/// An I2CButton instance used to handle button presses.
-I2CButton &button = I2CButton::getInstance();
+// Include the appropriate button type based on build configuration
+#ifdef GPIO_BUTTON_PIN
+#include <GPIOButton.h>
+#define BUTTON_TYPE GPIOButton
+#else
+#include <I2CButton.h>
+#define BUTTON_TYPE I2CButton
+#endif
+
+/// Button instance used to handle button presses.
+BUTTON_TYPE &button = BUTTON_TYPE::getInstance();
+
+// Tracks whether the I2C button was successfully initialized
+bool buttonAvailable = false;
 
 // Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
 // when the provisioning process been running for three minutes or more.
@@ -65,8 +76,10 @@ DistanceSensor sensor;
  * This function configures the service that handles the deep sleep cycle for the Brine device. The service handles
  * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the
  * device wakes, callback functions are invoked.
+ * 
+ * @param enableTimer If true, enables timer-based wake-up. If false, only button wake-up is enabled.
  */
-void _configureDeepSleepService() {
+void _configureDeepSleepService(bool enableTimer = true) {
   DeepSleepService &deepSleepService = DeepSleepService::getInstance();
 
   // Set the duration to sleep between sensor uploads. In debug mode, this duration is 30 seconds to allow for faster
@@ -75,7 +88,18 @@ void _configureDeepSleepService() {
 
   // Configure wake-up sources. The first argument is a duration in milliseconds for the timer wake-up. The second is
   // a GPIO pin used to manually wake up the device.
-  deepSleepService.configureWakeUp(deepSleepDuration, GPIO_NUM_32);
+#ifdef GPIO_BUTTON_PIN
+  gpio_num_t wakeupPin = static_cast<gpio_num_t>(GPIO_BUTTON_PIN);
+#else
+  gpio_num_t wakeupPin = GPIO_NUM_32; // I2C button interrupt pin
+#endif
+  
+  if (enableTimer) {
+    deepSleepService.configureWakeUp(deepSleepDuration, wakeupPin);
+  } else {
+    // Only configure button wake-up, no timer
+    deepSleepService.configureWakeUpButtonOnly(wakeupPin);
+  }
 
   // Enter deep sleep.
   deepSleepService.enterDeepSleep();
@@ -306,12 +330,50 @@ void startProvisioning() {
  * @brief The setup function for the Brine monitor firmware.
  */
 void setup() {
+  // Initialize DebugService first to ensure serial output is available
+  DebugService::getInstance().debugPrintln("Starting Brine monitor firmware...");
+  
+  // Add a small delay to allow serial monitor to connect
+  delay(2000);
+  
+  // Check the wake-up cause to determine if the button was pressed
+  esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
+  
+  switch(wakeup_reason) {
+    case ESP_SLEEP_WAKEUP_EXT0:
+    case ESP_SLEEP_WAKEUP_EXT1:
+      DebugService::getInstance().debugPrintln("Woke up from button press (EXT wake-up)");
+      buttonPressed = true;
+      break;
+    case ESP_SLEEP_WAKEUP_TIMER:
+      DebugService::getInstance().debugPrintln("Woke up from timer");
+      buttonPressed = false;
+      break;
+    case ESP_SLEEP_WAKEUP_UNDEFINED:
+    default:
+      DebugService::getInstance().debugPrintln("Not a deep sleep wake-up (power on or reset)");
+      buttonPressed = false;
+      break;
+  }
+  
   // Initialize the main I2C bus for general peripherals using pins from build configuration
   Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
   DebugService::getInstance().debugPrintln("I2C bus initialized.");
 
   // Initialize the button service, setting the buttonCallback function as the callback for button presses.
-  button.begin(Wire, button_isr);
+#ifdef GPIO_BUTTON_PIN
+  DebugService::getInstance().debugPrintln("Initializing GPIO Button.");
+  buttonAvailable = button.begin(button_isr);
+#else
+  DebugService::getInstance().debugPrintln("Initializing I2C Button.");
+  buttonAvailable = button.begin(Wire, button_isr);
+#endif
+  
+  if (!buttonAvailable) {
+    DebugService::getInstance().debugPrintln("Failed to initialize button. Continuing without button support.");
+  } else {
+    DebugService::getInstance().debugPrintln("Button initialized successfully.");
+  }
 
   // Initialize the LED service.
   LEDService::getInstance().begin(Wire);
@@ -384,8 +446,9 @@ void setup() {
 
     if (!wifiConnected) {
       DebugService::getInstance().debugPrintln("Failed to connect to WiFi after multiple attempts.");
-      // Optionally reset the device or enter deep sleep here
-      _configureDeepSleepService();
+      DebugService::getInstance().debugPrintln("Entering deep sleep. Press button to wake and enter provisioning.");
+      // Enter deep sleep - device will wake on button press ONLY (no timer since no WiFi)
+      _configureDeepSleepService(false);
       return; // Exit setup if WiFi connection fails
     }
 
@@ -397,9 +460,11 @@ void setup() {
       // Handle upload failure if needed
     }
 
-    // Configure the deep sleep service.
-    _configureDeepSleepService();
+    // Configure the deep sleep service with timer enabled for periodic sensor readings
+    _configureDeepSleepService(true);
   }
+  
+  DebugService::getInstance().debugPrintln("Setup complete. Entering main loop.");
 }
 
 void loop() {
@@ -430,15 +495,17 @@ void loop() {
       buttonPressed = false;
 
       // Reset the state of the button.
-      I2CButton::getInstance().clearEventBits();
+      if (buttonAvailable) {
+        button.clearEventBits();
+      }
     } else if (!clientConnected) {
       // Blink LED while provisioning
       LEDService::getInstance().blink(millis());
     }
   }
 
-  // Detect long button press
-  if (button.isPressed()) {
+  // Detect long button press (only if button is available)
+  if (buttonAvailable && button.isPressed()) {
     // Check if the duration exceeds the long press threshold
     if (!isLongPressTriggered && (millis() - buttonPressStartTime >= LONG_PRESS_DURATION)) {
       isLongPressTriggered = true;

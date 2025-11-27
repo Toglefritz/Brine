@@ -42,11 +42,41 @@ public:
     _sleepDurationMs = sleepDurationMs;
     _wakeUpPin = wakeUpPin;
 
-    // Configure wake-up sources
+    // Configure timer wake-up
     esp_sleep_enable_timer_wakeup(sleepDurationMs * 1000); // Convert to microseconds
-    esp_sleep_enable_ext0_wakeup(wakeUpPin, 0); // Wake up when the button is pressed (active-low)
     
-    DebugService::getInstance().debugPrintln("DeepSleepService: Wake-up sources configured.");
+    // Configure GPIO wake-up
+    // Use ext1 for better compatibility across ESP32 variants
+    // Button is active-low (pressed = LOW), so wake when ANY pin goes LOW
+    uint64_t wakeupMask = 1ULL << wakeUpPin;
+    esp_sleep_enable_ext1_wakeup(wakeupMask, ESP_EXT1_WAKEUP_ANY_LOW);
+    
+    DebugService::getInstance().debugPrint("DeepSleepService: Wake-up configured - Timer: ");
+    DebugService::getInstance().debugPrint(String(sleepDurationMs));
+    DebugService::getInstance().debugPrint("ms, GPIO: ");
+    DebugService::getInstance().debugPrintln(String(wakeUpPin));
+  }
+
+  /**
+   * @brief Configures button-only wake-up (no timer).
+   *
+   * Sets up only the GPIO wake-up source for deep sleep, without a timer.
+   * This is useful when the device has no WiFi credentials and cannot perform
+   * periodic sensor uploads.
+   *
+   * @param wakeUpPin GPIO pin connected to the button for wake-up.
+   */
+  void configureWakeUpButtonOnly(gpio_num_t wakeUpPin) {
+    _wakeUpPin = wakeUpPin;
+    _sleepDurationMs = 0; // No timer
+
+    // Configure GPIO wake-up only
+    // Button is active-low (pressed = LOW), so wake when ANY pin goes LOW
+    uint64_t wakeupMask = 1ULL << wakeUpPin;
+    esp_sleep_enable_ext1_wakeup(wakeupMask, ESP_EXT1_WAKEUP_ANY_LOW);
+    
+    DebugService::getInstance().debugPrint("DeepSleepService: Wake-up configured - Button only on GPIO: ");
+    DebugService::getInstance().debugPrintln(String(wakeUpPin));
   }
 
   /**
