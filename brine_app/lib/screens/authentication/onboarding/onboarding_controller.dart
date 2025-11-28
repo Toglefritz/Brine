@@ -9,10 +9,10 @@ import 'onboarding_view.dart';
 /// Controller for [OnboardingRoute].
 class OnboardingController extends State<OnboardingRoute> {
   /// Handles taps on the login button.
-  void handleLoginTap() {
+  Future<void> handleLoginTap() async {
     Analytics.trackEvent(eventName: 'onboarding_login_tap');
 
-    Navigator.pushReplacement(
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => const LoginRoute(),
@@ -21,10 +21,10 @@ class OnboardingController extends State<OnboardingRoute> {
   }
 
   /// Handles taps on the create an account button.
-  void handleCreateAccountTap() {
+  Future<void> handleCreateAccountTap() async {
     Analytics.trackEvent(eventName: 'onboarding_create_account_tap');
 
-    Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => const CreateAccountRoute(),

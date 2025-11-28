@@ -9,6 +9,7 @@ import '../../../services/authentication/authentication_service.dart';
 import '../../../services/authentication/exceptions/firebase_auth_creation_exception.dart';
 import '../../../services/authentication/exceptions/user_document_creation_exception.dart';
 import '../../../services/authentication/models/auth_methods.dart';
+import '../../../services/device_management/device_management_service.dart';
 import '../../../values/regex.dart';
 import '../../errors/error_route.dart';
 import '../../errors/models/error_type.dart';
@@ -95,8 +96,10 @@ class CreateAccountController extends State<CreateAccountRoute> {
         } else if (e.code == 'network-request-failed') {
           Analytics.trackEvent(eventName: 'network-request-failed');
           unawaited(
-            FirebaseCrashlytics.instance
-                .recordError('Account creation with basic auth failed with exception, $e', StackTrace.current),
+            FirebaseCrashlytics.instance.recordError(
+              'Account creation with basic auth failed with exception, $e',
+              StackTrace.current,
+            ),
           );
 
           setState(() {
@@ -110,6 +113,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
           return;
         } else {
           Analytics.trackEvent(eventName: 'unknown_error');
+
           unawaited(
             FirebaseCrashlytics.instance.recordError(
               'Account creation with basic auth failed with exception, $e',
@@ -131,6 +135,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
         }
       } catch (e, s) {
         Analytics.trackEvent(eventName: 'unknown_error');
+
         unawaited(
           FirebaseCrashlytics.instance.recordError('Account creation with basic auth failed with exception, $e', s),
         );
@@ -160,7 +165,11 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
       Analytics.trackSignUp(AuthMethod.basicAuth);
 
-      _navigateToSetup();
+      // Create the user document
+      await _createUserDocument(FirebaseAuth.instance.currentUser!);
+
+      // Navigate to the setup route
+      await _navigateToSetup();
     }
   }
 
@@ -250,14 +259,12 @@ class CreateAccountController extends State<CreateAccountRoute> {
   }
 
   /// Handles taps on the back button.
-  void onBackTap() {
+  Future<void> onBackTap() async {
     Analytics.trackEvent(eventName: 'account_creation_back_tap');
 
-    Navigator.pushReplacement(
+    await Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const OnboardingRoute(),
-      ),
+      MaterialPageRoute<void>(builder: (BuildContext context) => const OnboardingRoute()),
     );
   }
 
@@ -266,49 +273,81 @@ class CreateAccountController extends State<CreateAccountRoute> {
     Analytics.trackSignUp(AuthMethod.google);
 
     try {
-      await AuthenticationService.createUser(method: AuthMethod.google);
+      final User? user = await AuthenticationService.createUser(method: AuthMethod.google);
 
-      _navigateToSetup();
+      // If the user is null, the account creation failed
+      if (user == null) {
+        // TODO(Toglefritz): show a specific error
+        await _showErrorPage(errorType: ErrorType.unknown);
+      }
+
+      // Create a Firestore document for the user
+      await _createUserDocument(user!);
+
+      // Navigate to the setup route
+      await _navigateToSetup();
     } on FirebaseAuthCreationException catch (_) {
-      _showErrorPage(errorType: ErrorType.firebaseAuthCreationFailed);
+      await _showErrorPage(errorType: ErrorType.firebaseAuthCreationFailed);
     } on UserDocumentCreationException catch (_) {
-      _showErrorPage(errorType: ErrorType.userDocumentCreationFailed);
+      await _showErrorPage(errorType: ErrorType.userDocumentCreationFailed);
     } catch (e) {
-      _showErrorPage(errorType: ErrorType.unknown);
+      await _showErrorPage(errorType: ErrorType.unknown);
     }
-  }
-
-  /// Displays an error page with information about the error that occurred during account creation.
-  void _showErrorPage({required ErrorType errorType}) {
-    // TODO(Toglefritz): should this be a push?
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => ErrorRoute(
-          errorType: errorType,
-        ),
-      ),
-    );
   }
 
   /// Handles taps on the Apple sign in button.
   Future<void> handleAppleCreateAccount() async {
     Analytics.trackSignUp(AuthMethod.apple);
 
-    // TODO(Toglefritz): catch exceptions
+    try {
+      // Create the user with Apple credentials
+      final User? newUser = await AuthenticationService.createUser(method: AuthMethod.apple);
 
-    await AuthenticationService.createUser(method: AuthMethod.apple);
+      // If the user is null, the account creation failed
+      if (newUser == null) {
+        // TODO(Toglefritz): show a specific error
+        await _showErrorPage(errorType: ErrorType.unknown);
+      }
 
-    _navigateToSetup();
+      // Create a Firestore document for the user
+      await _createUserDocument(newUser!);
+
+      // Navigate to the setup route
+      await _navigateToSetup();
+    } catch (e) {
+      // TODO(Toglefritz): show a specific error
+      await _showErrorPage(errorType: ErrorType.unknown);
+    }
+  }
+
+  /// Creates a document for the new user account in the Firestore database.
+  ///
+  /// After a new user account is successfully created, a document needs to be created in the Firestore database for
+  /// the new user. This document will include information about the user's devices, among other things.
+  Future<void> _createUserDocument(User user) async {
+    try {
+      final DeviceManagementService deviceManagementService = DeviceManagementService(user: user);
+      await deviceManagementService.createUserDocument();
+    } catch (e) {
+      // TODO(Toglefritz): show a specific error
+      await _showErrorPage(errorType: ErrorType.unknown);
+    }
   }
 
   /// Navigates to the setup route following a successful account creation.
-  void _navigateToSetup() {
-    Navigator.pushReplacement(
+  Future<void> _navigateToSetup() async {
+    await Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const SetupRoute(),
-      ),
+      MaterialPageRoute<void>(builder: (BuildContext context) => const SetupRoute()),
+    );
+  }
+
+  /// Displays an error page with information about the error that occurred during account creation.
+  Future<void> _showErrorPage({required ErrorType errorType}) async {
+    // TODO(Toglefritz): should this be a push?
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(builder: (BuildContext context) => ErrorRoute(errorType: errorType)),
     );
   }
 

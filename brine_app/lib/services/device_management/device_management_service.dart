@@ -25,9 +25,44 @@ class DeviceManagementService {
   static final String _cloudFunctionsHost = kDebugMode ? devMachineIP : ''; // TODO(Toglefritz): update prod host
 
   /// The base URL for all endpoints used by this service.
-  static String baseUrl = kDebugMode
-      ? 'http://$_cloudFunctionsHost:5001/brine-3b212/us-central1'
-      : ''; // TODO(Toglefritz): update prod endpoint
+  static String _getEndpointUrl(String function) {
+    const bool useFirebaseEmulator = bool.fromEnvironment('USE_FIREBASE_EMULATOR');
+
+    if (useFirebaseEmulator) {
+      return 'http://$_cloudFunctionsHost:5001/brine-3b212/us-central1/$function';
+    } else {
+      return 'https://$function-7wo3szegoq-uc.a.run.app';
+    }
+  }
+
+  /// Creates a Firestore user document for the authenticated user via backend endpoint.
+  Future<void> createUserDocument() async {
+    final String? idToken = await user.getIdToken();
+
+    // Ensure the user is authenticated and has an ID token
+    if (idToken == null) {
+      throw Exception('Missing ID token for authenticated user.');
+    }
+
+    // Define the backend endpoint URL for creating a user document
+    const String function = 'createUserDocument';
+    final String endpoint = _getEndpointUrl(function);
+
+    // Make an authenticated HTTP POST request to create the user document
+    final Response response = await post(
+      Uri.parse(endpoint),
+      headers: {'Authorization': 'Bearer $idToken', 'Content-Type': 'application/json'},
+    );
+
+    // Check the response status code
+    if (response.statusCode == HttpStatus.ok || response.statusCode == HttpStatus.created) {
+      debugPrint('Successfully created user document for user with ID: ${user.uid}');
+
+      return;
+    } else {
+      throw Exception('Failed to create user document: ${response.reasonPhrase}');
+    }
+  }
 
   /// Calls the *addDeviceToAccount* endpoint to add a new device to the authenticated user's account. The Firebase
   /// backend will also create a record for the Brine device in the "devices" collection if one does not already exist.
@@ -62,17 +97,14 @@ class DeviceManagementService {
       final String? idToken = await user.getIdToken();
 
       // Define the endpoint URL
-      const String endpoint = '/addDeviceToUser';
+      const String function = 'addDeviceToUser';
 
       // Make an authenticated HTTP request to the endpoint
       final Response response = await post(
-        Uri.parse(baseUrl + endpoint),
+        Uri.parse(_getEndpointUrl(function)),
         // Include the ID token in the Authorization header
         headers: {'Authorization': 'Bearer $idToken'},
-        body: {
-          'deviceId': device.deviceId,
-          'deviceName': device.name.toLowerCase(),
-        },
+        body: {'deviceId': device.deviceId, 'deviceName': device.name.toLowerCase()},
       );
 
       // Check the response status code
@@ -102,17 +134,14 @@ class DeviceManagementService {
       final String? idToken = await user.getIdToken();
 
       // Define the endpoint URL
-      const String endpoint = '/updateApplianceHeight';
+      const String function = 'updateApplianceHeight';
 
       // Make an authenticated HTTP request to the endpoint
       final Response response = await patch(
-        Uri.parse(baseUrl + endpoint),
+        Uri.parse(_getEndpointUrl(function)),
         // Include the ID token in the Authorization header
         headers: {'Authorization': 'Bearer $idToken'},
-        body: {
-          'deviceId': deviceId,
-          'applianceHeight': height.toString(),
-        },
+        body: {'deviceId': deviceId, 'applianceHeight': height.toString()},
       );
 
       // Check the response status code
@@ -139,11 +168,12 @@ class DeviceManagementService {
       final String? idToken = await user.getIdToken();
 
       // Define the endpoint URL
-      const String endpoint = '/getUserDevices';
+      const String function = 'getUserDevices';
+      final String endpoint = _getEndpointUrl(function);
 
       // Make an authenticated HTTP request to the endpoint
       final Response response = await get(
-        Uri.parse(baseUrl + endpoint),
+        Uri.parse(endpoint),
         // Include the ID token in the Authorization header
         headers: {'Authorization': 'Bearer $idToken'},
       );
@@ -203,14 +233,14 @@ class DeviceManagementService {
       final String? idToken = await user.getIdToken();
 
       // Define the endpoint URL
-      const String endpoint = '/getDevice';
+      const String function = 'getDevice';
 
       // Define the query parameter for the device ID
       final String query = '?deviceId=$deviceId';
 
       // Make an HTTP GET request to the endpoint
       final Response response = await post(
-        Uri.parse(baseUrl + endpoint + query),
+        Uri.parse(_getEndpointUrl(function) + query),
         // Include the ID token in the Authorization header
         headers: {'Authorization': 'Bearer $idToken'},
       );
@@ -255,16 +285,14 @@ class DeviceManagementService {
       final String? idToken = await user.getIdToken();
 
       // Define the endpoint URL
-      const String endpoint = '/generatePSK';
+      const String function = 'generatePSK';
 
       // Create the body of the request containing the device ID.
-      final Map<String, dynamic> body = {
-        'deviceId': deviceId,
-      };
+      final Map<String, dynamic> body = {'deviceId': deviceId};
 
       // Make an HTTP GET request to the endpoint
       final Response response = await post(
-        Uri.parse(baseUrl + endpoint),
+        Uri.parse(_getEndpointUrl(function)),
         // Include the ID token in the Authorization header
         headers: {'Authorization': 'Bearer $idToken'},
         body: body,
@@ -310,11 +338,12 @@ class DeviceManagementService {
       final String? idToken = await user.getIdToken();
 
       // Define the endpoint URL with deviceId as a query parameter
-      final String endpoint = '/removeDeviceFromUser?deviceId=$deviceId';
+      const String function = 'removeDeviceFromUser';
+      final String query = '?deviceId=$deviceId';
 
       // Make an authenticated HTTP DELETE request to the endpoint
       final Response response = await delete(
-        Uri.parse(baseUrl + endpoint),
+        Uri.parse(_getEndpointUrl(function) + query),
         // Include the ID token in the Authorization header
         headers: {'Authorization': 'Bearer $idToken'},
       );
