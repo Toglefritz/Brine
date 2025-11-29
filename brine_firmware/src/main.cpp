@@ -414,18 +414,32 @@ void setup() {
       break;
   }
   
+  // Configure the wakeup pin with internal pull-up resistor
+  // This prevents the pin from floating and causing false wakeups
+  #ifdef GPIO_BUTTON_PIN
+  gpio_num_t wakeupPin = static_cast<gpio_num_t>(GPIO_BUTTON_PIN);
+  #else
+  gpio_num_t wakeupPin = GPIO_NUM_32; // I2C button interrupt pin
+  #endif
+  
+  // Set pin mode with pull-up (button should be wired to pull LOW when pressed)
+  pinMode(wakeupPin, INPUT_PULLUP);
+  DebugService::getInstance().debugPrint("Wakeup pin ");
+  DebugService::getInstance().debugPrint(String(wakeupPin));
+  DebugService::getInstance().debugPrintln(" configured with internal pull-up");
+  
   // Initialize the main I2C bus for general peripherals using pins from build configuration
   Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
   DebugService::getInstance().debugPrintln("I2C bus initialized.");
 
   // Initialize the button service, setting the buttonCallback function as the callback for button presses.
-#ifdef GPIO_BUTTON_PIN
+  #ifdef GPIO_BUTTON_PIN
   DebugService::getInstance().debugPrintln("Initializing GPIO Button.");
   buttonAvailable = button.begin(button_isr);
-#else
+  #else
   DebugService::getInstance().debugPrintln("Initializing I2C Button.");
   buttonAvailable = button.begin(Wire, button_isr);
-#endif
+  #endif
   
   if (!buttonAvailable) {
     DebugService::getInstance().debugPrintln("Failed to initialize button. Continuing without button support.");
@@ -560,6 +574,43 @@ void loop() {
       if (buttonAvailable) {
         button.clearEventBits();
       }
+
+      // Check if the button is currently pressed before going to sleep
+      #ifdef GPIO_BUTTON_PIN
+      gpio_num_t wakeupPin = static_cast<gpio_num_t>(GPIO_BUTTON_PIN);
+      #else
+      gpio_num_t wakeupPin = GPIO_NUM_32; // I2C button interrupt pin
+      #endif
+      
+      // Read the current state of the button pin (LOW = pressed with pull-up)
+      int buttonState = digitalRead(wakeupPin);
+      
+      if (buttonState == LOW) {
+        DebugService::getInstance().debugPrintln("Button is currently pressed. Waiting for release before sleep...");
+        
+        // Wait for button to be released (with timeout to prevent infinite loop)
+        unsigned long waitStart = millis();
+        const unsigned long waitTimeout = 30000; // 30 second timeout
+        
+        while (digitalRead(wakeupPin) == LOW && (millis() - waitStart < waitTimeout)) {
+          delay(100); // Check every 100ms
+          LEDService::getInstance().blink(millis()); // Blink to indicate waiting
+        }
+        
+        if (digitalRead(wakeupPin) == LOW) {
+          DebugService::getInstance().debugPrintln("Button still pressed after timeout. Entering sleep anyway.");
+        } else {
+          DebugService::getInstance().debugPrintln("Button released. Safe to enter sleep.");
+        }
+        
+        // Add a small delay to ensure pin has stabilized
+        delay(500);
+      }
+
+      // Go back to sleep
+      // TODO: Check if WiFi is connected to determine if timer should be enabled
+      DebugService::getInstance().debugPrintln("Entering deep sleep. Press button to wake and enter provisioning.");
+      _configureDeepSleepService();
     } else if (!clientConnected) {
       // Blink LED while provisioning
       LEDService::getInstance().blink(millis());

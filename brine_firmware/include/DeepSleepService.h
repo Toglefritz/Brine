@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 #include <esp_sleep.h>
+#include <driver/rtc_io.h>
+#include <driver/gpio.h>
 #include "DebugService.h"
 
 /**
@@ -45,6 +47,23 @@ public:
     // Configure timer wake-up
     esp_sleep_enable_timer_wakeup(sleepDurationMs * 1000); // Convert to microseconds
     
+    // Ensure the wakeup pin has pull-up enabled to prevent floating
+    // Note: Some GPIO pins may not support RTC pull-ups, so we also set regular pull-up
+    gpio_pullup_en(wakeUpPin);
+    gpio_pulldown_dis(wakeUpPin);
+    
+    // Try to enable RTC pull-up if supported (may fail on some pins)
+    esp_err_t rtc_result = rtc_gpio_pullup_en(wakeUpPin);
+    if (rtc_result == ESP_OK) {
+      rtc_gpio_pulldown_dis(wakeUpPin);
+      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up enabled on wakeup pin");
+    } else {
+      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up not supported on this pin, using regular pull-up");
+    }
+    
+    // Isolate the pin to prevent it from being affected by other peripherals during sleep
+    rtc_gpio_isolate(wakeUpPin);
+    
     // Configure GPIO wake-up
     // Use ext1 for better compatibility across ESP32 variants
     // Button is active-low (pressed = LOW), so wake when ANY pin goes LOW
@@ -70,6 +89,22 @@ public:
     _wakeUpPin = wakeUpPin;
     _sleepDurationMs = 0; // No timer
 
+    // Ensure the wakeup pin has pull-up enabled to prevent floating
+    gpio_pullup_en(wakeUpPin);
+    gpio_pulldown_dis(wakeUpPin);
+    
+    // Try to enable RTC pull-up if supported
+    esp_err_t rtc_result = rtc_gpio_pullup_en(wakeUpPin);
+    if (rtc_result == ESP_OK) {
+      rtc_gpio_pulldown_dis(wakeUpPin);
+      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up enabled on wakeup pin");
+    } else {
+      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up not supported on this pin, using regular pull-up");
+    }
+    
+    // Isolate the pin
+    rtc_gpio_isolate(wakeUpPin);
+    
     // Configure GPIO wake-up only
     // Button is active-low (pressed = LOW), so wake when ANY pin goes LOW
     uint64_t wakeupMask = 1ULL << wakeUpPin;
