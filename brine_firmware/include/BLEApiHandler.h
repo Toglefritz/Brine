@@ -68,14 +68,21 @@ private:
    */
   FirebaseService *firebaseService;
 
-public:
-  BLEApiHandler() {}
-
+private:
   // Buffer for accumulating PSK chunks
   String pskBuffer = "";
   
   // Flag to indicate PSK is ready to be saved (deferred to main loop)
   bool pskReadyToSave = false;
+  
+  // Flag to indicate WiFi scan is requested (deferred to main loop)
+  bool wifiScanRequested = false;
+  
+  // Pending response to be sent from main loop (to avoid stack overflow in BLE callback)
+  String pendingResponse = "";
+
+public:
+  BLEApiHandler() {}
   
   /**
    * @brief Checks if PSK is ready to be saved and handles the save operation.
@@ -98,6 +105,48 @@ public:
     pskBuffer = "";
     
     return saveResult;
+  }
+  
+  /**
+   * @brief Checks if WiFi scan is requested and returns the scan results.
+   * 
+   * This should be called from the main loop, not from BLE callbacks.
+   * Returns the JSON response string with scan results, or empty string if no scan pending.
+   */
+  String processPendingWifiScan() {
+    if (!wifiScanRequested) {
+      return "";
+    }
+    
+    wifiScanRequested = false;
+    
+    // Perform WiFi scan in main loop context (plenty of stack)
+    JsonDocument responseArray = WiFiService::scanForNetworks();
+    
+    // Create a JSON response object with the array of networks
+    JsonDocument responseDoc;
+    responseDoc["response"] = "scan";
+    responseDoc["networks"] = responseArray;
+    
+    // Serialize the JSON response to a string
+    String jsonResponse;
+    serializeJson(responseDoc, jsonResponse);
+    
+    return jsonResponse;
+  }
+  
+  /**
+   * @brief Gets and clears any pending response that needs to be sent.
+   * 
+   * This should be called from the main loop to send responses that were
+   * deferred from BLE callbacks to avoid stack overflow.
+   * 
+   * @return String The pending response, or empty string if none
+   */
+  String getPendingResponse() {
+    String response = pendingResponse;
+    pendingResponse = "";
+    return response;
   }
   
   /**
@@ -177,21 +226,17 @@ private:
   /**
    * @brief Handles the 'get_device_id' command.
    *
-   * @return String The JSON response string containing the device ID.
+   * Defers the response to main loop to avoid stack overflow.
+   *
+   * @return String Empty string (response will be sent from main loop)
    */
   String handleGetDeviceId() {
-    JsonDocument responseDoc;
-    responseDoc["response"] = "device_id";
-    responseDoc["device_id"] = DEVICE_ID; // Use the defined DEVICE_ID
-
-    String jsonResponse;
-
-    serializeJson(responseDoc, jsonResponse);
-
-    DebugService::getInstance().debugPrint("Returning response with device ID, ");
-    DebugService::getInstance().debugPrintln(jsonResponse);
-
-    return jsonResponse;
+    // Build response as a single string to avoid concatenation issues
+    pendingResponse = String("{\"response\":\"device_id\",\"device_id\":\"") + 
+                      String(DEVICE_ID) + 
+                      String("\"}");
+    
+    return "";
   }
 
   /**
@@ -264,32 +309,19 @@ String handlePskProvided(const char *psk) {
 }
 
   /**
-   * @brief Scans for WiFi networks and returns a list of networks as a JSON string.
+   * @brief Handles WiFi scan request by setting a flag for deferred processing.
    *
-   * This method scans for available WiFi networks and constructs a JSON array
-   * with objects representing each network. Each object includes the SSID and RSSI
-   * (signal strength) of the network.
+   * To avoid stack overflow in the BLE callback, the actual WiFi scan is deferred
+   * to the main loop where there's plenty of stack space.
    *
-   * @return String The JSON response string containing the list of WiFi networks.
+   * @return String Empty string (response will be sent from main loop)
    */
   String handleScanWifiNetworks() {
-    // Get a list of available WiFi networks as a JSON array.
-    JsonDocument responseArray = WiFiService::scanForNetworks();
-
-    // Create a JSON response object with the array of networks.
-    JsonDocument responseDoc;
-    responseDoc["response"] = "scan";
-    responseDoc["networks"] = responseArray;
-
-    // Serialize the JSON response to a string.
-    String jsonResponse;
-    serializeJson(responseDoc, jsonResponse);
-
-    DebugService::getInstance().debugPrint("Returning WiFi scan results, ");
-    DebugService::getInstance().debugPrintln(jsonResponse);
-
-    // Return the JSON response string.
-    return jsonResponse;
+    // Set flag for main loop to process the scan
+    wifiScanRequested = true;
+    
+    // Return empty string - response will be sent from main loop
+    return "";
   }
 
   /**
@@ -339,37 +371,31 @@ String handlePskProvided(const char *psk) {
         }
       }
 
-      // Create a JSON response indicating successful connection.
-      JsonDocument responseDoc;
-      responseDoc["response"] = "wifi_connected";
-      responseDoc["ssid"] = ssid;
+      // Build response manually to minimize stack usage
+      pendingResponse = "{\"response\":\"wifi_connected\",\"ssid\":\"";
+      pendingResponse += ssid;
+      pendingResponse += "\"}";
 
-      String jsonResponse;
-      serializeJson(responseDoc, jsonResponse);
-
-      return jsonResponse;
+      return "";
     }
     // If the connection failed, return an error response.
     else {
-      DebugService::getInstance().debugPrint("Failed to connect to WiFi network: ");
-      DebugService::getInstance().debugPrintln(ssid);
+      DebugService::getInstance().debugPrintln("WiFi connect failed");
 
-      // Create a JSON response indicating the reason for the failure.
-      JsonDocument errorResponseDoc;
-      errorResponseDoc["response"] = "wifi_connect_error";
-
+      // Build error response manually to minimize stack usage
+      pendingResponse = "{\"response\":\"wifi_connect_error\",\"message\":\"";
+      
       if (WiFi.status() == WL_NO_SSID_AVAIL) {
-        errorResponseDoc["message"] = "SSID not found";
+        pendingResponse += "SSID not found";
       } else if (WiFi.status() == WL_CONNECT_FAILED) {
-        errorResponseDoc["message"] = "Connection failed";
+        pendingResponse += "Connection failed";
       } else {
-        errorResponseDoc["message"] = "Unknown error";
+        pendingResponse += "Unknown error";
       }
+      
+      pendingResponse += "\"}";
 
-      String errorResponse;
-      serializeJson(errorResponseDoc, errorResponse);
-
-      return errorResponse;
+      return "";
     }
   }
 
@@ -380,36 +406,9 @@ String handlePskProvided(const char *psk) {
    * This method is called when the client indicates to the Brine device that all setup steps are complete.
    */
   String handleCompleteProvisioning() {
-    DebugService::getInstance().debugPrintln("Completing provisioning process");
-
-    // Check if the connection was successful
-    try {
-      // Create a JSON response indicating successful connection.
-      JsonDocument responseDoc;
-      responseDoc["response"] = "provisioning_complete";
-
-      String jsonResponse;
-      serializeJson(responseDoc, jsonResponse);
-
-      DebugService::getInstance().debugPrintln("Provisioning process complete");
-
-      return jsonResponse;
-    }
-    // If the connection failed, return an error response.
-    catch (const std::exception &e) {
-      DebugService::getInstance().debugPrint("Failed to complete provisioning process: ");
-      DebugService::getInstance().debugPrintln(e.what());
-
-      // Create a JSON response indicating the reason for the failure.
-      JsonDocument errorResponseDoc;
-      errorResponseDoc["response"] = "complete_provisioning_error";
-      errorResponseDoc["message"] = e.what();
-
-      String errorResponse;
-      serializeJson(errorResponseDoc, errorResponse);
-
-      return errorResponse;
-    }
+    // Build response manually to minimize stack usage
+    pendingResponse = "{\"response\":\"provisioning_complete\"}";
+    return "";
   }
 
   /**

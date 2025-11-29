@@ -556,16 +556,29 @@ void setup() {
 
 void loop() {
   // Check if there's a pending PSK save operation (deferred from BLE callback to avoid stack overflow)
-  if (apiHandler.processPendingPskSave()) {
-    DebugService::getInstance().debugPrintln("PSK saved OK");
-    
-    // Send response from main loop (not BLE callback) to avoid stack overflow
-    if (pResponseCharacteristic != nullptr) {
-      DeviceConfigurationManager::getInstance().setCharacteristicValue(
-        pResponseCharacteristic, 
-        "{\"response\":\"psk_saved\"}"
-      );
-    }
+  if (apiHandler.processPendingPskSave() && pResponseCharacteristic != nullptr) {
+    DeviceConfigurationManager::getInstance().setCharacteristicValue(
+      pResponseCharacteristic, 
+      "{\"response\":\"psk_saved\"}"
+    );
+  }
+  
+  // Check if there's a pending WiFi scan (deferred from BLE callback to avoid stack overflow)
+  String wifiScanResponse = apiHandler.processPendingWifiScan();
+  if (wifiScanResponse.length() > 0 && pResponseCharacteristic != nullptr) {
+    DeviceConfigurationManager::getInstance().setCharacteristicValue(
+      pResponseCharacteristic, 
+      wifiScanResponse.c_str()
+    );
+  }
+  
+  // Check if there's any other pending response (deferred from BLE callback to avoid stack overflow)
+  String pendingResponse = apiHandler.getPendingResponse();
+  if (pendingResponse.length() > 0 && pResponseCharacteristic != nullptr) {
+    DeviceConfigurationManager::getInstance().setCharacteristicValue(
+      pResponseCharacteristic, 
+      pendingResponse.c_str()
+    );
   }
 
   // Start the provisioning process if the button was pressed and the provisioning process has not already started.
