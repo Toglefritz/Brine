@@ -60,6 +60,9 @@ void IRAM_ATTR button_isr() { buttonPressed = true; }
 // A handler for Bluetooth API commands and responses.
 BLEApiHandler apiHandler;
 
+// Store the BLE characteristic for sending deferred responses
+BLECharacteristic *pResponseCharacteristic = nullptr;
+
 // A service for saving and reading values from the non-volatile storage (NVS) of the ESP32.
 NVSService &nvsService = NVSService::getInstance();
 
@@ -349,13 +352,21 @@ void startProvisioning() {
   deviceConfigManager.setExternalWriteCallback([&deviceConfigManager](BLECharacteristic *pCharacteristic) {
     std::string value = pCharacteristic->getValue();
 
+    // Store characteristic for deferred responses
+    pResponseCharacteristic = pCharacteristic;
+
     // Handle the JSON command using BLEApiHandler
-    String jsonResponse = apiHandler.handleCommand(String(value.c_str()));
-    // If the provisioning process is complete, call the onProvisioningComplete function after the response is sent.
-    if (jsonResponse.indexOf("provisioning_complete") != -1) {
-      deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str(), onProvisioningComplete);
-    } else {
-      deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str());
+    // Use const reference to avoid unnecessary string copies
+    const String jsonResponse = apiHandler.handleCommand(String(value.c_str()));
+    
+    // Only send a response if one was generated (empty responses are used to minimize stack usage)
+    if (jsonResponse.length() > 0) {
+      // If the provisioning process is complete, call the onProvisioningComplete function after the response is sent.
+      if (jsonResponse.indexOf("provisioning_complete") != -1) {
+        deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str(), onProvisioningComplete);
+      } else {
+        deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str());
+      }
     }
   });
 
@@ -544,6 +555,19 @@ void setup() {
 }
 
 void loop() {
+  // Check if there's a pending PSK save operation (deferred from BLE callback to avoid stack overflow)
+  if (apiHandler.processPendingPskSave()) {
+    DebugService::getInstance().debugPrintln("PSK saved OK");
+    
+    // Send response from main loop (not BLE callback) to avoid stack overflow
+    if (pResponseCharacteristic != nullptr) {
+      DeviceConfigurationManager::getInstance().setCharacteristicValue(
+        pResponseCharacteristic, 
+        "{\"response\":\"psk_saved\"}"
+      );
+    }
+  }
+
   // Start the provisioning process if the button was pressed and the provisioning process has not already started.
   if (buttonPressed && provisioningStartTime == 0) {
     // Record the time when the button was pressed

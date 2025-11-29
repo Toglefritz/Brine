@@ -71,6 +71,35 @@ private:
 public:
   BLEApiHandler() {}
 
+  // Buffer for accumulating PSK chunks
+  String pskBuffer = "";
+  
+  // Flag to indicate PSK is ready to be saved (deferred to main loop)
+  bool pskReadyToSave = false;
+  
+  /**
+   * @brief Checks if PSK is ready to be saved and handles the save operation.
+   * 
+   * This should be called from the main loop, not from BLE callbacks.
+   * Returns true if a PSK was saved and response needs to be sent.
+   */
+  bool processPendingPskSave() {
+    if (!pskReadyToSave) {
+      return false;
+    }
+    
+    pskReadyToSave = false;
+    
+    // Save the PSK
+    NVSService &nvsService = NVSService::getInstance();
+    bool saveResult = nvsService.saveString("psk", pskBuffer.c_str());
+    
+    // Clear the buffer
+    pskBuffer = "";
+    
+    return saveResult;
+  }
+  
   /**
    * @brief Handles incoming JSON command requests.
    *
@@ -94,6 +123,15 @@ public:
     // The command, "get_device_id," returns the device ID of the IoT device.
     if (strcmp(command, "get_device_id") == 0) {
       return handleGetDeviceId();
+    }
+    // The command "psk_chunk" is used to send PSK data in chunks to avoid stack overflow
+    else if (strcmp(command, "psk_chunk") == 0) {
+      JsonObject parameters = doc["parameters"].as<JsonObject>();
+      const char *chunk = parameters["chunk"];
+      int chunkIndex = parameters["index"] | 0;
+      int totalChunks = parameters["total"] | 1;
+      
+      return handlePskChunk(chunk, chunkIndex, totalChunks);
     }
     // The command "psk_transfer," is used by the mobile app to provide a pre-shared key to the IoT device that it 
     // will use later in calls to the backend service.
@@ -157,6 +195,42 @@ private:
   }
 
   /**
+   * @brief Handles receiving PSK data in chunks to avoid stack overflow.
+   *
+   * This method accumulates PSK chunks sent from the mobile app. When all chunks
+   * are received, it sets a flag for the main loop to save the PSK.
+   *
+   * To minimize stack usage in the BLE callback, intermediate chunks return an empty
+   * response. The final chunk sets a flag and returns empty - the actual save and
+   * response happen in the main loop.
+   *
+   * @param chunk The PSK chunk data
+   * @param chunkIndex The index of this chunk (0-based)
+   * @param totalChunks The total number of chunks expected
+   * @return String The JSON response (always empty - response sent from main loop)
+   */
+  String handlePskChunk(const char *chunk, int chunkIndex, int totalChunks) {
+    // If this is the first chunk, clear the buffer
+    if (chunkIndex == 0) {
+      pskBuffer = "";
+      pskReadyToSave = false;
+    }
+    
+    // Append this chunk to the buffer
+    if (chunk != nullptr) {
+      pskBuffer += String(chunk);
+    }
+    
+    // If this is the last chunk, set flag for main loop to save
+    if (chunkIndex == totalChunks - 1) {
+      pskReadyToSave = true;
+    }
+    
+    // Always return empty string - response will be sent from main loop
+    return "";
+  }
+
+  /**
  * @brief Stores a pre-shared key provided by the client into NVS.
  *
  * This IoT device interacts with a cloud backend service. Those interactions require authentication in the form
@@ -169,25 +243,24 @@ private:
  * @return String The JSON response containing a confirmation of the command.
  */
 String handlePskProvided(const char *psk) {
+    DebugService::getInstance().debugPrintln("Saving PSK...");
+    
     // Get the instance of the NVSServices singleton.
     NVSService &nvsService = NVSService::getInstance();
 
-    // Save the PSK as a string under the key "preSharedKey"
+    // Save the PSK as a string under the key "psk"
     bool saveResult = nvsService.saveString("psk", psk);
 
     // If saving the PSK to NVS failed, return an error response.
     if (!saveResult) {
-        return createErrorResponse("Failed to save pre-shared key");
+        DebugService::getInstance().debugPrintln("ERROR: Save failed");
+        return "{\"response\":\"error\",\"message\":\"Failed to save PSK\"}";
     }
 
-    // Otherwise, if saving the PSK was successful, return a success response.
-    JsonDocument responseDoc;
-    responseDoc["response"] = "psk_saved";
+    DebugService::getInstance().debugPrintln("PSK saved OK");
 
-    String jsonResponse;
-    serializeJson(responseDoc, jsonResponse);
-
-    return jsonResponse;
+    // Return a minimal pre-built JSON response to avoid stack overflow
+    return "{\"response\":\"psk_saved\"}";
 }
 
   /**
