@@ -47,6 +47,15 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// Connection timeout duration in seconds.
   static const int _connectionTimeoutSeconds = 30;
 
+  /// Maximum number of retries for device ID request (to handle pairing).
+  static const int _maxDeviceIdRetries = 3;
+
+  /// Current retry count for device ID request.
+  int _deviceIdRetryCount = 0;
+
+  /// Timer for device ID request timeout.
+  Timer? _deviceIdTimeout;
+
   @override
   void initState() {
     Analytics.trackPageView('device_connection');
@@ -161,8 +170,11 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// Each Brine device has a unique device ID of the form `<adjective>_<adjective>_<noun>`, for example,
   /// "vast_teal_elephant." The Bluetooth API used by Brine monitors include a command allowing the app to retrieve this
   /// device ID. This is necessary because the device ID is included in the account association process.
+  ///
+  /// Note: If the device is not paired, the first write attempt will trigger the system pairing dialog and fail.
+  /// This method implements a retry mechanism to handle this scenario.
   Future<void> _getDeviceId(BleCharacteristic characteristic) async {
-    debugPrint('Requesting device ID');
+    debugPrint('Requesting device ID (attempt ${_deviceIdRetryCount + 1}/$_maxDeviceIdRetries)');
 
     // Get the command for requesting the device ID.
     final Command deviceIdCommand = Command(commandType: CommandType.getDeviceId);
@@ -170,11 +182,58 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
     try {
       await _bleCommunicationManager!.writeValue(value: commandString);
+
+      // Start a timeout to detect if we don't receive a response
+      _startDeviceIdTimeout();
     } catch (e) {
       debugPrint('Failed to request device ID with exception, $e');
 
-      // TODO(Toglefritz): Handle this error
+      // Check if this is likely a pairing-related error
+      final String errorMessage = e.toString().toLowerCase();
+      final bool isPairingError =
+          errorMessage.contains('insufficient') ||
+          errorMessage.contains('authentication') ||
+          errorMessage.contains('encryption');
+
+      if (isPairingError && _deviceIdRetryCount < _maxDeviceIdRetries) {
+        _deviceIdRetryCount++;
+
+        // Use exponential backoff: 2s, 4s, 8s
+        final int delaySeconds = 2 << (_deviceIdRetryCount - 1);
+        debugPrint('Pairing may be in progress. Retrying in $delaySeconds seconds...');
+
+        await Future<void>.delayed(Duration(seconds: delaySeconds));
+        await _getDeviceId(characteristic);
+      } else {
+        debugPrint('Failed to get device ID after $_deviceIdRetryCount retries');
+        _onDeviceIdError();
+      }
     }
+  }
+
+  /// Starts a timeout for receiving the device ID response.
+  void _startDeviceIdTimeout() {
+    _deviceIdTimeout?.cancel();
+    _deviceIdTimeout = Timer(const Duration(seconds: 5), () {
+      debugPrint('Device ID response timeout');
+
+      if (_deviceIdRetryCount < _maxDeviceIdRetries) {
+        _deviceIdRetryCount++;
+        _getDeviceId(_bleCommunicationManager!.characteristic);
+      } else {
+        _onDeviceIdError();
+      }
+    });
+  }
+
+  /// Handles errors when unable to retrieve device ID.
+  void _onDeviceIdError() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const ErrorRoute(errorType: ErrorType.bluetoothConnection),
+      ),
+    );
   }
 
   /// Handles changes in the value of a [BleCharacteristic].
@@ -188,6 +247,9 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     // Check that the characteristic value contains the device ID.
     if (response is DeviceIdResponse) {
       debugPrint('Received device ID: ${response.deviceId}');
+
+      // Cancel the device ID timeout since we received a response
+      _deviceIdTimeout?.cancel();
 
       _deviceId = response.deviceId;
 
@@ -232,6 +294,9 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   void dispose() {
     // Cancel the connection timeout timer.
     _connectionTimeout?.cancel();
+
+    // Cancel the device ID timeout timer.
+    _deviceIdTimeout?.cancel();
 
     // Cancel the connection state stream.
     _connectionStream?.cancel();

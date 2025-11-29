@@ -399,10 +399,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_splendid_ble
-      sha256: "4afd8460ae3c84a217256a98eb5fb9bf32333a745cb73d19bec13a3d50c88de6"
+      sha256: "52981a55fa974421fa95620d1cbc2db780057f4f0f674c90f732341a6300d146"
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.0"
+    version: "0.19.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
