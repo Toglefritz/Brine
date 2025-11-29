@@ -35,11 +35,11 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
       final PreSharedKey psk = await _generatePsk();
 
       // Transfer the PSK to the Brine device.
-      _transferPsk(psk);
+      await _transferPsk(psk);
     } catch (e) {
       debugPrint('Failed to perform PSK setup with exception, $e');
 
-      // TODO(Toglefritz): Handle the failure to add the device to the account.
+      // TODO(Toglefritz): Handle the failure.
       rethrow;
     }
   }
@@ -62,63 +62,85 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
     } catch (e) {
       debugPrint('Failed to get PSK with exception, $e');
 
-      // TODO(Toglefritz): Handle the failure to add the device to the account.
+      // TODO(Toglefritz): Handle the failure.
       rethrow;
     }
   }
 
-  /// Transfers the pre-shared key to the Brine device.
+  /// Transfers the pre-shared key to the Brine device in chunks.
+  ///
+  /// The PSK is sent in multiple small chunks to avoid BLE stack overflow on the device.
+  /// Each chunk is 16 characters, which keeps the BLE payload small and prevents crashes.
   ///
   /// The mobile app does not hold the PSK for the Brine device except in this controller. Once the navigation call made
   /// in response to receiving confirmation of the PSK transfer is made, the PSK is no longer stored in the app. From
   /// that point forward, the PSK is only used for securing communication between the Brine device and the Firebase
   /// backend.
-  void _transferPsk(PreSharedKey psk) {
+  Future<void> _transferPsk(PreSharedKey psk) async {
     // Register a callback to handle the response from the Brine device.
-    widget.bleCommunicationManager.registerCallback(_onPskTransferCompleted);
+    widget.bleCommunicationManager.registerCallback(_onPskChunkResponse);
 
-    // Send a command to the Brine device to scan for available WiFi networks.
-    final Command scanCommand = Command(
-      commandType: CommandType.pskTransfer,
-    );
-    final String commandString = scanCommand.toJsonString(
-      parameters: {
-        'psk': psk.value,
-      },
-    );
+    const int chunkSize = 16; // Send 16 characters at a time
+    final String pskValue = psk.value;
+    final int totalChunks = (pskValue.length / chunkSize).ceil();
+
+    debugPrint('Transferring PSK in $totalChunks chunks (no intermediate responses)');
 
     try {
-      widget.bleCommunicationManager.writeValue(
-        value: commandString,
-      );
+      // Send each chunk without waiting for intermediate responses
+      for (int i = 0; i < totalChunks; i++) {
+        final int start = i * chunkSize;
+        final int end = (start + chunkSize < pskValue.length) ? start + chunkSize : pskValue.length;
+        final String chunk = pskValue.substring(start, end);
+
+        debugPrint('Sending chunk ${i + 1}/$totalChunks');
+
+        final Command chunkCommand = Command(commandType: CommandType.pskChunk);
+        final String commandString = chunkCommand.toJsonString(
+          parameters: {'chunk': chunk, 'index': i, 'total': totalChunks},
+        );
+
+        await widget.bleCommunicationManager.writeValue(value: commandString);
+
+        // Add a small delay between chunks to ensure they're processed in order
+        await Future<void>.delayed(const Duration(milliseconds: 150));
+      }
+
+      debugPrint('All chunks sent, waiting for final response...');
     } catch (e) {
-      debugPrint('Failed to send PSK transfer command with exception, $e');
+      debugPrint('Failed to send PSK chunk with exception, $e');
 
       rethrow;
     }
   }
 
-  /// A callback that is invoked when the Brine device returns a response to the pre-shared key transfer.
+  /// A callback that is invoked when the Brine device returns a response after PSK transfer.
   ///
-  /// Assuming the PSK transfer is successful, the app will navigate to the next screen in the device configuration
-  void _onPskTransferCompleted(JSON value) {
-    debugPrint('Received PSK transfer response: $value');
+  /// Only the final chunk receives a response (after the PSK is saved).
+  /// Intermediate chunks do not send responses to minimize stack usage on the device.
+  void _onPskChunkResponse(JSON value) {
+    debugPrint('Received PSK response: $value');
 
     // Get a Response object from the JSON response.
     final Response response = Response.fromJson(value);
 
-    // If the response indicates that the PSK was successfully transferred, navigate to the next screen.
+    // The response should be psk_saved (intermediate chunks don't send responses)
     if (response.responseType == ResponseType.pskTransferred) {
+      debugPrint('PSK saved successfully, navigating to WiFi setup');
+
+      // Unregister the callback before navigating
+      widget.bleCommunicationManager.unregisterCallback(_onPskChunkResponse);
+
       // Navigate to the next screen.
       Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => WiFiSetupRoute(
-            bleCommunicationManager: widget.bleCommunicationManager,
-            device: widget.device,
-          ),
+          builder: (context) =>
+              WiFiSetupRoute(bleCommunicationManager: widget.bleCommunicationManager, device: widget.device),
         ),
       );
+    } else {
+      debugPrint('Unexpected response type: ${response.responseType}');
     }
   }
 
@@ -128,7 +150,7 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
   @override
   void dispose() {
     // Unregister the callback for changes in the value of the characteristic.
-    widget.bleCommunicationManager.unregisterCallback(_onPskTransferCompleted);
+    widget.bleCommunicationManager.unregisterCallback(_onPskChunkResponse);
 
     super.dispose();
   }

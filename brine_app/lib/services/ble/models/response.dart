@@ -2,6 +2,7 @@ import '../../../extensions/json.dart';
 import 'device_id_response.dart';
 import 'error_response.dart';
 import 'provisioning_complete_response.dart';
+import 'psk_chunk_received_response.dart';
 import 'psk_transferred_response.dart';
 import 'response_type.dart';
 import 'wifi_connected_response.dart';
@@ -15,9 +16,7 @@ abstract class Response {
   /// Creates an instance of [Response] with the provided [responseType].
   ///
   /// The [responseType] parameter specifies the type of response being created.
-  Response({
-    required this.responseType,
-  });
+  Response({required this.responseType});
 
   /// Factory constructor to create a [Response] object from a JSON map.
   ///
@@ -34,6 +33,8 @@ abstract class Response {
       throw Exception('Response type not found in JSON');
     } else if (responseKey == ResponseType.deviceId.responseKey) {
       return DeviceIdResponse.fromJson(json);
+    } else if (responseKey == ResponseType.pskChunkReceived.responseKey) {
+      return PSKChunkReceivedResponse();
     } else if (responseKey == ResponseType.pskTransferred.responseKey) {
       return PSKTransferredResponse();
     } else if (responseKey == ResponseType.provisioningComplete.responseKey) {

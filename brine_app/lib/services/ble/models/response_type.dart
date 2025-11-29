@@ -3,6 +3,9 @@ enum ResponseType {
   /// A response containing the device ID.
   deviceId,
 
+  /// A response indicating that a PSK chunk was received by the Brine device.
+  pskChunkReceived,
+
   /// A response indicating that the PSK was successfully transferred to the Brine device and saved to NVS.
   pskTransferred,
 
@@ -27,6 +30,8 @@ enum ResponseType {
     switch (this) {
       case ResponseType.deviceId:
         return 'device_id';
+      case ResponseType.pskChunkReceived:
+        return 'psk_chunk_received';
       case ResponseType.pskTransferred:
         return 'psk_saved';
       case ResponseType.networks:
