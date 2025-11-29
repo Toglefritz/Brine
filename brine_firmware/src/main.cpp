@@ -3,6 +3,7 @@
 #include "DeviceConfig.h"
 
 #include "DebugService.h"
+#include <OTAService.h>
 #include <BLEApiHandler.h>
 #include <BLEModule.h>
 #include <BatteryMonitor.h>
@@ -69,6 +70,53 @@ FirebaseService firebaseService;
 // on the distance of the salt level from the sensor compared to the overall height of the water softener.
 // Sensor type (VL53L0X or VL53L1X) is determined by compile-time configuration.
 DistanceSensor sensor;
+
+// A service for handling Over-The-Air (OTA) firmware updates.
+OTAService otaService;
+
+/**
+ * @brief Checks for available firmware updates and performs the update if available.
+ *
+ * This function queries the cloud backend to check if a newer firmware version is available.
+ * If an update is found, it downloads and applies the update. The device will automatically
+ * reboot after a successful update.
+ *
+ * @return true if an update was performed (device will reboot), false if no update is available or update failed.
+ */
+bool _checkAndPerformOTAUpdate() {
+  DebugService::getInstance().debugPrintln("Checking for firmware updates...");
+  DebugService::getInstance().debugPrint("Current firmware version: ");
+  DebugService::getInstance().debugPrintln(otaService.getCurrentVersion());
+
+  String latestVersion;
+  String downloadUrl;
+
+  // Check if an update is available
+  bool updateAvailable = otaService.checkForUpdate(latestVersion, downloadUrl);
+
+  if (updateAvailable) {
+    DebugService::getInstance().debugPrintln("Firmware update available: " + latestVersion);
+    DebugService::getInstance().debugPrintln("Download URL: " + downloadUrl);
+
+    // Indicate update in progress with LED
+    LEDService::getInstance().turnOn();
+
+    // Perform the update
+    bool updateSuccess = otaService.performCloudUpdate(downloadUrl);
+
+    if (updateSuccess) {
+      // Device will reboot automatically after successful update
+      return true;
+    } else {
+      DebugService::getInstance().debugPrintln("Firmware update failed.");
+      LEDService::getInstance().turnOff();
+      return false;
+    }
+  } else {
+    DebugService::getInstance().debugPrintln("No firmware update available. Device is up to date.");
+    return false;
+  }
+}
 
 /**
  * @brief Configures the deep sleep management service.
@@ -260,6 +308,16 @@ void onProvisioningComplete() {
  *    write event.
  */
 void startProvisioning() {
+  // Check for firmware updates at the start of provisioning
+  // This ensures the device can be updated even if WiFi credentials are already saved
+  int connectStatus = connectToSavedWiFi();
+  if (connectStatus == 1) {
+    DebugService::getInstance().debugPrintln("WiFi connected. Checking for firmware updates before provisioning...");
+    _checkAndPerformOTAUpdate();
+    // Disconnect WiFi to save power during provisioning
+    WiFi.disconnect();
+  }
+
   // Initialize provisioning manager
   DeviceConfigurationManager &deviceConfigManager = DeviceConfigurationManager::getInstance();
 
@@ -453,6 +511,10 @@ void setup() {
     }
 
     DebugService::getInstance().debugPrintln("WiFi connected successfully.");
+
+    // Check for firmware updates before taking measurements
+    // If an update is available and successful, the device will reboot
+    _checkAndPerformOTAUpdate();
 
     // Capture sensor readings and send them to the cloud backend.
     if (!_updateDeviceLevels()) {
