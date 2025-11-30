@@ -89,23 +89,29 @@ class AccountView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // User avatar - either profile picture or initials
-                UserAvatar(user: state.user),
-
-                // The user's name
-                Padding(
-                  padding: const EdgeInsets.only(top: Insets.small),
-                  child: Text(state.user?.displayName ?? '', style: Theme.of(context).textTheme.headlineSmall),
+                UserAvatar(
+                  user: state.user,
                 ),
 
+                // The user's name
+                if (state.user?.displayName != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: Insets.small),
+                    child: Text(state.user?.displayName ?? '', style: Theme.of(context).textTheme.headlineSmall),
+                  ),
+
                 // The user's email address
-                Text(state.user?.email ?? '', style: Theme.of(context).textTheme.bodyMedium),
+                Padding(
+                  padding: const EdgeInsets.only(top: Insets.xSmall),
+                  child: Text(state.user?.email ?? '', style: Theme.of(context).textTheme.bodyMedium),
+                ),
 
                 // List of user's devices
                 DeviceList(devices: state.widget.devices, onRemoveDevice: state.removeDevice),
 
                 // A title for a section of controls for managing the user's account.
                 Padding(
-                  padding: const EdgeInsets.only(top: Insets.large),
+                  padding: const EdgeInsets.only(top: Insets.medium),
                   child: Text(
                     AppLocalizations.of(context)!.accountControls,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -117,13 +123,25 @@ class AccountView extends StatelessWidget {
 
                 // Logout button
                 Padding(
-                  padding: const EdgeInsets.all(Insets.medium),
-                  child: LightButton(text: AppLocalizations.of(context)!.logout, onPressed: state.logout),
+                  padding: const EdgeInsets.only(
+                    top: Insets.small,
+                    bottom: Insets.medium,
+                    left: Insets.medium,
+                    right: Insets.medium,
+                  ),
+                  child: LightButton(
+                    text: AppLocalizations.of(context)!.logout,
+                    onPressed: state.logout,
+                  ),
                 ),
 
                 // Delete account button
                 Padding(
-                  padding: const EdgeInsets.only(bottom: Insets.medium),
+                  padding: const EdgeInsets.only(
+                    bottom: Insets.medium,
+                    left: Insets.medium,
+                    right: Insets.medium,
+                  ),
                   child: LightButton(
                     text: AppLocalizations.of(context)!.deleteAccount,
                     color: Colors.red[900],

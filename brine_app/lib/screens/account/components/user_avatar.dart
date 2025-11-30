@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// A widget that displays a user's avatar, either as a profile picture or as initials in a circular container.
 class UserAvatar extends StatelessWidget {
@@ -14,7 +15,7 @@ class UserAvatar extends StatelessWidget {
 
   /// Generates initials from the user's display name.
   String get _userInitials {
-    final String displayName = user?.displayName ?? '';
+    final String displayName = user?.displayName ?? user?.email ?? '';
     if (displayName.isEmpty) return '';
 
     final List<String> nameParts = displayName.trim().split(' ');
@@ -31,7 +32,10 @@ class UserAvatar extends StatelessWidget {
       builder: (context) {
         // If the user has a profile picture, display it
         if (user?.photoURL != null) {
-          return CircleAvatar(radius: radius, backgroundImage: NetworkImage(user!.photoURL!));
+          return CircleAvatar(
+            radius: radius,
+            backgroundImage: NetworkImage(user!.photoURL!),
+          );
         }
 
         // Otherwise, display the user's initials inside a circular avatar
@@ -49,8 +53,10 @@ class UserAvatar extends StatelessWidget {
           child: Center(
             child: Text(
               _userInitials,
+
               style: Theme.of(context).textTheme.displayMedium!.copyWith(
                 color: const Color(0xFF212121), // Always dark color on primary
+                fontFamily: GoogleFonts.bungee().fontFamily,
               ),
             ),
           ),

@@ -26,12 +26,19 @@ class DeviceList extends StatelessWidget {
       children: [
         // A title for the list of the user's devices
         Padding(
-          padding: const EdgeInsets.only(top: Insets.large, bottom: Insets.medium),
+          padding: const EdgeInsets.only(
+            top: Insets.medium,
+            bottom: Insets.xSmall,
+          ),
           child: Text(
             AppLocalizations.of(context)!.brineDevices,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).primaryColorDark, fontWeight: FontWeight.bold),
+            style:
+                Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).primaryColorDark,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ),
 
