@@ -355,18 +355,13 @@ void startProvisioning() {
     // Store characteristic for deferred responses
     pResponseCharacteristic = pCharacteristic;
 
-    // Handle the JSON command using BLEApiHandler
-    // Use const reference to avoid unnecessary string copies
-    const String jsonResponse = apiHandler.handleCommand(String(value.c_str()));
+    // Parse and queue the command (lightweight - runs in BTC_TASK)
+    String immediateResponse = apiHandler.handleCommand(String(value.c_str()));
     
-    // Only send a response if one was generated (empty responses are used to minimize stack usage)
-    if (jsonResponse.length() > 0) {
-      // If the provisioning process is complete, call the onProvisioningComplete function after the response is sent.
-      if (jsonResponse.indexOf("provisioning_complete") != -1) {
-        deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str(), onProvisioningComplete);
-      } else {
-        deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str());
-      }
+    // Only send response if one was generated (parse errors, unknown commands)
+    // Most commands return empty string and will be processed in main loop
+    if (immediateResponse.length() > 0) {
+      deviceConfigManager.setCharacteristicValue(pCharacteristic, immediateResponse.c_str());
     }
   });
 
@@ -555,30 +550,25 @@ void setup() {
 }
 
 void loop() {
-  // Check if there's a pending PSK save operation (deferred from BLE callback to avoid stack overflow)
-  if (apiHandler.processPendingPskSave() && pResponseCharacteristic != nullptr) {
-    DeviceConfigurationManager::getInstance().setCharacteristicValue(
-      pResponseCharacteristic, 
-      "{\"response\":\"psk_saved\"}"
-    );
-  }
-  
-  // Check if there's a pending WiFi scan (deferred from BLE callback to avoid stack overflow)
-  String wifiScanResponse = apiHandler.processPendingWifiScan();
-  if (wifiScanResponse.length() > 0 && pResponseCharacteristic != nullptr) {
-    DeviceConfigurationManager::getInstance().setCharacteristicValue(
-      pResponseCharacteristic, 
-      wifiScanResponse.c_str()
-    );
-  }
-  
-  // Check if there's any other pending response (deferred from BLE callback to avoid stack overflow)
-  String pendingResponse = apiHandler.getPendingResponse();
-  if (pendingResponse.length() > 0 && pResponseCharacteristic != nullptr) {
-    DeviceConfigurationManager::getInstance().setCharacteristicValue(
-      pResponseCharacteristic, 
-      pendingResponse.c_str()
-    );
+  // Process any pending BLE commands
+  if (pResponseCharacteristic != nullptr) {
+    String response = apiHandler.processCommand();
+    
+    if (response.length() > 0) {
+      // Check if provisioning is complete
+      if (response.indexOf("provisioning_complete") != -1) {
+        DeviceConfigurationManager::getInstance().setCharacteristicValue(
+          pResponseCharacteristic, 
+          response.c_str(), 
+          onProvisioningComplete
+        );
+      } else {
+        DeviceConfigurationManager::getInstance().setCharacteristicValue(
+          pResponseCharacteristic, 
+          response.c_str()
+        );
+      }
+    }
   }
 
   // Start the provisioning process if the button was pressed and the provisioning process has not already started.
