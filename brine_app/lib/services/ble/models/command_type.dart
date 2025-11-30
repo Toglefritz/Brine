@@ -4,12 +4,7 @@ enum CommandType {
   /// `<adjective>_<adjective>_<noun>`, for example, "vast_teal_elephant."
   getDeviceId(value: 'get_device_id', responseKey: 'device_id'),
 
-  /// Used to transfer a pre-shared key (PSK) chunk to the Brine device.
-  /// The PSK is sent in multiple chunks to avoid BLE stack overflow.
-  pskChunk(value: 'psk_chunk', responseKey: 'psk_chunk_received'),
-
-  /// Used to transfer a pre-shared key (PSK) to the Brine device in a single transfer.
-  /// This is kept for backward compatibility but chunked transfer is preferred.
+  /// Used to transfer a pre-shared key (PSK) to the Brine device.
   pskTransfer(value: 'psk_transfer', responseKey: 'psk_transfer_status'),
 
   /// Instructs the Brine device to scan for WiFi networks and send the SSID and RSSI of each network to the app.
@@ -22,7 +17,10 @@ enum CommandType {
   completeProvisioning(value: 'complete_provisioning', responseKey: 'provisioning_complete');
 
   /// Creates an instance of [CommandType].
-  const CommandType({required this.value, required this.responseKey});
+  const CommandType({
+    required this.value,
+    required this.responseKey,
+  });
 
   /// The value for the command in its JSON representation.
   ///
