@@ -4,6 +4,7 @@ import 'error_response.dart';
 import 'provisioning_complete_response.dart';
 import 'psk_transferred_response.dart';
 import 'response_type.dart';
+import 'wifi_connect_error_response.dart';
 import 'wifi_connected_response.dart';
 
 /// An abstract class representing a response from the Brine device.
@@ -15,9 +16,7 @@ abstract class Response {
   /// Creates an instance of [Response] with the provided [responseType].
   ///
   /// The [responseType] parameter specifies the type of response being created.
-  Response({
-    required this.responseType,
-  });
+  Response({required this.responseType});
 
   /// Factory constructor to create a [Response] object from a JSON map.
   ///
@@ -40,6 +39,8 @@ abstract class Response {
       return ProvisioningCompleteResponse();
     } else if (responseKey == ResponseType.wifiConnected.responseKey) {
       return WiFiConnectedResponse.fromJson(json);
+    } else if (responseKey == ResponseType.wifiConnectError.responseKey) {
+      return WiFiConnectErrorResponse.fromJson(json);
     } else if (responseKey == ResponseType.error.responseKey) {
       return ErrorResponse.fromJson(json);
     } else {

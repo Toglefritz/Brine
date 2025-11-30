@@ -18,13 +18,13 @@ class WiFiSetupView extends StatelessWidget {
 
   /// Returns an [Icon] to visually represent the signal strength of a WiFi network.
   Icon _getIconForSignalStrength(int rssi) {
-    if (rssi >= -60) {
+    if (rssi >= -50) {
       return const Icon(Icons.signal_wifi_4_bar, color: Colors.green);
-    } else if (rssi >= -70) {
+    } else if (rssi >= -60) {
       return const Icon(Icons.network_wifi_3_bar, color: Colors.yellow);
-    } else if (rssi >= -80) {
+    } else if (rssi >= -70) {
       return const Icon(Icons.network_wifi_2_bar, color: Colors.orange);
-    } else if (rssi >= -90) {
+    } else if (rssi >= -80) {
       return const Icon(Icons.network_wifi_1_bar, color: Colors.red);
     } else {
       return const Icon(Icons.signal_wifi_0_bar, color: Colors.grey);
