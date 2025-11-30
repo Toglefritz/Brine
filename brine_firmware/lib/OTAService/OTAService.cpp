@@ -37,8 +37,15 @@ bool OTAService::checkForUpdate(String &latestVersion, String &downloadUrl) {
   if (isDevelopment()) {
     http.begin(endpoint);
   } else {
-    // In production, use SSL
-    http.begin(endpoint);
+    // In production, use SSL with insecure mode (no certificate validation)
+    // Use static to keep the client alive for the duration of the request
+    static WiFiClientSecure secureClient;
+    secureClient.setInsecure(); // Skip certificate validation
+    
+    if (!http.begin(secureClient, endpoint)) {
+      DebugService::getInstance().debugPrintln("Failed to begin HTTPS connection");
+      return false;
+    }
   }
 
   http.addHeader("Content-Type", "application/json");
@@ -105,7 +112,15 @@ bool OTAService::performCloudUpdate(const String &downloadUrl) {
   if (isDevelopment()) {
     http.begin(downloadUrl);
   } else {
-    http.begin(downloadUrl);
+    // In production, use SSL with insecure mode (no certificate validation)
+    // Use static to keep the client alive for the duration of the request
+    static WiFiClientSecure secureClient;
+    secureClient.setInsecure(); // Skip certificate validation
+    
+    if (!http.begin(secureClient, downloadUrl)) {
+      DebugService::getInstance().debugPrintln("Failed to begin HTTPS connection");
+      return false;
+    }
   }
 
   int httpCode = http.GET();

@@ -7,6 +7,7 @@
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
 #include <NVSService.h>
+#include <WiFiClientSecure.h>
 
 /**
  * @class FirebaseService
@@ -171,7 +172,8 @@ private:
       hmacHex += String(hmacResult[i], HEX);
     }
 
-    DebugService::getInstance().debugPrintln("HMAC successfully generated using mbedTLS.");
+    DebugService::getInstance().debugPrintln("HMAC successfully generated.");
+    
     return hmacHex;
   }
 
@@ -246,18 +248,22 @@ private:
 
     // Create an HTTP client object and send a POST request to the specified Firebase endpoint with the JSON payload.
     HTTPClient http;
+    WiFiClient *client = nullptr;
 
-    // Begin HTTPS connection with root CA certificate verification
-    const char *firebaseCACert = "-----BEGIN CERTIFICATE-----\n"
-                                 "... (Firebase's Root CA Certificate) ...\n"
-                                 "-----END CERTIFICATE-----";
-
-    // Begin the HTTP connection. If the device is running in the production environment, use SSL to establish trust
-    // with the Firebase backend.
+    // Begin the HTTP connection. If the device is running in the production environment, use SSL.
     if (isDevelopment()) {
       http.begin(endpoint);
     } else {
-      http.begin(endpoint, firebaseCACert);
+      // In production, use SSL with insecure mode (no certificate validation)
+      // Use static to keep the client alive for the duration of the request
+      static WiFiClientSecure secureClient;
+      secureClient.setInsecure(); // Skip certificate validation
+      client = &secureClient;
+      
+      if (!http.begin(secureClient, endpoint)) {
+        DebugService::getInstance().debugPrintln("Failed to begin HTTPS connection");
+        return false;
+      }
     }
 
     // Add the necessary HTTP headers

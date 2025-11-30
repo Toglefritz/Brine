@@ -8,6 +8,7 @@
 #include <HTTPClient.h>
 #include <Update.h>
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
 
 // Current firmware version - update this with each release
 #define FIRMWARE_VERSION "1.0.0"
