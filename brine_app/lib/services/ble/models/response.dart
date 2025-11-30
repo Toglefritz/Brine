@@ -5,6 +5,7 @@ import 'provisioning_complete_response.dart';
 import 'psk_chunk_received_response.dart';
 import 'psk_transferred_response.dart';
 import 'response_type.dart';
+import 'wifi_connect_error_response.dart';
 import 'wifi_connected_response.dart';
 
 /// An abstract class representing a response from the Brine device.
@@ -41,6 +42,8 @@ abstract class Response {
       return ProvisioningCompleteResponse();
     } else if (responseKey == ResponseType.wifiConnected.responseKey) {
       return WiFiConnectedResponse.fromJson(json);
+    } else if (responseKey == ResponseType.wifiConnectError.responseKey) {
+      return WiFiConnectErrorResponse.fromJson(json);
     } else if (responseKey == ResponseType.error.responseKey) {
       return ErrorResponse.fromJson(json);
     } else {

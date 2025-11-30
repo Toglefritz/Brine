@@ -6,6 +6,7 @@ import '../../../services/ble/models/command.dart';
 import '../../../services/ble/models/command_type.dart';
 import '../../../services/ble/models/response.dart';
 import '../../../services/ble/models/response_type.dart';
+import '../../../services/ble/models/wifi_connect_error_response.dart';
 import '../brine_installation/brine_installation_route.dart';
 import 'wifi_connection_route.dart';
 import 'wifi_connection_view.dart';
@@ -33,20 +34,13 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
     widget.bleCommunicationManager.registerCallback(_onWiFiConnectCompleted);
 
     // Send a command to the Brine device to connect to the selected WiFi network.
-    final Command connectCommand = Command(
-      commandType: CommandType.wifiConnect,
-    );
+    final Command connectCommand = Command(commandType: CommandType.wifiConnect);
     final String commandString = connectCommand.toJsonString(
-      parameters: {
-        'ssid': widget.ssid,
-        'password': widget.password,
-      },
+      parameters: {'ssid': widget.ssid, 'password': widget.password},
     );
 
     try {
-      widget.bleCommunicationManager.writeValue(
-        value: commandString,
-      );
+      widget.bleCommunicationManager.writeValue(value: commandString);
     } catch (e) {
       debugPrint('Failed to send connect command with exception, $e');
 
@@ -72,7 +66,7 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
   ///
   /// ```json
   /// {
-  /// "response": "wifi_connect_failed",
+  /// "response": "wifi_connect_error",
   /// "message": "<error message>"
   /// }
   /// ```
@@ -88,19 +82,36 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => BrineInstallationRoute(
-            bleCommunicationManager: widget.bleCommunicationManager,
-            device: widget.device,
-          ),
+          builder: (BuildContext context) =>
+              BrineInstallationRoute(bleCommunicationManager: widget.bleCommunicationManager, device: widget.device),
         ),
       );
     }
     // If the response indicates that the Brine device failed to connect to the WiFi network, display an error message
     // to the user.
-    else {
-      debugPrint('WiFi connection failed with message: ${value['message']}');
+    else if (response.responseType == ResponseType.wifiConnectError) {
+      final WiFiConnectErrorResponse errorResponse = response as WiFiConnectErrorResponse;
+      debugPrint('WiFi connection failed with message: ${errorResponse.message}');
 
-      // TODO(Toglefritz): Handle the failure to connect to the WiFi network.
+      // Show error dialog to the user
+      if (mounted) {
+        await showDialog<void>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('WiFi Connection Failed'),
+            content: Text('Failed to connect to ${widget.ssid}.\n\n${errorResponse.message}'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close dialog
+                  Navigator.of(context).pop(); // Return to WiFi setup screen
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 
