@@ -60,6 +60,9 @@ void IRAM_ATTR button_isr() { buttonPressed = true; }
 // A handler for Bluetooth API commands and responses.
 BLEApiHandler apiHandler;
 
+// Store the BLE characteristic for sending deferred responses
+BLECharacteristic *pResponseCharacteristic = nullptr;
+
 // A service for saving and reading values from the non-volatile storage (NVS) of the ESP32.
 NVSService &nvsService = NVSService::getInstance();
 
@@ -349,13 +352,16 @@ void startProvisioning() {
   deviceConfigManager.setExternalWriteCallback([&deviceConfigManager](BLECharacteristic *pCharacteristic) {
     std::string value = pCharacteristic->getValue();
 
-    // Handle the JSON command using BLEApiHandler
-    String jsonResponse = apiHandler.handleCommand(String(value.c_str()));
-    // If the provisioning process is complete, call the onProvisioningComplete function after the response is sent.
-    if (jsonResponse.indexOf("provisioning_complete") != -1) {
-      deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str(), onProvisioningComplete);
-    } else {
-      deviceConfigManager.setCharacteristicValue(pCharacteristic, jsonResponse.c_str());
+    // Store characteristic for deferred responses
+    pResponseCharacteristic = pCharacteristic;
+
+    // Parse and queue the command (lightweight - runs in BTC_TASK)
+    String immediateResponse = apiHandler.handleCommand(String(value.c_str()));
+    
+    // Only send response if one was generated (parse errors, unknown commands)
+    // Most commands return empty string and will be processed in main loop
+    if (immediateResponse.length() > 0) {
+      deviceConfigManager.setCharacteristicValue(pCharacteristic, immediateResponse.c_str());
     }
   });
 
@@ -544,6 +550,27 @@ void setup() {
 }
 
 void loop() {
+  // Process any pending BLE commands
+  if (pResponseCharacteristic != nullptr) {
+    String response = apiHandler.processCommand();
+    
+    if (response.length() > 0) {
+      // Check if provisioning is complete
+      if (response.indexOf("provisioning_complete") != -1) {
+        DeviceConfigurationManager::getInstance().setCharacteristicValue(
+          pResponseCharacteristic, 
+          response.c_str(), 
+          onProvisioningComplete
+        );
+      } else {
+        DeviceConfigurationManager::getInstance().setCharacteristicValue(
+          pResponseCharacteristic, 
+          response.c_str()
+        );
+      }
+    }
+  }
+
   // Start the provisioning process if the button was pressed and the provisioning process has not already started.
   if (buttonPressed && provisioningStartTime == 0) {
     // Record the time when the button was pressed

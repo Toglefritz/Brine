@@ -11,127 +11,159 @@
 
 /**
  * @class BLEApiHandler
- * @brief A class to handle JSON-based API commands over BLE.
+ * @brief A class to handle JSON-based API commands over BLE with deferred execution.
  *
- * The BLEApiHandler class is responsible for parsing and processing JSON commands received over Bluetooth Low Energy
- * (BLE) and generating appropriate JSON responses. This class enables the IoT device to communicate with a central
- * device using a structured JSON-based protocol, allowing for flexible and extensible command handling.
- *
- * Depending upon the command received, the BLEApiHandler class can perform various operations such as retrieving the
- * device ID, scanning for available WiFi networks, connecting to a specific WiFi network, and more. To accomplish
- * these tasks, this class interacts with different service classes such as `WiFiService`, `FirebaseService`, and
- * 'DeviceName' to perform the required operations.
- *
- * @details
- * The `BLEApiHandler` class processes incoming JSON commands and generates responses based on the requested operations.
- * The primary function of the class is to handle specific commands and return JSON responses that the central device
- * can interpret.
- *
- * Example JSON command format:
- * @code
- * {
- *     "command": "get_device_id"
- * }
- * @endcode
- *
- * Example JSON response format:
- * @code
- * {
- *     "response": "device_id",
- *     "device_id": "Brine-1234"
- * }
- * @endcode
- *
- * In the event of an error or an unknown command, the response will indicate the error:
- * @code
- * {
- *     "response": "error",
- *     "message": "Unknown command"
- * }
- * @endcode
+ * This class uses a command queue pattern to minimize work done in BLE callbacks (BTC_TASK context).
+ * Commands are parsed and queued in the BLE callback, then processed in the main loop where
+ * there's sufficient stack space for heavy operations like NVS writes and WiFi operations.
  */
 class BLEApiHandler {
-private:
-  /**
-   * @brief Pointer to the WiFiService instance.
-   *
-   * The WiFiService instance is used to interact with the WiFi module on the ESP32. The WiFiService class provides
-   * methods for scanning for available networks and connecting to a specific network.
-   */
-  WiFiService *wifiService;
+public:
+  // Command types that can be queued
+  enum class CommandType {
+    NONE,
+    GET_DEVICE_ID,
+    PSK_TRANSFER,
+    WIFI_SCAN,
+    WIFI_CONNECT,
+    COMPLETE_PROVISIONING
+  };
 
-  /**
-   * @brief Pointer to the FirebaseService instance.
-   *
-   * The FirebaseService instance is used to interact with the Firebase backend. The FirebaseService class provides
-   * methods for uploading sensor data to Firebase using HTTP POST requests.
-   */
-  FirebaseService *firebaseService;
+  // Structure to hold command data
+  struct PendingCommand {
+    CommandType type = CommandType::NONE;
+    String param1;  // Used for PSK, SSID, etc.
+    String param2;  // Used for WiFi password
+  };
+
+private:
+  // Pending command to be processed in main loop
+  PendingCommand pendingCommand;
+  
+  // Flag indicating a command is ready to process
+  volatile bool commandReady = false;
 
 public:
   BLEApiHandler() {}
 
   /**
-   * @brief Handles incoming JSON command requests.
+   * @brief Parses incoming JSON command and queues it for processing.
+   * 
+   * This method runs in BLE callback (BTC_TASK) context, so it does minimal work:
+   * - Parse JSON to identify command type
+   * - Extract and store parameters
+   * - Return empty string (response sent later from main loop)
    *
    * @param jsonCommand The JSON command string received from the central device.
-   * @return String The JSON response string to be sent back to the central device.
+   * @return String Empty string - actual response sent from main loop after processing.
    */
   String handleCommand(const String &jsonCommand) {
-    // Parse the JSON command
+    // Parse the JSON command (lightweight operation)
     JsonDocument doc;
     DeserializationError error = deserializeJson(doc, jsonCommand);
 
     if (error) {
       DebugService::getInstance().debugPrintln("Failed to parse JSON command");
-
+      // For parse errors, we can return immediately since no heavy processing needed
       return createErrorResponse("Invalid JSON");
     }
 
-    // Extract the command
+    // Extract the command type
     const char *command = doc["command"];
 
-    // The command, "get_device_id," returns the device ID of the IoT device.
+    // Queue the command based on type
     if (strcmp(command, "get_device_id") == 0) {
-      return handleGetDeviceId();
+      pendingCommand.type = CommandType::GET_DEVICE_ID;
+      commandReady = true;
     }
-    // The command "psk_transfer," is used by the mobile app to provide a pre-shared key to the IoT device that it 
-    // will use later in calls to the backend service.
     else if (strcmp(command, "psk_transfer") == 0) {
-      // Get the parameters from the command.
       JsonObject parameters = doc["parameters"].as<JsonObject>();
-
-      // Get the PSKfrom the parameters.
       const char *psk = parameters["psk"];
-
+      
       DebugService::getInstance().debugPrint("Received PSK from mobile app: ");
       DebugService::getInstance().debugPrintln(psk);
-
-      return handlePskProvided(psk);
+      
+      pendingCommand.type = CommandType::PSK_TRANSFER;
+      pendingCommand.param1 = String(psk);
+      commandReady = true;
     }
-    // The command, "scan," returns a list of available WiFi networks.
     else if (strcmp(command, "scan") == 0) {
-      return handleScanWifiNetworks();
+      pendingCommand.type = CommandType::WIFI_SCAN;
+      commandReady = true;
     }
-    // The command "wifi_connect" provides the SSID and password for a network to which the device should connect
-    // in the parameters provided with this command. The parameters use the "ssid" and "password" keys.
     else if (strcmp(command, "wifi_connect") == 0) {
-      // Get the parameters for the WiFi connection from the command.
       JsonObject parameters = doc["parameters"].as<JsonObject>();
-
       const char *ssid = parameters["ssid"];
       const char *password = parameters["password"];
-
-      return handleWifiConnect(ssid, password);
+      
+      pendingCommand.type = CommandType::WIFI_CONNECT;
+      pendingCommand.param1 = String(ssid);
+      pendingCommand.param2 = String(password);
+      commandReady = true;
     }
-    // The command "complete_provisioning" indicates that the provisioning process is complete.
     else if (strcmp(command, "complete_provisioning") == 0) {
-      return handleCompleteProvisioning();
+      pendingCommand.type = CommandType::COMPLETE_PROVISIONING;
+      commandReady = true;
     }
-    // The command is not recognized
     else {
+      // Unknown command - can return error immediately
       return createErrorResponse("Unknown command");
     }
+
+    // Return empty string - response will be sent from main loop
+    return "";
+  }
+
+  /**
+   * @brief Checks if a command is ready to process and executes it.
+   * 
+   * This method should be called from the main loop. It has access to the full
+   * main task stack (8KB) for heavy operations.
+   * 
+   * @return String The JSON response to send back via BLE, or empty if no command ready.
+   */
+  String processCommand() {
+    if (!commandReady) {
+      return "";
+    }
+
+    // Clear the flag
+    commandReady = false;
+
+    // Process the command based on type
+    String response;
+    switch (pendingCommand.type) {
+      case CommandType::GET_DEVICE_ID:
+        response = handleGetDeviceId();
+        break;
+        
+      case CommandType::PSK_TRANSFER:
+        response = handlePskProvided(pendingCommand.param1.c_str());
+        break;
+        
+      case CommandType::WIFI_SCAN:
+        response = handleScanWifiNetworks();
+        break;
+        
+      case CommandType::WIFI_CONNECT:
+        response = handleWifiConnect(pendingCommand.param1.c_str(), pendingCommand.param2.c_str());
+        break;
+        
+      case CommandType::COMPLETE_PROVISIONING:
+        response = handleCompleteProvisioning();
+        break;
+        
+      default:
+        response = createErrorResponse("Unknown command type");
+        break;
+    }
+
+    // Clear the command
+    pendingCommand.type = CommandType::NONE;
+    pendingCommand.param1 = "";
+    pendingCommand.param2 = "";
+
+    return response;
   }
 
 
