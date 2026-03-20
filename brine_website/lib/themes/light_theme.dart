@@ -39,7 +39,7 @@ class LightTheme {
           elevation: 0,
           backgroundColor: Colors.transparent,
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 2,
           margin: const EdgeInsets.symmetric(
             horizontal: 16,

@@ -41,7 +41,7 @@ class DarkTheme {
             fontSize: 20,
           ),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 2,
           margin: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -73,7 +73,7 @@ class DarkTheme {
             fontWeight: FontWeight.bold,
           ),
         ),
-        dialogTheme: const DialogTheme(
+        dialogTheme: const DialogThemeData(
           backgroundColor: Color(0xff363636),
         ),
       );
