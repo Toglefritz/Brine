@@ -1,0 +1,39 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:addDevice": "jest addDeviceToUser.test.cjs",
+    "test:addFcmToken": "jest addFcmToken.test.cjs",
+    "test:addLead": "jest addLead.test.cjs",
+    "test:createUser": "jest createUser.test.cjs",
+    "test:deleteUser": "jest deleteUser.test.cjs",
+    "test:generatePSK": "jest generatePSK.test.cjs",
+    "test:getDevice": "jest getDevice.test.cjs",
+    "test:getUserDevices": "jest getUserDevices.test.cjs",
+    "test:removeDevice": "jest removeDeviceFromUser.test.cjs",
+    "test:updateApplianceHeight": "jest updateApplianceHeight.test.cjs",
+    "test:updateDeviceLevels": "jest updateDeviceLevels.test.cjs"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "main": "index.cjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^7.0.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.1",
+    "jest": "^29.7.0"
+  },
+  "private": true
+}
