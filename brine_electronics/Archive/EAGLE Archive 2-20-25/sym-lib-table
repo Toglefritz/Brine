@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 0)
+  (lib (name "Brine_SCH_v67-eagle-import")(type "KiCad")(uri "${KIPRJMOD}/Brine_SCH_v67-eagle-import.kicad_sym")(options "")(descr ""))
+)
