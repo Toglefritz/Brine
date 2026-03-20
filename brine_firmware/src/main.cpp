@@ -1,0 +1,669 @@
+#include <Arduino.h>
+
+#include "DeviceConfig.h"
+
+#include "DebugService.h"
+#include <OTAService.h>
+#include <BLEApiHandler.h>
+#include <BLEModule.h>
+#include <BatteryMonitor.h>
+#include <DeepSleepService.h>
+#include <DeviceConfigurationManager.h>
+#include <DistanceSensor.h>
+#include <LEDService.h>
+#include <Wire.h>
+
+// Include the appropriate button type based on build configuration
+#ifdef GPIO_BUTTON_PIN
+#include <GPIOButton.h>
+#define BUTTON_TYPE GPIOButton
+#else
+#include <I2CButton.h>
+#define BUTTON_TYPE I2CButton
+#endif
+
+/// Button instance used to handle button presses.
+BUTTON_TYPE &button = BUTTON_TYPE::getInstance();
+
+// Tracks whether the I2C button was successfully initialized
+bool buttonAvailable = false;
+
+// Determines if the button was pressed. This bool is set to true when the button is pressed and set to false again
+// when the provisioning process been running for three minutes or more.
+volatile bool buttonPressed = false;
+
+// If the button is held down for this duration, the device will perform a reset.
+const unsigned long LONG_PRESS_DURATION = 10000; // 10,000 milliseconds = 10 seconds
+
+// Variables to track button press timing
+unsigned long buttonPressStartTime = 0;
+bool isLongPressTriggered = false;
+
+// A timestamp for when the provisioning process was started. This is used to create a timeout for the provisioning
+// process to prevent it from running indefinitely if no provisioning activities are detected.
+unsigned long provisioningStartTime = 0;
+
+// Determines if a client device is connected to the BLE server. While a client is connected, the provisioning process
+// should not be interrupted.
+bool clientConnected = false;
+
+/**
+ * @brief Interrupt service routine for the button.
+ *
+ * This function is called when the button interrupt is triggered. It sets the `buttonPressed` flag to true.
+ *
+ * @note This function should be kept as short as possible to prevent blocking the main loop and causing the ESP32 to
+ * reset due to a watchdog timeout.
+ */
+void IRAM_ATTR button_isr() { buttonPressed = true; }
+
+// A handler for Bluetooth API commands and responses.
+BLEApiHandler apiHandler;
+
+// Store the BLE characteristic for sending deferred responses
+BLECharacteristic *pResponseCharacteristic = nullptr;
+
+// A service for saving and reading values from the non-volatile storage (NVS) of the ESP32.
+NVSService &nvsService = NVSService::getInstance();
+
+// A service for sending information to the Firebase cloud backend.
+FirebaseService firebaseService;
+
+// A service for getting readings from the distance sensor used to determine the salt level in the water softener based
+// on the distance of the salt level from the sensor compared to the overall height of the water softener.
+// Sensor type (VL53L0X or VL53L1X) is determined by compile-time configuration.
+DistanceSensor sensor;
+
+// A service for handling Over-The-Air (OTA) firmware updates.
+OTAService otaService;
+
+/**
+ * @brief Checks for available firmware updates and performs the update if available.
+ *
+ * This function queries the cloud backend to check if a newer firmware version is available.
+ * If an update is found, it downloads and applies the update. The device will automatically
+ * reboot after a successful update.
+ *
+ * @return true if an update was performed (device will reboot), false if no update is available or update failed.
+ */
+bool _checkAndPerformOTAUpdate() {
+  DebugService::getInstance().debugPrintln("Checking for firmware updates...");
+  DebugService::getInstance().debugPrint("Current firmware version: ");
+  DebugService::getInstance().debugPrintln(otaService.getCurrentVersion());
+
+  String latestVersion;
+  String downloadUrl;
+
+  // Check if an update is available
+  bool updateAvailable = otaService.checkForUpdate(latestVersion, downloadUrl);
+
+  if (updateAvailable) {
+    DebugService::getInstance().debugPrintln("Firmware update available: " + latestVersion);
+    DebugService::getInstance().debugPrintln("Download URL: " + downloadUrl);
+
+    // Indicate update in progress with LED
+    LEDService::getInstance().turnOn();
+
+    // Perform the update
+    bool updateSuccess = otaService.performCloudUpdate(downloadUrl);
+
+    if (updateSuccess) {
+      // Device will reboot automatically after successful update
+      return true;
+    } else {
+      DebugService::getInstance().debugPrintln("Firmware update failed.");
+      LEDService::getInstance().turnOff();
+      return false;
+    }
+  } else {
+    DebugService::getInstance().debugPrintln("No firmware update available. Device is up to date.");
+    return false;
+  }
+}
+
+/**
+ * @brief Configures the deep sleep management service.
+ *
+ * This function configures the service that handles the deep sleep cycle for the Brine device. The service handles
+ * placing the device into a deep sleep state and setting up the conditions under which it will wake up. When the
+ * device wakes, callback functions are invoked.
+ * 
+ * @param enableTimer If true, enables timer-based wake-up. If false, only button wake-up is enabled.
+ */
+void _configureDeepSleepService(bool enableTimer = true) {
+  DeepSleepService &deepSleepService = DeepSleepService::getInstance();
+
+  // Set the duration to sleep between sensor uploads. In debug mode, this duration is 30 seconds to allow for faster
+  // iterations during development. In production, the device waits 24 hours between sensor readings.
+  int deepSleepDuration = DebugService::getInstance().DEBUG ? 30000 : 86400000;
+
+  // Configure wake-up sources. The first argument is a duration in milliseconds for the timer wake-up. The second is
+  // a GPIO pin used to manually wake up the device.
+#ifdef GPIO_BUTTON_PIN
+  gpio_num_t wakeupPin = static_cast<gpio_num_t>(GPIO_BUTTON_PIN);
+#else
+  gpio_num_t wakeupPin = GPIO_NUM_32; // I2C button interrupt pin
+#endif
+  
+  if (enableTimer) {
+    deepSleepService.configureWakeUp(deepSleepDuration, wakeupPin);
+  } else {
+    // Only configure button wake-up, no timer
+    deepSleepService.configureWakeUpButtonOnly(wakeupPin);
+  }
+
+  // Enter deep sleep.
+  deepSleepService.enterDeepSleep();
+}
+
+/**
+ * @brief Updates the device salt and battery levels in the Firebase cloud.
+ *
+ * This function retrieves the salt and battery levels from the device's sensors and sends them to the Firebase cloud
+ * backend via a POST request. The function uses the `FirebaseService` singleton instance to send the data.
+ *
+ * @param sleepOnSuccess If true, the device will enter deep sleep after successfully updating the levels.
+ *
+ * @return true if the data was successfully uploaded to the Firebase cloud, false otherwise.
+ */
+bool _updateDeviceLevels(bool sleepOnSuccess = false) {
+  DebugService::getInstance().debugPrintln("Updating device levels...");
+
+  // Get the "salt level" from the distance sensor.
+  float saltLevel = sensor.getDistance();
+
+  // Stop the distance sensor's operations.
+  sensor.stopMeasurement();
+
+  // Initialize the battery monitor
+  BatteryMonitor batteryMonitor;
+  batteryMonitor.begin(Wire);
+
+  // Get the remaining battery life percentage using the BatteryMonitor
+  float batteryLife = batteryMonitor.getBatteryLifePercent();
+
+  // Upload the salt and battery levels to the Firebase cloud
+  bool success = firebaseService.uploadSensorData(batteryLife, saltLevel);
+
+  if (success) {
+    DebugService::getInstance().debugPrintln("Device levels successfully updated in Firebase.");
+
+    // With the device levels updated, the device can now enter deep sleep again.
+    if (sleepOnSuccess) {
+      _configureDeepSleepService();
+    }
+  } else {
+    DebugService::getInstance().debugPrintln("Failed to update device levels in Firebase.");
+  }
+
+  return success;
+}
+
+// Function to trigger system reboot
+void triggerSystemReboot() {
+  DebugService::getInstance().debugPrintln("Long button press detected. Rebooting system...");
+  // Perform any necessary cleanup here
+
+  // Clear NVS before rebooting (if desired)
+  nvsService.eraseAll();
+
+  // Stop provisioning if it is ongoing.
+  provisioningStartTime = 0;
+
+  // Delay to ensure messages are sent before reboot
+  delay(1000);
+
+  // Reboot the ESP32
+  ESP.restart();
+}
+
+/**
+ * @brief Connect to the saved WiFi credentials.
+ *
+ * This function attempts to retrieve the saved WiFi credentials from the NVS service and connect to the WiFi network.
+ * If the credentials are not found, it returns a distinct status indicating that retries should be skipped.
+ *
+ * @return int A status code:
+ * - 1 if the device successfully connects to the WiFi network.
+ * - 0 if the connection attempt fails.
+ * - -1 if no WiFi credentials are found in NVS.
+ */
+int connectToSavedWiFi() {
+  JsonDocument retrievedDoc;
+
+  // Retrieve the JSON document stored under the key "wifiCredentials"
+  bool retrieveResult = nvsService.retrieveJSON("wifiCredentials", retrievedDoc);
+
+  if (retrieveResult) {
+    DebugService::getInstance().debugPrintln("WiFi credentials retrieved successfully.");
+
+    // Attempt to connect to WiFi using the retrieved credentials.
+    WiFi.begin(retrievedDoc["ssid"].as<String>().c_str(), retrievedDoc["password"].as<String>().c_str());
+
+    // Wait for connection with a timeout
+    unsigned long startTime = millis();
+    const unsigned long timeout = 15000; // 15 seconds timeout
+
+    while (WiFi.status() != WL_CONNECTED && millis() - startTime < timeout) {
+      delay(500); // Wait for 500ms before checking again
+      DebugService::getInstance().debugPrint(".");
+    }
+
+    DebugService::getInstance().debugPrintln(""); // End of dots
+
+    if (WiFi.status() == WL_CONNECTED) {
+      DebugService::getInstance().debugPrintln("WiFi connected successfully.");
+      DebugService::getInstance().debugPrint("IP Address: ");
+      DebugService::getInstance().debugPrintln(WiFi.localIP().toString());
+      return 1; // WiFi connected successfully
+    } else {
+      DebugService::getInstance().debugPrintln("Failed to connect to WiFi within the timeout.");
+      return 0; // WiFi connection attempt failed
+    }
+  } else {
+    DebugService::getInstance().debugPrintln("No WiFi credentials found in NVS.");
+    return -1; // No WiFi credentials found
+  }
+}
+
+/**
+ * @brief Handles completion of the provisioning process.
+ *
+ * This function is called when the provisioning process is complete. It returns the Brine device to normal operation.
+ */
+void onProvisioningComplete() {
+  DebugService::getInstance().debugPrintln("Provisioning complete. Stopping provisioning process.");
+
+  // Stop the provisioning process.
+  DeviceConfigurationManager::getInstance().stopProvisioning();
+
+  // Turn off the LED in case it was on at the time of the timeout.
+  LEDService::getInstance().turnOff();
+
+  // Upload the salt and battery levels to the cloud.
+  _updateDeviceLevels(true);
+  // TODO handle the upload process failing
+
+  // Reset the provisioning start time and button pressed flags.
+  provisioningStartTime = 0;
+  buttonPressed = false;
+  clientConnected = false;
+}
+
+/**
+ * @brief Initializes the device configuration manager and sets up Bluetooth callbacks.
+ *
+ * This function initializes the `DeviceConfigurationManager` singleton instance and sets up the external Bluetooth
+ * event callbacks for connection, disconnection, characteristic read, characteristic write, and descriptor write
+ * events. These callbacks are used to handle the respective events within the main application logic. After
+ * configuring the callbacks, the provisioning process is started by calling the `startProvisioning` method of the
+ * `DeviceConfigurationManager` instance.
+ *
+ * The function also sets the provisioning start time to the current time (in milliseconds), which can be used for
+ * timeout management or other time-based operations during the provisioning process.
+ *
+ * The callbacks are set up as follows:
+ *  - Connection callback: Logs a message and handles the connection event.
+ *  - Disconnection callback: Logs a message and handles the disconnection event.
+ *  - Write callback: Logs the written value and handles the write event.
+ *  - Read callback: Logs a message and handles the read event.
+ *  - Descriptor write callback: Logs whether notifications have been enabled or disabled and handles the descriptor
+ *    write event.
+ */
+void startProvisioning() {
+  // Check for firmware updates at the start of provisioning
+  // This ensures the device can be updated even if WiFi credentials are already saved
+  int connectStatus = connectToSavedWiFi();
+  if (connectStatus == 1) {
+    DebugService::getInstance().debugPrintln("WiFi connected. Checking for firmware updates before provisioning...");
+    _checkAndPerformOTAUpdate();
+    // Disconnect WiFi to save power during provisioning
+    WiFi.disconnect();
+  }
+
+  // Initialize provisioning manager
+  DeviceConfigurationManager &deviceConfigManager = DeviceConfigurationManager::getInstance();
+
+  // Set external callbacks
+  deviceConfigManager.setExternalConnectionCallback([](BLEServer *pServer) {
+    // Turn on the LED.
+    LEDService::getInstance().turnOn();
+
+    // Set the flag to indicate that a client is connected.
+    clientConnected = true;
+  });
+
+  deviceConfigManager.setExternalDisconnectionCallback([](BLEServer *pServer) {
+    // When a client is disconnected, stop the provisioning process early.
+    DebugService::getInstance().debugPrintln("Client disconnected. Stopping provisioning process.");
+
+    DeviceConfigurationManager::getInstance().stopProvisioning();
+
+    // Turn off the LED in case it was on at the time of the timeout.
+    LEDService::getInstance().turnOff();
+
+    // Reset the provisioning start time and button pressed flags.
+    provisioningStartTime = 0;
+    buttonPressed = false;
+    clientConnected = false;
+  });
+
+  // Set the write callback for handling characteristic write events.
+  deviceConfigManager.setExternalWriteCallback([&deviceConfigManager](BLECharacteristic *pCharacteristic) {
+    std::string value = pCharacteristic->getValue();
+
+    // Store characteristic for deferred responses
+    pResponseCharacteristic = pCharacteristic;
+
+    // Parse and queue the command (lightweight - runs in BTC_TASK)
+    String immediateResponse = apiHandler.handleCommand(String(value.c_str()));
+    
+    // Only send response if one was generated (parse errors, unknown commands)
+    // Most commands return empty string and will be processed in main loop
+    if (immediateResponse.length() > 0) {
+      deviceConfigManager.setCharacteristicValue(pCharacteristic, immediateResponse.c_str());
+    }
+  });
+
+  // Set the read callback for handling characteristic read events.
+  deviceConfigManager.setExternalReadCallback([](BLECharacteristic *pCharacteristic) {
+    DebugService::getInstance().debugPrintln("Main: Characteristic read");
+
+    // Handle read event in main
+  });
+
+  // Set the descriptor write callback for handling descriptor write events.
+  deviceConfigManager.setExternalDescriptorWriteCallback([](BLEDescriptor *pDescriptor) {
+    uint8_t *data = pDescriptor->getValue();
+    if (data[0] == 0x01) {
+      DebugService::getInstance().debugPrintln("Main: Notifications enabled");
+    } else if (data[0] == 0x00) {
+      DebugService::getInstance().debugPrintln("Main: Notifications disabled");
+    }
+    // Handle descriptor write event in main
+  });
+
+  // Start the provisioning process.
+  deviceConfigManager.startProvisioning();
+
+  // Set the provisioning start time to the current time.
+  provisioningStartTime = millis();
+}
+
+/**
+ * @brief The setup function for the Brine monitor firmware.
+ */
+void setup() {
+  // Initialize DebugService first to ensure serial output is available
+  DebugService::getInstance().debugPrintln("Starting Brine monitor firmware...");
+  
+  // Add a small delay to allow serial monitor to connect
+  delay(2000);
+  
+  // Check the wake-up cause to determine if the button was pressed
+  esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
+  
+  switch(wakeup_reason) {
+    case ESP_SLEEP_WAKEUP_EXT0:
+    case ESP_SLEEP_WAKEUP_EXT1:
+      DebugService::getInstance().debugPrintln("Woke up from button press (EXT wake-up)");
+      buttonPressed = true;
+      break;
+    case ESP_SLEEP_WAKEUP_TIMER:
+      DebugService::getInstance().debugPrintln("Woke up from timer");
+      buttonPressed = false;
+      break;
+    case ESP_SLEEP_WAKEUP_UNDEFINED:
+    default:
+      DebugService::getInstance().debugPrintln("Not a deep sleep wake-up (power on or reset)");
+      buttonPressed = false;
+      break;
+  }
+  
+  // Configure the wakeup pin with internal pull-up resistor
+  // This prevents the pin from floating and causing false wakeups
+  #ifdef GPIO_BUTTON_PIN
+  gpio_num_t wakeupPin = static_cast<gpio_num_t>(GPIO_BUTTON_PIN);
+  #else
+  gpio_num_t wakeupPin = GPIO_NUM_32; // I2C button interrupt pin
+  #endif
+  
+  // Set pin mode with pull-up (button should be wired to pull LOW when pressed)
+  pinMode(wakeupPin, INPUT_PULLUP);
+  DebugService::getInstance().debugPrint("Wakeup pin ");
+  DebugService::getInstance().debugPrint(String(wakeupPin));
+  DebugService::getInstance().debugPrintln(" configured with internal pull-up");
+  
+  // Initialize the main I2C bus for general peripherals using pins from build configuration
+  Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
+  DebugService::getInstance().debugPrintln("I2C bus initialized.");
+
+  // Initialize the button service, setting the buttonCallback function as the callback for button presses.
+  #ifdef GPIO_BUTTON_PIN
+  DebugService::getInstance().debugPrintln("Initializing GPIO Button.");
+  buttonAvailable = button.begin(button_isr);
+  #else
+  DebugService::getInstance().debugPrintln("Initializing I2C Button.");
+  buttonAvailable = button.begin(Wire, button_isr);
+  #endif
+  
+  if (!buttonAvailable) {
+    DebugService::getInstance().debugPrintln("Failed to initialize button. Continuing without button support.");
+  } else {
+    DebugService::getInstance().debugPrintln("Button initialized successfully.");
+  }
+
+  // Initialize the LED service.
+  LEDService::getInstance().begin(Wire);
+  DebugService::getInstance().debugPrintln("LED Service initialized with " + LEDService::getInstance().getLEDType() + " LED.");
+
+  // Turn the LED off initially.
+  LEDService::getInstance().turnOff();
+
+  // Initialize the distance sensor.
+  bool sensorInitialized = sensor.begin(Wire);
+  if (!sensorInitialized) {
+    DebugService::getInstance().debugPrintln("Failed to initialize distance sensor.");
+  } else {
+    DebugService::getInstance().debugPrintln("Distance sensor initialized.");
+  }
+
+  // Initialize NVSService with the "wifi_credentials" namespace.
+  if (!nvsService.begin("wifi")) {
+    DebugService::getInstance().debugPrintln("NVS Service initialization failed.");
+    // TODO Handle initialization failure
+  } else {
+    DebugService::getInstance().debugPrintln("NVS Service initialized successfully.");
+  }
+
+  // Use the debugService to print messages.
+  DebugService::getInstance().debugPrintln("Brine monitor setup complete.");
+
+  // Initialize the device ID
+  String deviceId = DEVICE_ID;
+  DebugService::getInstance().debugPrint("Device ID: ");
+  DebugService::getInstance().debugPrintln(deviceId);
+
+  // Print the MAC address of the device for debugging purposes.
+  DebugService::getInstance().debugPrint("MAC address: ");
+  DebugService::getInstance().debugPrintln(WiFi.macAddress());
+
+  // Print the device name for debugging purposes.
+  DebugService::getInstance().debugPrint("Device name: ");
+  DebugService::getInstance().debugPrintln(DeviceName::getDeviceName());
+
+  // If the button has not been pressed, the wakeup resulted from reaching the timer.
+  if (!buttonPressed) {
+    // Attempt to connect to WiFi with retries
+    bool wifiConnected = false;
+    const int maxRetries = 3; // Number of retries
+    int retryCount = 0;
+
+    while (!wifiConnected && retryCount < maxRetries) {
+      if (buttonPressed) {
+        break;
+      }
+
+      DebugService::getInstance().debugPrint("Attempting to connect to WiFi... (Attempt ");
+      DebugService::getInstance().debugPrint(String(retryCount + 1).c_str());
+      DebugService::getInstance().debugPrintln(")");
+
+      int connectStatus = connectToSavedWiFi();
+
+      if (connectStatus == 1) {
+        wifiConnected = true; // Successfully connected
+      } else if (connectStatus == -1) {
+        DebugService::getInstance().debugPrintln("No WiFi credentials found. Skipping retries.");
+        break; // Skip retries if no credentials are found
+      } else {
+        DebugService::getInstance().debugPrintln("WiFi connection failed. Retrying...");
+        delay(5000); // Wait before retrying
+        retryCount++;
+      }
+    }
+
+    if (!wifiConnected) {
+      DebugService::getInstance().debugPrintln("Failed to connect to WiFi after multiple attempts.");
+      DebugService::getInstance().debugPrintln("Entering deep sleep. Press button to wake and enter provisioning.");
+      // Enter deep sleep - device will wake on button press ONLY (no timer since no WiFi)
+      _configureDeepSleepService(false);
+      return; // Exit setup if WiFi connection fails
+    }
+
+    DebugService::getInstance().debugPrintln("WiFi connected successfully.");
+
+    // Check for firmware updates before taking measurements
+    // If an update is available and successful, the device will reboot
+    _checkAndPerformOTAUpdate();
+
+    // Capture sensor readings and send them to the cloud backend.
+    if (!_updateDeviceLevels()) {
+      DebugService::getInstance().debugPrintln("Failed to upload device levels to Firebase.");
+      // Handle upload failure if needed
+    }
+
+    // Configure the deep sleep service with timer enabled for periodic sensor readings
+    _configureDeepSleepService(true);
+  }
+  
+  DebugService::getInstance().debugPrintln("Setup complete. Entering main loop.");
+}
+
+void loop() {
+  // Process any pending BLE commands
+  if (pResponseCharacteristic != nullptr) {
+    String response = apiHandler.processCommand();
+    
+    if (response.length() > 0) {
+      // Check if provisioning is complete
+      if (response.indexOf("provisioning_complete") != -1) {
+        DeviceConfigurationManager::getInstance().setCharacteristicValue(
+          pResponseCharacteristic, 
+          response.c_str(), 
+          onProvisioningComplete
+        );
+      } else {
+        DeviceConfigurationManager::getInstance().setCharacteristicValue(
+          pResponseCharacteristic, 
+          response.c_str()
+        );
+      }
+    }
+  }
+
+  // Start the provisioning process if the button was pressed and the provisioning process has not already started.
+  if (buttonPressed && provisioningStartTime == 0) {
+    // Record the time when the button was pressed
+    buttonPressStartTime = millis();
+    buttonPressed = false; // Reset the flag
+
+    // Start the provisioning process.
+    startProvisioning();
+  }
+
+  // Check if provisioning is ongoing
+  if (provisioningStartTime != 0) {
+    // If more than three minutes has passed since the provisioning process started, and a client is not connected,
+    // turn off provisioning process.
+    if (millis() - provisioningStartTime >= 180000 && !clientConnected) { // 3 minutes
+      DebugService::getInstance().debugPrintln("Provisioning process timed out. Turning off provisioning.");
+
+      DeviceConfigurationManager::getInstance().stopProvisioning();
+
+      // Turn off the LED in case it was on at the time of the timeout.
+      LEDService::getInstance().turnOff();
+
+      // Reset the provisioning start time and button pressed flags.
+      provisioningStartTime = 0;
+      buttonPressed = false;
+
+      // Reset the state of the button.
+      if (buttonAvailable) {
+        button.clearEventBits();
+      }
+
+      // Check if the button is currently pressed before going to sleep
+      #ifdef GPIO_BUTTON_PIN
+      gpio_num_t wakeupPin = static_cast<gpio_num_t>(GPIO_BUTTON_PIN);
+      #else
+      gpio_num_t wakeupPin = GPIO_NUM_32; // I2C button interrupt pin
+      #endif
+      
+      // Read the current state of the button pin (LOW = pressed with pull-up)
+      int buttonState = digitalRead(wakeupPin);
+      
+      if (buttonState == LOW) {
+        DebugService::getInstance().debugPrintln("Button is currently pressed. Waiting for release before sleep...");
+        
+        // Wait for button to be released (with timeout to prevent infinite loop)
+        unsigned long waitStart = millis();
+        const unsigned long waitTimeout = 30000; // 30 second timeout
+        
+        while (digitalRead(wakeupPin) == LOW && (millis() - waitStart < waitTimeout)) {
+          delay(100); // Check every 100ms
+          LEDService::getInstance().blink(millis()); // Blink to indicate waiting
+        }
+        
+        if (digitalRead(wakeupPin) == LOW) {
+          DebugService::getInstance().debugPrintln("Button still pressed after timeout. Entering sleep anyway.");
+        } else {
+          DebugService::getInstance().debugPrintln("Button released. Safe to enter sleep.");
+        }
+        
+        // Add a small delay to ensure pin has stabilized
+        delay(500);
+      }
+
+      // Go back to sleep
+      // TODO: Check if WiFi is connected to determine if timer should be enabled
+      DebugService::getInstance().debugPrintln("Entering deep sleep. Press button to wake and enter provisioning.");
+      _configureDeepSleepService();
+    } else if (!clientConnected) {
+      // Blink LED while provisioning
+      LEDService::getInstance().blink(millis());
+    }
+  }
+
+  // Detect long button press (only if button is available)
+  if (buttonAvailable && button.isPressed()) {
+    // Check if the duration exceeds the long press threshold
+    if (!isLongPressTriggered && (millis() - buttonPressStartTime >= LONG_PRESS_DURATION)) {
+      isLongPressTriggered = true;
+      triggerSystemReboot();
+    }
+  } else {
+    // Button was released before long press duration
+    buttonPressStartTime = 0;
+    isLongPressTriggered = false;
+  }
+
+  // If the provisioning process is currently running, but a client is not connected yet, blink the LED.
+  if (provisioningStartTime != 0 && !clientConnected) {
+    LEDService::getInstance().blink(millis());
+  }
+
+  // Ensure that the LED is off when provisioning is not running.
+  if (provisioningStartTime == 0) {
+    LEDService::getInstance().turnOff();
+  }
+}
