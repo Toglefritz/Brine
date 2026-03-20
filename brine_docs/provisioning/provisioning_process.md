@@ -13,7 +13,7 @@ This document outlines the provisioning process for Brine IoT devices. The proce
 5. **Device Information Retrieval**: The mobile app obtains the Brine device's unique device ID. The app also obtains some information from the Brine device as a Bluetooth peripheral.
 6. **Backend Communication**: The mobile app sends the device ID and device name, along with the authenticated user's credentials, to a Firebase backend service via a REST API endpoint that associates the Brine device to the user's account.
 7. **Device Association**: The Firebase backend service associates the Brine device with the user's account.
-8. **PSK Generation and Transfer**: The mobile app requests a PSK from the Firebasse backend and then transferrs it to the Brine device.
+8. **PSK Generation and Transfer**: The mobile app requests a PSK from the Firebasse backend and then transfers it to the Brine device.
 8. **WiFi Credentials Transfer**: The mobile app collects WiFi credentials from the user and sends them to the Brine device over BLE.
 9. **WiFi Connection**: The Brine device attempts to connect to the WiFi network using the provided credentials and reports the success of this operation back to the mobile app over BLE.
 10. **Brine Installation**: The user is provided with instructions to install the Brine device in the water softener.
