@@ -1,0 +1,132 @@
+# Provisioning Process for Brine IoT Devices
+
+## Introduction
+
+This document outlines the provisioning process for Brine IoT devices. The process involves interaction between the physical Brine device, a mobile app, and a Firebase backend service.
+
+## Process Overview
+
+1. **Device Activation**: The user initiates the process by pressing a button on the physical Brine device.
+2. **BLE Advertising**: The Brine device begins advertising information over Bluetooth Low Energy (BLE).
+3. **Device Discovery**: The mobile app scans for Brine devices over BLE and finds the advertising Brine device.
+4. **BLE Pairing and Bonding**: The mobile app performs BLE pairing and bonding with the selected Brine device.
+5. **Device Information Retrieval**: The mobile app obtains the Brine device's unique device ID. The app also obtains some information from the Brine device as a Bluetooth peripheral.
+6. **Backend Communication**: The mobile app sends the device ID and device name, along with the authenticated user's credentials, to a Firebase backend service via a REST API endpoint that associates the Brine device to the user's account.
+7. **Device Association**: The Firebase backend service associates the Brine device with the user's account.
+8. **PSK Generation and Transfer**: The mobile app requests a PSK from the Firebasse backend and then transfers it to the Brine device.
+8. **WiFi Credentials Transfer**: The mobile app collects WiFi credentials from the user and sends them to the Brine device over BLE.
+9. **WiFi Connection**: The Brine device attempts to connect to the WiFi network using the provided credentials and reports the success of this operation back to the mobile app over BLE.
+10. **Brine Installation**: The user is provided with instructions to install the Brine device in the water softener.
+11. **Set Appliance Height**: The user measures the height of their water softener and inputs this measurement into the app. The app sends this height to the the cloud backend. 
+12. **Provisioning Completion**: The Brine device and the mobile app exchange a final message to confirm to each other that the provisioning process is complete.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant MobileApp
+    participant BrineDevice
+    participant Backend
+
+    User ->> BrineDevice: Press button to initiate device activation
+    BrineDevice ->> MobileApp: Start BLE advertising
+    MobileApp ->> MobileApp: Scan for BLE devices
+    MobileApp ->> BrineDevice: Discover Brine device
+    MobileApp ->> BrineDevice: Perform BLE pairing and bonding
+    MobileApp ->> BrineDevice: Retrieve device ID
+    MobileApp ->> Backend: Send device ID and user ID
+    Backend ->> Backend: Associate device with user account
+    MobileApp ->> Backend: Request PSK for the Brine device
+    Backend ->> MobileApp: Generate and return PSK
+    MobileApp ->> BrineDevice: Transfer PSK
+    BrineDevice ->> BrineDevice: Save PSK to NVS
+    MobileApp ->> BrineDevice: Request WiFi scan results
+    BrineDevice ->> BrineDevice: Perform WiFi scan
+    BrineDevice ->> MobileApp: Return list of WiFi networks
+    User ->> MobileApp: Select WiFi network
+    User ->> MobileApp: Provide WiFi credentials
+    MobileApp ->> BrineDevice: Send WiFi credentials over BLE
+    BrineDevice ->> BrineDevice: Connect to WiFi network
+    BrineDevice ->> MobileApp: Report WiFi connection success
+    MobileApp ->> User: Notify provisioning completion
+```
+
+## Detailed Steps
+
+### Device Activation
+
+The device activation step is the first step in the provisioning process. It involves the user pressing a button on the physical Brine device to initiate the process. This button press serves as a proof of possession check, ensuring that the user attempting to provision the Brine device has physical access to it.
+
+Once the button is pressed, the Brine device starts advertising information over Bluetooth Low Energy (BLE). This enables the mobile app to discover and connect to the Brine device. The device will continue to advertise and accept incoming connections for a period of three minutes after the button is pressed.
+
+During this time, the mobile app scans for Brine devices over BLE.
+
+### Device Discovery
+
+The device discovery step involves the mobile app scanning for nearby Brine devices over Bluetooth Low Energy (BLE). This is done by performing a BLE scan and filtering the results based on the primary service UUID used by all Brine devices.
+
+### Device Selection
+
+In most cases, only a single Brine device is expected to be discovered over Bluetooth Low Energy (BLE). In this scenario, the mobile app will automatically continue to the next step without user intervention.
+
+However, there may be situations where multiple Brine devices are detected during the scan. In such cases, the mobile app will present a list of available devices to the user. The user can then choose the specific Brine device they wish to provision from the list.
+
+This user selection ensures that the provisioning process is performed on the intended Brine device and avoids any potential confusion or errors that may arise from provisioning the wrong device.
+
+Once the user selects the desired Brine device, the mobile app proceeds to the next step in the provisioning process.
+
+### BLE Pairing and Bonding
+
+The BLE pairing and bonding step is crucial for ensuring a secure provisioning process. During this step, the mobile app establishes a secure connection with the selected Brine device by performing BLE pairing and bonding.
+
+One important aspect of this step is the use of encrypted BLE characteristics for sharing sensitive information, such as WiFi credentials. As mentioned earlier, WiFi credentials are shared between the mobile app and the Brine device during the provisioning process. These credentials contain sensitive information that, if intercepted, could compromise the security of the WiFi network.
+
+By using encrypted BLE characteristics, the risk of interception and compromise of WiFi credentials is minimized. Encrypted characteristics ensure that the messages exchanged between the mobile app and the Brine device are protected and cannot be easily deciphered by unauthorized parties.
+
+To achieve this, both the mobile app and the Brine device must support the necessary encryption algorithms and key exchange protocols. The mobile app initiates the pairing process by sending a pairing request to the Brine device. The Brine device responds with a pairing response, and both devices exchange encryption keys to establish a secure connection.
+
+Once the secure connection is established, the mobile app can safely share the WiFi credentials with the Brine device over the encrypted BLE characteristics. This ensures that even if the messages are intercepted, they cannot be easily decrypted without the encryption keys.
+
+Using encrypted BLE characteristics for sharing WiFi credentials adds an extra layer of security to the provisioning process, protecting sensitive information from unauthorized access. It is important to ensure that both the mobile app and the Brine device are properly configured to support encryption and that the encryption keys are securely exchanged during the pairing and bonding process.
+
+### Device Association
+
+The device association step is where information about the Brine device and the authenticated user is linked in backend resources. This association enables the mobile app to retrieve a list of Brine devices associated with the user and display relevant information from those devices.
+
+To perform the device association, the mobile app sends the retrieved device ID, device name, and the authenticated user's credentials to a Firebase backend service via a REST API endpoint.
+
+The Firebase backend service receives the device information and user ID and associates the Brine device with the user's account. This association is typically stored in a database or other backend resource, allowing the mobile app to query and retrieve the associated devices when needed.
+
+By associating the Brine device with the user's account, the mobile app can provide a personalized experience for the user. On future launches of the mobile app, it can retrieve the list of associated Brine devices from the backend and display relevant information from those devices, such as device status, sensor readings, or other device-specific data.
+
+###  WiFi Credentials Transfer
+
+After the Brine device is associated with the user’s account, the mobile app prompts the user to enter the WiFi credentials (SSID and password) of the network to which the Brine device should connect.
+
+Once the user has entered the WiFi credentials, the mobile app proceeds to send these credentials to the Brine device over Bluetooth Low Energy (BLE).
+
+After sending the WiFi credentials, the mobile app waits for a response from the Brine device to confirm the receipt and processing of the credentials. 
+
+### Brine Installation
+
+The mobile app provides the user with step-by-step instructions for installing the Brine monitor in the water softener.
+
+1. **Prepare the Water Softener**: Ensure that the water softener is clean and free of any debris that might interfere with the installation of the Brine monitor.
+2. **Position the Brine Monitor**: Place the Brine monitor on top of the water softener, ensuring that it is centered and stable.
+3. **Secure the Monitor**: Use the provided mounting hardware to secure the Brine monitor in place. Follow the specific instructions for your water softener model to ensure a proper fit.
+
+Once the installation is verified, the Brine monitor will begin measuring the salt level in the water softener and transmitting this data to the cloud backend for analysis and monitoring.
+
+### Set Appliance Height
+
+After the Brine device is connected to the user's account, the mobile app prompts the user to measure the height of the water softener. The user is instructed to use a measuring tape to determine the distance from the base to the top of the water softener.
+
+Once the user has measured the height, they enter this value into the mobile app. The app then sends this height information to the cloud backend and uses it to calculate the approximate percentage of salt left in the water softener. This calculation is based on the distance between the top of the water softener and the current level of salt inside it, which is measured by the Brine device.
+
+The steps are as follows:
+
+1. The mobile app prompts the user to measure the height of the water softener.
+2. The user measures the height using a measuring tape.
+3. The user enters the measured height into the mobile app.
+4. The app sends this information to the cloud backend via a REST API request.
+5. The Brine device measures the distance from the top of the water softener to the salt level.
+6. The app uses the height and distance measurements to estimate the percentage of salt remaining in the water softener.
