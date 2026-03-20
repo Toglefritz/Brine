@@ -1,0 +1,17 @@
+# Sensitive data
+brine_certs/
+
+# Archive directories
+**/archive/
+**/Archive/
+
+# Workbench
+workbench/
+
+# OS files
+.DS_Store
+**/.DS_Store
+
+# IDE
+.vscode/
+.idea/
