@@ -11,10 +11,8 @@ import "github.com/charmbracelet/lipgloss"
 var (
 	colorPrimary   = lipgloss.Color("#7C9CBF")
 	colorAccent    = lipgloss.Color("#E8B87E")
-	colorGreen     = lipgloss.Color("#8FBF9F")
 	colorDim       = lipgloss.Color("#666666")
 	colorSubtle    = lipgloss.Color("#888888")
-	colorBorder    = lipgloss.Color("#444444")
 	colorHighlight = lipgloss.Color("#2A3A4A")
 )
 
@@ -61,12 +59,13 @@ var (
 	toolDescStyle = lipgloss.NewStyle().
 			Foreground(colorSubtle)
 
-	// statusRunningStyle renders the "running" status badge.
-	statusRunningStyle = lipgloss.NewStyle().
-				Foreground(colorGreen).
-				Bold(true)
-
-	// statusStoppedStyle renders the "stopped" status badge.
+	// statusStoppedStyle renders dim text for unconfigured tools.
 	statusStoppedStyle = lipgloss.NewStyle().
 				Foreground(colorDim)
+
+	// statusMsgStyle renders the transient status message shown after
+	// a launch attempt or when a tool is not yet configured.
+	statusMsgStyle = lipgloss.NewStyle().
+			Foreground(colorPrimary).
+			Italic(true)
 )

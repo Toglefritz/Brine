@@ -7,50 +7,49 @@ import "fmt"
 // View renders the current model state as a styled string for display.
 // This satisfies the Bubbletea Model interface.
 func (m model) View() string {
-	// Header
 	header := headerStyle.Render("🧂 Brine Launcher")
 	subtitle := subtitleStyle.Render("Development Environment Tools")
 
-	// Tool list
 	list := ""
 	for i, tool := range m.tools {
 		list += renderToolRow(i, tool, m.cursor) + "\n"
 	}
 
-	// Footer help
-	footer := footerStyle.Render("↑/↓ navigate • enter toggle • q quit")
+	// Show the status message when present (launch confirmation, errors, etc.)
+	status := ""
+	if m.statusMsg != "" {
+		status = "\n" + statusMsgStyle.Render(m.statusMsg)
+	}
+
+	footer := footerStyle.Render("↑/↓ navigate • enter launch • q quit")
 
 	return appStyle.Render(
 		header + "\n" +
 			subtitle + "\n\n" +
-			list + "\n" +
+			list +
+			status + "\n" +
 			footer,
 	)
 }
 
 // renderToolRow builds a single styled row for a tool in the list.
 func renderToolRow(index int, tool Tool, cursor int) string {
-	// Status badge
-	var status string
-	if tool.Status == Running {
-		status = statusRunningStyle.Render("● running")
-	} else {
-		status = statusStoppedStyle.Render("○ stopped")
-	}
-
-	// Cursor indicator
-	cursor_indicator := "  "
+	cursorIndicator := "  "
 	if index == cursor {
-		cursor_indicator = "▸ "
+		cursorIndicator = "▸ "
 	}
 
-	// Tool name and description
 	name := toolNameStyle.Render(tool.Name)
 	desc := toolDescStyle.Render(tool.Description)
 
-	row := fmt.Sprintf("%s%s  %s\n   %s", cursor_indicator, name, status, desc)
+	// Show a dim "not configured" note for tools without a command yet.
+	configured := ""
+	if tool.Command == "" {
+		configured = statusStoppedStyle.Render("  (not configured)")
+	}
 
-	// Apply row-level styling based on selection
+	row := fmt.Sprintf("%s%s%s\n   %s", cursorIndicator, name, configured, desc)
+
 	if index == cursor {
 		return selectedItemStyle.Render(row)
 	}

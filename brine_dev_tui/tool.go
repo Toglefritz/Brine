@@ -1,55 +1,49 @@
 // tool.go defines the Tool type representing a launchable development tool.
 //
-// Each tool has a display name, description, and a status indicating
-// whether it is currently running or stopped.
+// Each tool has a display name, description, and the shell command
+// that gets executed in a new Terminal.app window when launched.
 package main
 
-// Status represents the current state of a development tool.
-type Status int
-
-const (
-	// Stopped indicates the tool is not currently running.
-	Stopped Status = iota
-	// Running indicates the tool is actively running.
-	Running
-)
-
-// String returns a human-readable label for the status.
-func (s Status) String() string {
-	switch s {
-	case Running:
-		return "running"
-	default:
-		return "stopped"
-	}
-}
-
 // Tool represents a single development tool that can be launched
-// from the TUI. It holds display metadata and runtime state.
+// from the TUI. It holds display metadata and the command to run.
 type Tool struct {
-	// Name is the display label shown in the tool list.
+	// Name is the display label shown in the tool list. This is also
+	// used as the title of the Terminal.app window when launched.
 	Name string
 	// Description is a short explanation of what the tool does.
 	Description string
-	// Status tracks whether the tool is currently running or stopped.
-	Status Status
+	// Command is the shell command executed when the tool is launched.
+	// An empty string means the tool is not yet wired up.
+	Command string
+	// WorkDir is the working directory for the command. If empty, the
+	// command runs in whatever directory the TUI was started from.
+	WorkDir string
 }
 
+// firmwareDir is the absolute path to the PlatformIO firmware project.
+const firmwareDir = "/Users/scotthatfield/Documents/Projects/Brine/brine_firmware"
+
 // defaultTools returns the initial set of development tools available
-// in the launcher. Commands will be wired up in a later iteration.
+// in the launcher.
 func defaultTools() []Tool {
 	return []Tool{
 		{
 			Name:        "Flash Firmware",
 			Description: "Build and flash firmware to the device",
+			Command:     "./upload.sh",
+			WorkDir:     firmwareDir,
 		},
 		{
 			Name:        "Device Emulator",
-			Description: "Start the device emulator for local testing",
+			Description: "Build and run the native firmware emulator",
+			Command:     "./emulator.sh",
+			WorkDir:     firmwareDir,
 		},
 		{
 			Name:        "Serial Monitor",
 			Description: "Open serial monitor for device output",
+			Command:     "./monitor.sh",
+			WorkDir:     firmwareDir,
 		},
 		{
 			Name:        "Flutter App",
