@@ -23,6 +23,12 @@ type Tool struct {
 // firmwareDir is the absolute path to the PlatformIO firmware project.
 const firmwareDir = "/Users/scotthatfield/Documents/Projects/Brine/brine_firmware"
 
+// flutterAppDir is the absolute path to the Brine Flutter application.
+const flutterAppDir = "/Users/scotthatfield/Documents/Projects/Brine/brine_app"
+
+// cloudFunctionsDir is the absolute path to the Firebase Cloud Functions project.
+const cloudFunctionsDir = "/Users/scotthatfield/Documents/Projects/Brine/brine_cloud_functions"
+
 // defaultTools returns the initial set of development tools available
 // in the launcher.
 func defaultTools() []Tool {
@@ -48,10 +54,14 @@ func defaultTools() []Tool {
 		{
 			Name:        "Flutter App",
 			Description: "Launch the Flutter mobile application",
+			Command:     "./run.sh",
+			WorkDir:     flutterAppDir,
 		},
 		{
 			Name:        "Firebase Emulator",
 			Description: "Start the Firebase local emulator suite",
+			Command:     "./firebase_emulator_suite.command",
+			WorkDir:     cloudFunctionsDir,
 		},
 	}
 }
