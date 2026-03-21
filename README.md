@@ -34,7 +34,24 @@ notifications when levels are low.
 | [`brine_cad`](brine_cad/) | 3D models and drawings for the device enclosure (Plasticity, STEP, and STL formats). |
 | [`brine_logos`](brine_logos/) | Brand assets and logo files in various formats. |
 | [`brine_store_listings`](brine_store_listings/) | App store listing assets including screenshots and feature graphics. |
-|
+| [`brine_dev_tui`](brine_dev_tui/) | Terminal UI launcher for starting development tools (firmware flashing, emulator, serial monitor, Flutter app, Firebase emulator). |
+
+## Development Launcher
+
+The project includes a terminal UI for launching the various tools needed during local development.
+Instead of remembering individual commands across multiple directories, the launcher provides a
+single interface to start everything from one place.
+
+Double-click `brine_dev_tui/Brine Launcher.command` in Finder to build and run it, or from the
+terminal:
+
+```sh
+cd brine_dev_tui
+go build -o brine-launcher .
+./brine-launcher
+```
+
+See [`brine_dev_tui/README.md`](brine_dev_tui/README.md) for controls and architecture details.
 
 ## Technology Overview
 
