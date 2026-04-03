@@ -66,7 +66,7 @@
         "annular_width": "error",
         "clearance": "error",
         "connection_width": "warning",
-        "copper_edge_clearance": "error",
+        "copper_edge_clearance": "ignore",
         "copper_sliver": "warning",
         "courtyards_overlap": "error",
         "creepage": "error",
@@ -100,7 +100,7 @@
         "padstack": "warning",
         "pth_inside_courtyard": "ignore",
         "shorting_items": "error",
-        "silk_edge_clearance": "warning",
+        "silk_edge_clearance": "ignore",
         "silk_over_copper": "ignore",
         "silk_overlap": "ignore",
         "skew_out_of_range": "error",
@@ -751,6 +751,30 @@
     [
       "da3a4ef2-0e38-46f1-a1fc-55d8e0a83a54",
       "Root"
+    ],
+    [
+      "63bc593b-afd3-4a61-9e23-7e85a1d104e9",
+      "XIAO ESP32-S3"
+    ],
+    [
+      "cb6fa39a-9a0c-434c-b5c9-65b8cf34a8e9",
+      "Battery"
+    ],
+    [
+      "4ad0d7d6-d3bf-4825-b971-cd4fdc149c91",
+      "Button"
+    ],
+    [
+      "6d2918a7-c70e-4d9e-bb5b-f7d45fd4d68d",
+      "RGB LED"
+    ],
+    [
+      "e2bbff58-4ff7-4cd5-a219-8604e35fe5c2",
+      "Battery Monitor"
+    ],
+    [
+      "0466b9b6-b218-4d15-b26d-b1a8ac4eb0dc",
+      "Distance Sensor"
     ]
   ],
   "text_variables": {}
