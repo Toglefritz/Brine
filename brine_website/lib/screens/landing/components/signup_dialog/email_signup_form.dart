@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -68,13 +70,18 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// validation checks fail, the function returns a localized error message string.
   ///
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
-  String? _validateNameField({required BuildContext context, required String? entry}) {
+  String? _validateNameField({
+    required BuildContext context,
+    required String? entry,
+  }) {
     if (entry == null || entry.isEmpty) {
-      Analytics.logEvent(
-        name: 'name_field_error',
-        parameters: {
-          'error': 'empty or null',
-        },
+      unawaited(
+        Analytics.logEvent(
+          name: 'name_field_error',
+          parameters: {
+            'error': 'empty or null',
+          },
+        ),
       );
 
       return AppLocalizations.of(context)!.validationNameEmpty;
@@ -82,36 +89,43 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
     // 1. Length check - truncate if length is greater than 30
     if (entry.length > 30) {
-      Analytics.logEvent(
-        name: 'name_field_error',
-        parameters: {
-          'error': 'name too long',
-        },
+      unawaited(
+        Analytics.logEvent(
+          name: 'name_field_error',
+          parameters: {
+            'error': 'name too long',
+          },
+        ),
       );
 
-      _nameFieldController.text = _nameFieldController.text.replaceRange(30, _nameFieldController.text.length, '...');
+      _nameFieldController.text = _nameFieldController.text
+          .replaceRange(30, _nameFieldController.text.length, '...');
     }
 
-    // Update the 'entry' variable after length truncation
-    entry = _nameFieldController.text;
+    // Update the local variable after length truncation
+    final String sanitizedEntry = _nameFieldController.text;
 
     // 2. Character set limitation - remove characters not in [a-zA-Z-', ]
     String validCharacters = '';
-    for (int i = 0; i < entry.length; i++) {
-      if (RegExp(r"^[a-zA-Z\-'\s]$").hasMatch(entry[i])) {
-        validCharacters += entry[i];
+    for (int i = 0; i < sanitizedEntry.length; i++) {
+      if (RegExp(r"^[a-zA-Z\-'\s]$").hasMatch(sanitizedEntry[i])) {
+        validCharacters += sanitizedEntry[i];
       }
     }
     _nameFieldController.text = validCharacters;
 
     // 3. Escape or Strip HTML (Enhanced checks)
-    final RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
-    if (htmlCharacters.hasMatch(entry)) {
-      Analytics.logEvent(
-        name: 'name_field_error',
-        parameters: {
-          'error': 'contains HTML',
-        },
+    final RegExp htmlCharacters = RegExp(
+      r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;',
+    );
+    if (htmlCharacters.hasMatch(sanitizedEntry)) {
+      unawaited(
+        Analytics.logEvent(
+          name: 'name_field_error',
+          parameters: {
+            'error': 'contains HTML',
+          },
+        ),
       );
 
       return AppLocalizations.of(context)!.validationNameInvalidHtml;
@@ -119,12 +133,14 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
     // 4. Reject Control Characters
     final RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
-    if (controlCharacters.hasMatch(entry)) {
-      Analytics.logEvent(
-        name: 'name_field_error',
-        parameters: {
-          'error': 'contains control characters',
-        },
+    if (controlCharacters.hasMatch(sanitizedEntry)) {
+      unawaited(
+        Analytics.logEvent(
+          name: 'name_field_error',
+          parameters: {
+            'error': 'contains control characters',
+          },
+        ),
       );
 
       return AppLocalizations.of(context)!.validationNameControlCharacters;
@@ -158,7 +174,10 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
   /// validation checks fail, the function returns a localized error message string.
   ///
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
-  String? _validateEmailField({required BuildContext context, required String? entry}) {
+  String? _validateEmailField({
+    required BuildContext context,
+    required String? entry,
+  }) {
     // Regular expression pattern for validating email address
     const String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -166,11 +185,13 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
     // Check if the entry is null or empty
     if (entry == null || entry.isEmpty) {
-      Analytics.logEvent(
-        name: 'email_field_error',
-        parameters: {
-          'error': 'empty or null',
-        },
+      unawaited(
+        Analytics.logEvent(
+          name: 'email_field_error',
+          parameters: {
+            'error': 'empty or null',
+          },
+        ),
       );
 
       return AppLocalizations.of(context)!.validationEmailEmpty;
@@ -178,24 +199,30 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
     // Check if the email address is in valid format
     if (!regex.hasMatch(entry)) {
-      Analytics.logEvent(
-        name: 'email_field_error',
-        parameters: {
-          'error': 'invalid email format',
-        },
+      unawaited(
+        Analytics.logEvent(
+          name: 'email_field_error',
+          parameters: {
+            'error': 'invalid email format',
+          },
+        ),
       );
 
       return AppLocalizations.of(context)!.validationEmailInvalid;
     }
 
     // Check for HTML characters/tags
-    final RegExp htmlCharacters = RegExp(r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;');
+    final RegExp htmlCharacters = RegExp(
+      r'<|>|&|"|\|/|<!--|-->|!DOCTYPE|=|javascript:|data:|@import|expression\(|`|;',
+    );
     if (htmlCharacters.hasMatch(entry)) {
-      Analytics.logEvent(
-        name: 'email_field_error',
-        parameters: {
-          'error': 'contains HTML',
-        },
+      unawaited(
+        Analytics.logEvent(
+          name: 'email_field_error',
+          parameters: {
+            'error': 'contains HTML',
+          },
+        ),
       );
 
       return AppLocalizations.of(context)!.validationEmailHtmlCharacters;
@@ -204,11 +231,13 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
     // Reject Control Characters
     final RegExp controlCharacters = RegExp(r'[\x00-\x1F\x7F-\x9F]');
     if (controlCharacters.hasMatch(entry)) {
-      Analytics.logEvent(
-        name: 'email_field_error',
-        parameters: {
-          'error': 'contains control characters',
-        },
+      unawaited(
+        Analytics.logEvent(
+          name: 'email_field_error',
+          parameters: {
+            'error': 'contains control characters',
+          },
+        ),
       );
 
       return AppLocalizations.of(context)!.validationEmailControlCharacters;
@@ -284,7 +313,8 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         }
 
         // Update the anonymous profile
-        await FirebaseAuth.instance.currentUser?.updateDisplayName(_nameFieldController.text);
+        await FirebaseAuth.instance.currentUser
+            ?.updateDisplayName(_nameFieldController.text);
 
         if (!kDebugMode) {
           await FirebaseAnalytics.instance.logGenerateLead();
@@ -292,7 +322,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
         // Return true to the caller to indicate success
         if (!mounted) return;
-        context.pushReplacement('${ThanksRoute.screenName}/${_nameFieldController.text}');
+        context.pushReplacement(
+          '${ThanksRoute.screenName}/${_nameFieldController.text}',
+        );
       }
     }
   }

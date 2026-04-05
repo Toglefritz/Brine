@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -25,7 +26,8 @@ class WaveProgressIndicator extends StatefulWidget {
 
 /// [WaveProgressIndicatorState] is the state class for [WaveProgressIndicator]. It holds the [AnimationController]
 /// which is used to animate the wave.
-class WaveProgressIndicatorState extends State<WaveProgressIndicator> with TickerProviderStateMixin {
+class WaveProgressIndicatorState extends State<WaveProgressIndicator>
+    with TickerProviderStateMixin {
   late AnimationController _waveController;
   late Animation<double> _waveAnimation;
 
@@ -40,7 +42,9 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
     _waveController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    )..repeat();
+    );
+
+    unawaited(_waveController.repeat());
 
     // Create a linear animation for the wave ignore_for_file: prefer_int_literals
     _waveAnimation = Tween(begin: 0.0, end: 1.0).animate(
@@ -60,7 +64,9 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
       vsync: this,
     );
 
-    _progressAnimation = Tween(begin: widget.progressPercent, end: widget.progressPercent).animate(
+    _progressAnimation =
+        Tween(begin: widget.progressPercent, end: widget.progressPercent)
+            .animate(
       CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
     );
 
@@ -76,13 +82,14 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
 
     // If the progress value has changed, animate to the new value
     if (widget.progressPercent != oldWidget.progressPercent) {
-      _progressAnimation = Tween(begin: oldWidget.progressPercent, end: widget.progressPercent).animate(
+      _progressAnimation =
+          Tween(begin: oldWidget.progressPercent, end: widget.progressPercent)
+              .animate(
         CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
       );
 
-      _progressController
-        ..reset()
-        ..forward();
+      _progressController.reset();
+      unawaited(_progressController.forward());
     }
   }
 
@@ -140,7 +147,8 @@ class WavePainter extends CustomPainter {
     path.moveTo(0, size.height);
     for (int i = 0; i <= size.width.toInt(); i++) {
       // Calculate the sine wave for current position
-      final double wave = amplitudeFactor * sin((i / size.width) * 2 * pi + 2 * pi * waveAnimationValue);
+      final double wave = amplitudeFactor *
+          sin((i / size.width) * 2 * pi + 2 * pi * waveAnimationValue);
 
       // Calculate the height that should not be filled by the progress indicator
       final double unfilledHeight = size.height * (1 - progressPercent);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,7 @@ class TermsAndConditionsController extends State<TermsAndConditionsRoute> {
   @override
   void initState() {
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logScreenView(screenName: 'terms_and_conditions');
+      unawaited(FirebaseAnalytics.instance.logScreenView(screenName: 'terms_and_conditions'));
     }
 
     super.initState();

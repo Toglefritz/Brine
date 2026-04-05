@@ -18,9 +18,10 @@ class DarkThemeProvider with ChangeNotifier {
   bool get darkTheme => _darkTheme;
 
   /// A method to initialize the dark theme preference. It retrieves the current dark theme setting from
-  set darkTheme(bool value) {
-    _darkTheme = value;
-    darkThemePreference.setDarkTheme(value: value);
+  Future<void> setDarkTheme({required bool darkThemeEnabled}) async {
+    _darkTheme = darkThemeEnabled;
+    await darkThemePreference.setDarkTheme(value: darkThemeEnabled);
+
     notifyListeners();
   }
 }

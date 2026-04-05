@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -55,7 +57,7 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
 
     _initializeCTAAnimation();
 
-    _startPaddingAnimation();
+    unawaited(_startPaddingAnimation());
 
     super.initState();
   }
@@ -75,8 +77,8 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
   }
 
   /// Starts the animation on the primary button.
-  void _startPaddingAnimation() {
-    _animationController.repeat(reverse: true);
+  Future<void> _startPaddingAnimation() async {
+    await _animationController.repeat(reverse: true);
   }
 
   @override

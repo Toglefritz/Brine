@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,7 @@ class PrivacyPolicyController extends State<PrivacyPolicyRoute> {
   @override
   void initState() {
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logScreenView(screenName: 'privacy_policy');
+      unawaited(FirebaseAnalytics.instance.logScreenView(screenName: 'privacy_policy'));
     }
     super.initState();
   }

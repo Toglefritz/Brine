@@ -56,7 +56,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
 
     if (!context.mounted) return;
-    Provider.of<DarkThemeProvider>(context, listen: false).darkTheme = isActive;
+    await Provider.of<DarkThemeProvider>(context, listen: false).setDarkTheme(darkThemeEnabled: isActive);
   }
 
   @override

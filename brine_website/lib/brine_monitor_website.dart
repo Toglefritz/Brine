@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,12 +27,15 @@ class _BrineMonitorWebsiteState extends State<BrineMonitorWebsite> {
     super.initState();
 
     // Get the current darkTheme preference
-    _getCurrentAppTheme();
+    unawaited(_getCurrentAppTheme());
   }
 
   /// Gets the current dark theme preference.
   Future<void> _getCurrentAppTheme() async {
-    themeChangeProvider.darkTheme = await themeChangeProvider.darkThemePreference.getTheme();
+    final bool darkThemeEnabled =
+        await themeChangeProvider.darkThemePreference.getTheme();
+
+    await themeChangeProvider.setDarkTheme(darkThemeEnabled: darkThemeEnabled);
   }
 
   @override
@@ -46,8 +51,11 @@ class _BrineMonitorWebsiteState extends State<BrineMonitorWebsite> {
             debugShowCheckedModeBanner: false,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            themeMode: darkThemeProvider.darkTheme ? ThemeMode.dark : ThemeMode.light,
-            theme: darkThemeProvider.darkTheme ? DarkTheme.darkTheme : LightTheme.lightTheme,
+            themeMode:
+                darkThemeProvider.darkTheme ? ThemeMode.dark : ThemeMode.light,
+            theme: darkThemeProvider.darkTheme
+                ? DarkTheme.darkTheme
+                : LightTheme.lightTheme,
             routerConfig: router,
           );
         },

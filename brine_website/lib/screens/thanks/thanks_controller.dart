@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:confetti/confetti.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +27,8 @@ import 'thanks_view.dart';
 /// This screen features a big ol' party with a bunch of confetti that displays when the page launches and a very
 /// special GIF thanking the visitor for their interest in Brine. The page shows updates about Brine and links to share
 /// the project with others.
-class ThanksController extends State<ThanksRoute> with SingleTickerProviderStateMixin {
+class ThanksController extends State<ThanksRoute>
+    with SingleTickerProviderStateMixin {
   /// A controller for the much bigger and grander confetti effect triggered when the visitor successfully signs up for
   /// updates from Brine.
   late ConfettiController partyController;
@@ -36,7 +39,7 @@ class ThanksController extends State<ThanksRoute> with SingleTickerProviderState
   @override
   void initState() {
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logScreenView(screenName: 'thanks_page');
+      unawaited(FirebaseAnalytics.instance.logScreenView(screenName: 'thanks_page'));
     }
 
     initializeConfettiAnimation();
@@ -55,14 +58,17 @@ class ThanksController extends State<ThanksRoute> with SingleTickerProviderState
   /// animations.
   void initializeConfettiAnimation() {
     setState(() {
-      partyController = ConfettiController(duration: const Duration(seconds: 2));
+      partyController =
+          ConfettiController(duration: const Duration(seconds: 2));
     });
   }
 
   /// Handles taps on the [PrimaryColorButton] on the [ThanksView].
   void onButtonPressed() {
-    Analytics.logEvent(
-      name: 'thanks_cta_pressed',
+    unawaited(
+      Analytics.logEvent(
+        name: 'thanks_cta_pressed',
+      ),
     );
 
     context.pushReplacement(InsiderRoute.screenName);
@@ -71,14 +77,17 @@ class ThanksController extends State<ThanksRoute> with SingleTickerProviderState
   /// Fires the [ConfettiCannon]s again because everybody loves confetti (except the people who have to clean it up
   /// after the party).
   void repeatParty() {
-    Analytics.logEvent(
-      name: 'repeat_party',
-      parameters: {
-        'confetti_count': _confettiCount,
-      },
+    unawaited(
+      Analytics.logEvent(
+        name: 'repeat_party',
+        parameters: {
+          'confetti_count': _confettiCount,
+        },
+      ),
     );
 
-    if (partyController.state != ConfettiControllerState.playing && _confettiCount < 8) {
+    if (partyController.state != ConfettiControllerState.playing &&
+        _confettiCount < 8) {
       _confettiCount++;
 
       partyController.play();

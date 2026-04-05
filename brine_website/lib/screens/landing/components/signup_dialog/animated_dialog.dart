@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// An animated dialog widget that slides from the lower right corner of the screen to the middle when opened.
@@ -34,7 +36,7 @@ class AnimatedDialogState extends State<AnimatedDialog> with SingleTickerProvide
     offset = Tween<Offset>(begin: const Offset(1.0, 0), end: Offset.zero).animate(controller);
 
     // Start the animation.
-    controller.forward();
+    unawaited(controller.forward());
   }
 
   @override

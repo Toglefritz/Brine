@@ -16,13 +16,13 @@ class Footer extends StatelessWidget {
   });
 
   /// Handles taps on the terms and conditions button.
-  void _termsAndConditionsOnTap(BuildContext context) {
-    context.push(TermsAndConditionsRoute.screenName);
+  Future<void> _termsAndConditionsOnTap(BuildContext context) async {
+    await context.push(TermsAndConditionsRoute.screenName);
   }
 
   /// Handles taps on the privacy policy button.
-  void _privacyPolicyOnTap(BuildContext context) {
-    context.push(PrivacyPolicyRoute.screenName);
+  Future<void> _privacyPolicyOnTap(BuildContext context) async {
+    await context.push(PrivacyPolicyRoute.screenName);
   }
 
   @override

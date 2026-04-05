@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -13,7 +15,7 @@ class SetupController extends State<SetupRoute> {
   @override
   void initState() {
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logAppOpen();
+      unawaited(FirebaseAnalytics.instance.logAppOpen());
     }
 
     super.initState();

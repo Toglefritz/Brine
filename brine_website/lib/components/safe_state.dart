@@ -46,9 +46,9 @@ abstract class SafeState<T extends StatefulWidget> extends State<T> {
   }
 
   /// Checks the [mounted] boolean before performing calls to [Navigator.pushAndRemoveUntil].
-  void pushAndRemoveUntil(Route<void> route, RoutePredicate predicate) {
+  Future<void> pushAndRemoveUntil(Route<void> route, RoutePredicate predicate) async {
     if (!mounted) return;
 
-    Navigator.pushAndRemoveUntil(context, route, predicate);
+    await Navigator.pushAndRemoveUntil(context, route, predicate);
   }
 }

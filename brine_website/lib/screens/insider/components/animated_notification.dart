@@ -57,19 +57,19 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
     /// Initialize offset with start and end points for the drop-down animation
     offset = Tween<Offset>(begin: Offset.zero, end: const Offset(0.0, -1.0)).animate(controller);
 
-    _hide();
+    unawaited(_hide());
 
     // Show the notification periodically
     _notificationTimer = Timer.periodic(const Duration(seconds: 8), (timer) {
-      _present();
+      unawaited(_present());
     });
   }
 
   /// Show the notification
   ///
   /// Starts the controller for the animation
-  void _present() {
-    controller.forward();
+  Future<void> _present() async {
+    await controller.forward();
 
     Future.delayed(const Duration(seconds: 1), _hide);
   }
@@ -77,8 +77,8 @@ class AnimatedNotificationState extends State<AnimatedNotification> with SingleT
   /// Hide the notification
   ///
   /// Reverses the controller for the animation
-  void _hide() {
-    controller.reverse();
+  Future<void> _hide() async {
+    await controller.reverse();
   }
 
   @override

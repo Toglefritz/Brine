@@ -87,10 +87,10 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
   }
 
   /// Starts the animation on the primary button.
-  void _startPaddingAnimation(PointerEvent details) {
+  Future<void> _startPaddingAnimation(PointerEvent details) async {
     _shouldStopOnNextCycle = false;
-    _animationController.repeat(reverse: true);
-    _ticker.start();
+    await _animationController.repeat(reverse: true);
+    await _ticker.start();
   }
 
   /// Stops the animation on the primary button.

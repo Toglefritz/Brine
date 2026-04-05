@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:confetti/confetti.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
@@ -33,7 +35,7 @@ class LandingController extends State<LandingRoute> with SingleTickerProviderSta
   @override
   void initState() {
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logScreenView(screenName: 'landing');
+      unawaited(FirebaseAnalytics.instance.logScreenView(screenName: 'landing'));
     }
 
     _initializeConfettiAnimation();
@@ -54,7 +56,7 @@ class LandingController extends State<LandingRoute> with SingleTickerProviderSta
 
   /// Launches the confetti!
   void launchConfettiBlast() {
-    Analytics.logEvent(name: 'landing_confetti');
+    unawaited(Analytics.logEvent(name: 'landing_confetti'));
 
     confettiController.play();
   }
