@@ -1,6 +1,0 @@
-Front (top side) placement file: '/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Brine Mainboard/Brine-top.pos'.
-Info: Component count: 15.
-Back (bottom side) placement file: '/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Brine Mainboard/Brine-bottom.pos'.
-Info: Component count: 1.
-Info: Full component count: 16.
-Info: Done.
