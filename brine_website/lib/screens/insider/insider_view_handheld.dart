@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../components/app_bar/main_app_bar.dart';
-import '../../components/footer.dart';
-import '../../components/padded_column.dart';
+import '../../components/footer/footer.dart';
+import '../../components/layout/padded_column.dart';
 import '../../components/social_sharing_buttons.dart';
 import '../../values/insets.dart';
 import 'components/app_notification_preview.dart';

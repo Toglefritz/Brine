@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../components/app_bar/main_app_bar.dart';
-import '../../components/footer.dart';
-import '../../components/padded_column.dart';
+import '../../components/footer/footer.dart';
+import '../../components/layout/padded_column.dart';
 import '../../components/responsive_safe_scaffold.dart';
 import '../../values/insets.dart';
 import 'components/app_preview.dart';
@@ -65,11 +65,13 @@ class LandingViewDesktop extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               IconAnimatedButtonHorizontal(
-                                text: AppLocalizations.of(context)!.getStartedButton,
+                                text: AppLocalizations.of(context)!
+                                    .getStartedButton,
                                 onTap: () => state.letsGoooooooo('button_1'),
                               ),
                               Text(
-                                AppLocalizations.of(context)!.landingPageDescription,
+                                AppLocalizations.of(context)!
+                                    .landingPageDescription,
                                 style: Theme.of(context).textTheme.bodyLarge,
                                 textAlign: TextAlign.center,
                               ),
@@ -93,7 +95,8 @@ class LandingViewDesktop extends StatelessWidget {
                     builder: (context, constraints) {
                       return BenefitsInfo(
                         direction: Axis.horizontal,
-                        itemWidth: (constraints.maxWidth - (Insets.small * 3)) / 5,
+                        itemWidth:
+                            (constraints.maxWidth - (Insets.small * 3)) / 5,
                       );
                     },
                   ),
@@ -103,7 +106,9 @@ class LandingViewDesktop extends StatelessWidget {
                     vertical: Insets.medium,
                   ),
                   child: DeviceInfo(
-                    direction: MediaQuery.of(context).size.width > 1000 ? Axis.horizontal : Axis.vertical,
+                    direction: MediaQuery.of(context).size.width > 1000
+                        ? Axis.horizontal
+                        : Axis.vertical,
                   ),
                 ),
                 Padding(

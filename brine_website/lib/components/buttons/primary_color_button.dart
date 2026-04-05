@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../values/insets.dart';
+import '../../values/insets.dart';
 
 /// Presents a button that represents the primary CTA on a page. The button uses the theme's background color as its
 /// background color, with a border, and at a high elevation.

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../components/primary_color_button.dart';
+import '../../../components/buttons/primary_color_button.dart';
 import '../../../values/insets.dart';
 
 /// A CTA button with a vertical icon on either side.

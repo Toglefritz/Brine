@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/padded_flex.dart';
+import '../../../components/layout/padded_flex.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../themes/dark_theme.dart';
 import '../../../values/assets.dart';

@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../components/app_bar/main_app_bar.dart';
-import '../../components/footer.dart';
-import '../../components/light_button.dart';
-import '../../components/padded_column.dart';
+import '../../components/footer/footer.dart';
+import '../../components/buttons/light_button.dart';
+import '../../components/layout/padded_column.dart';
 import '../../components/social_sharing_buttons.dart';
 import '../../values/insets.dart';
 import 'components/confetti_cannon.dart';
@@ -63,7 +63,8 @@ class ThanksView extends StatelessWidget {
                           ),
                           LightButton(
                             onPressed: state.onButtonPressed,
-                            text: AppLocalizations.of(context)!.accessInsiderPortal,
+                            text: AppLocalizations.of(context)!
+                                .accessInsiderPortal,
                             width: 350,
                           ),
                           LightButton(

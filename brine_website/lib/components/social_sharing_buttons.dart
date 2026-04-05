@@ -7,7 +7,7 @@ import '../models/social_network.dart';
 import '../services/analytics/analytics.dart';
 import '../values/assets.dart';
 import '../values/insets.dart';
-import 'padded_row.dart';
+import 'layout/padded_row.dart';
 
 /// Displays a list of buttons to share Brine on various social networks.
 class SocialSharingButtons extends StatelessWidget {

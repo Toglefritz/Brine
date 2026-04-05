@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../components/primary_color_button.dart';
+import '../../components/buttons/primary_color_button.dart';
 import '../../services/analytics/analytics.dart';
 import '../../values/insets.dart';
 import '../insider/insider_route.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../values/insets.dart';
+import '../../values/insets.dart';
 
 /// A button with a light background and an outline.
 ///

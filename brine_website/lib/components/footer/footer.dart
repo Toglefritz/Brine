@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/app_localizations.dart';
+import '../../screens/privacy_policy/privacy_policy_route.dart';
+import '../../screens/terms_and_conditions/terms_and_conditions_route.dart';
 import '../../values/insets.dart';
-import '../l10n/app_localizations.dart';
-import '../screens/privacy_policy/privacy_policy_route.dart';
-import '../screens/terms_and_conditions/terms_and_conditions_route.dart';
 import 'footer_button.dart';
 
 /// THe [Footer] appears at the bottom of the home screen and contains a set of navigational buttons to administrative

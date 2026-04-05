@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../components/app_bar/main_app_bar.dart';
-import '../../components/footer.dart';
-import '../../components/padded_column.dart';
+import '../../components/footer/footer.dart';
+import '../../components/layout/padded_column.dart';
 import '../../components/social_sharing_buttons.dart';
 import '../../values/insets.dart';
 import 'components/app_notification_preview.dart';
@@ -51,7 +51,9 @@ class InsiderViewDesktop extends StatelessWidget {
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            if (FirebaseAuth.instance.currentUser?.displayName != null)
+                            if (FirebaseAuth
+                                    .instance.currentUser?.displayName !=
+                                null)
                               Padding(
                                 padding: EdgeInsets.only(
                                   bottom: Insets.medium,
@@ -71,7 +73,10 @@ class InsiderViewDesktop extends StatelessWidget {
                             ),
                             Text(
                               AppLocalizations.of(context)!.socialSharePrompt,
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
                               textAlign: TextAlign.center,
