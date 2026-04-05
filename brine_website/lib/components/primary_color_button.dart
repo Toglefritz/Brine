@@ -8,7 +8,9 @@ import '../values/insets.dart';
 class PrimaryColorButton extends StatelessWidget {
   /// Creates an instance of [PrimaryColorButton].
   const PrimaryColorButton({
-    required this.onPressed, required this.text, super.key,
+    required this.onPressed,
+    required this.text,
+    super.key,
   });
 
   /// The action to perform when the button is pressed.
@@ -42,10 +44,10 @@ class PrimaryColorButton extends StatelessWidget {
           child: Text(
             text.toUpperCase(),
             style: GoogleFonts.mavenPro().copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: themeColor,
-                ),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: themeColor,
+            ),
             textAlign: TextAlign.center,
           ),
         ),

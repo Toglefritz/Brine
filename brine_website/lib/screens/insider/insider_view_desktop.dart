@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../components/app_bar/main_app_bar.dart';
 import '../../components/footer.dart';
 import '../../components/padded_column.dart';

@@ -7,8 +7,24 @@ import 'package:flutter/material.dart';
 
 import 'brine_monitor_website.dart';
 import 'firebase_options.dart';
+import 'screens/under_construction/under_construction_app.dart';
+
+/// When `true`, the app renders a minimal under construction page instead of the full website. Controlled at build time
+/// via:
+///
+/// ```sh
+/// flutter run --dart-define=UNDER_CONSTRUCTION=true
+/// ```
+const bool _underConstruction = bool.fromEnvironment(
+  'UNDER_CONSTRUCTION',
+);
 
 Future<void> main() async {
+  if (_underConstruction) {
+    runApp(const UnderConstructionApp());
+    return;
+  }
+
   // Initialize Firebase services
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

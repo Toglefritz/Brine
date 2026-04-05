@@ -32,7 +32,7 @@ class DarkThemeToggle extends StatelessWidget {
         },
       ),
       inactiveThumbColor: Theme.of(context).primaryColorDark,
-      activeColor: Theme.of(context).primaryColor,
+      activeThumbColor: Theme.of(context).primaryColor,
       onChanged: (isActive) => onChanged(
         isActive: isActive,
         context: context,

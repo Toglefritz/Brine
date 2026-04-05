@@ -100,7 +100,7 @@ class SocialSharingButtons extends StatelessWidget {
           onPressed: () => _socialShare(SocialNetwork.formerlyTwitter),
         ),
         IconButton(
-          icon: const Icon(
+          icon: const FaIcon(
             FontAwesomeIcons.facebook,
             size: 36,
           ),
@@ -108,7 +108,7 @@ class SocialSharingButtons extends StatelessWidget {
           onPressed: () => _socialShare(SocialNetwork.facebook),
         ),
         IconButton(
-          icon: const Icon(
+          icon: const FaIcon(
             FontAwesomeIcons.linkedin,
             size: 36,
           ),
@@ -116,7 +116,7 @@ class SocialSharingButtons extends StatelessWidget {
           onPressed: () => _socialShare(SocialNetwork.linkedin),
         ),
         IconButton(
-          icon: const Icon(
+          icon: const FaIcon(
             FontAwesomeIcons.pinterest,
             size: 36,
           ),
@@ -124,7 +124,7 @@ class SocialSharingButtons extends StatelessWidget {
           onPressed: () => _socialShare(SocialNetwork.pinterest),
         ),
         IconButton(
-          icon: const Icon(
+          icon: const FaIcon(
             FontAwesomeIcons.squareShareNodes,
             size: 36,
           ),

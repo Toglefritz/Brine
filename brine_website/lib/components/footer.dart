@@ -7,8 +7,8 @@ import '../screens/privacy_policy/privacy_policy_route.dart';
 import '../screens/terms_and_conditions/terms_and_conditions_route.dart';
 import 'footer_button.dart';
 
-/// THe [Footer] appears at the bottom of the home screen and contains a set of navigational
-/// buttons to administrative pages on the site.
+/// THe [Footer] appears at the bottom of the home screen and contains a set of navigational buttons to administrative
+/// pages on the site.
 class Footer extends StatelessWidget {
   /// Creates a [Footer] widget.
   const Footer({

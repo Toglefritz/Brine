@@ -92,5 +92,9 @@
   "validationNameInvalidHtml": "This name seems to contain some HTML. Why?",
   "wakeUpRoutines": "Wake-up routines",
   "webDevelopment": "Web Development",
-  "wireframesAndPrototypes": "Wireframes and prototypes"
+  "wireframesAndPrototypes": "Wireframes and prototypes",
+  "underConstructionMessage": "We're giving the site a fresh coat of paint. Check back soon!",
+  "@underConstructionMessage": {
+    "description": "Message displayed on the under construction page while the website is being refreshed"
+  }
 }

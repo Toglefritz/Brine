@@ -3,8 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'benefits_info.dart';
 
-/// An individual item in the [BenefitsInfo] widget consisting of an [icon], and [title], and
-/// a [description].
+/// An individual item in the [BenefitsInfo] widget consisting of an [icon], and [title], and a [description].
 class BenefitsItem extends StatelessWidget {
   /// Creates an instance of [BenefitsItem].
   const BenefitsItem({

@@ -9,7 +9,9 @@ import '../../../values/insets.dart';
 class IconAnimatedButtonVertical extends StatefulWidget {
   /// Creates an instance of [IconAnimatedButtonVertical].
   const IconAnimatedButtonVertical({
-    required this.buttonText, required this.onTap, super.key,
+    required this.buttonText,
+    required this.onTap,
+    super.key,
   });
 
   /// The text to display on the [PrimaryColorButton].
@@ -61,8 +63,8 @@ class _IconAnimatedButtonVerticalState extends State<IconAnimatedButtonVertical>
 
   /// Initializes the [AnimationController] and the [Animation] for the button.
   ///
-  /// This method creates a [Tween] to animate between 16 and 24. The `addListener` callback is used to rebuild the widget
-  /// tree via the [setState] call inside.
+  /// This method creates a [Tween] to animate between 16 and 24. The `addListener` callback is used to rebuild the
+  /// widget tree via the [setState] call inside.
   void _initializeCTAAnimation() {
     super.initState();
     _paddingAnimation = Tween<double>(begin: 0, end: _amplitude).animate(_animationController)

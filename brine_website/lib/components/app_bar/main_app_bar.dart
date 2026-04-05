@@ -31,8 +31,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// The height of the [AppBar].
   double get _height => bottom == null ? 72.0 : 144.0;
 
-  /// A callback triggered when the confetti button is pressed. If null, the confetti button is not
-  /// shown in the [AppBar].
+  /// A callback triggered when the confetti button is pressed. If null, the confetti button is not shown in the
+  /// [AppBar].
   final VoidCallback? confettiCallback;
 
   @override

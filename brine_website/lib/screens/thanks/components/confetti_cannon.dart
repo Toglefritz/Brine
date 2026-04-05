@@ -25,20 +25,20 @@ class ConfettiCannon extends StatelessWidget {
   /// rotation angle is counterclockwise.
   final int blastDirection;
 
-  /// Determines the positioning of the [ConfettiCannon] widget with respect to the left side of the [Stack] widget
-  /// in which the [ConfettiCannon] must reside.
+  /// Determines the positioning of the [ConfettiCannon] widget with respect to the left side of the [Stack] widget in
+  /// which the [ConfettiCannon] must reside.
   final double? left;
 
-  /// Determines the positioning of the [ConfettiCannon] widget with respect to the right side of the [Stack] widget
-  /// in which the [ConfettiCannon] must reside.
+  /// Determines the positioning of the [ConfettiCannon] widget with respect to the right side of the [Stack] widget in
+  /// which the [ConfettiCannon] must reside.
   final double? right;
 
-  /// Determines the positioning of the [ConfettiCannon] widget with respect to the top of the [Stack] widget
-  /// in which the [ConfettiCannon] must reside.
+  /// Determines the positioning of the [ConfettiCannon] widget with respect to the top of the [Stack] widget in which
+  /// the [ConfettiCannon] must reside.
   final double? top;
 
-  /// Determines the positioning of the [ConfettiCannon] widget with respect to the bottom of the [Stack] widget
-  /// in which the [ConfettiCannon] must reside.
+  /// Determines the positioning of the [ConfettiCannon] widget with respect to the bottom of the [Stack] widget in
+  /// which the [ConfettiCannon] must reside.
   final double? bottom;
 
   @override

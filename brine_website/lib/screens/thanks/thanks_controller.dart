@@ -2,11 +2,11 @@ import 'package:confetti/confetti.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../components/primary_color_button.dart';
 import '../../services/analytics/analytics.dart';
 import '../../values/insets.dart';
@@ -23,11 +23,11 @@ import 'thanks_view.dart';
 /// a flag set via [SharedPreferences] the visitor returns to the site.
 ///
 /// This screen features a big ol' party with a bunch of confetti that displays when the page launches and a very
-/// special GIF thanking the visitor for their interest in Brine. The page shows updates about Brine and links
-/// to share the project with others.
+/// special GIF thanking the visitor for their interest in Brine. The page shows updates about Brine and links to share
+/// the project with others.
 class ThanksController extends State<ThanksRoute> with SingleTickerProviderStateMixin {
-  /// A controller for the much bigger and grander confetti effect triggered when the visitor successfully signs
-  /// up for updates from Brine.
+  /// A controller for the much bigger and grander confetti effect triggered when the visitor successfully signs up for
+  /// updates from Brine.
   late ConfettiController partyController;
 
   /// Counts the number of times the confetti party has been launched.
@@ -35,7 +35,7 @@ class ThanksController extends State<ThanksRoute> with SingleTickerProviderState
 
   @override
   void initState() {
-    if (kDebugMode == false) {
+    if (!kDebugMode) {
       FirebaseAnalytics.instance.logScreenView(screenName: 'thanks_page');
     }
 
@@ -51,8 +51,8 @@ class ThanksController extends State<ThanksRoute> with SingleTickerProviderState
 
   /// Initializes the controllers for the decorative confetti animations.
   ///
-  /// The [ConfettiController]s are initialized with [Duration]s that determines the duration of their
-  /// confetti animations.
+  /// The [ConfettiController]s are initialized with [Duration]s that determines the duration of their confetti
+  /// animations.
   void initializeConfettiAnimation() {
     setState(() {
       partyController = ConfettiController(duration: const Duration(seconds: 2));
@@ -68,8 +68,8 @@ class ThanksController extends State<ThanksRoute> with SingleTickerProviderState
     context.pushReplacement(InsiderRoute.screenName);
   }
 
-  /// Fires the [ConfettiCannon]s again because everybody loves confetti (except the people who have to clean it
-  /// up after the party).
+  /// Fires the [ConfettiCannon]s again because everybody loves confetti (except the people who have to clean it up
+  /// after the party).
   void repeatParty() {
     Analytics.logEvent(
       name: 'repeat_party',

@@ -12,7 +12,7 @@ import 'setup_view.dart';
 class SetupController extends State<SetupRoute> {
   @override
   void initState() {
-    if (kDebugMode == false) {
+    if (!kDebugMode) {
       FirebaseAnalytics.instance.logAppOpen();
     }
 
@@ -23,7 +23,7 @@ class SetupController extends State<SetupRoute> {
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           // Check if the user is logged in
           if (snapshot.hasData) {

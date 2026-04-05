@@ -1,8 +1,8 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../components/app_bar/main_app_bar.dart';
 import '../../components/footer.dart';
 import '../../components/padded_column.dart';
@@ -90,7 +90,7 @@ class LandingViewDesktop extends StatelessWidget {
                     vertical: Insets.xLarge,
                   ),
                   child: LayoutBuilder(
-                    builder: (BuildContext context, BoxConstraints constraints) {
+                    builder: (context, constraints) {
                       return BenefitsInfo(
                         direction: Axis.horizontal,
                         itemWidth: (constraints.maxWidth - (Insets.small * 3)) / 5,

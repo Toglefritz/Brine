@@ -102,7 +102,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailOptinButtonText => 'Make it so';
 
   @override
-  String get emailOptinDescription => 'Brine is coming soon to a water softener near you. Sign up for updates and, you know, maybe a couple discounts as well.';
+  String get emailOptinDescription =>
+      'Brine is coming soon to a water softener near you. Sign up for updates and, you know, maybe a couple discounts as well.';
 
   @override
   String get enoughConfetti => 'That\'s quite enough confetti for you, sir.';
@@ -147,10 +148,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get increaseCleaningEffectiveness => 'Increase Cleaning Effectiveness';
 
   @override
-  String get increaseCleaningEffectivenessExplanation => 'Hard water not only reduces the effectiveness of soap but also it makes soap betray you and turn into soap scum.';
+  String get increaseCleaningEffectivenessExplanation =>
+      'Hard water not only reduces the effectiveness of soap but also it makes soap betray you and turn into soap scum.';
 
   @override
-  String get insiderPageIntro => 'You might not have checked in a while so your water softener may be out of salt right now. Don\'t worry though, Brine will be launching soon on Kickstarter so you will be able to get notifications right on your phone when your salt is running low.';
+  String get insiderPageIntro =>
+      'You might not have checked in a while so your water softener may be out of salt right now. Don\'t worry though, Brine will be launching soon on Kickstarter so you will be able to get notifications right on your phone when your salt is running low.';
 
   @override
   String get insiderPageTitle => 'Welcome, Brine insider!';
@@ -159,13 +162,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get insiderPageSubtitle => 'It\'s good to see you again, ';
 
   @override
-  String get landingPageDescription => 'Brine is an app-connected device that monitors the salt level in your water softener and sends you alerts when it\'s time to refill. With Brine, you can ensure that your water softener is always working at its best.';
+  String get landingPageDescription =>
+      'Brine is an app-connected device that monitors the salt level in your water softener and sends you alerts when it\'s time to refill. With Brine, you can ensure that your water softener is always working at its best.';
 
   @override
   String get landingPageEmailInvite => 'Get you on the list';
 
   @override
-  String get landingPageHook => 'It\'s super important to keep your water softener filled with salt! It helps remove minerals that can harm your pipes and appliances. But sometimes it\'s easy to forget to check the salt level. That\'s where Brine comes in!';
+  String get landingPageHook =>
+      'It\'s super important to keep your water softener filled with salt! It helps remove minerals that can harm your pipes and appliances. But sometimes it\'s easy to forget to check the salt level. That\'s where Brine comes in!';
 
   @override
   String get landingPageTitle => 'Never forget to fill your water softener with salt';
@@ -207,7 +212,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get promoteHealthySkinAndHair => 'Promote healthy skin and hair';
 
   @override
-  String get promoteHealthySkinAndHairExplanation => 'Hard water can strip away natural oils from the skin and hair, leading to dryness, irritation.';
+  String get promoteHealthySkinAndHairExplanation =>
+      'Hard water can strip away natural oils from the skin and hair, leading to dryness, irritation.';
 
   @override
   String get proofOfPossessionCheck => 'Proof of possession check';
@@ -216,13 +222,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get protectClothingAndFabrics => 'Protect Clothing and Fabrics';
 
   @override
-  String get protectClothingAndFabricsExplanation => 'Keep your whites white, your colors colorful, and your clothing and fabrics soft.';
+  String get protectClothingAndFabricsExplanation =>
+      'Keep your whites white, your colors colorful, and your clothing and fabrics soft.';
 
   @override
   String get reduceScaleBuildup => 'Reduce scale buildup';
 
   @override
-  String get reduceScaleBuildupExplanation => 'Reduce scale buildup on fixtures and in pipes and appliances to increase their life spans and performance.';
+  String get reduceScaleBuildupExplanation =>
+      'Reduce scale buildup on fixtures and in pipes and appliances to increase their life spans and performance.';
 
   @override
   String get saltLevelLow => 'Salt Running Low';
@@ -255,7 +263,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get testHardwarePrototypes => 'Test hardware prototypes';
 
   @override
-  String get thanksPageDescription => 'You\'re all signed up to receive updates about Brine, which will be launching soon. You\'ll be among the first to know when Brine is available because you\'ll receive a nice discount right into your inbox.';
+  String get thanksPageDescription =>
+      'You\'re all signed up to receive updates about Brine, which will be launching soon. You\'ll be among the first to know when Brine is available because you\'ll receive a nice discount right into your inbox.';
 
   @override
   String get thanksPageTitlePrefix => 'Thanks, ';
@@ -289,4 +298,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wireframesAndPrototypes => 'Wireframes and prototypes';
+
+  @override
+  String get underConstructionMessage => 'We\'re giving the site a fresh coat of paint. Check back soon!';
 }

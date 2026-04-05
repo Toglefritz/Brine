@@ -4,14 +4,15 @@ import '../../../l10n/app_localizations.dart';
 import '../../../values/assets.dart';
 import '../../../values/insets.dart';
 
-/// Displays information about the Brine device by showing an annotated image alongside a table with the
-/// corresponding annotations.
+/// Displays information about the Brine device by showing an annotated image alongside a table with the corresponding
+/// annotations.
 ///
 /// The [direction] parameter determines whether the image and table are displayed in a row or a column.
 class DeviceInfo extends StatefulWidget {
   /// Creates a [DeviceInfo] widget.
   const DeviceInfo({
-    required this.direction, super.key,
+    required this.direction,
+    super.key,
   });
 
   /// The direction, either horizontal or vertical, to show the image and corresponding table.
@@ -22,8 +23,8 @@ class DeviceInfo extends StatefulWidget {
 }
 
 class _DeviceInfoState extends State<DeviceInfo> {
-  /// A list of assets to display on each row of the table where the index of the asset in the list
-  /// corresponds to the row on which it should be displayed.
+  /// A list of assets to display on each row of the table where the index of the asset in the list corresponds to the
+  /// row on which it should be displayed.
   final List<Asset> rowAssets = [
     Asset.numeral1,
     Asset.numeral2,

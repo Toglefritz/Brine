@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../../../l10n/app_localizations.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/analytics/analytics.dart';
 import '../../../../services/authentication/sign_in_anonymously.dart';
 import '../../../../services/lead_management/add_lead_function.dart';
@@ -42,32 +42,30 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
   /// Validates the user's first name entry for a form.
   ///
-  /// The function takes two parameters, [context] and [entry]. The [context] parameter
-  /// is required for localization purposes, and the [entry] parameter is the user's first name input.
+  /// The function takes two parameters, [context] and [entry]. The [context] parameter is required for localization
+  /// purposes, and the [entry] parameter is the user's first name input.
   ///
   /// The following validation checks are performed on the input:
-  ///   1. Checks if the input is null or empty, if so, returns a localized message indicating that
-  ///      the name field cannot be empty.
+  /// 1. Checks if the input is null or empty, if so, returns a localized message indicating that
+  /// the name field cannot be empty.
   ///
-  ///   2. Checks if the length of the input is greater than 50 characters, if so, returns a localized
-  ///      message indicating that the name is too long.
+  /// 2. Checks if the length of the input is greater than 50 characters, if so, returns a localized
+  /// message indicating that the name is too long.
   ///
-  ///   3. Checks if the input only contains alphabets, hyphens, apostrophes, or spaces. If other
-  ///      characters are found, returns a localized message indicating that the name contains
-  ///      invalid characters.
+  /// 3. Checks if the input only contains alphabets, hyphens, apostrophes, or spaces. If other
+  /// characters are found, returns a localized message indicating that the name contains invalid characters.
   ///
-  ///   4. Checks if the input contains any HTML tags or JavaScript code to prevent XSS attacks. If such
-  ///      characters are found, returns a localized message indicating that HTML tags are not allowed.
+  /// 4. Checks if the input contains any HTML tags or JavaScript code to prevent XSS attacks. If such
+  /// characters are found, returns a localized message indicating that HTML tags are not allowed.
   ///
-  ///   5. Checks if the input contains control characters which are non-printable characters that could
-  ///      be used maliciously. If found, returns a localized message indicating that control characters
-  ///      are not allowed.
+  /// 5. Checks if the input contains control characters which are non-printable characters that could
+  /// be used maliciously. If found, returns a localized message indicating that control characters are not allowed.
   ///
-  ///   6. Normalizes the input to a standard Unicode form (Normalization Form C) to ensure consistency
-  ///      and prevent issues with different Unicode representations.
+  /// 6. Normalizes the input to a standard Unicode form (Normalization Form C) to ensure consistency
+  /// and prevent issues with different Unicode representations.
   ///
-  /// The function returns `null` if all validation checks pass, indicating that the input is valid. If
-  /// any of the validation checks fail, the function returns a localized error message string.
+  /// The function returns `null` if all validation checks pass, indicating that the input is valid. If any of the
+  /// validation checks fail, the function returns a localized error message string.
   ///
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
   String? _validateNameField({required BuildContext context, required String? entry}) {
@@ -137,28 +135,27 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
   /// Validates the user's email address entry for a form.
   ///
-  /// The function takes two parameters, [context] and [entry]. The [context] parameter
-  /// is required for localization purposes, and the [entry] parameter is the user's email address input.
+  /// The function takes two parameters, [context] and [entry]. The [context] parameter is required for localization
+  /// purposes, and the [entry] parameter is the user's email address input.
   ///
   /// The following validation checks are performed on the input:
-  ///   1. Checks if the input is null or empty, if so, returns a localized message indicating that
-  ///      the email field cannot be empty.
+  /// 1. Checks if the input is null or empty, if so, returns a localized message indicating that
+  /// the email field cannot be empty.
   ///
-  ///   2. Checks if the input is in a valid email format, if not, returns a localized message
-  ///      indicating that the email address is invalid.
+  /// 2. Checks if the input is in a valid email format, if not, returns a localized message
+  /// indicating that the email address is invalid.
   ///
-  ///   3. Checks if the input contains any HTML tags or JavaScript code to prevent XSS attacks. If such
-  ///      characters are found, returns a localized message indicating that HTML tags are not allowed.
+  /// 3. Checks if the input contains any HTML tags or JavaScript code to prevent XSS attacks. If such
+  /// characters are found, returns a localized message indicating that HTML tags are not allowed.
   ///
-  ///   4. Checks if the input contains control characters which are non-printable characters that could
-  ///      be used maliciously. If found, returns a localized message indicating that control characters
-  ///      are not allowed.
+  /// 4. Checks if the input contains control characters which are non-printable characters that could
+  /// be used maliciously. If found, returns a localized message indicating that control characters are not allowed.
   ///
-  ///   5. Normalizes the input to a standard Unicode form (Normalization Form C) to ensure consistency
-  ///      and prevent issues with different Unicode representations.
+  /// 5. Normalizes the input to a standard Unicode form (Normalization Form C) to ensure consistency
+  /// and prevent issues with different Unicode representations.
   ///
-  /// The function returns `null` if all validation checks pass, indicating that the input is valid. If
-  /// any of the validation checks fail, the function returns a localized error message string.
+  /// The function returns `null` if all validation checks pass, indicating that the input is valid. If any of the
+  /// validation checks fail, the function returns a localized error message string.
   ///
   /// Returns `null` if the input passes all validation checks, otherwise returns a localized error message.
   String? _validateEmailField({required BuildContext context, required String? entry}) {
@@ -222,9 +219,9 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
 
   /// Handles submissions of the signup form.
   ///
-  /// If the input to the form is valid, this method calls the [LeadsService] Firebase callable function to
-  /// submit the lead to Firebase, which creates a new record in Firestore for the new lead. Assuming this cloud
-  /// function call is successful, the method will return a `true` value via a call to [Navigator.pop].
+  /// If the input to the form is valid, this method calls the [LeadsService] Firebase callable function to submit the
+  /// lead to Firebase, which creates a new record in Firestore for the new lead. Assuming this cloud function call is
+  /// successful, the method will return a `true` value via a call to [Navigator.pop].
   ///
   /// Because it takes time for the Firebase backend to process the new lead, a loading indicator is displayed in place
   /// of the form's submit button while the app waits for a response from the endpoint. This method sets
@@ -239,7 +236,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
       catch (error, stackTrace) {
         debugPrint('Authentication failed for addLead function');
 
-        if (kDebugMode == false) {
+        if (!kDebugMode) {
           await FirebaseCrashlytics.instance.recordError(
             error,
             stackTrace,
@@ -273,7 +270,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
             processingLead = false;
           });
 
-          if (kDebugMode == false) {
+          if (!kDebugMode) {
             await FirebaseCrashlytics.instance.recordError(
               error,
               stackTrace,
@@ -289,7 +286,7 @@ class _EmailSignupFormState extends State<EmailSignupForm> {
         // Update the anonymous profile
         await FirebaseAuth.instance.currentUser?.updateDisplayName(_nameFieldController.text);
 
-        if (kDebugMode == false) {
+        if (!kDebugMode) {
           await FirebaseAnalytics.instance.logGenerateLead();
         }
 

@@ -2,18 +2,16 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-/// `Screen` is a utility class that provides easy access to the current screen's dimensions,
-/// both in pixels and inches, as well as determining its orientation.
+/// `Screen` is a utility class that provides easy access to the current screen's dimensions, both in pixels and inches,
+/// as well as determining its orientation.
 ///
-/// This class includes static methods for determining the screen size in both
-/// pixels and inches. It also includes methods to determine if the screen is in
-/// landscape orientation.
+/// This class includes static methods for determining the screen size in both pixels and inches. It also includes
+/// methods to determine if the screen is in landscape orientation.
 ///
-/// The PPI (Pixels Per Inch) value used for conversion to inches is assumed as
-/// 150 for Android and iOS devices, and 96 for other platforms.
+/// The PPI (Pixels Per Inch) value used for conversion to inches is assumed as 150 for Android and iOS devices, and 96
+/// for other platforms.
 ///
-/// Note: It is important to ensure that MediaQuery data is available
-/// in the context used with these methods.
+/// Note: It is important to ensure that MediaQuery data is available in the context used with these methods.
 class Screen {
   /// Private getter `_ppi` provides the assumed Pixels Per Inch based on the platform.
   static double get _ppi => (Platform.isAndroid || Platform.isIOS) ? 150 : 96;

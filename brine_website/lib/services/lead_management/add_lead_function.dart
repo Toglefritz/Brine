@@ -6,9 +6,8 @@ import 'package:http/http.dart';
 
 /// A service class responsible for submitting leads to the backend.
 ///
-/// This service authenticates the request using anonymous sign-in and sends a
-/// POST request to the Firebase Function endpoint that creates a new lead
-/// document in Firestore.
+/// This service authenticates the request using anonymous sign-in and sends a POST request to the Firebase Function
+/// endpoint that creates a new lead document in Firestore.
 class LeadsService {
   /// Submits a new lead to the backend via HTTP POST.
   ///

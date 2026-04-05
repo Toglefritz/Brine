@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 /// A [Row] in which each widget in the [children] will be interleaved with [Padding] that has horizontal spacing of
 /// [childrenPadding].
 ///
-/// This widget can be used as a direct replacement for a [Row] widget so that padding can be applied to every
-/// element in the padding with the [childrenPadding] parameter rather than having to wrap each child in a
-/// [Padding] widget.
+/// This widget can be used as a direct replacement for a [Row] widget so that padding can be applied to every element
+/// in the padding with the [childrenPadding] parameter rather than having to wrap each child in a [Padding] widget.
 class PaddedRow extends StatelessWidget {
   /// Creates an instance of [PaddedRow].
   const PaddedRow({
@@ -24,8 +23,8 @@ class PaddedRow extends StatelessWidget {
   /// Determines the way tha the [children] are arranged in the [Row].
   final MainAxisAlignment? mainAxisAlignment;
 
-  /// Returns a [List<Widget>] in which each widget in the list is wrapped in
-  /// a [Padding] widget with horizontal padding of [childrenPadding].
+  /// Returns a [List<Widget>] in which each widget in the list is wrapped in a [Padding] widget with horizontal padding
+  /// of [childrenPadding].
   List<Widget> _getPaddedChildren() {
     final List<Widget> paddedWidgets = [];
 

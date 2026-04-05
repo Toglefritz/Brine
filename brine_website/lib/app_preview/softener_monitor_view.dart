@@ -21,9 +21,9 @@ class SoftenerMonitorView extends StatelessWidget {
   /// A controller for this view.
   final BrineDevice device;
 
-  /// Returns a value to use for the top padding for the text element used to display the remaining level of salt in
-  /// the appliance. This padding allows the text element to move down the page with the salt level indicator,
-  /// stopping at a certain point representing the lowest position the text will occupy on the screen.
+  /// Returns a value to use for the top padding for the text element used to display the remaining level of salt in the
+  /// appliance. This padding allows the text element to move down the page with the salt level indicator, stopping at a
+  /// certain point representing the lowest position the text will occupy on the screen.
   EdgeInsets _getLabelTopPadding(BuildContext context) {
     // Get the level of salt in the appliance.
     final double saltLevel = device.saltLevel;
@@ -46,9 +46,8 @@ class SoftenerMonitorView extends StatelessWidget {
     }
   }
 
-  /// Returns the text color to use for the text indicating the level of salt in the appliance. This color depends
-  /// on whether or not the text is drawn on top of the salt level indicator and also on the current theme
-  /// [Brightness].
+  /// Returns the text color to use for the text indicating the level of salt in the appliance. This color depends on
+  /// whether or not the text is drawn on top of the salt level indicator and also on the current theme [Brightness].
   Color _getTextColor(BuildContext context) {
     // Get the level of salt in the appliance.
     final double saltLevel = device.saltLevel;
@@ -57,8 +56,8 @@ class SoftenerMonitorView extends StatelessWidget {
     if (saltLevel > 0.70) {
       return const Color(0xFF212121);
     }
-    // If the salt level is below 70%, the label will be displayed near the top of the screen, on the
-    // Scaffold background color. If using a dark Brightness, the label text should be lightly colored.
+    // If the salt level is below 70%, the label will be displayed near the top of the screen, on the Scaffold
+    // background color. If using a dark Brightness, the label text should be lightly colored.
     else {
       return Theme.of(context).primaryColorDark;
     }

@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'screens/insider/insider_route.dart';
@@ -17,23 +16,23 @@ GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: const SetupRoute().screenName,
-      builder: (BuildContext context, GoRouterState state) => const SetupRoute(),
+      builder: (context, state) => const SetupRoute(),
     ),
     GoRoute(
       path: const LandingRoute().screenName,
-      builder: (BuildContext context, GoRouterState state) => const LandingRoute(),
+      builder: (context, state) => const LandingRoute(),
     ),
     GoRoute(
       path: PrivacyPolicyRoute.screenName,
-      builder: (BuildContext context, GoRouterState state) => const PrivacyPolicyRoute(),
+      builder: (context, state) => const PrivacyPolicyRoute(),
     ),
     GoRoute(
       path: TermsAndConditionsRoute.screenName,
-      builder: (BuildContext context, GoRouterState state) => const TermsAndConditionsRoute(),
+      builder: (context, state) => const TermsAndConditionsRoute(),
     ),
     GoRoute(
       path: '${ThanksRoute.screenName}/:name',
-      builder: (BuildContext context, GoRouterState state) {
+      builder: (context, state) {
         final String name = state.pathParameters['name']!;
 
         return ThanksRoute(
@@ -43,7 +42,7 @@ GoRouter router = GoRouter(
     ),
     GoRoute(
       path: InsiderRoute.screenName,
-      builder: (BuildContext context, GoRouterState state) => const InsiderRoute(),
+      builder: (context, state) => const InsiderRoute(),
     ),
   ],
 );

@@ -5,17 +5,19 @@ import '../../../components/light_button.dart';
 
 /// A CTA button with an icon on either side.
 ///
-/// This widget is pretty cool TBH. It consists of a [LightButton] in the center of two icons, a left and right
-/// pointing hand that point towards the button. When the button is hovered, the icons animate back and forth
-/// horizontally, as if gesturing to the button. After the cursor leaves the [MouseRegion] used to trigger this
-/// animation effect, the animation is allowed to complete its current cycle before stopping.
+/// This widget is pretty cool TBH. It consists of a [LightButton] in the center of two icons, a left and right pointing
+/// hand that point towards the button. When the button is hovered, the icons animate back and forth horizontally, as if
+/// gesturing to the button. After the cursor leaves the [MouseRegion] used to trigger this animation effect, the
+/// animation is allowed to complete its current cycle before stopping.
 ///
 /// The `hideLeftIcon` boolean can be optionally supplied to determine if the left icon should be hidden. Hiding the
 /// left icon helps to avoid overflows on smaller screens.
 class IconAnimatedButtonHorizontal extends StatefulWidget {
   /// Creates an instance of [IconAnimatedButtonHorizontal].
   const IconAnimatedButtonHorizontal({
-    required this.text, required this.onTap, super.key,
+    required this.text,
+    required this.onTap,
+    super.key,
   });
 
   /// The text displayed in the button.
@@ -60,8 +62,8 @@ class _IconAnimatedButtonHorizontalState extends State<IconAnimatedButtonHorizon
 
   /// Initializes the [AnimationController] and the [Animation] for the primary CTA button.
   ///
-  /// This method creates a [Tween} to animate between 16 and 24. The [addListener] callback is used to rebuild the widget
-  /// tree via the [setState] call inside.
+  /// This method creates a [Tween} to animate between 16 and 24. The [addListener] callback is used to rebuild the
+  /// widget tree via the [setState] call inside.
   void _initializeCTAAnimation() {
     super.initState();
     _paddingAnimation = Tween<double>(begin: _amplitude.start, end: _amplitude.end).animate(_animationController)

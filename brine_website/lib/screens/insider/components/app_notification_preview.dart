@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
 
 import '../../../app_preview/brine_device.dart';
 import '../../../app_preview/light_theme_data.dart';
 import '../../../app_preview/softener_monitor_view.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../values/assets.dart';
 import 'animated_notification.dart';
 
-/// Provides a preview of the experience of receiving a push notification from the Brine mobile app by running the
-/// app itself, which is included as a submodule, inside an iPhone frame mockup.
+/// Provides a preview of the experience of receiving a push notification from the Brine mobile app by running the app
+/// itself, which is included as a submodule, inside an iPhone frame mockup.
 ///
-/// The push notification within this preview is mocked up using a custom widget designed to emulate the appearance
-/// and behavior of a native push notification.
+/// The push notification within this preview is mocked up using a custom widget designed to emulate the appearance and
+/// behavior of a native push notification.
 class AppNotificationPreview extends StatefulWidget {
   /// Creates an instance of [AppNotificationPreview].
   const AppNotificationPreview({
@@ -42,8 +42,8 @@ class _AppNotificationPreviewState extends State<AppNotificationPreview> {
   /// A widget that emulates the appearance of a push notification.
   late AnimatedNotification _notificationWidget;
 
-  /// Gets a notification widget for use in simulating the experience of receiving a push notification
-  /// about salt running low from the Brine mobile app.
+  /// Gets a notification widget for use in simulating the experience of receiving a push notification about salt
+  /// running low from the Brine mobile app.
   void _buildNotificationWidget() {
     _notificationWidget = AnimatedNotification(
       width: widget.width * 0.85,

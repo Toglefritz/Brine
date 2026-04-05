@@ -8,8 +8,8 @@ import '../../../app_preview/light_theme_data.dart';
 import '../../../app_preview/softener_monitor_view.dart';
 import '../../../values/assets.dart';
 
-/// Provides a preview of the Brine mobile app by running the app itself, which is included as a submodule, inside
-/// an iPhone frame mockup.
+/// Provides a preview of the Brine mobile app by running the app itself, which is included as a submodule, inside an
+/// iPhone frame mockup.
 ///
 /// So, this preview of the Brine app is not really a preview at all. It is actually the real app running within inside
 /// an aesthetic frame. This fully takes advantage of the idea (which is wrong) that everything in Flutter is a widget.
@@ -42,8 +42,8 @@ class _AppPreviewState extends State<AppPreview> {
 
   /// Generates a random double value between a specified minimum and maximum value.
   ///
-  /// This function takes in two double values, [minValue] and [maxValue], and returns
-  /// a random double that falls between these values, inclusive of [minValue] and exclusive of [maxValue].
+  /// This function takes in two double values, [minValue] and [maxValue], and returns a random double that falls
+  /// between these values, inclusive of [minValue] and exclusive of [maxValue].
   ///
   /// Throws an [ArgumentError] if [maxValue] is less than [minValue].
   ///
@@ -55,8 +55,8 @@ class _AppPreviewState extends State<AppPreview> {
   /// print('Random double between $minValue and $maxValue is $randomValue');
   /// ```
   ///
-  /// [minValue] The minimum value that the random double can take, inclusive.
-  /// [maxValue] The maximum value that the random double can take, exclusive.
+  /// [minValue] The minimum value that the random double can take, inclusive. [maxValue] The maximum value that the
+  /// random double can take, exclusive.
   ///
   /// Returns a random double between [minValue] and [maxValue].
   double _generateRandomDouble(double minValue, double maxValue) {
@@ -70,7 +70,7 @@ class _AppPreviewState extends State<AppPreview> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       setState(() {
         // Generate new values
         _saltLevel = _generateRandomDouble(0.02, 0.95);

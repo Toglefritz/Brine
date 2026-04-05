@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// A [Flex] in which each widget in the [children] will be interleaved with [Padding] that has horizontal or
-/// vertical spacing of [childrenPadding], depending on the value of [direction], which determines the arrangement
-/// of the [children].
+/// A [Flex] in which each widget in the [children] will be interleaved with [Padding] that has horizontal or vertical
+/// spacing of [childrenPadding], depending on the value of [direction], which determines the arrangement of the
+/// [children].
 ///
-/// This widget can be used as a direct replacement for a [Flex] widget so that padding can be applied to every
-/// element in the padding with the [childrenPadding] parameter rather than having to wrap each child in a
-/// [Padding] widget.
+/// This widget can be used as a direct replacement for a [Flex] widget so that padding can be applied to every element
+/// in the padding with the [childrenPadding] parameter rather than having to wrap each child in a [Padding] widget.
 class PaddedFlex extends StatelessWidget {
   /// Creates an instance of [PaddedFlex].
   const PaddedFlex({

@@ -10,7 +10,7 @@ import 'terms_and_conditions_view.dart';
 class TermsAndConditionsController extends State<TermsAndConditionsRoute> {
   @override
   void initState() {
-    if (kDebugMode == false) {
+    if (!kDebugMode) {
       FirebaseAnalytics.instance.logScreenView(screenName: 'terms_and_conditions');
     }
 

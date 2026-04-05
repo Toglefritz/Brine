@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// A wrapper around [State] that overrides the [setState] and [Navigator] methods to check [mounted] before calling
-/// the methods.
+/// A wrapper around [State] that overrides the [setState] and [Navigator] methods to check [mounted] before calling the
+/// methods.
 ///
 /// Calling [setState] after the controller, or other class extending [State], is disposed results in, at best, an
 /// exception being thrown by the Flutter SDK and, at worst, an app crash. [SafeState] is a wrapper around [State] that
@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 /// respectively. These methods check the [mounted] boolean before calling the calls the [Navigator]'s methods within.
 ///
 /// In general, it is safest to use the [SafeState] method for any class that extends [State] because, even if there is
-/// no risk in checking for [mounted] before calling [setState] or the [Navigator] methods, it also does not hurt
-/// to do so. Performing these checks on [mounted] help to reduce the risk of exceptions and app crashes.
+/// no risk in checking for [mounted] before calling [setState] or the [Navigator] methods, it also does not hurt to do
+/// so. Performing these checks on [mounted] help to reduce the risk of exceptions and app crashes.
 abstract class SafeState<T extends StatefulWidget> extends State<T> {
   /// Overrides the [setState] method to check the [mounted] boolean before calling [super.setState].
   @override

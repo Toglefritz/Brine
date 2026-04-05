@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
 
 import '../../../components/padded_flex.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../themes/dark_theme.dart';
 import '../../../values/assets.dart';
 import '../../../values/insets.dart';
@@ -11,7 +11,9 @@ import 'benefits_item.dart';
 class BenefitsInfo extends StatelessWidget {
   /// Creates an instance of [BenefitsInfo].
   const BenefitsInfo({
-    required this.direction, required this.itemWidth, super.key,
+    required this.direction,
+    required this.itemWidth,
+    super.key,
   });
 
   /// The axis along which to arrange the list of widgets.

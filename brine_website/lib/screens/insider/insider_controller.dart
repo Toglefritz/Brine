@@ -11,7 +11,7 @@ import 'insider_view_handheld.dart';
 class InsiderController extends State<InsiderRoute> {
   @override
   void initState() {
-    if (kDebugMode == false) {
+    if (!kDebugMode) {
       FirebaseAnalytics.instance.logScreenView(screenName: 'insider_page_opened');
     }
 
@@ -21,7 +21,7 @@ class InsiderController extends State<InsiderRoute> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
+      builder: (context, constraints) {
         if (ScreenInfo.width(context) > 900) {
           return InsiderViewDesktop(this);
         } else {

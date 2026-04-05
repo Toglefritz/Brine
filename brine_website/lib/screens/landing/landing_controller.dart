@@ -17,8 +17,8 @@ import 'landing_view_handheld.dart';
 /// in a Padding widget that has an animated [EdgeInsets].
 ///
 /// When the mouse hovers over the [PrimaryColorButton], the horizontal padding value animates from an initial value of
-/// 16 to a maximum value of 24 over a duration of 500ms, and then reverses from 24 back to 16 over another 500ms.
-/// This hover animation effect is achieved using an [AnimationController] and a [Tween] animation.
+/// 16 to a maximum value of 24 over a duration of 500ms, and then reverses from 24 back to 16 over another 500ms. This
+/// hover animation effect is achieved using an [AnimationController] and a [Tween] animation.
 ///
 /// The [MouseRegion] widget surrounding the [PrimaryColorButton] provides two callbacks: `onEnter` and `onExit`. These
 /// callbacks are used to start and stop the padding animation respectively.
@@ -26,13 +26,13 @@ class LandingController extends State<LandingRoute> with SingleTickerProviderSta
   /// A controller for the decorative confetti effect launch-able from the main menu.
   late ConfettiController confettiController;
 
-  /// A controller for the much bigger and grander confetti effect triggered when the visitor successfully signs
-  /// up for updates from Brine.
+  /// A controller for the much bigger and grander confetti effect triggered when the visitor successfully signs up for
+  /// updates from Brine.
   late ConfettiController partyController;
 
   @override
   void initState() {
-    if (kDebugMode == false) {
+    if (!kDebugMode) {
       FirebaseAnalytics.instance.logScreenView(screenName: 'landing');
     }
 
@@ -43,8 +43,8 @@ class LandingController extends State<LandingRoute> with SingleTickerProviderSta
 
   /// Initializes the controllers for the decorative confetti animations.
   ///
-  /// The [ConfettiController]s are initialized with [Duration]s that determines the duration of their
-  /// confetti animations.
+  /// The [ConfettiController]s are initialized with [Duration]s that determines the duration of their confetti
+  /// animations.
   void _initializeConfettiAnimation() {
     setState(() {
       confettiController = ConfettiController(duration: const Duration(seconds: 1));
@@ -64,8 +64,8 @@ class LandingController extends State<LandingRoute> with SingleTickerProviderSta
   /// ultimate call to add the visitor's information to a Firebase collection succeeded. If the visitor successfully
   /// signs up, we have a little party with lots of confetti and stuff, if not, we get sad and display an error message.
   ///
-  /// The [buttonLabel] parameter is used in a `logEvent` call to Firebase Analytics so the specific button the
-  /// visitor pressed, of the several buttons on the landing page, can be identified.
+  /// The [buttonLabel] parameter is used in a `logEvent` call to Firebase Analytics so the specific button the visitor
+  /// pressed, of the several buttons on the landing page, can be identified.
   Future<void> letsGoooooooo(String buttonLabel) async {
     // ignore: unawaited_futures
     Analytics.logEvent(
@@ -93,7 +93,7 @@ class LandingController extends State<LandingRoute> with SingleTickerProviderSta
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
+      builder: (context, constraints) {
         if (ScreenInfo.width(context) > 900) {
           return LandingViewDesktop(this);
         } else {

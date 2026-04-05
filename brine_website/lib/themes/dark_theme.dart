@@ -34,7 +34,7 @@ class DarkTheme {
         primaryColorDark: const Color(0xfdffffff),
         scaffoldBackgroundColor: const Color(0xff262626),
         appBarTheme: AppBarTheme(
-          color: Colors.grey[900],
+          backgroundColor: Colors.grey[900],
         ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(

@@ -2,9 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// [WaveProgressIndicator] is a widget that displays a linear progress indicator
-/// with a wave animation. It takes a [progressPercent] parameter which determines
-/// how much of the progress indicator is filled.
+/// [WaveProgressIndicator] is a widget that displays a linear progress indicator with a wave animation. It takes a
+/// [progressPercent] parameter which determines how much of the progress indicator is filled.
 class WaveProgressIndicator extends StatefulWidget {
   /// Create an instance of [WaveProgressIndicator].
   const WaveProgressIndicator({
@@ -24,8 +23,8 @@ class WaveProgressIndicator extends StatefulWidget {
   WaveProgressIndicatorState createState() => WaveProgressIndicatorState();
 }
 
-/// [WaveProgressIndicatorState] is the state class for [WaveProgressIndicator].
-/// It holds the [AnimationController] which is used to animate the wave.
+/// [WaveProgressIndicatorState] is the state class for [WaveProgressIndicator]. It holds the [AnimationController]
+/// which is used to animate the wave.
 class WaveProgressIndicatorState extends State<WaveProgressIndicator> with TickerProviderStateMixin {
   late AnimationController _waveController;
   late Animation<double> _waveAnimation;
@@ -43,8 +42,7 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
       vsync: this,
     )..repeat();
 
-    // Create a linear animation for the wave
-    // ignore_for_file: prefer_int_literals
+    // Create a linear animation for the wave ignore_for_file: prefer_int_literals
     _waveAnimation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _waveController, curve: Curves.linear),
     );
@@ -107,9 +105,8 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
   }
 }
 
-/// [WavePainter] is a CustomPainter that is used to draw the wave on the canvas.
-/// It takes [progressPercent] which is the progress level and [waveAnimationValue]
-/// which is the current value of the wave animation, to draw the wave.
+/// [WavePainter] is a CustomPainter that is used to draw the wave on the canvas. It takes [progressPercent] which is
+/// the progress level and [waveAnimationValue] which is the current value of the wave animation, to draw the wave.
 class WavePainter extends CustomPainter {
   /// Creates an instance of [WavePainter].
   WavePainter({

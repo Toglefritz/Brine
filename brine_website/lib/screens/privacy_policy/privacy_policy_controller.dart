@@ -9,7 +9,7 @@ import 'privacy_policy_view.dart';
 class PrivacyPolicyController extends State<PrivacyPolicyRoute> {
   @override
   void initState() {
-    if (kDebugMode == false) {
+    if (!kDebugMode) {
       FirebaseAnalytics.instance.logScreenView(screenName: 'privacy_policy');
     }
     super.initState();

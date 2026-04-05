@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import 'router.dart';
 import 'themes/dark_theme.dart';
 import 'themes/dark_theme_provider.dart';
@@ -40,7 +40,7 @@ class _BrineMonitorWebsiteState extends State<BrineMonitorWebsite> {
         return themeChangeProvider;
       },
       child: Consumer<DarkThemeProvider>(
-        builder: (BuildContext context, DarkThemeProvider darkThemeProvider, Widget? child) {
+        builder: (context, darkThemeProvider, child) {
           return MaterialApp.router(
             title: 'Brine',
             debugShowCheckedModeBanner: false,

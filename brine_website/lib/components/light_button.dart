@@ -5,10 +5,10 @@ import '../values/insets.dart';
 /// A button with a light background and an outline.
 ///
 /// This widget uses, at its base, an [ElevatedButton] widget. The text displayed on the button is determined by the
-/// [text] field. When it is tapped, the widget calls the function provided by the [onPressed] field. By default,
-/// the button has a width of 350 logical pixels. However, this value can be overridden by the [width] field. An
-/// icon can be optionally displayed on the left side of the button by providing [IconData] to the [icon] field.
-/// If this field is null, no icon is displayed on the button.
+/// [text] field. When it is tapped, the widget calls the function provided by the [onPressed] field. By default, the
+/// button has a width of 350 logical pixels. However, this value can be overridden by the [width] field. An icon can be
+/// optionally displayed on the left side of the button by providing [IconData] to the [icon] field. If this field is
+/// null, no icon is displayed on the button.
 class LightButton extends StatelessWidget {
   /// Creates an instance of [LightButton].
   const LightButton({

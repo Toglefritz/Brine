@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../values/insets.dart';
 import 'terms_and_conditions_controller.dart';
 import 'terms_and_conditions_route.dart';
