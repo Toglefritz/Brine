@@ -29,9 +29,7 @@ class LandingViewHandheld extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSafeScaffold(
-      appBar: MainAppBar(
-        confettiCallback: state.launchConfettiBlast,
-      ),
+      appBar: const MainAppBar(),
       body: Stack(
         children: [
           SingleChildScrollView(

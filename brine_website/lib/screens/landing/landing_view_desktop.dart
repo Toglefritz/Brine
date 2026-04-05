@@ -121,19 +121,6 @@ class LandingViewDesktop extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(
-            right: 150,
-            child: ConfettiWidget(
-              maximumSize: const Size(10, 10),
-              minimumSize: const Size(5, 5),
-              confettiController: state.confettiController,
-              blastDirection: 2.61799,
-              maxBlastForce: 100,
-              minBlastForce: 8,
-              emissionFrequency: 1,
-              gravity: 1,
-            ),
-          ),
         ],
       ),
     );

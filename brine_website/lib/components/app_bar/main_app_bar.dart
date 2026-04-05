@@ -29,7 +29,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
 
   /// The height of the [AppBar].
-  double get _height => bottom == null ? 72.0 : 144.0;
+  double get _height => bottom == null ? 72.0 + Insets.medium : 144.0;
 
   /// A callback triggered when the confetti button is pressed. If null, the confetti button is not shown in the
   /// [AppBar].
@@ -44,14 +44,18 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   /// Handles taps on the dark theme toggle by setting the dark theme preference to the value of the toggle.
-  void _toggleDarkTheme({required bool isActive, required BuildContext context}) {
-    Analytics.logEvent(
+  Future<void> _toggleDarkTheme({
+    required bool isActive,
+    required BuildContext context,
+  }) async {
+    await Analytics.logEvent(
       name: 'dark_mode_toggle',
       parameters: {
         'enabled': isActive.toString(),
       },
     );
 
+    if (!context.mounted) return;
     Provider.of<DarkThemeProvider>(context, listen: false).darkTheme = isActive;
   }
 
@@ -86,6 +90,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             Padding(
               padding: EdgeInsets.only(
                 right: Insets.small,
+                bottom: Insets.medium,
               ),
               child: Image.asset(
                 Asset.brineLogo.path,
