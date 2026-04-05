@@ -1,4 +1,5 @@
 const admin = require('../config/adminInit.cjs');
+const crypto = require('crypto');
 
 /**
  * @brief Checks if a firmware update is available for a Brine device.
@@ -28,6 +29,39 @@ async function checkFirmwareUpdate(req, res) {
         // Validate input
         if (!deviceId || !currentVersion) {
             res.status(400).send('Device ID and current version are required.');
+            return;
+        }
+
+        // Verify HMAC signature to authenticate the requesting device
+        const headerDeviceId = req.headers['x-device-id'];
+        const providedHmac = req.headers['x-hmac-signature'];
+
+        if (!headerDeviceId || !providedHmac) {
+            res.status(400).send('Missing X-Device-ID or X-HMAC-Signature headers.');
+            return;
+        }
+
+        // Retrieve the device's PSK from Firestore
+        const deviceDoc = await admin.firestore().collection('devices').doc(headerDeviceId).get();
+        if (!deviceDoc.exists) {
+            res.status(404).send('Device not found.');
+            return;
+        }
+
+        const deviceData = deviceDoc.data();
+        const psk = deviceData.psk;
+
+        if (!psk) {
+            res.status(500).send('PSK not found for the device.');
+            return;
+        }
+
+        // Compute the expected HMAC and compare against the provided signature
+        const payload = JSON.stringify(req.body);
+        const expectedHmac = crypto.createHmac('sha256', psk).update(payload).digest('hex');
+
+        if (providedHmac !== expectedHmac) {
+            res.status(403).send('Invalid HMAC signature.');
             return;
         }
 

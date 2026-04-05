@@ -1,5 +1,6 @@
 const { checkFirmwareUpdate } = require('../src/checkFirmwareUpdate.cjs');
 const admin = require('../config/adminInit.cjs');
+const crypto = require('crypto');
 
 // Mock Firestore
 jest.mock('../config/adminInit.cjs', () => {
@@ -11,18 +12,35 @@ jest.mock('../config/adminInit.cjs', () => {
     };
 });
 
+// Test PSK used to generate valid HMAC signatures in tests
+const TEST_PSK = 'test-psk-secret-key';
+
+/**
+ * Generates a valid HMAC signature for the given request body using the test PSK.
+ * This mirrors the signing logic on the firmware and cloud function sides.
+ */
+function generateTestHmac(body) {
+    const payload = JSON.stringify(body);
+    return crypto.createHmac('sha256', TEST_PSK).update(payload).digest('hex');
+}
+
 describe('checkFirmwareUpdate', () => {
-    let req, res, mockCollection, mockOrderBy, mockLimit, mockGet, mockUpdate;
+    let req, res, mockCollection, mockOrderBy, mockLimit, mockFirmwareGet;
+    let mockDeviceUpdate, mockDeviceGet;
 
     beforeEach(() => {
-        // Reset mocks
         jest.clearAllMocks();
 
-        // Mock request and response objects
+        const body = {
+            device_id: 'test-device-123',
+            current_version: '1.0.0',
+        };
+
         req = {
-            body: {
-                device_id: 'test-device-123',
-                current_version: '1.0.0',
+            body,
+            headers: {
+                'x-device-id': 'test-device-123',
+                'x-hmac-signature': generateTestHmac(body),
             },
         };
 
@@ -32,18 +50,26 @@ describe('checkFirmwareUpdate', () => {
             json: jest.fn(),
         };
 
-        // Mock Firestore chain
-        mockUpdate = jest.fn().mockResolvedValue({});
-        mockGet = jest.fn();
-        mockLimit = jest.fn().mockReturnValue({ get: mockGet });
+        // Mock for firmware_versions query chain
+        mockFirmwareGet = jest.fn();
+        mockLimit = jest.fn().mockReturnValue({ get: mockFirmwareGet });
         mockOrderBy = jest.fn().mockReturnValue({ limit: mockLimit });
+
+        // Mock for devices collection (PSK lookup and update check logging)
+        mockDeviceUpdate = jest.fn().mockResolvedValue({});
+        mockDeviceGet = jest.fn().mockResolvedValue({
+            exists: true,
+            data: () => ({ psk: TEST_PSK }),
+        });
+
         mockCollection = jest.fn((collectionName) => {
             if (collectionName === 'firmware_versions') {
                 return { orderBy: mockOrderBy };
             } else if (collectionName === 'devices') {
                 return {
                     doc: jest.fn().mockReturnValue({
-                        update: mockUpdate,
+                        get: mockDeviceGet,
+                        update: mockDeviceUpdate,
                     }),
                 };
             }
@@ -52,7 +78,7 @@ describe('checkFirmwareUpdate', () => {
         admin.firestore().collection = mockCollection;
     });
 
-    test('should return 400 if device_id is missing', async () => {
+    test('should return 400 if device_id is missing from body', async () => {
         req.body.device_id = undefined;
 
         await checkFirmwareUpdate(req, res);
@@ -61,7 +87,7 @@ describe('checkFirmwareUpdate', () => {
         expect(res.send).toHaveBeenCalledWith('Device ID and current version are required.');
     });
 
-    test('should return 400 if current_version is missing', async () => {
+    test('should return 400 if current_version is missing from body', async () => {
         req.body.current_version = undefined;
 
         await checkFirmwareUpdate(req, res);
@@ -70,8 +96,48 @@ describe('checkFirmwareUpdate', () => {
         expect(res.send).toHaveBeenCalledWith('Device ID and current version are required.');
     });
 
+    test('should return 400 if HMAC headers are missing', async () => {
+        req.headers = {};
+
+        await checkFirmwareUpdate(req, res);
+
+        // Body validation passes, then header check fails
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.send).toHaveBeenCalledWith('Missing X-Device-ID or X-HMAC-Signature headers.');
+    });
+
+    test('should return 404 if device does not exist in Firestore', async () => {
+        mockDeviceGet.mockResolvedValue({ exists: false });
+
+        await checkFirmwareUpdate(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.send).toHaveBeenCalledWith('Device not found.');
+    });
+
+    test('should return 500 if device has no PSK', async () => {
+        mockDeviceGet.mockResolvedValue({
+            exists: true,
+            data: () => ({ psk: null }),
+        });
+
+        await checkFirmwareUpdate(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.send).toHaveBeenCalledWith('PSK not found for the device.');
+    });
+
+    test('should return 403 if HMAC signature is invalid', async () => {
+        req.headers['x-hmac-signature'] = 'invalid-hmac-value';
+
+        await checkFirmwareUpdate(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.send).toHaveBeenCalledWith('Invalid HMAC signature.');
+    });
+
     test('should return no update available if no firmware versions exist', async () => {
-        mockGet.mockResolvedValue({ empty: true, docs: [] });
+        mockFirmwareGet.mockResolvedValue({ empty: true, docs: [] });
 
         await checkFirmwareUpdate(req, res);
 
@@ -92,7 +158,7 @@ describe('checkFirmwareUpdate', () => {
             }),
         };
 
-        mockGet.mockResolvedValue({
+        mockFirmwareGet.mockResolvedValue({
             empty: false,
             docs: [mockFirmwareDoc],
         });
@@ -107,14 +173,19 @@ describe('checkFirmwareUpdate', () => {
             release_notes: 'Bug fixes and improvements',
         });
 
-        expect(mockUpdate).toHaveBeenCalledWith({
+        expect(mockDeviceUpdate).toHaveBeenCalledWith({
             last_update_check: expect.any(String),
             available_firmware_version: '1.1.0',
         });
     });
 
     test('should return no update when current version is up to date', async () => {
-        req.body.current_version = '1.1.0';
+        const body = {
+            device_id: 'test-device-123',
+            current_version: '1.1.0',
+        };
+        req.body = body;
+        req.headers['x-hmac-signature'] = generateTestHmac(body);
 
         const mockFirmwareDoc = {
             data: () => ({
@@ -124,7 +195,7 @@ describe('checkFirmwareUpdate', () => {
             }),
         };
 
-        mockGet.mockResolvedValue({
+        mockFirmwareGet.mockResolvedValue({
             empty: false,
             docs: [mockFirmwareDoc],
         });
@@ -139,7 +210,7 @@ describe('checkFirmwareUpdate', () => {
             latest_version: '1.1.0',
         });
 
-        expect(mockUpdate).toHaveBeenCalledWith({
+        expect(mockDeviceUpdate).toHaveBeenCalledWith({
             last_update_check: expect.any(String),
         });
     });
@@ -153,7 +224,7 @@ describe('checkFirmwareUpdate', () => {
             }),
         };
 
-        mockGet.mockResolvedValue({
+        mockFirmwareGet.mockResolvedValue({
             empty: false,
             docs: [mockFirmwareDoc],
         });
@@ -168,7 +239,7 @@ describe('checkFirmwareUpdate', () => {
     });
 
     test('should handle errors gracefully', async () => {
-        mockGet.mockRejectedValue(new Error('Database error'));
+        mockFirmwareGet.mockRejectedValue(new Error('Database error'));
 
         await checkFirmwareUpdate(req, res);
 
@@ -186,7 +257,12 @@ describe('checkFirmwareUpdate', () => {
         ];
 
         for (const testCase of testCases) {
-            req.body.current_version = testCase.current;
+            const body = {
+                device_id: 'test-device-123',
+                current_version: testCase.current,
+            };
+            req.body = body;
+            req.headers['x-hmac-signature'] = generateTestHmac(body);
 
             const mockFirmwareDoc = {
                 data: () => ({
@@ -196,7 +272,7 @@ describe('checkFirmwareUpdate', () => {
                 }),
             };
 
-            mockGet.mockResolvedValue({
+            mockFirmwareGet.mockResolvedValue({
                 empty: false,
                 docs: [mockFirmwareDoc],
             });

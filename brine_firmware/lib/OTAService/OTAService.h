@@ -6,9 +6,11 @@
 #include "DeviceConfig.h"
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
+#include <NVSService.h>
 #include <Update.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
+#include <mbedtls/md.h>
 
 // Current firmware version - update this with each release
 #define FIRMWARE_VERSION "1.0.0"
@@ -126,6 +128,27 @@ private:
    * @return true if latest is newer than current, false otherwise.
    */
   bool isNewerVersion(const String &current, const String &latest);
+
+  /**
+   * @brief Loads the pre-shared key from NVS storage.
+   *
+   * Retrieves the PSK stored during device provisioning. This key is used
+   * to generate HMAC signatures for authenticating requests to the cloud.
+   *
+   * @return The PSK string, or an empty string if retrieval fails.
+   */
+  String loadPsk();
+
+  /**
+   * @brief Generates an HMAC-SHA256 signature for the given payload.
+   *
+   * Uses the device's pre-shared key to produce a hex-encoded HMAC that
+   * the cloud function can verify against its own copy of the PSK.
+   *
+   * @param payload The string to sign.
+   * @return Hex-encoded HMAC string, or empty string on failure.
+   */
+  String generateHMAC(const String &payload);
 };
 
 #endif // OTASERVICE_H

@@ -33,6 +33,14 @@ bool OTAService::checkForUpdate(String &latestVersion, String &downloadUrl) {
   String payload;
   serializeJson(doc, payload);
 
+  // Generate HMAC signature for request authentication
+  String hmac = generateHMAC(payload);
+  if (hmac.isEmpty()) {
+    DebugService::getInstance().debugPrintln(
+        "Failed to generate HMAC. Skipping update check.");
+    return false;
+  }
+
   // Begin HTTP connection (SSL in production, plain HTTP in development)
   if (isDevelopment()) {
     http.begin(endpoint);
@@ -49,6 +57,8 @@ bool OTAService::checkForUpdate(String &latestVersion, String &downloadUrl) {
   }
 
   http.addHeader("Content-Type", "application/json");
+  http.addHeader("X-Device-ID", DEVICE_ID);
+  http.addHeader("X-HMAC-Signature", hmac);
 
   // Send POST request to check for updates
   int httpResponseCode = http.POST(payload);
@@ -411,4 +421,110 @@ bool OTAService::isNewerVersion(const String &current, const String &latest) {
     return true;
 
   return false;
+}
+
+/**
+ * Load the pre-shared key from NVS
+ *
+ * Retrieves the PSK that was stored during device provisioning. The PSK
+ * is used to generate HMAC signatures for authenticating cloud requests.
+ *
+ * @return The PSK string, or an empty string if retrieval fails
+ */
+String OTAService::loadPsk() {
+  NVSService &nvsService = NVSService::getInstance();
+
+  bool initResult = nvsService.begin("preSharedKey");
+  if (!initResult) {
+    DebugService::getInstance().debugPrintln(
+        "Error: Failed to initialize NVSService for 'preSharedKey'.");
+    return "";
+  }
+
+  String psk = nvsService.getString("psk");
+  if (psk.isEmpty()) {
+    DebugService::getInstance().debugPrintln("Error: PSK not found in NVS.");
+    nvsService.end();
+    return "";
+  }
+
+  nvsService.end();
+  return psk;
+}
+
+/**
+ * Generate an HMAC-SHA256 signature for the given payload
+ *
+ * Uses the device's pre-shared key and the mbedTLS library to produce a
+ * hex-encoded HMAC. This signature is sent as a header so the cloud function
+ * can verify the request originated from an authorized device.
+ *
+ * @param payload The string to sign
+ * @return Hex-encoded HMAC string, or empty string on failure
+ */
+String OTAService::generateHMAC(const String &payload) {
+  String psk = loadPsk();
+  if (psk.isEmpty()) {
+    DebugService::getInstance().debugPrintln(
+        "Error: Cannot generate HMAC without a valid PSK.");
+    return "";
+  }
+
+  mbedtls_md_context_t ctx;
+  mbedtls_md_init(&ctx);
+
+  const mbedtls_md_info_t *md_info =
+      mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
+  if (md_info == nullptr) {
+    DebugService::getInstance().debugPrintln(
+        "Error: Failed to get SHA-256 info for HMAC.");
+    mbedtls_md_free(&ctx);
+    return "";
+  }
+
+  if (mbedtls_md_setup(&ctx, md_info, 1) != 0) {
+    DebugService::getInstance().debugPrintln(
+        "Error: Failed to set up HMAC context.");
+    mbedtls_md_free(&ctx);
+    return "";
+  }
+
+  if (mbedtls_md_hmac_starts(&ctx,
+                              (const unsigned char *)psk.c_str(),
+                              psk.length()) != 0) {
+    DebugService::getInstance().debugPrintln(
+        "Error: Failed to start HMAC computation.");
+    mbedtls_md_free(&ctx);
+    return "";
+  }
+
+  if (mbedtls_md_hmac_update(&ctx,
+                              (const unsigned char *)payload.c_str(),
+                              payload.length()) != 0) {
+    DebugService::getInstance().debugPrintln(
+        "Error: Failed to update HMAC with payload.");
+    mbedtls_md_free(&ctx);
+    return "";
+  }
+
+  unsigned char hmacResult[32];
+  if (mbedtls_md_hmac_finish(&ctx, hmacResult) != 0) {
+    DebugService::getInstance().debugPrintln(
+        "Error: Failed to finish HMAC computation.");
+    mbedtls_md_free(&ctx);
+    return "";
+  }
+
+  mbedtls_md_free(&ctx);
+
+  // Convert to hex string
+  String hmacHex = "";
+  for (int i = 0; i < 32; i++) {
+    if (hmacResult[i] < 16) {
+      hmacHex += "0";
+    }
+    hmacHex += String(hmacResult[i], HEX);
+  }
+
+  return hmacHex;
 }
