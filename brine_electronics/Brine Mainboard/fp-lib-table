@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "LTC2954CTS8_2_TRMPBF")(type "KiCad")(uri "/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Libraries/LTC2954CTS8_2_TRMPBF")(options "")(descr ""))
+  (lib (name "VL53L1X")(type "KiCad")(uri "/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Libraries/VL53L1X")(options "")(descr ""))
+)

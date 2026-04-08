@@ -318,7 +318,7 @@
 		)
 		(uuid "45be3330-a4b3-4e78-b716-8a4780943484")
 	)
-	(hierarchical_label "BATT"
+	(hierarchical_label "SYS_VBAT"
 		(shape output)
 		(at 100.33 101.6 180)
 		(effects

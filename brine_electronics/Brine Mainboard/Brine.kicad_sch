@@ -12,7 +12,7 @@
 	(lib_symbols)
 	(wire
 		(pts
-			(xy 342.9 271.78) (xy 368.3 271.78)
+			(xy 342.9 309.88) (xy 368.3 309.88)
 		)
 		(stroke
 			(width 0)
@@ -22,7 +22,7 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 276.86) (xy 368.3 276.86)
+			(xy 342.9 314.96) (xy 368.3 314.96)
 		)
 		(stroke
 			(width 0)
@@ -32,7 +32,7 @@
 	)
 	(wire
 		(pts
-			(xy 190.5 203.2) (xy 215.9 203.2)
+			(xy 190.5 241.3) (xy 215.9 241.3)
 		)
 		(stroke
 			(width 0)
@@ -42,17 +42,7 @@
 	)
 	(wire
 		(pts
-			(xy 279.4 152.4) (xy 279.4 177.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6cee5e91-20fa-4101-9e91-78ab38ab3211")
-	)
-	(wire
-		(pts
-			(xy 342.9 203.2) (xy 368.3 203.2)
+			(xy 342.9 241.3) (xy 368.3 241.3)
 		)
 		(stroke
 			(width 0)
@@ -62,7 +52,7 @@
 	)
 	(wire
 		(pts
-			(xy 190.5 279.4) (xy 215.9 279.4)
+			(xy 190.5 317.5) (xy 215.9 317.5)
 		)
 		(stroke
 			(width 0)
@@ -72,7 +62,7 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 281.94) (xy 368.3 281.94)
+			(xy 342.9 320.04) (xy 368.3 320.04)
 		)
 		(stroke
 			(width 0)
@@ -82,7 +72,7 @@
 	)
 	(wire
 		(pts
-			(xy 342.9 287.02) (xy 368.3 287.02)
+			(xy 342.9 325.12) (xy 368.3 325.12)
 		)
 		(stroke
 			(width 0)
@@ -91,7 +81,7 @@
 		(uuid "e500e4d0-1153-4969-9ec4-c6ced6ca1b63")
 	)
 	(sheet
-		(at 368.3 254)
+		(at 368.3 292.1)
 		(size 127 50.8)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -107,7 +97,7 @@
 		)
 		(uuid "0466b9b6-b218-4d15-b26d-b1a8ac4eb0dc")
 		(property "Sheetname" "Distance Sensor"
-			(at 368.3 253.2884 0)
+			(at 368.3 291.3884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -116,7 +106,7 @@
 			)
 		)
 		(property "Sheetfile" "brine_distance_sensor.kicad_sch"
-			(at 368.3 305.3846 0)
+			(at 368.3 343.4846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125,7 +115,7 @@
 			)
 		)
 		(pin "GPIO1" input
-			(at 368.3 271.78 180)
+			(at 368.3 309.88 180)
 			(uuid "9ba7ec9e-aaf1-4107-88ff-a4c71c5df385")
 			(effects
 				(font
@@ -135,7 +125,7 @@
 			)
 		)
 		(pin "SCL" input
-			(at 368.3 276.86 180)
+			(at 368.3 314.96 180)
 			(uuid "2ecb776c-d16a-428c-bee3-e76333b8220b")
 			(effects
 				(font
@@ -145,7 +135,7 @@
 			)
 		)
 		(pin "SDA" input
-			(at 368.3 281.94 180)
+			(at 368.3 320.04 180)
 			(uuid "d6c41d08-1211-4ab5-8c4a-878cce18ead3")
 			(effects
 				(font
@@ -155,7 +145,7 @@
 			)
 		)
 		(pin "XSHUT" input
-			(at 368.3 287.02 180)
+			(at 368.3 325.12 180)
 			(uuid "f41c4957-683e-451a-9701-01756956111d")
 			(effects
 				(font
@@ -173,7 +163,49 @@
 		)
 	)
 	(sheet
-		(at 63.5 177.8)
+		(at 215.9 114.3)
+		(size 127 63.5)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "1d104773-e5f5-4a03-987f-9f6e19e65cdb")
+		(property "Sheetname" "Power Latch"
+			(at 215.9 113.5884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power_latch.kicad_sch"
+			(at 215.9 178.3846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "Brine"
+				(path "/da3a4ef2-0e38-46f1-a1fc-55d8e0a83a54"
+					(page "8")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 63.5 215.9)
 		(size 127 50.8)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -189,7 +221,7 @@
 		)
 		(uuid "4ad0d7d6-d3bf-4825-b971-cd4fdc149c91")
 		(property "Sheetname" "Button"
-			(at 63.5 177.0884 0)
+			(at 63.5 215.1884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -198,7 +230,7 @@
 			)
 		)
 		(property "Sheetfile" "brine_button.kicad_sch"
-			(at 63.5 229.1846 0)
+			(at 63.5 267.2846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -207,7 +239,7 @@
 			)
 		)
 		(pin "BUTTON" output
-			(at 190.5 203.2 0)
+			(at 190.5 241.3 0)
 			(uuid "d7e57ee6-4db4-4f61-b8fc-91a11123a191")
 			(effects
 				(font
@@ -225,7 +257,7 @@
 		)
 	)
 	(sheet
-		(at 215.9 177.8)
+		(at 215.9 215.9)
 		(size 127 128.27)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -240,8 +272,8 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "63bc593b-afd3-4a61-9e23-7e85a1d104e9")
-		(property "Sheetname" "XIAO ESP32-S3"
-			(at 215.9 177.0884 0)
+		(property "Sheetname" "XIAO ESP32-C3"
+			(at 215.9 215.1884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -250,7 +282,7 @@
 			)
 		)
 		(property "Sheetfile" "xiao_esp32-s3.kicad_sch"
-			(at 215.9 306.6546 0)
+			(at 215.9 344.7546 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -259,7 +291,7 @@
 			)
 		)
 		(pin "LIFE" input
-			(at 215.9 279.4 180)
+			(at 215.9 317.5 180)
 			(uuid "01cce121-4a1d-4f5b-8201-cf511a9b3349")
 			(effects
 				(font
@@ -269,7 +301,7 @@
 			)
 		)
 		(pin "BATT" input
-			(at 279.4 177.8 90)
+			(at 279.4 215.9 90)
 			(uuid "1e3fdfc5-7bae-44ae-899e-fc4119247e84")
 			(effects
 				(font
@@ -279,7 +311,7 @@
 			)
 		)
 		(pin "BUTTON" input
-			(at 215.9 203.2 180)
+			(at 215.9 241.3 180)
 			(uuid "f29d4040-771a-4a94-8bbd-f5f641594f04")
 			(effects
 				(font
@@ -289,7 +321,7 @@
 			)
 		)
 		(pin "GPIO1" output
-			(at 342.9 271.78 0)
+			(at 342.9 309.88 0)
 			(uuid "e722f8dd-0ea2-4493-ab6e-5958277418f0")
 			(effects
 				(font
@@ -299,7 +331,7 @@
 			)
 		)
 		(pin "LED" output
-			(at 342.9 203.2 0)
+			(at 342.9 241.3 0)
 			(uuid "5ee13296-dfb1-4918-a806-1f804bb397a7")
 			(effects
 				(font
@@ -309,7 +341,7 @@
 			)
 		)
 		(pin "SCL" output
-			(at 342.9 276.86 0)
+			(at 342.9 314.96 0)
 			(uuid "ecd10582-fb1a-42a0-a2af-9788961d5351")
 			(effects
 				(font
@@ -319,7 +351,7 @@
 			)
 		)
 		(pin "SDA" output
-			(at 342.9 281.94 0)
+			(at 342.9 320.04 0)
 			(uuid "02f41528-95d6-4774-a7f4-016c61c55024")
 			(effects
 				(font
@@ -329,7 +361,7 @@
 			)
 		)
 		(pin "XSHUT" output
-			(at 342.9 287.02 0)
+			(at 342.9 325.12 0)
 			(uuid "f818a658-40ba-47fe-bfeb-969d327423b5")
 			(effects
 				(font
@@ -347,7 +379,7 @@
 		)
 	)
 	(sheet
-		(at 368.3 177.8)
+		(at 368.3 215.9)
 		(size 127 50.8)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -363,7 +395,7 @@
 		)
 		(uuid "6d2918a7-c70e-4d9e-bb5b-f7d45fd4d68d")
 		(property "Sheetname" "RGB LED"
-			(at 368.3 177.0884 0)
+			(at 368.3 215.1884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -372,7 +404,7 @@
 			)
 		)
 		(property "Sheetfile" "brine_rgb_led.kicad_sch"
-			(at 368.3 229.1846 0)
+			(at 368.3 267.2846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -381,7 +413,7 @@
 			)
 		)
 		(pin "LED" input
-			(at 368.3 203.2 180)
+			(at 368.3 241.3 180)
 			(uuid "996f9750-a9a1-4087-91bc-d0d43280b328")
 			(effects
 				(font
@@ -399,7 +431,7 @@
 		)
 	)
 	(sheet
-		(at 215.9 101.6)
+		(at 215.9 39.37)
 		(size 127 50.8)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -415,7 +447,7 @@
 		)
 		(uuid "cb6fa39a-9a0c-434c-b5c9-65b8cf34a8e9")
 		(property "Sheetname" "Battery"
-			(at 215.9 100.8884 0)
+			(at 215.9 38.6584 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -424,7 +456,7 @@
 			)
 		)
 		(property "Sheetfile" "brine_battery.kicad_sch"
-			(at 215.9 152.9846 0)
+			(at 215.9 90.7546 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -433,7 +465,7 @@
 			)
 		)
 		(pin "BATT" output
-			(at 279.4 152.4 270)
+			(at 279.4 90.17 270)
 			(uuid "5bddc4b7-0aea-4f23-abab-2e7f6a286ac1")
 			(effects
 				(font
@@ -451,7 +483,7 @@
 		)
 	)
 	(sheet
-		(at 63.5 254)
+		(at 63.5 292.1)
 		(size 127 50.8)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -467,7 +499,7 @@
 		)
 		(uuid "e2bbff58-4ff7-4cd5-a219-8604e35fe5c2")
 		(property "Sheetname" "Battery Monitor"
-			(at 63.5 253.2884 0)
+			(at 63.5 291.3884 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -476,7 +508,7 @@
 			)
 		)
 		(property "Sheetfile" "brine_battery_monitor.kicad_sch"
-			(at 63.5 305.3846 0)
+			(at 63.5 343.4846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -485,7 +517,7 @@
 			)
 		)
 		(pin "LIFE" output
-			(at 190.5 279.4 0)
+			(at 190.5 317.5 0)
 			(uuid "a40cc7d2-2051-471e-9412-a12c4a21802f")
 			(effects
 				(font

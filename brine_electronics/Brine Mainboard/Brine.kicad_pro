@@ -37,9 +37,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 3.2,
-          "height": 3.2,
-          "width": 3.2
+          "drill": 1.152,
+          "height": 1.152,
+          "width": 1.152
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -58,7 +58,16 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "courtyards_overlap|146039000|79478300|0d8a9df1-61c6-4aa1-9565-bafee24e9481|8357d7aa-ed1e-4407-bee3-a854ab71ecdd",
+          ""
+        ],
+        [
+          "courtyards_overlap|146040300|77380800|01782d09-ba12-4095-8fd8-884d04c95aad|8357d7aa-ed1e-4407-bee3-a854ab71ecdd",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -527,6 +536,14 @@
       {
         "netclass": "Power",
         "pattern": "V_BATT"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "BATT"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "/Battery/BATT"
       }
     ]
   },
@@ -754,7 +771,7 @@
     ],
     [
       "63bc593b-afd3-4a61-9e23-7e85a1d104e9",
-      "XIAO ESP32-S3"
+      "XIAO ESP32-C3"
     ],
     [
       "cb6fa39a-9a0c-434c-b5c9-65b8cf34a8e9",
@@ -775,6 +792,10 @@
     [
       "0466b9b6-b218-4d15-b26d-b1a8ac4eb0dc",
       "Distance Sensor"
+    ],
+    [
+      "1d104773-e5f5-4a03-987f-9f6e19e65cdb",
+      "Power Latch"
     ]
   ],
   "text_variables": {}
