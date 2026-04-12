@@ -6,7 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "Brine - Distance Sensor")
-		(date "2026-04-03")
+		(date "2026-04-07")
 		(rev "1.0.0")
 		(company "Splendid Endeavors")
 		(comment 1 "The Brine monitor uses a distance sensor to measure the ")
@@ -807,6 +807,16 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "I2C pull-ups located on MCU sheet"
+		(exclude_from_sim no)
+		(at 170.434 103.632 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "36880516-64e8-4b41-bf52-6d61b60d0f62")
+	)
 	(junction
 		(at 152.4 93.98)
 		(diameter 0)
@@ -1050,16 +1060,6 @@
 			(type default)
 		)
 		(uuid "d58e9a6b-32c4-4983-adbd-e194b4910f35")
-	)
-	(label "I2C pull-ups located on MCU sheet"
-		(at 173.8197 101.1164 0)
-		(effects
-			(font
-				(size 0.762 0.762)
-			)
-			(justify left bottom)
-		)
-		(uuid "9d22330e-d99d-4d3a-b9be-ec5a3e655426")
 	)
 	(hierarchical_label "SCL"
 		(shape input)

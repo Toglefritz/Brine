@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "TactileButton")(type "KiCad")(uri "/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/KiCAD Libraries/TL3342F260QG.kicad_sym")(options "")(descr ""))
   (lib (name "LTC2954CTS8-2_TRMPBF")(type "KiCad")(uri "/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Libraries/LTC2954CTS8_2_TRMPBF/LTC2954CTS8-2_TRMPBF.kicad_sym")(options "")(descr ""))
+  (lib (name "TS-1187A-B-A-B")(type "KiCad")(uri "/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Libraries/TS-1187A-B-A-B/KiCad/TS-1187A-B-A-B.kicad_sym")(options "")(descr ""))
 )

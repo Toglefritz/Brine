@@ -6,7 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "Brine - Button")
-		(date "2026-04-03")
+		(date "2026-04-07")
 		(rev "1.0.0")
 		(company "Splendid Endeavors")
 		(comment 1 "This button is used to trigger various actions in the device firmware.")
@@ -15,12 +15,12 @@
 		(comment 4 "It can also be used to factory reset the module.")
 	)
 	(lib_symbols
-		(symbol "5_2mm_Button:TL3342F260QG"
+		(symbol "TS-1187A-B-A-B:TS-1187A-B-A-B"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "S"
-				(at 16.51 7.62 0)
+				(at 26.67 7.62 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -28,8 +28,8 @@
 					(justify left top)
 				)
 			)
-			(property "Value" "TL3342F260QG"
-				(at 16.51 5.08 0)
+			(property "Value" "TS-1187A-B-A-B"
+				(at 26.67 5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -37,18 +37,8 @@
 					(justify left top)
 				)
 			)
-			(property "Footprint" "TL3342F260QG"
-				(at 16.51 -94.92 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://configured-product-images.s3.amazonaws.com/2D/specs/TL3342F260QG.pdf"
-				(at 16.51 -194.92 0)
+			(property "Footprint" "TS1187ABAB"
+				(at 26.67 -94.92 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -57,7 +47,17 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "TACT, 50mA, 12VDC SPST-NO, Off-(On) Surface Mount"
+			(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
+				(at 26.67 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "tact switch 4x4X1.5 patch 160GF metal head waterproof"
 				(at 0 0 0)
 				(effects
 					(font
@@ -66,8 +66,8 @@
 					(hide yes)
 				)
 			)
-			(property "Height" "1.54"
-				(at 16.51 -394.92 0)
+			(property "Height" "4.05"
+				(at 26.67 -394.92 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -76,8 +76,8 @@
 					(hide yes)
 				)
 			)
-			(property "Mouser Part Number" "612-TL3342F260QG"
-				(at 16.51 -494.92 0)
+			(property "Manufacturer_Name" "XKB Connectivity"
+				(at 26.67 -494.92 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -86,8 +86,8 @@
 					(hide yes)
 				)
 			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/E-Switch/TL3342F260QG?qs=6C6BR4UgC3Of90YOH%2FEXyw%3D%3D"
-				(at 16.51 -594.92 0)
+			(property "Manufacturer_Part_Number" "TS-1187A-B-A-B"
+				(at 26.67 -594.92 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -96,8 +96,8 @@
 					(hide yes)
 				)
 			)
-			(property "Manufacturer_Name" "E-Switch"
-				(at 16.51 -694.92 0)
+			(property "Mouser Part Number" ""
+				(at 26.67 -694.92 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -106,8 +106,8 @@
 					(hide yes)
 				)
 			)
-			(property "Manufacturer_Part_Number" "TL3342F260QG"
-				(at 16.51 -794.92 0)
+			(property "Mouser Price/Stock" ""
+				(at 26.67 -794.92 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -116,10 +116,30 @@
 					(hide yes)
 				)
 			)
-			(symbol "TL3342F260QG_1_1"
+			(property "Arrow Part Number" ""
+				(at 26.67 -894.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Arrow Price/Stock" ""
+				(at 26.67 -994.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "TS-1187A-B-A-B_1_1"
 				(rectangle
 					(start 5.08 2.54)
-					(end 15.24 -5.08)
+					(end 25.4 -5.08)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -131,14 +151,14 @@
 				(pin passive line
 					(at 0 0 0)
 					(length 5.08)
-					(name "3"
+					(name "COM_1"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "3"
+					(number "A1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -149,32 +169,14 @@
 				(pin passive line
 					(at 0 -2.54 0)
 					(length 5.08)
-					(name "1"
+					(name "NO_1"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 20.32 0 180)
-					(length 5.08)
-					(name "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
+					(number "C1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -183,16 +185,34 @@
 					)
 				)
 				(pin passive line
-					(at 20.32 -2.54 180)
+					(at 30.48 0 180)
 					(length 5.08)
-					(name "2"
+					(name "COM_2"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "2"
+					(number "B1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 30.48 -2.54 180)
+					(length 5.08)
+					(name "NO_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "D1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -306,60 +326,50 @@
 		)
 	)
 	(junction
-		(at 152.4 111.76)
+		(at 109.22 113.03)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "b8dd912f-beb9-4ca2-9470-7b737da52a02")
+		(uuid "3544072a-0bc9-415e-8a7c-f9d7bcb2c7fa")
 	)
 	(junction
-		(at 132.08 114.3)
+		(at 144.78 113.03)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "bcf6db44-7f16-4f7f-b3ca-f6a8283ce853")
+		(uuid "38ce3a1c-cff9-4d86-9a44-d1cc0bc00bb0")
 	)
 	(wire
 		(pts
-			(xy 132.08 111.76) (xy 132.08 106.68)
+			(xy 109.22 113.03) (xy 109.22 115.57)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2641e33d-ff90-4af6-a75c-4bd7e49616d7")
+		(uuid "11a6a9ba-1bb6-4c2d-b3d9-ea994f1e7f57")
 	)
 	(wire
 		(pts
-			(xy 152.4 119.38) (xy 152.4 114.3)
+			(xy 101.6 113.03) (xy 109.22 113.03)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "26877271-78fc-4242-b68e-d35eafb8de21")
+		(uuid "570f83da-f7b1-4f52-9c03-f9624d231d76")
 	)
 	(wire
 		(pts
-			(xy 152.4 106.68) (xy 152.4 111.76)
+			(xy 144.78 113.03) (xy 144.78 115.57)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "447c7655-56c9-43a0-a732-6f79ebca7b9e")
+		(uuid "722f4ecb-490b-4a2f-84b5-8d8c0c768d44")
 	)
 	(wire
 		(pts
-			(xy 132.08 119.38) (xy 152.4 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "99f25558-1d5f-48f0-bacb-6e8ffe9eec59")
-	)
-	(wire
-		(pts
-			(xy 152.4 111.76) (xy 167.64 111.76)
+			(xy 142.24 113.03) (xy 144.78 113.03)
 		)
 		(stroke
 			(width 0)
@@ -369,37 +379,47 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 114.3) (xy 132.08 114.3)
+			(xy 144.78 113.03) (xy 152.4 113.03)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a0e542e2-a31b-4d30-95c7-e1c5591da73b")
+		(uuid "b1164a20-c5ad-407d-b31b-f1f45404a130")
 	)
 	(wire
 		(pts
-			(xy 132.08 106.68) (xy 152.4 106.68)
+			(xy 142.24 115.57) (xy 144.78 115.57)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a34a9adb-64cb-464e-89c0-05f1861fec49")
+		(uuid "ba024d05-4980-4c5d-884a-dd12272a093c")
 	)
 	(wire
 		(pts
-			(xy 132.08 114.3) (xy 132.08 119.38)
+			(xy 109.22 113.03) (xy 111.76 113.03)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f11d347a-236c-4d8b-be7a-f0555ccc1637")
+		(uuid "be1860be-a9e1-40f4-b7e1-22a4a6c2b620")
+	)
+	(wire
+		(pts
+			(xy 111.76 115.57) (xy 109.22 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4c0e8b0-f08a-4377-9674-b3936470a7da")
 	)
 	(hierarchical_label "BUTTON"
 		(shape output)
-		(at 167.64 111.76 0)
+		(at 152.4 113.03 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -409,42 +429,33 @@
 		(uuid "a951973d-4e95-4c48-9dd6-b83a33038c6f")
 	)
 	(symbol
-		(lib_id "5_2mm_Button:TL3342F260QG")
-		(at 132.08 111.76 0)
+		(lib_id "TS-1187A-B-A-B:TS-1187A-B-A-B")
+		(at 111.76 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "649b27b3-c739-475d-af01-66384d8ee6cc")
-		(property "Reference" "S1"
-			(at 142.24 102.616 0)
+		(fields_autoplaced yes)
+		(uuid "d401149c-88e5-480e-a342-225b901fcc35")
+		(property "Reference" "S2"
+			(at 127 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "TL3342F260QG"
-			(at 142.24 105.156 0)
+		(property "Value" "TS-1187A-B-A-B"
+			(at 127 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "TL3342F160QG:SW_TL3342F160QG"
-			(at 148.59 206.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://configured-product-images.s3.amazonaws.com/2D/specs/TL3342F260QG.pdf"
-			(at 148.59 306.68 0)
+		(property "Footprint" "TS-1187A:TS1187ABAB"
+			(at 138.43 207.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -453,17 +464,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "TACT, 50mA, 12VDC SPST-NO, Off-(On) Surface Mount"
-			(at 132.08 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Height" "1.54"
-			(at 148.59 506.68 0)
+		(property "Datasheet" "http://www.helloxkb.com/public/images/pdf/TS-1187A-X-X-X.pdf"
+			(at 138.43 307.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -472,8 +474,17 @@
 				(hide yes)
 			)
 		)
-		(property "Mouser Part Number" "612-TL3342F260QG"
-			(at 148.59 606.68 0)
+		(property "Description" "tact switch 4x4X1.5 patch 160GF metal head waterproof"
+			(at 111.76 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "4.05"
+			(at 138.43 507.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -482,8 +493,8 @@
 				(hide yes)
 			)
 		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/E-Switch/TL3342F260QG?qs=6C6BR4UgC3Of90YOH%2FEXyw%3D%3D"
-			(at 148.59 706.68 0)
+		(property "Manufacturer_Name" "XKB Connectivity"
+			(at 138.43 607.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -492,8 +503,8 @@
 				(hide yes)
 			)
 		)
-		(property "Manufacturer_Name" "E-Switch"
-			(at 148.59 806.68 0)
+		(property "Manufacturer_Part_Number" "TS-1187A-B-A-B"
+			(at 138.43 707.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -502,8 +513,8 @@
 				(hide yes)
 			)
 		)
-		(property "Manufacturer_Part_Number" "TL3342F260QG"
-			(at 148.59 906.68 0)
+		(property "Mouser Part Number" ""
+			(at 138.43 807.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -512,22 +523,52 @@
 				(hide yes)
 			)
 		)
-		(pin "1"
-			(uuid "688054b8-2388-46b1-a646-1739afd5d8f3")
+		(property "Mouser Price/Stock" ""
+			(at 138.43 907.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
 		)
-		(pin "3"
-			(uuid "95de98fe-6f12-43cc-9117-be09eca4e8f1")
+		(property "Arrow Part Number" ""
+			(at 138.43 1007.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
 		)
-		(pin "2"
-			(uuid "b600067e-62a9-415b-852b-62d91c396507")
+		(property "Arrow Price/Stock" ""
+			(at 138.43 1107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
 		)
-		(pin "4"
-			(uuid "8c26bd03-ba0b-422d-955e-2f89b5768047")
+		(pin "C1"
+			(uuid "e0d3aaec-ddb8-4568-ad6c-f08a58a7b833")
+		)
+		(pin "D1"
+			(uuid "edd78670-5898-4bb7-8a60-27b97a5ae283")
+		)
+		(pin "A1"
+			(uuid "69117d6f-259b-4746-808f-33e3c0d08734")
+		)
+		(pin "B1"
+			(uuid "4ccb2972-bdcf-4e73-bcbc-c6307141135d")
 		)
 		(instances
-			(project "Brine"
+			(project ""
 				(path "/da3a4ef2-0e38-46f1-a1fc-55d8e0a83a54/4ad0d7d6-d3bf-4825-b971-cd4fdc149c91"
-					(reference "S1")
+					(reference "S2")
 					(unit 1)
 				)
 			)
@@ -535,7 +576,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 116.84 114.3 270)
+		(at 101.6 113.03 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -544,7 +585,7 @@
 		(fields_autoplaced yes)
 		(uuid "e95e9c4a-5f34-4006-b55c-3b529e4cf2c4")
 		(property "Reference" "#PWR09"
-			(at 110.49 114.3 0)
+			(at 95.25 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -553,7 +594,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 113.03 114.2999 90)
+			(at 97.79 113.0299 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -562,7 +603,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 116.84 114.3 0)
+			(at 101.6 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -571,7 +612,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 116.84 114.3 0)
+			(at 101.6 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -580,7 +621,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 116.84 114.3 0)
+			(at 101.6 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)

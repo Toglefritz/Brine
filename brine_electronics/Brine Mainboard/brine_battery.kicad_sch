@@ -6,7 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "Brine - Battery")
-		(date "2026-04-03")
+		(date "2026-04-07")
 		(rev "1.0.0")
 		(company "Splendid Endeavors")
 		(comment 1 "LiPo battery connections.")
@@ -400,6 +400,107 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "power:PWR_FLAG"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(junction
 		(at 152.4 100.33)
@@ -412,6 +513,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9001e3a3-f2be-43e0-b00e-ab7ebe3f6c52")
+	)
+	(junction
+		(at 162.56 102.87)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ae8ed9bb-abb2-4608-ad8f-29f92c6f264e")
 	)
 	(wire
 		(pts
@@ -445,7 +552,7 @@
 	)
 	(wire
 		(pts
-			(xy 152.4 102.87) (xy 165.1 102.87)
+			(xy 152.4 102.87) (xy 162.56 102.87)
 		)
 		(stroke
 			(width 0)
@@ -482,6 +589,16 @@
 			(type default)
 		)
 		(uuid "afbdd95a-8f05-4ddd-b949-2acfd7e4a6e9")
+	)
+	(wire
+		(pts
+			(xy 162.56 102.87) (xy 165.1 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b40825cd-10a0-4f4b-95b2-c3a6ec412821")
 	)
 	(wire
 		(pts
@@ -656,7 +773,7 @@
 				)
 			)
 		)
-		(property "Value" "BATT_CRG_GND"
+		(property "Value" "BATT_CRG_BATT"
 			(at 140.335 91.44 0)
 			(effects
 				(font
@@ -762,6 +879,71 @@
 			(project ""
 				(path "/da3a4ef2-0e38-46f1-a1fc-55d8e0a83a54/cb6fa39a-9a0c-434c-b5c9-65b8cf34a8e9"
 					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 162.56 102.87 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "db6e078f-e955-4429-b04f-67ae4b4a54b1")
+		(property "Reference" "#FLG03"
+			(at 162.56 104.775 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 162.56 105.918 0)
+			(effects
+				(font
+					(size 0.508 0.508)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 162.56 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 162.56 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "38bb0ea3-5e9c-4fd9-86d5-bfee0e05510b")
+		)
+		(instances
+			(project ""
+				(path "/da3a4ef2-0e38-46f1-a1fc-55d8e0a83a54/cb6fa39a-9a0c-434c-b5c9-65b8cf34a8e9"
+					(reference "#FLG03")
 					(unit 1)
 				)
 			)

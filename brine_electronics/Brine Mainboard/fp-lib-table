@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "LTC2954CTS8_2_TRMPBF")(type "KiCad")(uri "/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Libraries/LTC2954CTS8_2_TRMPBF")(options "")(descr ""))
   (lib (name "VL53L1X")(type "KiCad")(uri "/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Libraries/VL53L1X")(options "")(descr ""))
+  (lib (name "TS-1187A")(type "KiCad")(uri "/Users/scotthatfield/Documents/Projects/Brine/brine_electronics/Libraries/TS-1187A-B-A-B/KiCad")(options "")(descr ""))
 )

@@ -6,7 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "Brine - RGB LED")
-		(date "2026-04-03")
+		(date "2026-04-07")
 		(rev "1.0.0")
 		(company "Splendid Endeavors")
 		(comment 1 "Using various colors and patterns, this RGB LED is used")

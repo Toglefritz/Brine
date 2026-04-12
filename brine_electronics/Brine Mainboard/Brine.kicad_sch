@@ -6,10 +6,42 @@
 	(paper "A2")
 	(title_block
 		(title "Brine Monitor")
-		(date "2025-10-30")
-		(rev "Proto")
+		(date "2026-04-07")
+		(rev "1.0.0")
 	)
 	(lib_symbols)
+	(junction
+		(at 203.2 241.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6713ff37-7c9e-42e7-a18c-e0e10e6bf9af")
+	)
+	(junction
+		(at 266.7 203.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a4bbbe4c-191c-4f42-bb28-0ea31377ac2c")
+	)
+	(wire
+		(pts
+			(xy 203.2 241.3) (xy 215.9 241.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "165d1230-d3c9-4def-8fe0-e2f86ba9dd4f")
+	)
+	(wire
+		(pts
+			(xy 279.4 190.5) (xy 279.4 215.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "16c1e12b-97a1-4a5d-8a73-2877c35d0b33")
+	)
 	(wire
 		(pts
 			(xy 342.9 309.88) (xy 368.3 309.88)
@@ -19,6 +51,26 @@
 			(type default)
 		)
 		(uuid "25979045-a3b3-4e77-ad9a-6e1970063649")
+	)
+	(wire
+		(pts
+			(xy 209.55 304.8) (xy 209.55 203.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "297ebcb1-75df-44a3-a945-d9845e3dc401")
+	)
+	(wire
+		(pts
+			(xy 266.7 203.2) (xy 266.7 215.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c92519e-d19a-4596-962d-12b6555d9e57")
 	)
 	(wire
 		(pts
@@ -32,13 +84,43 @@
 	)
 	(wire
 		(pts
-			(xy 190.5 241.3) (xy 215.9 241.3)
+			(xy 190.5 241.3) (xy 203.2 241.3)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "5b15b98e-2683-4785-927e-dd12dd9a6097")
+	)
+	(wire
+		(pts
+			(xy 190.5 304.8) (xy 209.55 304.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5de833d2-e84a-4f26-b3bf-1aee5f767cb1")
+	)
+	(wire
+		(pts
+			(xy 292.1 190.5) (xy 292.1 215.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f87a951-2a2d-490e-8eff-47bbb801bfad")
+	)
+	(wire
+		(pts
+			(xy 279.4 90.17) (xy 279.4 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8259d6da-5543-4796-b460-eba65b440d7b")
 	)
 	(wire
 		(pts
@@ -72,6 +154,16 @@
 	)
 	(wire
 		(pts
+			(xy 266.7 190.5) (xy 266.7 203.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e44b97ac-e439-412b-8661-7cf767410c0b")
+	)
+	(wire
+		(pts
 			(xy 342.9 325.12) (xy 368.3 325.12)
 		)
 		(stroke
@@ -79,6 +171,36 @@
 			(type default)
 		)
 		(uuid "e500e4d0-1153-4969-9ec4-c6ced6ca1b63")
+	)
+	(wire
+		(pts
+			(xy 203.2 152.4) (xy 215.9 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e58aadb6-f2c6-4ac5-907b-f1304755e50e")
+	)
+	(wire
+		(pts
+			(xy 203.2 241.3) (xy 203.2 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eff94ac0-57c2-4f63-82a0-cfa467d46d09")
+	)
+	(wire
+		(pts
+			(xy 209.55 203.2) (xy 266.7 203.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "faaeb25c-7774-497b-b5b4-92ce684e34f1")
 	)
 	(sheet
 		(at 368.3 292.1)
@@ -164,7 +286,7 @@
 	)
 	(sheet
 		(at 215.9 114.3)
-		(size 127 63.5)
+		(size 127 76.2)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -188,12 +310,62 @@
 			)
 		)
 		(property "Sheetfile" "power_latch.kicad_sch"
-			(at 215.9 178.3846 0)
+			(at 215.9 191.0846 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "BATT" input
+			(at 279.4 114.3 90)
+			(uuid "01793034-6dc2-4928-982f-0a4db63e0454")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify right)
+			)
+		)
+		(pin "BUTTON" input
+			(at 215.9 152.4 180)
+			(uuid "96b8a76a-2190-400e-8af8-c6fe657681db")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify left)
+			)
+		)
+		(pin "PWR_INT" output
+			(at 292.1 190.5 270)
+			(uuid "a1e09b59-1ae8-41d6-9f0e-f8869f9cfe9d")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify left)
+			)
+		)
+		(pin "PWR_KILL" input
+			(at 279.4 190.5 270)
+			(uuid "26a3a740-b226-4bd1-b07a-4047cdc589a4")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify left)
+			)
+		)
+		(pin "SYS_VBAT" output
+			(at 266.7 190.5 270)
+			(uuid "ac1e4879-d5ba-44ba-8139-1ecfe6a19402")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -300,16 +472,6 @@
 				(justify left)
 			)
 		)
-		(pin "BATT" input
-			(at 279.4 215.9 90)
-			(uuid "1e3fdfc5-7bae-44ae-899e-fc4119247e84")
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify right)
-			)
-		)
 		(pin "BUTTON" input
 			(at 215.9 241.3 180)
 			(uuid "f29d4040-771a-4a94-8bbd-f5f641594f04")
@@ -363,6 +525,36 @@
 		(pin "XSHUT" output
 			(at 342.9 325.12 0)
 			(uuid "f818a658-40ba-47fe-bfeb-969d327423b5")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify right)
+			)
+		)
+		(pin "PWR_INT" input
+			(at 292.1 215.9 90)
+			(uuid "e1573d38-8877-4ee4-b191-4aa65198712f")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify right)
+			)
+		)
+		(pin "PWR_KILL" output
+			(at 279.4 215.9 90)
+			(uuid "4370cc36-7c3d-4a2d-9d79-ade933c64ed5")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify right)
+			)
+		)
+		(pin "SYS_VBAT" input
+			(at 266.7 215.9 90)
+			(uuid "486e0a92-050a-42a0-8f2a-aaae1883e8ee")
 			(effects
 				(font
 					(size 2.54 2.54)
@@ -519,6 +711,16 @@
 		(pin "LIFE" output
 			(at 190.5 317.5 0)
 			(uuid "a40cc7d2-2051-471e-9412-a12c4a21802f")
+			(effects
+				(font
+					(size 2.54 2.54)
+				)
+				(justify right)
+			)
+		)
+		(pin "SYS_VBAT" output
+			(at 190.5 304.8 0)
+			(uuid "0650e2fd-31a3-47fe-a870-c7f2395825bc")
 			(effects
 				(font
 					(size 2.54 2.54)
