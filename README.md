@@ -22,6 +22,13 @@ hands and hair well-moisturized, your laundry machine effective, and spots off y
 The project spans hardware, firmware, a mobile companion app, cloud backend services, and a
 marketing website.
 
+## Project Status
+
+> **Hardware finalization and pre-manufacturing**
+>
+> The hardware design is being finalized ahead of final system integration.
+> Preparation for first-run manufacturing is underway.
+
 ## How It Works
 
 A Brine device mounts inside the lid of a water softener, facing down toward the salt. It uses a
