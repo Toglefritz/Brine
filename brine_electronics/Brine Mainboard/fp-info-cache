@@ -1,4 +1,4 @@
-45823244053331931
+45828570511740673
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -68830,6 +68830,13 @@ Yellow 5381 Series LED
 0
 2
 2
+LTC2954CTS8_2_TRMPBF
+TSOT-23_TS8
+
+
+0
+8
+8
 Module
 A20_OLINUXINO_LIME2
 A20 Olinuxino LIME2, 1.2GHz, 512-1024MB RAM, Micro-SD, NAND or eMMC, 1000Mbit Ethernet
@@ -176182,6 +176189,13 @@ SW_TL3342F160QG
 0
 4
 4
+TS-1187A
+TS1187ABAB
+TS-1187A-B-A-B-1
+Switch
+0
+4
+4
 TerminalBlock
 TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm
 terminal block MaiXu MX126-5.0-02P, 2 pins, pitch 5mm, size 10.5x7.8mm, drill diameter 1.3mm, pad diameter 2.8mm, https://www.lcsc.com/datasheet/lcsc_datasheet_2309150913_MAX-MX126-5-0-03P-GN01-Cu-S-A_C5188435.pdf, script-generated using https://gitlab.com/kicad/libraries/kicad-footprint-generator/-/tree/master/scripts/TerminalBlock_MaiXu
@@ -182230,6 +182244,13 @@ igbt diode module
 0
 25
 25
+VL53L1X
+VL53L1X
+VL53L1X-1
+Integrated Circuit
+0
+13
+13
 Valve
 Valve_ECC-83-1
 Valve ECC-83-1 round pins
