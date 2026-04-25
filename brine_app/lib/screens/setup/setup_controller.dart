@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,10 +24,10 @@ class SetupController extends State<SetupRoute> {
     Analytics.trackPageView('setup');
 
     // Perform setup for app usage.
-    _performSetup();
+    unawaited(_performSetup());
 
     // Send the device's FCM token to Firebase to ensure it is up to date.
-    _sendDeviceTokenToFirebase();
+    unawaited(_sendDeviceTokenToFirebase());
 
     super.initState();
   }
@@ -49,7 +50,7 @@ class SetupController extends State<SetupRoute> {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => const ErrorRoute(
+          builder: (context) => const ErrorRoute(
             errorType: ErrorType.unauthenticated,
           ),
         ),
@@ -61,7 +62,7 @@ class SetupController extends State<SetupRoute> {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => const ErrorRoute(
+          builder: (context) => const ErrorRoute(
             errorType: ErrorType.unknown,
           ),
         ),
@@ -74,7 +75,7 @@ class SetupController extends State<SetupRoute> {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => const WelcomeRoute(),
+          builder: (context) => const WelcomeRoute(),
         ),
       );
     }
@@ -85,7 +86,7 @@ class SetupController extends State<SetupRoute> {
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute<void>(
-            builder: (BuildContext context) => SoftenerMonitorRoute(
+            builder: (context) => SoftenerMonitorRoute(
               devices: deviceList!,
             ),
           ),
@@ -102,8 +103,9 @@ class SetupController extends State<SetupRoute> {
     }
 
     try {
-      final PushNotificationsService pushNotificationsService =
-          PushNotificationsService(user: FirebaseAuth.instance.currentUser!);
+      final PushNotificationsService pushNotificationsService = PushNotificationsService(
+        user: FirebaseAuth.instance.currentUser!,
+      );
 
       await pushNotificationsService.registerFcmToken();
     } catch (e) {
@@ -122,7 +124,7 @@ class SetupController extends State<SetupRoute> {
       // Get the current user.
       final User? user = FirebaseAuth.instance.currentUser;
 
-      if(user == null) {
+      if (user == null) {
         throw AuthenticationException('No current user for the authentication session.');
       }
 

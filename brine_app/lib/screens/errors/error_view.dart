@@ -64,8 +64,8 @@ class ErrorView extends StatelessWidget {
               child: Text(
                 state.widget.errorType.errorMessage(context),
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).primaryColorLight,
-                    ),
+                  color: Theme.of(context).primaryColorLight,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),

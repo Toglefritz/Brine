@@ -12,14 +12,14 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
   ///
   /// The "continue" button in the [DeviceConfirmationView] is used to confirm that the targeted Brine module is the one
   /// the user intends to provision. This confirmation allows the provisioning process to continue to the next step.
-  void onContinuePressed() {
+  Future<void> onContinuePressed() async {
     Analytics.trackEvent(eventName: 'device_confirmation_denied');
 
     // Proceed with the selected device.
-    Navigator.pushReplacement(
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => DeviceConnectionRoute(
+        builder: (context) => DeviceConnectionRoute(
           device: widget.device,
         ),
       ),
@@ -32,7 +32,7 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
   /// correct one for provisioning. This denial causes the provisioning process to go back to the Bluetooth scan so a
   /// different Brine module can be selected. The module that is currently targeted is excluded from the next Bluetooth
   /// search, along with any other devices where were excluded previously.
-  void onChooseAnotherPressed() {
+  Future<void> onChooseAnotherPressed() async {
     Analytics.trackEvent(eventName: 'device_confirmation_denied');
 
     // Add the discovered, but rejected, device to the list of excluded devices.
@@ -42,10 +42,10 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
     ];
 
     // Go back to the scan route.
-    Navigator.pushReplacement(
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => ScanRoute(
+        builder: (context) => ScanRoute(
           excludedDeviceNames: deviceExclusionList,
         ),
       ),

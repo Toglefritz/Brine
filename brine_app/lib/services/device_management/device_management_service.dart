@@ -308,7 +308,7 @@ class DeviceManagementService {
         // Create a PreSharedKey instance from the string.
         final PreSharedKey preSharedKey = PreSharedKey.fromJson(pskJson);
 
-        // Return  the PSK.
+        // Return the PSK.
         return preSharedKey;
       } else {
         throw Exception('Failed to get device PSK: ${response.reasonPhrase}');

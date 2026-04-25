@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,8 +16,10 @@ class Analytics {
     debugPrint('Analytics trackPageView: $pageName');
 
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logScreenView(
-        screenName: pageName,
+      unawaited(
+        FirebaseAnalytics.instance.logScreenView(
+          screenName: pageName,
+        ),
       );
     }
   }
@@ -25,7 +29,7 @@ class Analytics {
     debugPrint('Analytics trackSignUp');
 
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logSignUp(signUpMethod: signUpMethod.name);
+      unawaited(FirebaseAnalytics.instance.logSignUp(signUpMethod: signUpMethod.name));
     }
   }
 
@@ -34,7 +38,7 @@ class Analytics {
     debugPrint('Analytics trackLogin');
 
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logLogin();
+      unawaited(FirebaseAnalytics.instance.logLogin());
     }
   }
 
@@ -43,7 +47,7 @@ class Analytics {
     debugPrint('Analytics trackLogout');
 
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logEvent(name: 'logout');
+      unawaited(FirebaseAnalytics.instance.logEvent(name: 'logout'));
     }
   }
 
@@ -55,9 +59,11 @@ class Analytics {
     debugPrint('Analytics trackEvent: $eventName, $parameters');
 
     if (!kDebugMode) {
-      FirebaseAnalytics.instance.logEvent(
-        name: eventName,
-        parameters: parameters,
+      unawaited(
+        FirebaseAnalytics.instance.logEvent(
+          name: eventName,
+          parameters: parameters,
+        ),
       );
     }
   }

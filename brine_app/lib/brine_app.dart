@@ -30,7 +30,7 @@ class BrineApp extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, AsyncSnapshot<User?> authStateSnapshot) {
+          builder: (context, authStateSnapshot) {
             if (authStateSnapshot.hasData) {
               return const SetupRoute();
             }

@@ -42,7 +42,7 @@ class BleCommunicationService {
   /// Creates an instance of [BleCommunicationService] and subscribes to the characteristic of the Brine device.
   BleCommunicationService({required this.characteristic}) {
     // Subscribe to the characteristic so that the app can receive updates from the Brine device.
-    _subscribeToCharacteristic();
+    unawaited(_subscribeToCharacteristic());
   }
 
   /// The [BleCharacteristic] with which this service will interact.
@@ -126,6 +126,6 @@ class BleCommunicationService {
   /// When the characteristic subscription is no longer needed, this method should be called to dispose of the
   /// subscription in order to avoid memory leaks.
   void dispose() {
-    _characteristicValueListener?.cancel();
+    unawaited(_characteristicValueListener?.cancel());
   }
 }

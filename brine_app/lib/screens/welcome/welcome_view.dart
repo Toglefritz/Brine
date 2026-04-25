@@ -53,8 +53,8 @@ class WelcomeView extends StatelessWidget {
                   child: Text(
                     AppLocalizations.of(context)!.addDeviceInvitation,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).primaryColorDark,
-                        ),
+                      color: Theme.of(context).primaryColorDark,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -71,8 +71,8 @@ class WelcomeView extends StatelessWidget {
                       Text(
                         AppLocalizations.of(context)!.salesPrompt,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).primaryColorDark,
-                            ),
+                          color: Theme.of(context).primaryColorDark,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                       Padding(

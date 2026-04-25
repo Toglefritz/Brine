@@ -122,7 +122,7 @@ class LoginController extends State<LoginRoute> {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => const SetupRoute(),
+          builder: (context) => const SetupRoute(),
         ),
       );
     }
@@ -136,8 +136,10 @@ class LoginController extends State<LoginRoute> {
   /// form validation errors.
   Future<UserCredential?> login({required String emailAddress, required String password}) async {
     try {
-      final UserCredential credential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailAddress, password: password);
+      final UserCredential credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailAddress,
+        password: password,
+      );
 
       return credential;
     } on FirebaseAuthException catch (e) {
@@ -202,13 +204,13 @@ class LoginController extends State<LoginRoute> {
   }
 
   /// Handles taps on the back button.
-  void onBackTap() {
+  Future<void> onBackTap() async {
     Analytics.trackEvent(eventName: 'login_back_tap');
 
-    Navigator.pushReplacement(
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const OnboardingRoute(),
+        builder: (context) => const OnboardingRoute(),
       ),
     );
   }
@@ -224,7 +226,7 @@ class LoginController extends State<LoginRoute> {
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute<void>(
-            builder: (BuildContext context) => const SetupRoute(),
+            builder: (context) => const SetupRoute(),
           ),
         );
       }

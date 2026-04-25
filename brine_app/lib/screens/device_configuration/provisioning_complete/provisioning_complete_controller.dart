@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../extensions/json.dart';
@@ -22,7 +24,7 @@ class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
     Analytics.trackPageView('provisioning_complete');
 
     // Complete the provisioning process.
-    _completeProvisioning();
+    unawaited(_completeProvisioning());
 
     super.initState();
   }
@@ -78,8 +80,8 @@ class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
     // Get a Response object from the JSON response.
     final Response response = Response.fromJson(value);
 
-    // If the response indicates that the Brine device successfully completed the provisioning process, update the UI
-    // to reflect this.
+    // If the response indicates that the Brine device successfully completed the provisioning process, update the UI to
+    // reflect this.
     if (response.responseType == ResponseType.provisioningComplete) {
       // Terminate the Bluetooth connection.
       widget.bleCommunicationManager.dispose();
@@ -104,7 +106,7 @@ class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const SetupRoute(),
+        builder: (context) => const SetupRoute(),
       ),
     );
   }

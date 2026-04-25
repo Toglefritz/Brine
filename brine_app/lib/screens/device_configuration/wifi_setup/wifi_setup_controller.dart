@@ -39,7 +39,7 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
   /// 1. It establishes a callback to handle the response from the Brine device. This is done before sending the
   /// command so that this controller is prepared to handle the response when it arrives.
   /// 2. It sends a command to the Brine device to scan for available WiFi networks.
-  void _sendScanCommand() {
+  Future<void> _sendScanCommand() async {
     // Register a callback to handle the response from the Brine device.
     widget.bleCommunicationManager.registerCallback(_onScanCompleted);
 
@@ -50,7 +50,7 @@ class WiFiSetupController extends State<WiFiSetupRoute> {
     final String commandString = scanCommand.toJsonString();
 
     try {
-      widget.bleCommunicationManager.writeValue(
+      await widget.bleCommunicationManager.writeValue(
         value: commandString,
       );
     } catch (e) {

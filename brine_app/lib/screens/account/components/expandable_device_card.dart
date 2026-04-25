@@ -104,8 +104,9 @@ class ExpandableDeviceCardState extends State<ExpandableDeviceCard> {
             duration: _cardAnimationDuration,
             curve: Curves.easeInOut,
             padding: const EdgeInsets.all(Insets.medium),
-            height:
-                _isExpanded ? MediaQuery.textScalerOf(context).scale(190) : MediaQuery.textScalerOf(context).scale(100),
+            height: _isExpanded
+                ? MediaQuery.textScalerOf(context).scale(190)
+                : MediaQuery.textScalerOf(context).scale(100),
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(12),
@@ -136,8 +137,8 @@ class ExpandableDeviceCardState extends State<ExpandableDeviceCard> {
                                   TextSpan(
                                     text: '${AppLocalizations.of(context)!.deviceId}: ',
                                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   TextSpan(
                                     text: widget.device.deviceId,
@@ -152,8 +153,8 @@ class ExpandableDeviceCardState extends State<ExpandableDeviceCard> {
                                   TextSpan(
                                     text: '${AppLocalizations.of(context)!.saltLevel}: ',
                                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   TextSpan(
                                     text: '${(widget.device.saltLevel * 100).toInt()}%',
@@ -168,8 +169,8 @@ class ExpandableDeviceCardState extends State<ExpandableDeviceCard> {
                                   TextSpan(
                                     text: '${AppLocalizations.of(context)!.batteryLevel}: ',
                                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   TextSpan(
                                     text: '${widget.device.batteryLevel.toInt()}%',
@@ -184,8 +185,8 @@ class ExpandableDeviceCardState extends State<ExpandableDeviceCard> {
                                   TextSpan(
                                     text: '${AppLocalizations.of(context)!.lastUpdated}: ',
                                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   TextSpan(
                                     text: widget.device.lastUpdateTime,

@@ -31,8 +31,8 @@ class DeviceConnectionView extends StatelessWidget {
               child: Text(
                 AppLocalizations.of(context)!.bleConnecting,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).primaryColorDark,
-                    ),
+                  color: Theme.of(context).primaryColorDark,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),

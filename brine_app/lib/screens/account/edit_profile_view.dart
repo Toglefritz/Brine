@@ -21,7 +21,7 @@ class EditProfileView extends StatelessWidget {
   }) async {
     final bool? removeDevice = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.emailUpdateDialogTitle),
           content: Text(AppLocalizations.of(context)!.emailUpdateDialogMessage(newEmail)),
@@ -99,8 +99,8 @@ class EditProfileView extends StatelessWidget {
                         child: Text(
                           state.userInitials,
                           style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                                color: const Color(0xFF212121), // Always dark color on primary
-                              ),
+                            color: const Color(0xFF212121), // Always dark color on primary
+                          ),
                         ),
                       ),
                     ),
@@ -111,9 +111,9 @@ class EditProfileView extends StatelessWidget {
                     child: Text(
                       AppLocalizations.of(context)!.profile,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).primaryColorDark,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: Theme.of(context).primaryColorDark,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
 
@@ -164,9 +164,9 @@ class EditProfileView extends StatelessWidget {
                     child: Text(
                       AppLocalizations.of(context)!.security,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).primaryColorDark,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: Theme.of(context).primaryColorDark,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
 

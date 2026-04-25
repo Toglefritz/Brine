@@ -2,13 +2,11 @@
 enum AuthMethod {
   /// Authentication using a username and password.
   basicAuth,
-  //phone,
-  //anonymous,
+  // phone, anonymous,
   /// Authentication through a Google account.
   google,
-  //microsoft,
-  //facebook,
+  // microsoft, facebook,
   /// Authentication through an Apple account.
   apple,
-  //gitHub;
+  // gitHub;
 }

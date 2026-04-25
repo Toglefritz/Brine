@@ -204,8 +204,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
   }
 
   /// Validates the password field.
-  // This method always returns null because the [validatePasswordConfirmationField] method handles validation
-  // for both password field.
+  // This method always returns null because the [validatePasswordConfirmationField] method handles validation for both
+  // password field.
   String? validatePasswordField(String? value) {
     if (value == null || value.isEmpty) {
       Analytics.trackEvent(eventName: 'account_creation_empty_password');
@@ -264,7 +264,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
     await Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(builder: (BuildContext context) => const OnboardingRoute()),
+      MaterialPageRoute<void>(builder: (context) => const OnboardingRoute()),
     );
   }
 
@@ -322,8 +322,8 @@ class CreateAccountController extends State<CreateAccountRoute> {
 
   /// Creates a document for the new user account in the Firestore database.
   ///
-  /// After a new user account is successfully created, a document needs to be created in the Firestore database for
-  /// the new user. This document will include information about the user's devices, among other things.
+  /// After a new user account is successfully created, a document needs to be created in the Firestore database for the
+  /// new user. This document will include information about the user's devices, among other things.
   Future<void> _createUserDocument(User user) async {
     try {
       final DeviceManagementService deviceManagementService = DeviceManagementService(user: user);
@@ -338,7 +338,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
   Future<void> _navigateToSetup() async {
     await Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(builder: (BuildContext context) => const SetupRoute()),
+      MaterialPageRoute<void>(builder: (context) => const SetupRoute()),
     );
   }
 
@@ -347,7 +347,7 @@ class CreateAccountController extends State<CreateAccountRoute> {
     // TODO(Toglefritz): should this be a push?
     await Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(builder: (BuildContext context) => ErrorRoute(errorType: errorType)),
+      MaterialPageRoute<void>(builder: (context) => ErrorRoute(errorType: errorType)),
     );
   }
 

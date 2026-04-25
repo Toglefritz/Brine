@@ -49,7 +49,7 @@ class ScanController extends State<ScanRoute> {
     Analytics.trackPageView('scan');
 
     // Initialize the Bluetooth permission status monitor.
-    _initBluetoothPermissionStatusMonitor();
+    unawaited(_initBluetoothPermissionStatusMonitor());
 
     super.initState();
   }
@@ -59,12 +59,12 @@ class ScanController extends State<ScanRoute> {
   /// This method sets up a listener to monitor the current status of the Bluetooth permissions on the host platform.
   Future<void> _initBluetoothPermissionStatusMonitor() async {
     _bluetoothPermissionStream = (await BleCommunicationService.ble.emitCurrentPermissionStatus()).listen(
-      (BluetoothPermissionStatus status) {
+      (status) async {
         _bluetoothPermissionStatus = status;
 
         // If permissions are granted, start monitoring the Bluetooth adapter status.
         if (_bluetoothPermissionStatus == BluetoothPermissionStatus.granted) {
-          _initBluetoothAdapterStatusMonitor();
+          await _initBluetoothAdapterStatusMonitor();
         }
       },
       onError: (dynamic error) async {
@@ -75,7 +75,7 @@ class ScanController extends State<ScanRoute> {
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute<void>(
-            builder: (BuildContext context) => const ErrorRoute(errorType: ErrorType.bluetoothPermissions),
+            builder: (context) => const ErrorRoute(errorType: ErrorType.bluetoothPermissions),
           ),
         );
       },
@@ -92,13 +92,13 @@ class ScanController extends State<ScanRoute> {
   Future<void> _initBluetoothAdapterStatusMonitor() async {
     try {
       _bluetoothStatusStream = (await BleCommunicationService.ble.emitCurrentBluetoothStatus()).listen(
-        (BluetoothStatus status) {
+        (status) async {
           _bluetoothAdapterStatus = status;
 
           // Start the scan if the Bluetooth adapter is available and if permissions have been granted.
           if (_bluetoothAdapterStatus == BluetoothStatus.enabled &&
               _bluetoothPermissionStatus == BluetoothPermissionStatus.granted) {
-            _startScan();
+            await _startScan();
           }
         },
         onError: (dynamic error) {
@@ -144,12 +144,12 @@ class ScanController extends State<ScanRoute> {
   /// Receives [BleDevice] instances from the [SplendidBle] service that represent BLE devices discovered during the
   /// scan. Since the scan is filtered to only show devices with the Brine service UUID, this method will only be called
   /// when Brine devices are discovered.
-  void _onDeviceDiscovered(BleDevice device) {
+  Future<void> _onDeviceDiscovered(BleDevice device) async {
     debugPrint('Discovered Brine device, ${device.name}');
 
     // Check if the discovered device is among the excluded devices
     final bool isExcluded = widget.excludedDeviceNames
-        .where((String excludedDeviceName) => excludedDeviceName == device.name)
+        .where((excludedDeviceName) => excludedDeviceName == device.name)
         .isNotEmpty;
 
     // Check that the discovered device is not excluded. If it is, ignore the device. If it is not excluded, double
@@ -160,14 +160,14 @@ class ScanController extends State<ScanRoute> {
       _scanTimeout.cancel();
 
       // Stop the scan.
-      _stopScan();
+      await _stopScan();
 
       // Navigate to the next screen.
-      Navigator.pushReplacement(
+      if (!mounted) return;
+      await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) =>
-              DeviceConfirmationRoute(device: device, excludedDevices: widget.excludedDeviceNames),
+          builder: (context) => DeviceConfirmationRoute(device: device, excludedDevices: widget.excludedDeviceNames),
         ),
       );
     }
@@ -175,30 +175,31 @@ class ScanController extends State<ScanRoute> {
 
   /// Handles taps on the "cancel" button used to stop the scan and return to the setup route so the account can be
   /// loaded again.
-  void onCancelScan() {
+  Future<void> onCancelScan() async {
     Analytics.trackEvent(eventName: 'scan_cancel_tap');
 
-    _stopScan();
+    await _stopScan();
 
-    Navigator.pushReplacement(context, MaterialPageRoute<void>(builder: (BuildContext context) => const SetupRoute()));
+    if (!mounted) return;
+    await Navigator.pushReplacement(context, MaterialPageRoute<void>(builder: (context) => const SetupRoute()));
   }
 
   /// Handles taps on the "try again" button used to restart the scan.
   // TODO(Toglefritz): Go back to the instructions about how to start advertisement on the Brine device instead
-  void onTryAgain() {
+  Future<void> onTryAgain() async {
     Analytics.trackEvent(eventName: 'scan_try_again_tap');
 
     setState(() {
       _scanTimeoutReached = false;
     });
 
-    _startScan();
+    await _startScan();
   }
 
   /// Stops the scan for nearby BLE devices.
-  void _stopScan({bool? scanTimeout}) {
+  Future<void> _stopScan({bool? scanTimeout}) async {
     BleCommunicationService.ble.stopScan();
-    _discoveredDeviceSubscription?.cancel();
+    await _discoveredDeviceSubscription?.cancel();
 
     // If the scan was stopped due to a timeout, show a message to the user.
     if (scanTimeout ?? false) {
@@ -216,16 +217,16 @@ class ScanController extends State<ScanRoute> {
   @override
   void dispose() {
     // Stop the scan.
-    _stopScan();
+    unawaited(_stopScan());
 
     // Cancel the scan timeout timer.
     _scanTimeout.cancel();
 
     // Cancel the Bluetooth status stream.
-    _bluetoothStatusStream?.cancel();
+    unawaited(_bluetoothStatusStream?.cancel());
 
     // Cancel the Bluetooth permission stream.
-    _bluetoothPermissionStream?.cancel();
+    unawaited(_bluetoothPermissionStream?.cancel());
 
     super.dispose();
   }

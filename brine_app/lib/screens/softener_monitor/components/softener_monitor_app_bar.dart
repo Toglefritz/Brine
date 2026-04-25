@@ -42,7 +42,7 @@ class SoftenerMonitorAppBar extends StatelessWidget implements PreferredSizeWidg
             controller: _menuAnchorController,
             menuChildren: List.generate(
               state.widget.devices.length,
-              (int index) {
+              (index) {
                 final BrineDevice device = state.widget.devices[index];
 
                 return MenuItemButton(
@@ -61,7 +61,7 @@ class SoftenerMonitorAppBar extends StatelessWidget implements PreferredSizeWidg
                 );
               },
             ),
-            builder: (BuildContext context, _, __) {
+            builder: (context, _, _) {
               return TextButton(
                 onPressed: () {
                   if (_menuAnchorController.isOpen) {
@@ -74,15 +74,15 @@ class SoftenerMonitorAppBar extends StatelessWidget implements PreferredSizeWidg
                   text: TextSpan(
                     text: '${AppLocalizations.of(context)!.device}: ',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).primaryColorDark,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: Theme.of(context).primaryColorDark,
+                      fontWeight: FontWeight.bold,
+                    ),
                     children: [
                       TextSpan(
                         text: state.selectedDevice.name.toUpperCase(),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).primaryColorDark,
-                            ),
+                          color: Theme.of(context).primaryColorDark,
+                        ),
                       ),
                     ],
                   ),
@@ -91,12 +91,12 @@ class SoftenerMonitorAppBar extends StatelessWidget implements PreferredSizeWidg
             },
           ),
         PopupMenuButton<String>(
-          onSelected: (String value) => state.onAccountTap(),
+          onSelected: (value) => state.onAccountTap(),
           icon: Icon(
             Icons.more_vert,
             color: Theme.of(context).primaryColorDark,
           ),
-          itemBuilder: (BuildContext context) {
+          itemBuilder: (context) {
             return [
               PopupMenuItem<String>(
                 value: AppLocalizations.of(context)!.account,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -40,10 +41,11 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
     _waveController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    )..repeat();
+    );
 
-    // Create a linear animation for the wave
-    // ignore_for_file: prefer_int_literals
+    unawaited(_waveController.repeat());
+
+    // Create a linear animation for the wave ignore_for_file: prefer_int_literals
     _waveAnimation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _waveController, curve: Curves.linear),
     );
@@ -72,7 +74,7 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
   }
 
   @override
-  void didUpdateWidget(WaveProgressIndicator oldWidget) {
+  Future<void> didUpdateWidget(WaveProgressIndicator oldWidget) async {
     super.didUpdateWidget(oldWidget);
 
     // If the progress value has changed, animate to the new value
@@ -81,9 +83,8 @@ class WaveProgressIndicatorState extends State<WaveProgressIndicator> with Ticke
         CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
       );
 
-      _progressController
-        ..reset()
-        ..forward();
+      _progressController.reset();
+      await _progressController.forward();
     }
   }
 

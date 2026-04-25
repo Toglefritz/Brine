@@ -72,8 +72,8 @@ class ApplianceMeasurementView extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.waterSoftenerHeight,
                             labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
+                              color: Theme.of(context).primaryColorDark,
+                            ),
                             // A dropdown menu allowing the unit of measurement to be selected
                             suffixIcon: Padding(
                               padding: const EdgeInsets.only(
@@ -83,7 +83,7 @@ class ApplianceMeasurementView extends StatelessWidget {
                                 value: state.unitOfMeasurement,
                                 items: UnitOfMeasurement.values
                                     .map<DropdownMenuItem<UnitOfMeasurement>>(
-                                      (UnitOfMeasurement unit) => DropdownMenuItem<UnitOfMeasurement>(
+                                      (unit) => DropdownMenuItem<UnitOfMeasurement>(
                                         value: unit,
                                         child: Text(unit.label),
                                       ),

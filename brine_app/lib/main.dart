@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -30,10 +32,9 @@ Future<void> main() async {
     await FirebaseAppCheck.instance.activate();
   }
 
-  // Get the use_emulator boolean from the `flutter run` command to determine if the Firebase Emulator Suite should
-  // be used. The `fromEnvironment` method returns false by default if the argument is not passed.
-  // To run the app with the emulator, use the following command:
-  // flutter run --dart-define=USE_FIREBASE_EMULATOR=true
+  // Get the use_emulator boolean from the `flutter run` command to determine if the Firebase Emulator Suite should be
+  // used. The `fromEnvironment` method returns false by default if the argument is not passed. To run the app with the
+  // emulator, use the following command: flutter run --dart-define=USE_FIREBASE_EMULATOR=true
   const bool useFirebaseEmulator = bool.fromEnvironment('USE_FIREBASE_EMULATOR');
 
   // In debug mode, use the Firebase local emulator.
@@ -54,8 +55,8 @@ Future<void> main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
     // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    PlatformDispatcher.instance.onError = (error, stack) {
+      unawaited(FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
       return true;
     };
   }

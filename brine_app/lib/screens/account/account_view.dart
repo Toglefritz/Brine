@@ -23,7 +23,7 @@ class AccountView extends StatelessWidget {
   }) async {
     final bool? removeDevice = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.removeDevice),
           content: Text(AppLocalizations.of(context)!.removeDeviceConfirmation(deviceId)),
@@ -50,7 +50,7 @@ class AccountView extends StatelessWidget {
   static Future<bool?> showDeleteAccountConfirmationDialog({required BuildContext context}) async {
     final bool? removeDevice = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.deleteAccount),
           content: Text(AppLocalizations.of(context)!.deleteAccountConfirmation),

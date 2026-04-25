@@ -65,8 +65,8 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                                 child: Text(
                                   '*',
                                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                        color: Theme.of(context).primaryColor,
-                                      ),
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               ),
                             ),
@@ -84,8 +84,8 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                       child: Text(
                         AppLocalizations.of(context)!.saltRemaining.toUpperCase(),
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              color: Theme.of(context).primaryColorDark,
-                            ),
+                          color: Theme.of(context).primaryColorDark,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -127,15 +127,15 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                                 Text(
                                   '*  ',
                                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        color: Theme.of(context).primaryColor,
-                                      ),
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                                 Flexible(
                                   child: Text(
                                     AppLocalizations.of(context)!.deviceOverdueMessageDescription,
                                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: Theme.of(context).primaryColorDark,
-                                        ),
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -156,8 +156,8 @@ class SoftenerMonitorOverdueView extends StatelessWidget {
                           child: Text(
                             AppLocalizations.of(context)!.deviceOverdueMessage(state.selectedDevice.lastUpdateTime),
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
+                              color: Theme.of(context).primaryColorDark,
+                            ),
                           ),
                         ),
                       ],

@@ -41,7 +41,7 @@ class SoftenerMonitorController extends State<SoftenerMonitorRoute> {
     await Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => AccountRoute(
+        builder: (context) => AccountRoute(
           devices: widget.devices,
         ),
       ),
@@ -56,13 +56,13 @@ class SoftenerMonitorController extends State<SoftenerMonitorRoute> {
   Future<void> onReconnectDevice() async {
     // Get a list of device names to be excluded from the Bluetooth scan on the next screen.
     final List<String> deviceExclusionList = [
-      ...widget.devices.map((BrineDevice device) => device.name),
+      ...widget.devices.map((device) => device.name),
     ];
 
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => ScanRoute(
+        builder: (context) => ScanRoute(
           excludedDeviceNames: deviceExclusionList,
         ),
       ),
@@ -73,8 +73,9 @@ class SoftenerMonitorController extends State<SoftenerMonitorRoute> {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
-      child:
-          selectedDevice.isUpdateOverdue ? SoftenerMonitorOverdueView(state: this) : SoftenerMonitorView(state: this),
+      child: selectedDevice.isUpdateOverdue
+          ? SoftenerMonitorOverdueView(state: this)
+          : SoftenerMonitorView(state: this),
     );
   }
 }

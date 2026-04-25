@@ -58,8 +58,8 @@ class SoftenerMonitorView extends StatelessWidget {
     if (saltLevel > 0.70) {
       return const Color(0xFF212121);
     }
-    // If the salt level is below 70%, the label will be displayed near the top of the screen, on the
-    // Scaffold background color. If using a dark Brightness, the label text should be lightly colored.
+    // If the salt level is below 70%, the label will be displayed near the top of the screen, on the Scaffold
+    // background color. If using a dark Brightness, the label text should be lightly colored.
     else {
       return Theme.of(context).primaryColorDark;
     }
@@ -106,8 +106,8 @@ class SoftenerMonitorView extends StatelessWidget {
                     child: Text(
                       AppLocalizations.of(context)!.saltRemaining.toUpperCase(),
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            color: _getTextColor(context),
-                          ),
+                        color: _getTextColor(context),
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),

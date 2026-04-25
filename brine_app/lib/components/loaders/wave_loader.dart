@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import 'delay_tween.dart';
@@ -20,11 +22,11 @@ class WaveLoader extends StatefulWidget {
     this.itemCount = 5,
     this.duration = const Duration(milliseconds: 1200),
     this.controller,
-  })  : assert(
-          !(itemBuilder is IndexedWidgetBuilder && color is Color) && !(itemBuilder == null && color == null),
-          'You should specify either an itemBuilder or a color',
-        ),
-        assert(itemCount >= 2, 'itemCount cannot be less than 2.');
+  }) : assert(
+         !(itemBuilder is IndexedWidgetBuilder && color is Color) && !(itemBuilder == null && color == null),
+         'You should specify either an itemBuilder or a color',
+       ),
+       assert(itemCount >= 2, 'itemCount cannot be less than 2.');
 
   /// The color of the wave bars.
   ///
@@ -67,12 +69,13 @@ class _WaveLoaderState extends State<WaveLoader> with SingleTickerProviderStateM
     super.initState();
 
     // If a controller is provided, use it. Otherwise, create a new controller.
-    _controller = (widget.controller ??
+    _controller =
+        widget.controller ??
         AnimationController(
           vsync: this,
           duration: widget.duration,
-        ))
-      ..repeat();
+        );
+    unawaited(_controller.repeat());
   }
 
   /// Returns the animation delay values based on the selected wave type.
@@ -92,12 +95,12 @@ class _WaveLoaderState extends State<WaveLoader> with SingleTickerProviderStateM
     return <double>[
       ...List<double>.generate(
         count ~/ 2,
-        (int index) => -1.0 - (index * 0.1) - 0.1,
+        (index) => -1.0 - (index * 0.1) - 0.1,
       ).reversed,
       if (count.isOdd) -1.0,
       ...List<double>.generate(
         count ~/ 2,
-        (int index) => -1.0 + (index * 0.1) + (count.isOdd ? 0.1 : 0.0),
+        (index) => -1.0 + (index * 0.1) + (count.isOdd ? 0.1 : 0.0),
       ),
     ];
   }
@@ -107,12 +110,12 @@ class _WaveLoaderState extends State<WaveLoader> with SingleTickerProviderStateM
     return <double>[
       ...List<double>.generate(
         count ~/ 2,
-        (int index) => -1.0 + (index * 0.1) + 0.1,
+        (index) => -1.0 + (index * 0.1) + 0.1,
       ).reversed,
       if (count.isOdd) -1.0,
       ...List<double>.generate(
         count ~/ 2,
-        (int index) => -1.0 - (index * 0.1) - (count.isOdd ? 0.1 : 0.0),
+        (index) => -1.0 - (index * 0.1) - (count.isOdd ? 0.1 : 0.0),
       ),
     ];
   }
@@ -122,12 +125,12 @@ class _WaveLoaderState extends State<WaveLoader> with SingleTickerProviderStateM
     return <double>[
       ...List<double>.generate(
         count ~/ 2,
-        (int index) => -1.0 + (index * 0.2) + 0.2,
+        (index) => -1.0 + (index * 0.2) + 0.2,
       ).reversed,
       if (count.isOdd) -1.0,
       ...List<double>.generate(
         count ~/ 2,
-        (int index) => -1.0 + (index * 0.2) + 0.2,
+        (index) => -1.0 + (index * 0.2) + 0.2,
       ),
     ];
   }
@@ -150,7 +153,7 @@ class _WaveLoaderState extends State<WaveLoader> with SingleTickerProviderStateM
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(
             animationDelays.length,
-            (int index) {
+            (index) {
               return ScaleYWidget(
                 scaleY: DelayTween(
                   begin: 0.4,

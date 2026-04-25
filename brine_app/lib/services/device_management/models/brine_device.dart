@@ -46,22 +46,24 @@ class BrineDevice {
   /// Creates an instance of [BrineDevice] from a JSON object.
   factory BrineDevice.fromJson(Map<String, dynamic> json) {
     // Get the salt level. The salt level can be an integer or a double, so it is necessary to check the type.
-    final double saltDistance =
-        json['salt_distance'] is int ? (json['salt_distance'] as int).toDouble() : json['salt_distance'] as double;
+    final double saltDistance = json['salt_distance'] is int
+        ? (json['salt_distance'] as int).toDouble()
+        : json['salt_distance'] as double;
 
     // Get the total height of the water softener
     final double applianceHeight = json['appliance_height'] is int
         ? (json['appliance_height'] as int).toDouble()
         : json['appliance_height'] as double;
 
-    // Calculate the salt level as a percentage. If an issue occurs resulting in the salt level exceeding 100%, the
-    // salt level will be capped at 100%. This is to prevent the salt level from being displayed as greater than 100%.
+    // Calculate the salt level as a percentage. If an issue occurs resulting in the salt level exceeding 100%, the salt
+    // level will be capped at 100%. This is to prevent the salt level from being displayed as greater than 100%.
     // Similarly, if the salt level is calculated to be less than 0%, the salt level will be capped at 0%.
     final double saltLevel = min(1, max(0, saltDistance / applianceHeight));
 
     // Get the battery level. The battery level can be an integer or a double, so it is necessary to check the type.
-    final double batteryLevel =
-        json['battery_level'] is int ? (json['battery_level'] as int).toDouble() : json['battery_level'] as double;
+    final double batteryLevel = json['battery_level'] is int
+        ? (json['battery_level'] as int).toDouble()
+        : json['battery_level'] as double;
 
     // Get the last updated timestamp
     final DateTime lastUpdatedTimestamp = DateTime.parse(json['last_updated'] as String);

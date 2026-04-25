@@ -57,7 +57,7 @@ dev_dependencies:
   # Mocking library for Dart.
   mockito: ^5.4.5
   # Lint rules for Dart and Flutter used internally at Very Good Ventures
-  very_good_analysis: ^7.0.0
+  very_good_analysis: ^10.2.0
 
 flutter:
   uses-material-design: true

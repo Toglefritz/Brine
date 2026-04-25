@@ -35,7 +35,7 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
       final PreSharedKey psk = await _generatePsk();
 
       // Transfer the PSK to the Brine device.
-      _transferPsk(psk);
+      await _transferPsk(psk);
     } catch (e) {
       debugPrint('Failed to perform PSK setup with exception, $e');
 
@@ -73,7 +73,7 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
   /// in response to receiving confirmation of the PSK transfer is made, the PSK is no longer stored in the app. From
   /// that point forward, the PSK is only used for securing communication between the Brine device and the Firebase
   /// backend.
-  void _transferPsk(PreSharedKey psk) {
+  Future<void> _transferPsk(PreSharedKey psk) async {
     // Register a callback to handle the response from the Brine device.
     widget.bleCommunicationManager.registerCallback(_onPskTransferCompleted);
 
@@ -88,7 +88,7 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
     );
 
     try {
-      widget.bleCommunicationManager.writeValue(
+      await widget.bleCommunicationManager.writeValue(
         value: commandString,
       );
     } catch (e) {
@@ -101,7 +101,7 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
   /// A callback that is invoked when the Brine device returns a response to the pre-shared key transfer.
   ///
   /// Assuming the PSK transfer is successful, the app will navigate to the next screen in the device configuration
-  void _onPskTransferCompleted(JSON value) {
+  Future<void> _onPskTransferCompleted(JSON value) async {
     debugPrint('Received PSK transfer response: $value');
 
     // Get a Response object from the JSON response.
@@ -110,7 +110,7 @@ class PreSharedKeySetupController extends State<PreSharedKeySetupRoute> {
     // If the response indicates that the PSK was successfully transferred, navigate to the next screen.
     if (response.responseType == ResponseType.pskTransferred) {
       // Navigate to the next screen.
-      Navigator.pushReplacement(
+      await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
           builder: (context) => WiFiSetupRoute(

@@ -15,7 +15,7 @@ class OnboardingController extends State<OnboardingRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const LoginRoute(),
+        builder: (context) => const LoginRoute(),
       ),
     );
   }
@@ -27,7 +27,7 @@ class OnboardingController extends State<OnboardingRoute> {
     await Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const CreateAccountRoute(),
+        builder: (context) => const CreateAccountRoute(),
       ),
     );
   }

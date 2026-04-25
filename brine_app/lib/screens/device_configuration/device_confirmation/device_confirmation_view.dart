@@ -49,8 +49,8 @@ class DeviceConfirmationView extends StatelessWidget {
                   child: Text(
                     AppLocalizations.of(context)!.detectedDeviceConfirmation,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).primaryColorDark,
-                        ),
+                      color: Theme.of(context).primaryColorDark,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -64,12 +64,12 @@ class DeviceConfirmationView extends StatelessWidget {
                   child: Text(
                     state.widget.device.name?.substring(6) ?? state.widget.device.address,
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          fontSize: 52,
-                          color: Theme.of(context).brightness == Brightness.light
-                              ? Theme.of(context).primaryColorDark
-                              : Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontSize: 52,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Theme.of(context).primaryColorDark
+                          : Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),

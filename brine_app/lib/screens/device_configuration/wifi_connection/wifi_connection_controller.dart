@@ -27,7 +27,7 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
 
   /// Sends a command to the Brine device to connect to a WiFi network. The SSID and password of the network are
   /// provided by the user on the previous screen.
-  void _sendWiFiConnectCommand() {
+  Future<void> _sendWiFiConnectCommand() async {
     debugPrint('Sending WiFi connect command for SSID, ${widget.ssid}');
 
     // Register a callback to handle the response from the Brine device.
@@ -40,7 +40,7 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
     );
 
     try {
-      widget.bleCommunicationManager.writeValue(value: commandString);
+      await widget.bleCommunicationManager.writeValue(value: commandString);
     } catch (e) {
       debugPrint('Failed to send connect command with exception, $e');
 
@@ -76,13 +76,13 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
     // Get a Response object from the JSON response.
     final Response response = Response.fromJson(value);
 
-    // If the response indicates that the Brine device successfully connected to the WiFi network, navigate to the
-    // Brine installation screen.
+    // If the response indicates that the Brine device successfully connected to the WiFi network, navigate to the Brine
+    // installation screen.
     if (response.responseType == ResponseType.wifiConnected) {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) =>
+          builder: (context) =>
               BrineInstallationRoute(bleCommunicationManager: widget.bleCommunicationManager, device: widget.device),
         ),
       );
@@ -97,7 +97,7 @@ class WiFiConnectionController extends State<WiFiConnectionRoute> {
       if (mounted) {
         await showDialog<void>(
           context: context,
-          builder: (BuildContext context) => AlertDialog(
+          builder: (context) => AlertDialog(
             title: const Text('WiFi Connection Failed'),
             content: Text('Failed to connect to ${widget.ssid}.\n\n${errorResponse.message}'),
             actions: [

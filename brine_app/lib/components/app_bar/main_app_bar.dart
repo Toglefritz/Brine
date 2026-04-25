@@ -36,7 +36,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       await Navigator.push(
         BrineApp.navigatorKey.currentContext!,
         MaterialPageRoute<void>(
-          builder: (BuildContext context) => AccountRoute(
+          builder: (context) => AccountRoute(
             devices: devices,
           ),
         ),
@@ -56,7 +56,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             Icons.more_vert,
             color: menuIconColor ?? Theme.of(context).primaryColorDark,
           ),
-          itemBuilder: (BuildContext context) {
+          itemBuilder: (context) {
             return [
               PopupMenuItem<String>(
                 value: AppLocalizations.of(context)!.account,

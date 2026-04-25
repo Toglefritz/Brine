@@ -30,26 +30,27 @@ void main() {
       /// This test verifies that the `toJsonString` method successfully converts a [Command] object to a serialized
       /// JSON string. The `wifiConnect` command type is used in this test.
       test(
-          'should successfully convert a Command object to a serialized JSON string for the `getDeviceId` command type',
-          () {
-        // Create a Command object with the CommandType.retrieveDeviceId type.
-        final Command command = Command(commandType: CommandType.wifiConnect);
+        'should successfully convert a Command object to a serialized JSON string for the `getDeviceId` command type',
+        () {
+          // Create a Command object with the CommandType.retrieveDeviceId type.
+          final Command command = Command(commandType: CommandType.wifiConnect);
 
-        // Create parameters for the command.
-        final Map<String, dynamic> parameters = {
-          'ssid': 'mock_ssid',
-          'password': 'mock_password',
-        };
+          // Create parameters for the command.
+          final Map<String, dynamic> parameters = {
+            'ssid': 'mock_ssid',
+            'password': 'mock_password',
+          };
 
-        // Convert the Command object to a serialized JSON string.
-        final String jsonString = command.toJsonString(parameters: parameters);
+          // Convert the Command object to a serialized JSON string.
+          final String jsonString = command.toJsonString(parameters: parameters);
 
-        // Verify that the Command object was successfully converted to a serialized JSON string.
-        expect(
-          jsonString,
-          '{"command":"wifi_connect","parameters":{"ssid":"mock_ssid","password":"mock_password"}}',
-        );
-      });
+          // Verify that the Command object was successfully converted to a serialized JSON string.
+          expect(
+            jsonString,
+            '{"command":"wifi_connect","parameters":{"ssid":"mock_ssid","password":"mock_password"}}',
+          );
+        },
+      );
     });
   });
 }

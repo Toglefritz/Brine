@@ -85,23 +85,24 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
 
   /// Starts the connection timeout timer.
   void _startConnectionTimeout() {
-    _connectionTimeout = Timer(const Duration(seconds: _connectionTimeoutSeconds), () {
+    _connectionTimeout = Timer(const Duration(seconds: _connectionTimeoutSeconds), () async {
       debugPrint('Connection timeout reached for device: ${widget.device.address}');
-      _onConnectionTimeout();
+      await _onConnectionTimeout();
     });
   }
 
   /// Handles connection timeout by navigating to the error screen.
-  void _onConnectionTimeout() {
+  Future<void> _onConnectionTimeout() async {
     // Cancel any ongoing streams
-    _connectionStream?.cancel();
-    _servicesDiscoveredStream?.cancel();
+    await _connectionStream?.cancel();
+    await _servicesDiscoveredStream?.cancel();
 
     // Navigate to error screen
-    Navigator.pushReplacement(
+    if (!mounted) return;
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const ErrorRoute(errorType: ErrorType.bluetoothConnection),
+        builder: (context) => const ErrorRoute(errorType: ErrorType.bluetoothConnection),
       ),
     );
   }
@@ -115,13 +116,13 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   ///
   /// The app waits for a connection to the Brine device to be established before moving on to performing service and
   /// characteristic discovery.
-  void _onConnectionStateUpdate(BleConnectionState state) {
+  Future<void> _onConnectionStateUpdate(BleConnectionState state) async {
     debugPrint('Connection state update for ${widget.device.name}: ${state.name}');
 
     if (state == BleConnectionState.connected) {
       // Cancel the connection timeout since we've successfully connected
       _connectionTimeout?.cancel();
-      _discoverServices();
+      await _discoverServices();
     }
   }
 
@@ -134,7 +135,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   }
 
   /// Called when a services are successfully discovered.
-  void _onServiceDiscovered(List<BleService> services) {
+  Future<void> _onServiceDiscovered(List<BleService> services) async {
     debugPrint('Discovered ${services.length} service(s): ${services.map((service) => service.serviceUuid)}');
 
     // Ensure that the expected single service containing a single characteristic were discovered.
@@ -150,7 +151,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     final BleCharacteristic characteristic = services.first.characteristics.first;
 
     // Create a BleCommunicationManager instance to handle communication with the Brine device.
-    _createBleCommunicationManager(characteristic);
+    await _createBleCommunicationManager(characteristic);
   }
 
   /// Subscribes to the single characteristic available from Brine devices.
@@ -171,8 +172,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// "vast_teal_elephant." The Bluetooth API used by Brine monitors include a command allowing the app to retrieve this
   /// device ID. This is necessary because the device ID is included in the account association process.
   ///
-  /// Note: If the device is not paired, the first write attempt will trigger the system pairing dialog and fail.
-  /// This method implements a retry mechanism to handle this scenario.
+  /// Note: If the device is not paired, the first write attempt will trigger the system pairing dialog and fail. This
+  /// method implements a retry mechanism to handle this scenario.
   Future<void> _getDeviceId(BleCharacteristic characteristic) async {
     debugPrint('Requesting device ID (attempt ${_deviceIdRetryCount + 1}/$_maxDeviceIdRetries)');
 
@@ -206,7 +207,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
         await _getDeviceId(characteristic);
       } else {
         debugPrint('Failed to get device ID after $_deviceIdRetryCount retries');
-        _onDeviceIdError();
+        await _onDeviceIdError();
       }
     }
   }
@@ -214,24 +215,24 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   /// Starts a timeout for receiving the device ID response.
   void _startDeviceIdTimeout() {
     _deviceIdTimeout?.cancel();
-    _deviceIdTimeout = Timer(const Duration(seconds: 5), () {
+    _deviceIdTimeout = Timer(const Duration(seconds: 5), () async {
       debugPrint('Device ID response timeout');
 
       if (_deviceIdRetryCount < _maxDeviceIdRetries) {
         _deviceIdRetryCount++;
-        _getDeviceId(_bleCommunicationManager!.characteristic);
+        await _getDeviceId(_bleCommunicationManager!.characteristic);
       } else {
-        _onDeviceIdError();
+        await _onDeviceIdError();
       }
     });
   }
 
   /// Handles errors when unable to retrieve device ID.
-  void _onDeviceIdError() {
-    Navigator.pushReplacement(
+  Future<void> _onDeviceIdError() async {
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const ErrorRoute(errorType: ErrorType.bluetoothConnection),
+        builder: (context) => const ErrorRoute(errorType: ErrorType.bluetoothConnection),
       ),
     );
   }
@@ -281,8 +282,7 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) =>
-            AssociationRoute(bleCommunicationManager: _bleCommunicationManager!, device: device),
+        builder: (context) => AssociationRoute(bleCommunicationManager: _bleCommunicationManager!, device: device),
       ),
     );
   }
@@ -299,10 +299,10 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
     _deviceIdTimeout?.cancel();
 
     // Cancel the connection state stream.
-    _connectionStream?.cancel();
+    unawaited(_connectionStream?.cancel());
 
     // Cancel the service discovery stream.
-    _servicesDiscoveredStream?.cancel();
+    unawaited(_servicesDiscoveredStream?.cancel());
 
     // Unregister the callback for changes in the value of the characteristic.
     _bleCommunicationManager?.unregisterCallback(_onCharacteristicChanged);

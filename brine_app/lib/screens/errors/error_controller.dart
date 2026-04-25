@@ -56,7 +56,7 @@ class ErrorController extends State<ErrorRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const OnboardingRoute(),
+        builder: (context) => const OnboardingRoute(),
       ),
     );
   }
@@ -66,7 +66,7 @@ class ErrorController extends State<ErrorRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => const ScanRoute(
+        builder: (context) => const ScanRoute(
           excludedDeviceNames: [], // By definition, there are no excluded devices from this route
         ),
       ),

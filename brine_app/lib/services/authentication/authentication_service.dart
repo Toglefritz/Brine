@@ -129,7 +129,7 @@ class AuthenticationService {
       final Completer<User?> completer = Completer<User?>();
       late StreamSubscription<GoogleSignInAuthenticationEvent> subscription;
 
-      subscription = googleSignIn.authenticationEvents.listen((GoogleSignInAuthenticationEvent event) async {
+      subscription = googleSignIn.authenticationEvents.listen((event) async {
         if (event is GoogleSignInAuthenticationEventSignIn) {
           final GoogleSignInAccount googleUser = event.user;
           final GoogleSignInAuthentication googleAuth = googleUser.authentication;

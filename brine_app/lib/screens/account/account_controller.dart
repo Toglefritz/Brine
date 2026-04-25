@@ -310,15 +310,14 @@ class AccountController extends State<AccountRoute> {
       }
 
       // Create a new list of devices that excludes the device that was removed.
-      final List<BrineDevice> updatedDevices = widget.devices
-        ..removeWhere((BrineDevice device) => device.deviceId == deviceId);
+      final List<BrineDevice> updatedDevices = widget.devices..removeWhere((device) => device.deviceId == deviceId);
 
       // If the user has just removed the last device from their account, navigate back to the WelcomeRoute.
       if (updatedDevices.isEmpty) {
         if (!mounted) return;
         await Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute<void>(builder: (BuildContext context) => const WelcomeRoute()),
-          (Route<dynamic> route) => false,
+          MaterialPageRoute<void>(builder: (context) => const WelcomeRoute()),
+          (route) => false,
         );
         return;
       }
@@ -327,7 +326,7 @@ class AccountController extends State<AccountRoute> {
         // Refresh this route.
         if (!mounted) return;
         await Navigator.of(context).pushReplacement(
-          MaterialPageRoute<void>(builder: (BuildContext context) => AccountRoute(devices: updatedDevices)),
+          MaterialPageRoute<void>(builder: (context) => AccountRoute(devices: updatedDevices)),
         );
       }
     }
@@ -342,8 +341,8 @@ class AccountController extends State<AccountRoute> {
     // Navigate back to the OnboardingRoute.
     if (!mounted) return;
     await Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute<void>(builder: (BuildContext context) => const OnboardingRoute()),
-      (Route<dynamic> route) => false,
+      MaterialPageRoute<void>(builder: (context) => const OnboardingRoute()),
+      (route) => false,
     );
   }
 
