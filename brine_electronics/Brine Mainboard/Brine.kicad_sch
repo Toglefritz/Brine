@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20250114)
+	(version 20260306)
 	(generator "eeschema")
-	(generator_version "9.0")
+	(generator_version "10.0")
 	(uuid "da3a4ef2-0e38-46f1-a1fc-55d8e0a83a54")
 	(paper "A2")
 	(title_block
@@ -215,11 +215,13 @@
 			(type solid)
 		)
 		(fill
-			(color 0 0 0 0.0000)
+			(color 0 0 0 0)
 		)
 		(uuid "0466b9b6-b218-4d15-b26d-b1a8ac4eb0dc")
 		(property "Sheetname" "Distance Sensor"
 			(at 368.3 291.3884 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -229,6 +231,8 @@
 		)
 		(property "Sheetfile" "brine_distance_sensor.kicad_sch"
 			(at 368.3 343.4846 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -297,11 +301,13 @@
 			(type solid)
 		)
 		(fill
-			(color 0 0 0 0.0000)
+			(color 0 0 0 0)
 		)
 		(uuid "1d104773-e5f5-4a03-987f-9f6e19e65cdb")
 		(property "Sheetname" "Power Latch"
 			(at 215.9 113.5884 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -311,6 +317,8 @@
 		)
 		(property "Sheetfile" "power_latch.kicad_sch"
 			(at 215.9 191.0846 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -389,11 +397,13 @@
 			(type solid)
 		)
 		(fill
-			(color 0 0 0 0.0000)
+			(color 0 0 0 0)
 		)
 		(uuid "4ad0d7d6-d3bf-4825-b971-cd4fdc149c91")
 		(property "Sheetname" "Button"
 			(at 63.5 215.1884 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -403,6 +413,8 @@
 		)
 		(property "Sheetfile" "brine_button.kicad_sch"
 			(at 63.5 267.2846 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -441,11 +453,13 @@
 			(type solid)
 		)
 		(fill
-			(color 0 0 0 0.0000)
+			(color 0 0 0 0)
 		)
 		(uuid "63bc593b-afd3-4a61-9e23-7e85a1d104e9")
 		(property "Sheetname" "XIAO ESP32-C3"
 			(at 215.9 215.1884 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -455,6 +469,8 @@
 		)
 		(property "Sheetfile" "xiao_esp32-s3.kicad_sch"
 			(at 215.9 344.7546 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -583,11 +599,13 @@
 			(type solid)
 		)
 		(fill
-			(color 0 0 0 0.0000)
+			(color 0 0 0 0)
 		)
 		(uuid "6d2918a7-c70e-4d9e-bb5b-f7d45fd4d68d")
 		(property "Sheetname" "RGB LED"
 			(at 368.3 215.1884 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -597,6 +615,8 @@
 		)
 		(property "Sheetfile" "brine_rgb_led.kicad_sch"
 			(at 368.3 267.2846 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -635,11 +655,13 @@
 			(type solid)
 		)
 		(fill
-			(color 0 0 0 0.0000)
+			(color 0 0 0 0)
 		)
 		(uuid "cb6fa39a-9a0c-434c-b5c9-65b8cf34a8e9")
 		(property "Sheetname" "Battery"
 			(at 215.9 38.6584 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -649,6 +671,8 @@
 		)
 		(property "Sheetfile" "brine_battery.kicad_sch"
 			(at 215.9 90.7546 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -687,11 +711,13 @@
 			(type solid)
 		)
 		(fill
-			(color 0 0 0 0.0000)
+			(color 0 0 0 0)
 		)
 		(uuid "e2bbff58-4ff7-4cd5-a219-8604e35fe5c2")
 		(property "Sheetname" "Battery Monitor"
 			(at 63.5 291.3884 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -701,6 +727,8 @@
 		)
 		(property "Sheetfile" "brine_battery_monitor.kicad_sch"
 			(at 63.5 343.4846 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
