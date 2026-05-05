@@ -3,25 +3,29 @@
 
 #include <Arduino.h>
 #include <esp_sleep.h>
-#include <driver/rtc_io.h>
 #include <driver/gpio.h>
 #include "DebugService.h"
 
+// The ESP32-C3 does not have RTC GPIO or EXT1 wakeup support. It uses the
+// deep sleep GPIO wakeup API instead. Other ESP32 variants (original, S2, S3)
+// use the RTC subsystem for GPIO wakeup during deep sleep.
+#if !defined(CONFIG_IDF_TARGET_ESP32C3)
+#include <driver/rtc_io.h>
+#endif
+
 /**
  * @class DeepSleepService
- * @brief A singleton class that manages the deep sleep cycle of the ESP32 IoT device.
+ * @brief Manages the deep sleep cycle for the ESP32.
  *
- * The `DeepSleepService` class encapsulates the functionality required to handle the ESP32's
- * deep sleep capabilities. It allows the device to conserve power by entering a deep sleep state
- * and waking up periodically or when triggered by an external event, such as a button press.
+ * This singleton configures timer-based and GPIO-based wake-up sources, then
+ * puts the device into deep sleep. The GPIO wake-up path allows the user to
+ * wake the device by pressing a button, while the timer path enables periodic
+ * sensor readings and data uploads.
  *
- * Features:
- * - **Timer Wake-Up**: Configures the ESP32 to wake up after a specified duration, enabling
- *   periodic tasks such as taking sensor readings and uploading data to a backend.
- * - **Button Wake-Up**: Configures a GPIO pin to wake the device when a button is pressed,
- *   allowing for manual wake-up and actions such as starting a provisioning process.
- * - **Wake-Up Cause Handling**: Determines the reason for the device waking up and triggers
- *   the corresponding actions, such as handling periodic tasks or responding to a button press.
+ * Platform differences between ESP32 variants are handled internally via
+ * compile-time checks. On the ESP32-C3, GPIO wakeup uses
+ * esp_deep_sleep_enable_gpio_wakeup(). On other variants, EXT1 wakeup with
+ * RTC GPIO is used.
  */
 class DeepSleepService {
 public:
@@ -31,11 +35,7 @@ public:
   }
 
   /**
-   * @brief Configures the deep sleep wake-up sources.
-   *
-   * Sets up the wake-up sources for deep sleep. This includes:
-   * - Timer-based wake-up for periodic sensor readings.
-   * - GPIO-based wake-up for button presses.
+   * @brief Configures both timer and GPIO wake-up sources for deep sleep.
    *
    * @param sleepDurationMs Duration in milliseconds for the timer wake-up.
    * @param wakeUpPin GPIO pin connected to the button for wake-up.
@@ -44,32 +44,12 @@ public:
     _sleepDurationMs = sleepDurationMs;
     _wakeUpPin = wakeUpPin;
 
-    // Configure timer wake-up
-    esp_sleep_enable_timer_wakeup(sleepDurationMs * 1000); // Convert to microseconds
-    
-    // Ensure the wakeup pin has pull-up enabled to prevent floating
-    // Note: Some GPIO pins may not support RTC pull-ups, so we also set regular pull-up
-    gpio_pullup_en(wakeUpPin);
-    gpio_pulldown_dis(wakeUpPin);
-    
-    // Try to enable RTC pull-up if supported (may fail on some pins)
-    esp_err_t rtc_result = rtc_gpio_pullup_en(wakeUpPin);
-    if (rtc_result == ESP_OK) {
-      rtc_gpio_pulldown_dis(wakeUpPin);
-      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up enabled on wakeup pin");
-    } else {
-      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up not supported on this pin, using regular pull-up");
-    }
-    
-    // Isolate the pin to prevent it from being affected by other peripherals during sleep
-    rtc_gpio_isolate(wakeUpPin);
-    
-    // Configure GPIO wake-up
-    // Use ext1 for better compatibility across ESP32 variants
-    // Button is active-low (pressed = LOW), so wake when ANY pin goes LOW
-    uint64_t wakeupMask = 1ULL << wakeUpPin;
-    esp_sleep_enable_ext1_wakeup(wakeupMask, ESP_EXT1_WAKEUP_ANY_LOW);
-    
+    // Configure timer wake-up (microseconds)
+    esp_sleep_enable_timer_wakeup(sleepDurationMs * 1000);
+
+    // Configure GPIO wake-up using the platform-appropriate API.
+    _configureGpioWakeup(wakeUpPin);
+
     DebugService::getInstance().debugPrint("DeepSleepService: Wake-up configured - Timer: ");
     DebugService::getInstance().debugPrint(String(sleepDurationMs));
     DebugService::getInstance().debugPrint("ms, GPIO: ");
@@ -79,37 +59,17 @@ public:
   /**
    * @brief Configures button-only wake-up (no timer).
    *
-   * Sets up only the GPIO wake-up source for deep sleep, without a timer.
    * This is useful when the device has no WiFi credentials and cannot perform
-   * periodic sensor uploads.
+   * periodic sensor uploads. The device will only wake on a button press.
    *
    * @param wakeUpPin GPIO pin connected to the button for wake-up.
    */
   void configureWakeUpButtonOnly(gpio_num_t wakeUpPin) {
     _wakeUpPin = wakeUpPin;
-    _sleepDurationMs = 0; // No timer
+    _sleepDurationMs = 0;
 
-    // Ensure the wakeup pin has pull-up enabled to prevent floating
-    gpio_pullup_en(wakeUpPin);
-    gpio_pulldown_dis(wakeUpPin);
-    
-    // Try to enable RTC pull-up if supported
-    esp_err_t rtc_result = rtc_gpio_pullup_en(wakeUpPin);
-    if (rtc_result == ESP_OK) {
-      rtc_gpio_pulldown_dis(wakeUpPin);
-      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up enabled on wakeup pin");
-    } else {
-      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up not supported on this pin, using regular pull-up");
-    }
-    
-    // Isolate the pin
-    rtc_gpio_isolate(wakeUpPin);
-    
-    // Configure GPIO wake-up only
-    // Button is active-low (pressed = LOW), so wake when ANY pin goes LOW
-    uint64_t wakeupMask = 1ULL << wakeUpPin;
-    esp_sleep_enable_ext1_wakeup(wakeupMask, ESP_EXT1_WAKEUP_ANY_LOW);
-    
+    _configureGpioWakeup(wakeUpPin);
+
     DebugService::getInstance().debugPrint("DeepSleepService: Wake-up configured - Button only on GPIO: ");
     DebugService::getInstance().debugPrintln(String(wakeUpPin));
   }
@@ -117,14 +77,11 @@ public:
   /**
    * @brief Puts the device into deep sleep.
    *
-   * This method should be called after completing the sensor readings and uploading data
-   * to the Firebase cloud. It ensures all necessary peripherals are disabled before sleeping.
+   * Call this after completing sensor readings and data uploads. The device
+   * will not return from this call until a configured wake-up source fires.
    */
   void enterDeepSleep() {
     DebugService::getInstance().debugPrintln("DeepSleepService: Entering deep sleep...");
-    // TODO Perform any cleanup operations if needed
-
-    // Enter deep sleep
     esp_deep_sleep_start();
   }
 
@@ -132,8 +89,46 @@ private:
   uint64_t _sleepDurationMs;
   gpio_num_t _wakeUpPin;
 
-  // Private constructor to enforce singleton pattern
   DeepSleepService() : _sleepDurationMs(0), _wakeUpPin(GPIO_NUM_MAX) {}
+
+  /**
+   * @brief Configures GPIO-based deep sleep wakeup using the correct API for
+   * the current ESP32 variant.
+   *
+   * On the ESP32-C3, uses esp_deep_sleep_enable_gpio_wakeup() which operates
+   * on the digital GPIO domain. On other variants, uses EXT1 wakeup through
+   * the RTC GPIO subsystem.
+   *
+   * @param pin The GPIO pin to configure as a wake-up source (active-low).
+   */
+  void _configureGpioWakeup(gpio_num_t pin) {
+    // Enable pull-up on the wakeup pin to prevent floating during sleep.
+    gpio_pullup_en(pin);
+    gpio_pulldown_dis(pin);
+
+#if defined(CONFIG_IDF_TARGET_ESP32C3)
+    // The C3 uses the deep sleep GPIO wakeup API. The pin mask indicates
+    // which GPIOs can trigger wakeup, and the mode specifies the level.
+    uint64_t wakeupMask = 1ULL << pin;
+    esp_deep_sleep_enable_gpio_wakeup(wakeupMask, ESP_GPIO_WAKEUP_GPIO_LOW);
+    DebugService::getInstance().debugPrintln("DeepSleepService: GPIO wakeup configured (C3 deep sleep GPIO API)");
+#else
+    // For original ESP32, S2, S3: use RTC GPIO with EXT1 wakeup.
+    esp_err_t rtc_result = rtc_gpio_pullup_en(pin);
+    if (rtc_result == ESP_OK) {
+      rtc_gpio_pulldown_dis(pin);
+      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up enabled on wakeup pin");
+    } else {
+      DebugService::getInstance().debugPrintln("DeepSleepService: RTC pull-up not supported on this pin, using regular pull-up");
+    }
+
+    rtc_gpio_isolate(pin);
+
+    uint64_t wakeupMask = 1ULL << pin;
+    esp_sleep_enable_ext1_wakeup(wakeupMask, ESP_EXT1_WAKEUP_ANY_LOW);
+    DebugService::getInstance().debugPrintln("DeepSleepService: EXT1 wakeup configured");
+#endif
+  }
 };
 
 #endif // DEEP_SLEEP_SERVICE_H

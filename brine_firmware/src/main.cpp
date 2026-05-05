@@ -11,6 +11,7 @@
 #include <DeviceConfigurationManager.h>
 #include <DistanceSensor.h>
 #include <LEDService.h>
+#include <PowerLatch.h>
 #include <Wire.h>
 
 // Include the appropriate button type based on build configuration
@@ -24,6 +25,22 @@
 
 /// Button instance used to handle button presses.
 BUTTON_TYPE &button = BUTTON_TYPE::getInstance();
+
+/// Power latch service for managing the LTC2954 shutdown circuit.
+PowerLatch &powerLatch = PowerLatch::getInstance();
+
+/// Set to true by the PWR_INT interrupt when the user requests a power-off
+/// via the LTC2954 pushbutton. Checked cooperatively in the main loop.
+volatile bool shutdownRequested = false;
+
+/**
+ * @brief ISR for the LTC2954 PWR_INT signal.
+ *
+ * Invoked on the falling edge of PWR_INT, indicating the user pressed the
+ * power button. Sets a flag that the main loop uses to initiate a graceful
+ * shutdown sequence.
+ */
+void IRAM_ATTR powerLatch_isr() { shutdownRequested = true; }
 
 // Tracks whether the I2C button was successfully initialized
 bool buttonAvailable = false;
@@ -460,6 +477,10 @@ void setup() {
   // Turn the LED off initially.
   LEDService::getInstance().turnOff();
 
+  // Initialize the power latch service. The ISR will set shutdownRequested
+  // when the user presses the LTC2954 power button.
+  powerLatch.begin(powerLatch_isr);
+
   // Initialize the distance sensor.
   bool sensorInitialized = sensor.begin(Wire);
   if (!sensorInitialized) {
@@ -550,6 +571,33 @@ void setup() {
 }
 
 void loop() {
+  // Check if the user requested a power-off via the LTC2954 pushbutton.
+  // This is checked first so the device can shut down promptly regardless
+  // of what other operations are in progress.
+  if (shutdownRequested || powerLatch.isShutdownRequested()) {
+    DebugService::getInstance().debugPrintln("Shutdown requested via power button. Beginning graceful shutdown...");
+
+    // Stop provisioning if it is active.
+    if (provisioningStartTime != 0) {
+      DeviceConfigurationManager::getInstance().stopProvisioning();
+    }
+
+    // Turn off the LED.
+    LEDService::getInstance().turnOff();
+
+    // Stop the distance sensor if it is running.
+    sensor.stopMeasurement();
+
+    // Allow a brief window for any pending serial output to flush.
+    delay(100);
+
+    // Assert PWR_KILL to command the LTC2954 to disconnect power.
+    powerLatch.shutdown();
+
+    // If power was not cut (latch not populated), reset the flag and continue.
+    shutdownRequested = false;
+  }
+
   // Process any pending BLE commands
   if (pResponseCharacteristic != nullptr) {
     String response = apiHandler.processCommand();

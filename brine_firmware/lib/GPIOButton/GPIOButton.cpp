@@ -1,4 +1,5 @@
 #include "GPIOButton.h"
+#include <esp_sleep.h>
 
 GPIOButton::GPIOButton() {}
 
@@ -129,7 +130,8 @@ void GPIOButton::detachInterrupt() {
  * @brief Configures the button pin for deep sleep wake-up.
  *
  * This method configures the button pin as an external wake-up source
- * for ESP32 deep sleep mode using ext1 wake-up.
+ * for ESP32 deep sleep mode. On the ESP32-C3, uses the deep sleep GPIO
+ * wakeup API. On other variants, uses ext1 wake-up through RTC GPIO.
  *
  * @param wakeupLevel The logic level that will trigger wake-up (0 for LOW, 1 for HIGH)
  * @return true if wake-up source was configured successfully, false otherwise.
@@ -140,21 +142,23 @@ bool GPIOButton::enableDeepSleepWakeup(int wakeupLevel) {
         return false;
     }
     
-    // Create a bitmask for the button pin
     uint64_t buttonMask = 1ULL << buttonPin;
-    
-    // Configure ext1 wake-up source
-    esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
-    
-    // Enable ext1 wake-up on the button pin
     esp_err_t result;
+
+#if defined(CONFIG_IDF_TARGET_ESP32C3)
+    // The ESP32-C3 uses the deep sleep GPIO wakeup API rather than EXT1.
     if (wakeupLevel == 0) {
-        // Wake up when pin goes LOW (button pressed)
-        result = esp_sleep_enable_ext1_wakeup(buttonMask, ESP_EXT1_WAKEUP_ALL_LOW);
+        result = esp_deep_sleep_enable_gpio_wakeup(buttonMask, ESP_GPIO_WAKEUP_GPIO_LOW);
     } else {
-        // Wake up when pin goes HIGH (button released, if using different wiring)
+        result = esp_deep_sleep_enable_gpio_wakeup(buttonMask, ESP_GPIO_WAKEUP_GPIO_HIGH);
+    }
+#else
+    if (wakeupLevel == 0) {
+        result = esp_sleep_enable_ext1_wakeup(buttonMask, ESP_EXT1_WAKEUP_ANY_LOW);
+    } else {
         result = esp_sleep_enable_ext1_wakeup(buttonMask, ESP_EXT1_WAKEUP_ANY_HIGH);
     }
+#endif
     
     if (result == ESP_OK) {
         debugService.debugPrintln("Deep sleep wake-up enabled on GPIO button pin " + String(buttonPin) + 
