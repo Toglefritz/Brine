@@ -366,86 +366,40 @@
 		)
 	)
 	(junction
-		(at 109.22 113.03)
+		(at 152.4 115.57)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "3544072a-0bc9-415e-8a7c-f9d7bcb2c7fa")
-	)
-	(junction
-		(at 144.78 113.03)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "38ce3a1c-cff9-4d86-9a44-d1cc0bc00bb0")
+		(uuid "afd409e6-770c-4a9f-9791-f76fbbd74b68")
 	)
 	(wire
 		(pts
-			(xy 109.22 113.03) (xy 109.22 115.57)
+			(xy 109.22 115.57) (xy 109.22 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "11a6a9ba-1bb6-4c2d-b3d9-ea994f1e7f57")
+		(uuid "08ae9cc3-136f-403e-a3b1-179ca1e58dbb")
 	)
 	(wire
 		(pts
-			(xy 101.6 113.03) (xy 109.22 113.03)
+			(xy 142.24 113.03) (xy 152.4 113.03)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "570f83da-f7b1-4f52-9c03-f9624d231d76")
+		(uuid "232d41fc-a428-4119-ad40-5566689d41d0")
 	)
 	(wire
 		(pts
-			(xy 144.78 113.03) (xy 144.78 115.57)
+			(xy 152.4 115.57) (xy 165.1 115.57)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "722f4ecb-490b-4a2f-84b5-8d8c0c768d44")
-	)
-	(wire
-		(pts
-			(xy 142.24 113.03) (xy 144.78 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9fc70d75-5026-4b3e-8a3f-df15656c1603")
-	)
-	(wire
-		(pts
-			(xy 144.78 113.03) (xy 152.4 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b1164a20-c5ad-407d-b31b-f1f45404a130")
-	)
-	(wire
-		(pts
-			(xy 142.24 115.57) (xy 144.78 115.57)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ba024d05-4980-4c5d-884a-dd12272a093c")
-	)
-	(wire
-		(pts
-			(xy 109.22 113.03) (xy 111.76 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "be1860be-a9e1-40f4-b7e1-22a4a6c2b620")
+		(uuid "2d891291-0f1d-4fdc-8340-bcefe99fc55c")
 	)
 	(wire
 		(pts
@@ -455,11 +409,51 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d4c0e8b0-f08a-4377-9674-b3936470a7da")
+		(uuid "5063ffc5-3abe-4fba-8595-728e4c1810e0")
+	)
+	(wire
+		(pts
+			(xy 152.4 115.57) (xy 152.4 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a3e2597-f2ab-4079-b47b-a2124861d275")
+	)
+	(wire
+		(pts
+			(xy 101.6 113.03) (xy 111.76 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be1860be-a9e1-40f4-b7e1-22a4a6c2b620")
+	)
+	(wire
+		(pts
+			(xy 142.24 115.57) (xy 152.4 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb24153a-c161-4361-88bc-04423e54e518")
+	)
+	(wire
+		(pts
+			(xy 109.22 121.92) (xy 152.4 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc868399-c8c8-463b-b932-5c9646fdfd47")
 	)
 	(hierarchical_label "BUTTON"
 		(shape output)
-		(at 152.4 113.03 0)
+		(at 165.1 115.57 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -467,6 +461,85 @@
 			(justify left)
 		)
 		(uuid "a951973d-4e95-4c48-9dd6-b83a33038c6f")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 152.4 113.03 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2aa85963-780e-42e6-adf0-28ee44ade6a0")
+		(property "Reference" "#PWR030"
+			(at 158.75 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 156.21 113.0299 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 152.4 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 152.4 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3b7e5afc-8400-4251-87fc-c47fd326acd0")
+		)
+		(instances
+			(project "Brine"
+				(path "/da3a4ef2-0e38-46f1-a1fc-55d8e0a83a54/4ad0d7d6-d3bf-4825-b971-cd4fdc149c91"
+					(reference "#PWR030")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "TS-1187A-B-A-B:TS-1187A-B-A-B")
