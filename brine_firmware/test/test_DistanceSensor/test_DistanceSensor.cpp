@@ -6,7 +6,7 @@
  * functionality of the distance sensor interface that works with either
  * VL53L0X or VL53L1X sensors based on compile-time configuration.
  *
- * Run this test with the command `pio test --filter test_DistanceSensor`.
+ * Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_DistanceSensor`.
  * Use -DVL53L0X_SENSOR build flag to test VL53L0X, otherwise VL53L1X is tested.
  */
 

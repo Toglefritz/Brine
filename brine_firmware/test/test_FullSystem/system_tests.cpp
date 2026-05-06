@@ -23,7 +23,7 @@
  * the test functions from the included headers, providing a complete test
  * suite for the device in a single run.
  *
- * To run this combined test, use the command, `pio test --filter test_FullSystem`
+ * To run this combined test, use the command, `pio test -e seeed_xiao_esp32c3 --filter test_FullSystem`
  */
 
 // I2C pins are defined in platformio.ini build flags

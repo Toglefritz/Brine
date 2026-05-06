@@ -22,7 +22,7 @@
  * - All required I2C devices are correctly connected to the bus.
  * - No address conflicts or communication issues exist.
  *
- * To run this test, use the command: `pio test --filter test_I2CScanner`
+ * To run this test, use the command: `pio test -e seeed_xiao_esp32c3 --filter test_I2CScanner`
  */
 
 // I2C pins are defined in platformio.ini build flags

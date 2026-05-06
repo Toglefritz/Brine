@@ -7,7 +7,7 @@
  the BLE module on the ESP32 by verifying that it initializes correctly and is
  able to begin advertising.
  *
- *  Run this test with the command `pio test --filter test_BLEModule`.
+ *  Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_BLEModule`.
  */
 
 /**

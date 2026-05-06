@@ -6,7 +6,7 @@
  * functionality of the VL53L1X distance sensor by verifying that it
  * initializes correctly and is able to obtain a distance reading.
  *
- *  Run this test with the command `pio test --filter test_VL53L1XSensor`.
+ *  Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_VL53L1XSensor`.
  */
 
 // I2C pins are defined in platformio.ini build flags

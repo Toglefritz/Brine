@@ -14,7 +14,7 @@
  * - Connect SK6812 GND to GND
  * - Connect SK6812 DIN to the configured data pin (SK6812_DATA_PIN)
  *
- * Run this test with the command `pio test --filter test_SK6812LED`.
+ * Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_SK6812LED`.
  */
 
 // Define number of LEDs for testing

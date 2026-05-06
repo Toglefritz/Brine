@@ -13,7 +13,7 @@
  * - Connect the other side of the button to GND
  * - No external pull-up resistor needed (internal pull-up is used)
  *
- *  Run this test with the command `pio test --filter test_GPIOButton`.
+ *  Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_GPIOButton`.
  */
 
 // Test state variables

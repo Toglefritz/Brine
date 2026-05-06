@@ -10,7 +10,7 @@
  * The tests gracefully handle cases where the MAX17048 hardware is not available
  * by skipping hardware-dependent tests with appropriate messages.
  *
- *  Run this test with the command `pio test --filter test_MAX17048Monitor`.
+ *  Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_MAX17048Monitor`.
  */
 
 // I2C pins are defined in platformio.ini build flags

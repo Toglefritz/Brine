@@ -2,7 +2,7 @@
  *  Test file for the NVSService class. This test file verifies the functionality of
  *  saving and retrieving JSON documents to and from the Non-Volatile Storage (NVS).
  *
- *  Run this test with the command `pio test --filter test_NVSService`.
+ *  Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_NVSService`.
  */
 
 #include <Arduino.h>

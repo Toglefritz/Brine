@@ -9,7 +9,7 @@
  * Note: These tests require a VL53L0X sensor to be physically connected.
  * If no sensor is present, tests will be skipped with appropriate messages.
  *
- *  Run this test with the command `pio test --filter test_VL53L0XSensor`.
+ *  Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_VL53L0XSensor`.
  */
 
 // I2C pins are defined in platformio.ini build flags

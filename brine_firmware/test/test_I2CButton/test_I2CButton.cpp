@@ -6,7 +6,7 @@
  * pressed, the test passes. If the button is not pressed within one minute, the
  *  test fails.
  *
- *  Run this test with the command `pio test --filter test_I2CButton`.
+ *  Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_I2CButton`.
  */
 
 // Include necessary libraries and headers

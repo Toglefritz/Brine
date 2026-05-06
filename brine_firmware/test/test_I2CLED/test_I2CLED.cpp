@@ -11,7 +11,7 @@
  * functionality of the I2CLED class by turning the LED on and off and asking
  * the user to verify that the LED is on and off.
  *
- *  Run this test with the command `pio test --filter test_I2CLED`.
+ *  Run this test with the command `pio test -e seeed_xiao_esp32c3 --filter test_I2CLED`.
  */
 
 // I2C pins are defined in platformio.ini build flags
