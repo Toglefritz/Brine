@@ -1,48 +1,44 @@
-#include "test_WS2812BLED.h"
-#include <WS2812BLED.h>
+#include "test_SK6812LED.h"
+#include <SK6812LED.h>
 #include <unity.h>
 
 /*
- *  This test file tests the WS2812BLED class. The WS2812BLED class is a singleton class
- * that controls WS2812B RGB LEDs connected to a GPIO pin. The WS2812BLED class provides
- * methods for color control, brightness adjustment, and various effects including
- * turnOn(), turnOff(), setColor(), setBrightness(), blink(), rainbow(), and breathe().
- * This test file tests the functionality of the WS2812BLED class by controlling the LED
- * and asking the user to verify the visual output.
+ * Tests for the SK6812LED class. SK6812LED is a singleton that controls SK6812
+ * addressable RGB LEDs connected to a GPIO pin. It provides color control,
+ * brightness adjustment, and visual effects (blink, rainbow, breathe).
+ *
+ * These tests drive the LED and rely on visual verification of the output.
  *
  * Hardware Setup for XIAO ESP32-S3:
- * - Connect WS2812B VCC to 3.3V or 5V
- * - Connect WS2812B GND to GND
- * - Connect WS2812B DIN to GPIO2 (safer than GPIO1 which can conflict with UART)
+ * - Connect SK6812 VCC to 3.3V or 5V
+ * - Connect SK6812 GND to GND
+ * - Connect SK6812 DIN to the configured data pin (SK6812_DATA_PIN)
  *
- *  Run this test with the command `pio test --filter test_WS2812BLED`.
+ * Run this test with the command `pio test --filter test_SK6812LED`.
  */
 
 // Define number of LEDs for testing
 #define NUM_LEDS 1
 
-// WS2812B_DATA_PIN is defined in the library header (default: GPIO1/D0/A0 for XIAO ESP32-S3)
-// Can be overridden with build flags if needed
-
 /**
  * @brief Prints an initial test setup message.
-*/
+ */
 void show_test_setup_message(void) {
     TEST_IGNORE_MESSAGE("Please observe the LED during testing for visual verification.");
 }
 
 /**
- * @brief Tests initialization of the WS2812B LED.
+ * @brief Tests initialization of the SK6812 LED.
  */
-void test_led_initialization(void) { 
-    test_ws2812b_initialization(NUM_LEDS); 
+void test_led_initialization(void) {
+    test_sk6812_initialization(NUM_LEDS);
 }
 
 /**
  * @brief Tests turning the LED on.
  */
 void test_led_turn_on(void) {
-    test_ws2812b_turn_on();
+    test_sk6812_turn_on();
     TEST_IGNORE_MESSAGE("LED should be ON (white). Verify visually.");
 }
 
@@ -50,7 +46,7 @@ void test_led_turn_on(void) {
  * @brief Tests turning off the LED.
  */
 void test_led_turn_off(void) {
-    test_ws2812b_turn_off();
+    test_sk6812_turn_off();
     TEST_IGNORE_MESSAGE("LED should be OFF. Verify visually.");
 }
 
@@ -58,7 +54,7 @@ void test_led_turn_off(void) {
  * @brief Tests RGB color setting.
  */
 void test_color_control_rgb(void) {
-    test_ws2812b_set_color_rgb();
+    test_sk6812_set_color_rgb();
     TEST_IGNORE_MESSAGE("LED should have cycled through Red -> Green -> Blue -> White. Verify visually.");
 }
 
@@ -66,7 +62,7 @@ void test_color_control_rgb(void) {
  * @brief Tests CRGB color setting.
  */
 void test_color_control_crgb(void) {
-    test_ws2812b_set_color_crgb();
+    test_sk6812_set_color_crgb();
     TEST_IGNORE_MESSAGE("LED should have shown various colors including a custom purple. Verify visually.");
 }
 
@@ -74,7 +70,7 @@ void test_color_control_crgb(void) {
  * @brief Tests brightness control.
  */
 void test_brightness_control(void) {
-    test_ws2812b_brightness();
+    test_sk6812_brightness();
     TEST_IGNORE_MESSAGE("LED should have shown different brightness levels. Verify visually.");
 }
 
@@ -82,7 +78,7 @@ void test_brightness_control(void) {
  * @brief Tests blink effect.
  */
 void test_blink_effect(void) {
-    test_ws2812b_blink_effect();
+    test_sk6812_blink_effect();
     TEST_IGNORE_MESSAGE("LED should have blinked green rapidly for 3 seconds. Verify visually.");
 }
 
@@ -90,7 +86,7 @@ void test_blink_effect(void) {
  * @brief Tests rainbow effect.
  */
 void test_rainbow_effect(void) {
-    test_ws2812b_rainbow_effect();
+    test_sk6812_rainbow_effect();
     TEST_IGNORE_MESSAGE("LED should have shown a smooth rainbow cycle for 2 seconds. Verify visually.");
 }
 
@@ -98,7 +94,7 @@ void test_rainbow_effect(void) {
  * @brief Tests breathing effect.
  */
 void test_breathing_effect(void) {
-    test_ws2812b_breathing_effect();
+    test_sk6812_breathing_effect();
     TEST_IGNORE_MESSAGE("LED should have shown a blue breathing effect for 3 seconds. Verify visually.");
 }
 
@@ -106,12 +102,12 @@ void test_breathing_effect(void) {
  * @brief Tests color retrieval.
  */
 void test_color_retrieval(void) {
-    test_ws2812b_get_color();
+    test_sk6812_get_color();
 }
 
 /**
  * @brief Prints a message when the test is complete.
-*/
+ */
 void show_test_complete_message(void) {
     TEST_IGNORE_MESSAGE("All tests completed. LED should be OFF.");
 }
@@ -119,33 +115,32 @@ void show_test_complete_message(void) {
 /**
  * @brief Initializes the test environment and runs the Unity test framework.
  *
- * This function runs all WS2812B LED tests with visual verification instructions
- * provided through TEST_IGNORE_MESSAGE calls that appear in PlatformIO test output.
+ * Runs all SK6812 LED tests with visual verification instructions provided
+ * through TEST_IGNORE_MESSAGE calls that appear in PlatformIO test output.
  */
 void setup() {
     // Add startup delay to ensure system stability
     delay(2000);
-    
+
     // Start the Unity test framework
     UNITY_BEGIN();
 
-    // Add initial setup message
     RUN_TEST(show_test_setup_message);
-     
+
     // Basic functionality tests
     RUN_TEST(test_led_initialization);
     delay(500);
-    
+
     RUN_TEST(test_led_turn_on);
     delay(2000);
-    
+
     RUN_TEST(test_led_turn_off);
     delay(1000);
 
     // Color control tests
     RUN_TEST(test_color_control_rgb);
     delay(2000);
-    
+
     RUN_TEST(test_color_control_crgb);
     delay(2000);
 
@@ -156,10 +151,10 @@ void setup() {
     // Effect tests
     RUN_TEST(test_blink_effect);
     delay(1000);
-    
+
     RUN_TEST(test_rainbow_effect);
     delay(1000);
-    
+
     RUN_TEST(test_breathing_effect);
     delay(1000);
 
@@ -167,9 +162,8 @@ void setup() {
     RUN_TEST(test_color_retrieval);
 
     // Final cleanup
-    WS2812BLED::getInstance().turnOff();
+    SK6812LED::getInstance().turnOff();
 
-    // Add test completion message
     RUN_TEST(show_test_complete_message);
 
     // End the Unity test framework
@@ -177,5 +171,5 @@ void setup() {
 }
 
 void loop() {
-    // Do nothing - all tests run in setup()
+    // All tests run in setup()
 }
