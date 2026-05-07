@@ -15,3 +15,5 @@ workbench/
 # IDE
 .vscode/
 .idea/
+/brine_electronics/Brine Mainboard/Brine-backups
+*.kicad_pcb.lck

@@ -1188,10 +1188,6 @@
 		(uuid "82f53f43-bebe-46ba-85f9-46fc3f3f638c")
 	)
 	(no_connect
-		(at 118.11 113.03)
-		(uuid "85751176-a64f-4ebe-bbd8-32d740256979")
-	)
-	(no_connect
 		(at 144.78 78.74)
 		(uuid "e5814f61-66ac-40ba-84d4-2fbdfd24ad26")
 	)
@@ -1311,16 +1307,6 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 101.6) (xy 118.11 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "572a1668-28f4-4d3b-bf6d-d410db801bb1")
-	)
-	(wire
-		(pts
 			(xy 175.26 90.17) (xy 177.8 90.17)
 		)
 		(stroke
@@ -1338,6 +1324,16 @@
 			(type default)
 		)
 		(uuid "5fc80306-2c91-4c51-92a0-aca515d763b5")
+	)
+	(wire
+		(pts
+			(xy 104.14 113.03) (xy 118.11 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "680d9890-4bd8-4355-b53d-03f47f4ed2d5")
 	)
 	(wire
 		(pts
@@ -1441,13 +1437,13 @@
 	)
 	(wire
 		(pts
-			(xy 160.02 105.41) (xy 177.8 105.41)
+			(xy 104.14 101.6) (xy 118.11 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "fb250bf0-aaa9-4a14-848c-a2b8a8467804")
+		(uuid "e192b437-d574-4a2d-bdc9-a8af0f46f4ef")
 	)
 	(hierarchical_label "LIFE"
 		(shape input)
@@ -1462,7 +1458,7 @@
 	)
 	(hierarchical_label "XSHUT"
 		(shape output)
-		(at 104.14 101.6 180)
+		(at 104.14 113.03 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1473,12 +1469,12 @@
 	)
 	(hierarchical_label "BUTTON"
 		(shape input)
-		(at 177.8 105.41 0)
+		(at 104.14 101.6 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
 		(uuid "1b68a59b-c3cd-4c52-93fb-2fad5d31143c")
 	)

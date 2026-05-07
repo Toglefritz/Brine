@@ -1,5 +1,6 @@
 #include "GPIOButton.h"
 #include <esp_sleep.h>
+#include <driver/gpio.h>
 
 GPIOButton::GPIOButton() {}
 
@@ -15,6 +16,12 @@ GPIOButton::GPIOButton() {}
  */
 bool GPIOButton::begin(void (*buttonHandler)()) {
     debugService.debugPrintln("Initializing GPIO Button on pin " + String(buttonPin));
+    
+    // On the ESP32-C3, GPIO8 and GPIO9 are strapping pins whose state is latched
+    // at boot to select the boot mode. The latch can prevent normal GPIO interrupt
+    // operation after startup. Calling gpio_reset_pin() clears the strapping latch
+    // and returns the pin to a standard GPIO state before configuring it.
+    gpio_reset_pin(static_cast<gpio_num_t>(buttonPin));
     
     // Configure the pin as input with pull-up resistor
     pinMode(buttonPin, INPUT_PULLUP);
