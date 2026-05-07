@@ -162,3 +162,55 @@ If an error occurs or an unknown command is received, an error response is sent:
     "message": "Unknown command"
 }
 ```
+
+## PlatformIO CLI Commands
+
+### Flashing Firmware
+
+Build and upload firmware to the connected device:
+
+```bash
+pio run -e seeed_xiao_esp32c3 --target upload
+```
+
+Build without uploading (compile check only):
+
+```bash
+pio run -e seeed_xiao_esp32c3
+```
+
+### Running Tests
+
+Run a specific test suite on hardware:
+
+```bash
+pio test -e seeed_xiao_esp32c3 --filter <test_name>
+```
+
+For example, to run the GPIO button test:
+
+```bash
+pio test -e seeed_xiao_esp32c3 --filter test_GPIOButton
+```
+
+Run all tests:
+
+```bash
+pio test -e seeed_xiao_esp32c3
+```
+
+### Serial Monitor
+
+Open the serial monitor to view debug output:
+
+```bash
+pio device monitor
+```
+
+### Clean Build
+
+Remove all build artifacts and force a full rebuild:
+
+```bash
+pio run -e seeed_xiao_esp32c3 --target clean
+```
