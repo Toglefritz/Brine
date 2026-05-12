@@ -426,6 +426,12 @@ void setup() {
       DebugService::getInstance().debugPrintln("Woke up from button press (EXT wake-up)");
       buttonPressed = true;
       break;
+#if defined(CONFIG_IDF_TARGET_ESP32C3)
+    case ESP_SLEEP_WAKEUP_GPIO:
+      DebugService::getInstance().debugPrintln("Woke up from button press (GPIO wake-up)");
+      buttonPressed = true;
+      break;
+#endif
     case ESP_SLEEP_WAKEUP_TIMER:
       DebugService::getInstance().debugPrintln("Woke up from timer");
       buttonPressed = false;

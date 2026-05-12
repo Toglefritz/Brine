@@ -17,3 +17,4 @@ workbench/
 .idea/
 /brine_electronics/Brine Mainboard/Brine-backups
 *.kicad_pcb.lck
+/brine_electronics/Brine Mainboard/.history
