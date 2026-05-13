@@ -1,13 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../components/app_bar/main_app_bar.dart';
-import '../../components/buttons/light_button.dart';
-import '../../l10n/app_localizations.dart';
-import '../../theme/insets.dart';
-import 'components/add_device_button.dart';
-import 'welcome_controller.dart';
-import 'welcome_route.dart';
+part of 'welcome_route.dart';
 
 /// View for [WelcomeRoute].
 class WelcomeView extends StatelessWidget {
@@ -30,41 +21,51 @@ class WelcomeView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
               vertical: Insets.medium,
             ),
-            child: Column(
-              children: [
-                Padding(
+            child: CustomScrollView(
+              physics: const ClampingScrollPhysics(),
+              slivers: [
+                // Welcome message
+                SliverPadding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: Insets.medium,
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.addADevice,
-                    style: GoogleFonts.bungee().copyWith(
-                      fontSize: 52,
-                      color: Theme.of(context).primaryColorDark,
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      AppLocalizations.of(context)!.addADevice,
+                      style: GoogleFonts.bungee().copyWith(
+                        fontSize: 52,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-                Padding(
+                SliverPadding(
                   padding: const EdgeInsets.symmetric(
-                    vertical: Insets.large,
+                    vertical: Insets.small,
                     horizontal: Insets.xLarge,
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.addDeviceInvitation,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).primaryColorDark,
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      AppLocalizations.of(context)!.addDeviceInvitation,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-                Padding(
+                SliverPadding(
                   padding: const EdgeInsets.only(top: Insets.medium),
-                  child: AddDeviceButton(
-                    onPressed: state.onAddDevicePressed,
+                  sliver: SliverToBoxAdapter(
+                    child: AddDeviceButton(
+                      onPressed: state.onAddDevicePressed,
+                    ),
                   ),
                 ),
-                Expanded(
+
+                SliverFillRemaining(
+                  hasScrollBody: false,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -78,7 +79,6 @@ class WelcomeView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(
                           top: Insets.xSmall,
-                          bottom: Insets.medium,
                         ),
                         child: LightButton(
                           text: AppLocalizations.of(context)!.getOneNow,

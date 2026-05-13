@@ -1,10 +1,5 @@
-import 'package:flutter/material.dart';
+part of 'welcome_route.dart';
 
-import '../../services/analytics/analytics.dart';
-import '../device_configuration/scan/scan_route.dart';
-import 'components/add_device_button.dart';
-import 'welcome_route.dart';
-import 'welcome_view.dart';
 
 /// Controller for [WelcomeRoute].
 class WelcomeController extends State<WelcomeRoute> {
