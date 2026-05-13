@@ -1,6 +1,5 @@
 part of 'welcome_route.dart';
 
-
 /// Controller for [WelcomeRoute].
 class WelcomeController extends State<WelcomeRoute> {
   /// A [FocusNode] for the menu button.

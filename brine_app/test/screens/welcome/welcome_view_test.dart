@@ -21,8 +21,8 @@ void main() {
     GoogleFonts.config.allowRuntimeFetching = false;
   });
 
-  /// A map of device names to their screen sizes, representing the range of
-  /// mobile and desktop platforms supported by this app.
+  /// A map of device names to their screen sizes, representing the range of mobile and desktop platforms supported by
+  /// this app.
   final Map<String, Size> screenSizes = {
     'iPhone SE': const Size(375, 667),
     'iPhone 15 Pro': const Size(393, 852),
