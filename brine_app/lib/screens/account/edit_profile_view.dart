@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../l10n/app_localizations.dart';
-import '../../theme/insets.dart';
-import 'account_controller.dart';
-import 'account_route.dart';
+part of 'account_route.dart';
 
 /// View for the [AccountRoute] when the user is editing their profile.
 class EditProfileView extends StatelessWidget {

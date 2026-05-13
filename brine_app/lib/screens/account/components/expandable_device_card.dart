@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../../l10n/app_localizations.dart';
-import '../../../services/device_management/models/brine_device.dart';
-import '../../../theme/insets.dart';
+part of '../account_route.dart';
 
 /// A card widget that expands when tapped to reveal additional information about an IoT device.
 ///

@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+part of '../account_route.dart';
 
 /// A widget that displays a user's avatar, either as a profile picture or as initials in a circular container.
 class UserAvatar extends StatelessWidget {

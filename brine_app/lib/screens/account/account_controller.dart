@@ -1,19 +1,4 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-import '../../l10n/app_localizations.dart';
-import '../../services/analytics/analytics.dart';
-import '../../services/authentication/authentication_service.dart';
-import '../../services/device_management/device_management_service.dart';
-import '../../services/device_management/models/brine_device.dart';
-import '../authentication/onboarding/onboarding_route.dart';
-import '../welcome/welcome_route.dart';
-import 'account_route.dart';
-import 'account_view.dart';
-import 'edit_profile_view.dart';
+part of 'account_route.dart';
 
 /// Controller for the [AccountRoute].
 class AccountController extends State<AccountRoute> {

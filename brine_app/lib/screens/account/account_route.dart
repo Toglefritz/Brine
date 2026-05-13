@@ -1,7 +1,29 @@
-import 'package:flutter/material.dart';
+/// This route displays information about the user's account including their devices and account settings.
+library;
 
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../components/buttons/light_button.dart';
+import '../../l10n/app_localizations.dart';
+import '../../services/analytics/analytics.dart';
+import '../../services/authentication/authentication_service.dart';
+import '../../services/device_management/device_management_service.dart';
 import '../../services/device_management/models/brine_device.dart';
-import 'account_controller.dart';
+import '../../theme/insets.dart';
+import '../authentication/onboarding/onboarding_route.dart';
+import '../welcome/welcome_route.dart';
+
+part 'components/user_avatar.dart';
+part 'account_controller.dart';
+part 'account_view.dart';
+part 'edit_profile_view.dart';
+part 'components/device_list.dart';
+part 'components/expandable_device_card.dart';
 
 /// This route displays information about the user's account including their devices and account settings.
 class AccountRoute extends StatefulWidget {

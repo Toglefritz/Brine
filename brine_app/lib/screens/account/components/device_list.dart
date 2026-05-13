@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../l10n/app_localizations.dart';
-import '../../../services/device_management/models/brine_device.dart';
-import '../../../theme/insets.dart';
-import 'expandable_device_card.dart';
+part of '../account_route.dart';
 
 /// A widget that displays a list of user's Brine devices in a wrap layout.
 class DeviceList extends StatelessWidget {

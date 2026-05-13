@@ -1,12 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../components/buttons/light_button.dart';
-import '../../l10n/app_localizations.dart';
-import '../../theme/insets.dart';
-import 'account_controller.dart';
-import 'account_route.dart';
-import 'components/device_list.dart';
-import 'components/user_avatar.dart';
+part of 'account_route.dart';
 
 /// View for the [AccountRoute].
 class AccountView extends StatelessWidget {
