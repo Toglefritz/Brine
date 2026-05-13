@@ -122,9 +122,27 @@ void main() {
     group('getUserDevices', () {
       /// This test verifies that the `getUserDevices` method successfully retrieves the user's devices.
       test('should successfully retrieve the user\'s devices', () async {
-        // Set up the mock response body.
+        // Set up the mock response body. The service expects a "devices" key containing a list of device JSON objects
+        // matching the BrineDevice.fromJson schema.
         final Map<String, dynamic> responseBody = {
-          'deviceIds': ['crimson_gentle_panther', 'luminous_cobalt_eagle'],
+          'devices': [
+            {
+              'device_id': 'crimson_gentle_panther',
+              'name': 'a1b2',
+              'salt_distance': 150,
+              'appliance_height': 300,
+              'battery_level': 0.9,
+              'last_updated': '2025-05-01T12:00:00.000Z',
+            },
+            {
+              'device_id': 'luminous_cobalt_eagle',
+              'name': 'c3d4',
+              'salt_distance': 100,
+              'appliance_height': 400,
+              'battery_level': 0.75,
+              'last_updated': '2025-05-02T08:30:00.000Z',
+            },
+          ],
         };
 
         // Set up the mock response data.
@@ -152,13 +170,15 @@ void main() {
         final DeviceManagementService deviceManagementService = DeviceManagementService(user: mockUser);
 
         // Call the function under test.
-        final List<BrineDevice> deviceIds = await deviceManagementService.getUserDevices();
+        final List<BrineDevice> devices = await deviceManagementService.getUserDevices();
 
         // Clean up by resetting the global HttpOverrides.
         HttpOverrides.global = null;
 
         // Verify the result.
-        expect(deviceIds, ['crimson_gentle_panther', 'luminous_cobalt_eagle']);
+        expect(devices.length, 2);
+        expect(devices[0].deviceId, 'crimson_gentle_panther');
+        expect(devices[1].deviceId, 'luminous_cobalt_eagle');
       });
     });
 
@@ -166,12 +186,15 @@ void main() {
     group('getDeviceLevels', () {
       /// This test verifies that the `getDeviceLevels` method successfully retrieves the device levels.
       test('should successfully retrieve the device levels', () async {
-        // Set up the mock response body.
+        // Set up the mock response body. The service passes this directly to BrineDevice.fromJson, which expects
+        // salt_distance, appliance_height, battery_level, last_updated, device_id, and name.
         final Map<String, dynamic> responseBody = {
           'device_id': 'silent_emerald_tiger',
-          'salt_level': 0.5,
-          'battery_level': 0.7,
           'name': '7b67',
+          'salt_distance': 150,
+          'appliance_height': 300,
+          'battery_level': 0.7,
+          'last_updated': '2025-05-10T10:00:00.000Z',
         };
 
         // Set up the mock response data.
@@ -206,9 +229,11 @@ void main() {
 
         // Verify the result.
         expect(brineDevice.deviceId, 'silent_emerald_tiger');
-        expect(brineDevice.saltLevel, 0.5);
-        expect(brineDevice.batteryLevel, 0.7);
         expect(brineDevice.name, '7b67');
+        expect(brineDevice.saltDistance, 150.0);
+        expect(brineDevice.applianceHeight, 300.0);
+        expect(brineDevice.saltLevel, 0.5); // 150 / 300 = 0.5
+        expect(brineDevice.batteryLevel, 0.7);
       });
     });
   });
