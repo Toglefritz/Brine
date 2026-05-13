@@ -4,14 +4,17 @@ on:
   push:
     branches: [main]
     paths:
-      - 'lib/**'
-      - 'test/**'
-      - 'pubspec.yaml'
-      - 'pubspec.lock'
+      - 'brine_app/lib/**'
+      - 'brine_app/test/**'
+      - 'brine_app/pubspec.yaml'
+      - 'brine_app/pubspec.lock'
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: brine_app
 
     steps:
       - uses: actions/checkout@v4

@@ -31,7 +31,7 @@ class WelcomeView extends StatelessWidget {
                   ),
                   sliver: SliverToBoxAdapter(
                     child: Text(
-                      'test',//AppLocalizations.of(context)!.addADevice,
+                      AppLocalizations.of(context)!.addADevice,
                       style: GoogleFonts.bungee().copyWith(
                         fontSize: 52,
                         color: Theme.of(context).primaryColorDark,
