@@ -31,7 +31,7 @@ class WelcomeView extends StatelessWidget {
                   ),
                   sliver: SliverToBoxAdapter(
                     child: Text(
-                      AppLocalizations.of(context)!.addADevice,
+                      'test',//AppLocalizations.of(context)!.addADevice,
                       style: GoogleFonts.bungee().copyWith(
                         fontSize: 52,
                         color: Theme.of(context).primaryColorDark,
@@ -55,6 +55,8 @@ class WelcomeView extends StatelessWidget {
                     ),
                   ),
                 ),
+
+                // Add device button
                 SliverPadding(
                   padding: const EdgeInsets.only(top: Insets.medium),
                   sliver: SliverToBoxAdapter(
@@ -64,6 +66,7 @@ class WelcomeView extends StatelessWidget {
                   ),
                 ),
 
+                // Bottom CTA button
                 SliverFillRemaining(
                   hasScrollBody: false,
                   child: Column(
