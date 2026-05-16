@@ -1,9 +1,12 @@
 part of 'account_route.dart';
 
 /// Controller for the [AccountRoute].
+///
+/// Manages account display, profile editing, device removal, logout, and account deletion. Uses injected dependencies
+/// from the route widget to access the current user and backend services.
 class AccountController extends State<AccountRoute> {
-  /// A convenience getter for the Firebase Auth user object.
-  User? get user => FirebaseAuth.instance.currentUser;
+  /// The current authenticated user, obtained from the injected [AuthSession].
+  User? get user => widget.authSession.currentUser;
 
   /// A key for the form used to edit the user's profile.
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -31,22 +34,19 @@ class AccountController extends State<AccountRoute> {
     emailController.text = user?.email ?? '';
   }
 
-  /// A convenience getter for the user's initials.
+  /// The user's initials derived from their display name.
+  ///
+  /// Returns the first character of the first name and the first character of the last name. Returns an empty string
+  /// when no user is authenticated or no display name is set.
   String get userInitials {
     if (user == null) {
       return '';
     }
 
-    // Split the user's display name their first and last names.
     final List<String> nameParts = user!.displayName!.split(' ');
-
-    // Get the first letter of the user's first name.
     final String firstName = nameParts.first;
-
-    // Get the first letter of the user's last name, if it exists.
     final String lastName = nameParts.length > 1 ? nameParts.last : '';
 
-    // Return a string consisting of the first letters of the user's first and last names.
     return '${firstName[0]}${lastName[0]}';
   }
 
@@ -283,11 +283,13 @@ class AccountController extends State<AccountRoute> {
     // If the user confirmed that they wish to remove the device, remove the device.
     if (didConfirm ?? false) {
       // Get the current user.
-      final User user = FirebaseAuth.instance.currentUser!;
+      final User currentUser = user!;
 
       // Remove the device from the user's account.
       try {
-        await DeviceManagementService(user: user).removeDeviceFromAccount(deviceId: deviceId);
+        final DeviceManagementService service =
+            widget.deviceManagementServiceFactory?.call(currentUser) ?? DeviceManagementService(user: currentUser);
+        await service.removeDeviceFromAccount(deviceId: deviceId);
       } catch (e) {
         debugPrint('Failed to remove device with exception, $e');
 
@@ -321,7 +323,11 @@ class AccountController extends State<AccountRoute> {
   Future<void> logout() async {
     Analytics.trackLogout();
 
-    await AuthenticationService.signOut();
+    if (widget.signOut != null) {
+      await widget.signOut!();
+    } else {
+      await AuthenticationService.signOut();
+    }
 
     // Navigate back to the OnboardingRoute.
     if (!mounted) return;
@@ -345,7 +351,11 @@ class AccountController extends State<AccountRoute> {
     if (didConfirm ?? false) {
       // Delete the user's document in the Firestore collection.
       try {
-        await AuthenticationService(user: user!).deleteUserDocument();
+        if (widget.deleteUserDocument != null) {
+          await widget.deleteUserDocument!(user!);
+        } else {
+          await AuthenticationService(user: user!).deleteUserDocument();
+        }
       } catch (e) {
         debugPrint('Failed to delete user document with exception, $e');
 
