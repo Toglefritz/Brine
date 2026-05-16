@@ -19,8 +19,8 @@ void main() {
   });
 
   group('UserAvatar', () {
-    testWidgets('displays initials when user has no photo URL', (tester) async {
-      final mockUser = MockUser();
+    testWidgets('displays initials when user has no photo URL', (WidgetTester tester) async {
+      final MockUser mockUser = MockUser();
       when(mockUser.photoURL).thenReturn(null);
       when(mockUser.displayName).thenReturn('John Doe');
       when(mockUser.email).thenReturn('john@example.com');
@@ -43,8 +43,8 @@ void main() {
       expect(find.text('JD'), findsOneWidget);
     });
 
-    testWidgets('displays single initial when user has only first name', (tester) async {
-      final mockUser = MockUser();
+    testWidgets('displays single initial when user has only first name', (WidgetTester tester) async {
+      final MockUser mockUser = MockUser();
       when(mockUser.photoURL).thenReturn(null);
       when(mockUser.displayName).thenReturn('Alice');
       when(mockUser.email).thenReturn('alice@example.com');
@@ -67,8 +67,8 @@ void main() {
       expect(find.text('A'), findsOneWidget);
     });
 
-    testWidgets('falls back to email when display name is null', (tester) async {
-      final mockUser = MockUser();
+    testWidgets('falls back to email when display name is null', (WidgetTester tester) async {
+      final MockUser mockUser = MockUser();
       when(mockUser.photoURL).thenReturn(null);
       when(mockUser.displayName).thenReturn(null);
       when(mockUser.email).thenReturn('bob@example.com');
@@ -91,7 +91,7 @@ void main() {
       expect(find.text('B'), findsOneWidget);
     });
 
-    testWidgets('displays empty string when user is null', (tester) async {
+    testWidgets('displays empty string when user is null', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
@@ -110,15 +110,15 @@ void main() {
       expect(find.text(''), findsOneWidget);
     });
 
-    testWidgets('displays CircleAvatar when user has a photo URL', (tester) async {
-      final mockUser = MockUser();
+    testWidgets('displays CircleAvatar when user has a photo URL', (WidgetTester tester) async {
+      final MockUser mockUser = MockUser();
       when(mockUser.photoURL).thenReturn('https://example.com/photo.jpg');
       when(mockUser.displayName).thenReturn('Jane Smith');
       when(mockUser.email).thenReturn('jane@example.com');
 
       // Suppress network image errors — in the test environment, all HTTP requests return 400.
-      final originalOnError = FlutterError.onError;
-      FlutterError.onError = (details) {
+      final void Function(FlutterErrorDetails)? originalOnError = FlutterError.onError;
+      FlutterError.onError = (FlutterErrorDetails details) {
         if (details.toString().contains('NetworkImageLoadException')) return;
         originalOnError?.call(details);
       };
@@ -145,8 +145,8 @@ void main() {
       expect(find.byType(CircleAvatar), findsOneWidget);
     });
 
-    testWidgets('respects custom radius', (tester) async {
-      final mockUser = MockUser();
+    testWidgets('respects custom radius', (WidgetTester tester) async {
+      final MockUser mockUser = MockUser();
       when(mockUser.photoURL).thenReturn(null);
       when(mockUser.displayName).thenReturn('Test User');
       when(mockUser.email).thenReturn('test@example.com');
@@ -166,10 +166,9 @@ void main() {
       );
 
       // The container should have width and height of radius * 2 = 150.
-      final container = tester.widget<Container>(find.byType(Container).first);
-      final BoxConstraints? constraints = container.constraints;
-      // Check via the decoration's size by finding the sized container.
-      expect(find.byType(Container), findsOneWidget);
+      final Container container = tester.widget<Container>(find.byType(Container).first);
+      expect(container.constraints?.maxWidth, 150);
+      expect(container.constraints?.maxHeight, 150);
     });
   });
 }

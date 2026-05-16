@@ -64,8 +64,8 @@ void main() {
   }
 
   group('ExpandableDeviceCard', () {
-    testWidgets('displays device name in collapsed state', (tester) async {
-      final device = createTestDevice(name: 'x7f3');
+    testWidgets('displays device name in collapsed state', (WidgetTester tester) async {
+      final BrineDevice device = createTestDevice(name: 'x7f3');
 
       await pumpExpandableDeviceCard(
         tester,
@@ -76,8 +76,8 @@ void main() {
       expect(find.text('x7f3'), findsOneWidget);
     });
 
-    testWidgets('does not show device details in collapsed state', (tester) async {
-      final device = createTestDevice(deviceId: 'my_device_123');
+    testWidgets('does not show device details in collapsed state', (WidgetTester tester) async {
+      final BrineDevice device = createTestDevice(deviceId: 'my_device_123');
 
       await pumpExpandableDeviceCard(
         tester,
@@ -89,7 +89,7 @@ void main() {
       expect(find.text('my_device_123'), findsNothing);
     });
 
-    testWidgets('does not show delete button in collapsed state', (tester) async {
+    testWidgets('does not show delete button in collapsed state', (WidgetTester tester) async {
       await pumpExpandableDeviceCard(
         tester,
         device: createTestDevice(),
@@ -99,18 +99,18 @@ void main() {
       expect(find.byIcon(Icons.delete_outline_rounded), findsNothing);
     });
 
-    testWidgets('expands on tap (container height increases)', (tester) async {
+    testWidgets('expands on tap (container height increases)', (WidgetTester tester) async {
       // Suppress overflow errors — the ExpandableDeviceCard has a known layout overflow when the expanded content
       // exceeds the AnimatedContainer's scaled height in test viewports.
-      final originalOnError = FlutterError.onError;
-      FlutterError.onError = (details) {
+      final void Function(FlutterErrorDetails)? originalOnError = FlutterError.onError;
+      FlutterError.onError = (FlutterErrorDetails details) {
         if (details.toString().contains('overflowed')) return;
         originalOnError?.call(details);
       };
 
       addTearDown(() => FlutterError.onError = originalOnError);
 
-      final device = createTestDevice(
+      final BrineDevice device = createTestDevice(
         deviceId: 'silver_fox_42',
         name: 'z9k1',
       );
@@ -122,7 +122,7 @@ void main() {
       );
 
       // Get the initial height of the AnimatedContainer.
-      final initialSize = tester.getSize(find.byType(AnimatedContainer));
+      final Size initialSize = tester.getSize(find.byType(AnimatedContainer));
 
       // Tap to expand.
       await tester.tap(find.text('z9k1'));
@@ -130,15 +130,15 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
 
       // Get the expanded height.
-      final expandedSize = tester.getSize(find.byType(AnimatedContainer));
+      final Size expandedSize = tester.getSize(find.byType(AnimatedContainer));
 
       // The height should have increased.
       expect(expandedSize.height, greaterThan(initialSize.height));
     });
 
-    testWidgets('shows delete button when expanded', (tester) async {
-      final originalOnError = FlutterError.onError;
-      FlutterError.onError = (details) {
+    testWidgets('shows delete button when expanded', (WidgetTester tester) async {
+      final void Function(FlutterErrorDetails)? originalOnError = FlutterError.onError;
+      FlutterError.onError = (FlutterErrorDetails details) {
         if (details.toString().contains('overflowed')) return;
         originalOnError?.call(details);
       };
@@ -155,15 +155,15 @@ void main() {
       expect(find.byIcon(Icons.delete_outline_rounded), findsOneWidget);
     });
 
-    testWidgets('calls onRemoveDevice when delete button is tapped', (tester) async {
-      final originalOnError = FlutterError.onError;
-      FlutterError.onError = (details) {
+    testWidgets('calls onRemoveDevice when delete button is tapped', (WidgetTester tester) async {
+      final void Function(FlutterErrorDetails)? originalOnError = FlutterError.onError;
+      FlutterError.onError = (FlutterErrorDetails details) {
         if (details.toString().contains('overflowed')) return;
         originalOnError?.call(details);
       };
       addTearDown(() => FlutterError.onError = originalOnError);
 
-      var removeCallCount = 0;
+      int removeCallCount = 0;
 
       await pumpExpandableDeviceCard(
         tester,
@@ -180,9 +180,9 @@ void main() {
       expect(removeCallCount, 1);
     });
 
-    testWidgets('collapses on second tap (delete button removed)', (tester) async {
-      final originalOnError = FlutterError.onError;
-      FlutterError.onError = (details) {
+    testWidgets('collapses on second tap (delete button removed)', (WidgetTester tester) async {
+      final void Function(FlutterErrorDetails)? originalOnError = FlutterError.onError;
+      FlutterError.onError = (FlutterErrorDetails details) {
         if (details.toString().contains('overflowed')) return;
         originalOnError?.call(details);
       };

@@ -21,22 +21,22 @@ void main() {
 
   group('WelcomeController', () {
     group('onAddDevicePressed', () {
-      testWidgets('add device button is wired to the controller callback', (tester) async {
+      testWidgets('add device button is wired to the controller callback', (WidgetTester tester) async {
         await pumpWelcomeRoute(tester);
 
         // Verify the AddDeviceButton is present and tappable.
-        final addButton = find.byType(AddDeviceButton);
+        final Finder addButton = find.byType(AddDeviceButton);
         expect(addButton, findsOneWidget);
 
         // Verify the button contains the expected "+" icon.
-        final icon = find.descendant(
+        final Finder icon = find.descendant(
           of: addButton,
           matching: find.byIcon(Icons.add),
         );
         expect(icon, findsOneWidget);
 
         // Verify the button is an ElevatedButton that can receive taps.
-        final elevatedButton = find.descendant(
+        final Finder elevatedButton = find.descendant(
           of: addButton,
           matching: find.byType(ElevatedButton),
         );
@@ -48,11 +48,11 @@ void main() {
     });
 
     group('onOrderButtonPressed', () {
-      testWidgets('tapping the order button does not navigate away', (tester) async {
+      testWidgets('tapping the order button does not navigate away', (WidgetTester tester) async {
         await pumpWelcomeRoute(tester);
 
         // Find and tap the "Get one now" button.
-        final orderButton = find.text('GET ONE NOW');
+        final Finder orderButton = find.text('GET ONE NOW');
         expect(orderButton, findsOneWidget);
 
         await tester.tap(orderButton);
@@ -62,15 +62,15 @@ void main() {
         expect(find.byType(WelcomeRoute), findsOneWidget);
       });
 
-      testWidgets('order button is present and tappable', (tester) async {
+      testWidgets('order button is present and tappable', (WidgetTester tester) async {
         await pumpWelcomeRoute(tester);
 
         // Verify the order button exists.
-        final orderButton = find.text('GET ONE NOW');
+        final Finder orderButton = find.text('GET ONE NOW');
         expect(orderButton, findsOneWidget);
 
         // Verify it is within an ElevatedButton.
-        final elevatedButton = find.ancestor(
+        final Finder elevatedButton = find.ancestor(
           of: orderButton,
           matching: find.byType(ElevatedButton),
         );
@@ -82,7 +82,7 @@ void main() {
     });
 
     group('initial state', () {
-      testWidgets('WelcomeRoute renders without errors', (tester) async {
+      testWidgets('WelcomeRoute renders without errors', (WidgetTester tester) async {
         await pumpWelcomeRoute(tester);
 
         // Verify the widget tree rendered without errors.
@@ -90,7 +90,7 @@ void main() {
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('WelcomeRoute uses a Scaffold', (tester) async {
+      testWidgets('WelcomeRoute uses a Scaffold', (WidgetTester tester) async {
         await pumpWelcomeRoute(tester);
 
         expect(find.byType(Scaffold), findsOneWidget);

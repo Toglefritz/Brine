@@ -35,9 +35,9 @@ void main() {
   };
 
   group('WelcomeView renders correctly', () {
-    for (final entry in screenSizes.entries) {
+    for (final MapEntry<String, Size> entry in screenSizes.entries) {
       testWidgets('renders without errors on ${entry.key} (${entry.value.width}x${entry.value.height})', (
-        tester,
+        WidgetTester tester,
       ) async {
         // Set the simulated screen size.
         tester.view.physicalSize = entry.value;
@@ -59,19 +59,19 @@ void main() {
   });
 
   group('WelcomeView displays expected widgets', () {
-    testWidgets('displays the MainAppBar', (tester) async {
+    testWidgets('displays the MainAppBar', (WidgetTester tester) async {
       await pumpWelcomeRoute(tester);
 
       expect(find.byType(MainAppBar), findsOneWidget);
     });
 
-    testWidgets('displays the "Add a device" heading text', (tester) async {
+    testWidgets('displays the "Add a device" heading text', (WidgetTester tester) async {
       await pumpWelcomeRoute(tester);
 
       expect(find.text('Add a device'), findsOneWidget);
     });
 
-    testWidgets('displays the invitation text', (tester) async {
+    testWidgets('displays the invitation text', (WidgetTester tester) async {
       await pumpWelcomeRoute(tester);
 
       expect(
@@ -80,13 +80,13 @@ void main() {
       );
     });
 
-    testWidgets('displays the AddDeviceButton', (tester) async {
+    testWidgets('displays the AddDeviceButton', (WidgetTester tester) async {
       await pumpWelcomeRoute(tester);
 
       expect(find.byType(AddDeviceButton), findsOneWidget);
     });
 
-    testWidgets('displays the sales prompt and order button', (tester) async {
+    testWidgets('displays the sales prompt and order button', (WidgetTester tester) async {
       await pumpWelcomeRoute(tester);
 
       expect(find.text("Don't have a Brine device?"), findsOneWidget);

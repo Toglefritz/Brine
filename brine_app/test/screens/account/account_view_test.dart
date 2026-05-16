@@ -15,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 /// ```sh
 /// flutter test test/screens/account/account_view_test.dart
 /// ```
+// ignore_for_file: discarded_futures
 void main() {
   setUp(() {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -22,13 +23,13 @@ void main() {
 
   group('AccountView', () {
     group('showRemoveDeviceConfirmationDialog', () {
-      testWidgets('displays dialog with device ID and action buttons', (tester) async {
+      testWidgets('displays dialog with device ID and action buttons', (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 return Scaffold(
                   body: ElevatedButton(
                     onPressed: () {
@@ -57,7 +58,7 @@ void main() {
         expect(find.text('Remove'), findsOneWidget);
       });
 
-      testWidgets('returns false when Cancel is tapped', (tester) async {
+      testWidgets('returns false when Cancel is tapped', (WidgetTester tester) async {
         bool? result;
 
         await tester.pumpWidget(
@@ -65,7 +66,7 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 return Scaffold(
                   body: ElevatedButton(
                     onPressed: () async {
@@ -92,7 +93,7 @@ void main() {
         expect(result, false);
       });
 
-      testWidgets('returns true when Remove is tapped', (tester) async {
+      testWidgets('returns true when Remove is tapped', (WidgetTester tester) async {
         bool? result;
 
         await tester.pumpWidget(
@@ -100,7 +101,7 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 return Scaffold(
                   body: ElevatedButton(
                     onPressed: () async {
@@ -129,13 +130,13 @@ void main() {
     });
 
     group('showDeleteAccountConfirmationDialog', () {
-      testWidgets('displays dialog with confirmation message and action buttons', (tester) async {
+      testWidgets('displays dialog with confirmation message and action buttons', (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 return Scaffold(
                   body: ElevatedButton(
                     onPressed: () {
@@ -159,7 +160,7 @@ void main() {
         expect(find.text('Delete'), findsOneWidget);
       });
 
-      testWidgets('returns false when Cancel is tapped', (tester) async {
+      testWidgets('returns false when Cancel is tapped', (WidgetTester tester) async {
         bool? result;
 
         await tester.pumpWidget(
@@ -167,7 +168,7 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 return Scaffold(
                   body: ElevatedButton(
                     onPressed: () async {
@@ -191,7 +192,7 @@ void main() {
         expect(result, false);
       });
 
-      testWidgets('returns true when Delete is tapped', (tester) async {
+      testWidgets('returns true when Delete is tapped', (WidgetTester tester) async {
         bool? result;
 
         await tester.pumpWidget(
@@ -199,7 +200,7 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 return Scaffold(
                   body: ElevatedButton(
                     onPressed: () async {
@@ -225,13 +226,13 @@ void main() {
     });
 
     group('EditProfileView.showEmailChangeConfirmationDialog', () {
-      testWidgets('displays dialog with new email and OK button', (tester) async {
+      testWidgets('displays dialog with new email and OK button', (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 return Scaffold(
                   body: ElevatedButton(
                     onPressed: () {
@@ -257,13 +258,13 @@ void main() {
         expect(find.text('OK'), findsOneWidget);
       });
 
-      testWidgets('dismisses when OK is tapped', (tester) async {
+      testWidgets('dismisses when OK is tapped', (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 return Scaffold(
                   body: ElevatedButton(
                     onPressed: () {

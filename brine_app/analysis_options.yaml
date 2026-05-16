@@ -17,6 +17,7 @@ linter:
       sort_constructors_first: false
       avoid_catches_without_on_clauses: false
       prefer_int_literals: false
+      avoid_types_on_closure_parameters: false
 
 formatter:
   page_width: 120

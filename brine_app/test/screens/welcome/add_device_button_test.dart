@@ -31,15 +31,15 @@ void main() {
   }
 
   group('AddDeviceButton', () {
-    testWidgets('renders an ElevatedButton with a "+" icon', (tester) async {
+    testWidgets('renders an ElevatedButton with a "+" icon', (WidgetTester tester) async {
       await pumpAddDeviceButton(tester, onPressed: () {});
 
       expect(find.byType(ElevatedButton), findsOneWidget);
       expect(find.byIcon(Icons.add), findsOneWidget);
     });
 
-    testWidgets('calls onPressed when tapped', (tester) async {
-      var tapCount = 0;
+    testWidgets('calls onPressed when tapped', (WidgetTester tester) async {
+      int tapCount = 0;
 
       await pumpAddDeviceButton(tester, onPressed: () => tapCount++);
 
@@ -49,7 +49,7 @@ void main() {
       expect(tapCount, 1);
     });
 
-    testWidgets('has a circular shape', (tester) async {
+    testWidgets('has a circular shape', (WidgetTester tester) async {
       await pumpAddDeviceButton(tester, onPressed: () {});
 
       final ElevatedButton button = tester.widget<ElevatedButton>(
@@ -67,7 +67,7 @@ void main() {
       expect(shape, isA<CircleBorder>());
     });
 
-    testWidgets('has a border with width 3', (tester) async {
+    testWidgets('has a border with width 3', (WidgetTester tester) async {
       await pumpAddDeviceButton(tester, onPressed: () {});
 
       final ElevatedButton button = tester.widget<ElevatedButton>(
@@ -83,7 +83,7 @@ void main() {
       expect(side!.width, 3);
     });
 
-    testWidgets('icon has size 64', (tester) async {
+    testWidgets('icon has size 64', (WidgetTester tester) async {
       await pumpAddDeviceButton(tester, onPressed: () {});
 
       final Icon icon = tester.widget<Icon>(find.byIcon(Icons.add));

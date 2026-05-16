@@ -31,25 +31,25 @@ void main() {
     group('userInitials logic', () {
       test('computes two-letter initials from a two-part display name', () {
         // The controller's userInitials getter splits on space and takes first chars.
-        final mockUser = MockUser();
+        final MockUser mockUser = MockUser();
         when(mockUser.displayName).thenReturn('Scott Hatfield');
 
-        final nameParts = mockUser.displayName!.split(' ');
-        final firstName = nameParts.first;
-        final lastName = nameParts.length > 1 ? nameParts.last : '';
-        final initials = '${firstName[0]}${lastName[0]}';
+        final List<String> nameParts = mockUser.displayName!.split(' ');
+        final String firstName = nameParts.first;
+        final String lastName = nameParts.length > 1 ? nameParts.last : '';
+        final String initials = '${firstName[0]}${lastName[0]}';
 
         expect(initials, 'SH');
       });
 
       test('computes initials from a three-part display name using first and last', () {
-        final mockUser = MockUser();
+        final MockUser mockUser = MockUser();
         when(mockUser.displayName).thenReturn('John Michael Smith');
 
-        final nameParts = mockUser.displayName!.split(' ');
-        final firstName = nameParts.first;
-        final lastName = nameParts.last;
-        final initials = '${firstName[0]}${lastName[0]}';
+        final List<String> nameParts = mockUser.displayName!.split(' ');
+        final String firstName = nameParts.first;
+        final String lastName = nameParts.last;
+        final String initials = '${firstName[0]}${lastName[0]}';
 
         expect(initials, 'JS');
       });
@@ -57,19 +57,19 @@ void main() {
 
     group('AccountRoute construction', () {
       test('stores the devices list passed to it', () {
-        final devices = [
+        final List<BrineDevice> devices = [
           createTestDevice(deviceId: 'device_1'),
           createTestDevice(deviceId: 'device_2'),
         ];
 
-        final route = AccountRoute(devices: devices);
+        final AccountRoute route = AccountRoute(devices: devices);
         expect(route.devices.length, 2);
         expect(route.devices[0].deviceId, 'device_1');
         expect(route.devices[1].deviceId, 'device_2');
       });
 
       test('accepts an empty devices list', () {
-        const route = AccountRoute(devices: []);
+        const AccountRoute route = AccountRoute(devices: []);
         expect(route.devices, isEmpty);
       });
     });

@@ -51,7 +51,7 @@ void main() {
   }
 
   group('DeviceList', () {
-    testWidgets('renders nothing when device list is empty', (tester) async {
+    testWidgets('renders nothing when device list is empty', (WidgetTester tester) async {
       await pumpDeviceList(
         tester,
         devices: [],
@@ -63,8 +63,8 @@ void main() {
       expect(find.text('Brine Devices'), findsNothing);
     });
 
-    testWidgets('displays the "Brine Devices" title when devices exist', (tester) async {
-      final devices = [createTestDevice()];
+    testWidgets('displays the "Brine Devices" title when devices exist', (WidgetTester tester) async {
+      final List<BrineDevice> devices = [createTestDevice()];
 
       await pumpDeviceList(
         tester,
@@ -75,8 +75,8 @@ void main() {
       expect(find.text('Brine Devices'), findsOneWidget);
     });
 
-    testWidgets('displays one ExpandableDeviceCard per device', (tester) async {
-      final devices = [
+    testWidgets('displays one ExpandableDeviceCard per device', (WidgetTester tester) async {
+      final List<BrineDevice> devices = [
         createTestDevice(deviceId: 'device_1', name: 'abc1'),
         createTestDevice(deviceId: 'device_2', name: 'def2'),
       ];
@@ -92,8 +92,8 @@ void main() {
       expect(find.text('def2'), findsOneWidget);
     });
 
-    testWidgets('displays three devices correctly', (tester) async {
-      final devices = [
+    testWidgets('displays three devices correctly', (WidgetTester tester) async {
+      final List<BrineDevice> devices = [
         createTestDevice(deviceId: 'device_1', name: 'aaa1'),
         createTestDevice(deviceId: 'device_2', name: 'bbb2'),
         createTestDevice(deviceId: 'device_3', name: 'ccc3'),
