@@ -1,23 +1,9 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/material.dart';
-
-import '../../services/analytics/analytics.dart';
-import '../../services/authentication/exceptions/authentication_exception.dart';
-import '../../services/device_management/device_management_service.dart';
-import '../../services/device_management/models/brine_device.dart';
-import '../../services/push_notifications/push_notifications_service.dart';
-import '../errors/error_route.dart';
-import '../errors/models/error_type.dart';
-import '../softener_monitor/softener_monitor_route.dart';
-import '../welcome/welcome_route.dart';
-import 'setup_route.dart';
-import 'setup_view.dart';
+part of 'setup_route.dart';
 
 /// Controller for the [SetupRoute].
+///
+/// Coordinates the initial app setup after authentication. Fetches the user's device list and navigates to the
+/// appropriate screen based on whether devices exist on the account.
 class SetupController extends State<SetupRoute> {
   @override
   void initState() {
@@ -37,24 +23,25 @@ class SetupController extends State<SetupRoute> {
   /// related to these processes. If the user has no devices on their account, the app proceeds to the [WelcomeRoute].
   /// Otherwise, the app goes to the [SoftenerMonitorRoute].
   Future<void> _performSetup() async {
-    List<BrineDevice>? deviceList;
+    final List<BrineDevice> deviceList;
 
     try {
       deviceList = await _getDevices();
     } on AuthenticationException catch (e, s) {
       debugPrint('Failed to perform setup with authentication exception, $e');
 
-      await FirebaseCrashlytics.instance.recordError('Failed to perform setup with authentication exception, $e', s);
+      await widget.crashReporter.recordError('Failed to perform setup with authentication exception, $e', s);
 
       if (!mounted) return;
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => const ErrorRoute(
+          builder: (_) => const ErrorRoute(
             errorType: ErrorType.unauthenticated,
           ),
         ),
       );
+      return;
     } catch (e) {
       debugPrint('Failed to perform setup with generic exception, $e');
 
@@ -62,36 +49,35 @@ class SetupController extends State<SetupRoute> {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => const ErrorRoute(
+          builder: (_) => const ErrorRoute(
             errorType: ErrorType.unknown,
           ),
         ),
       );
+      return;
     }
 
     // If there are no devices on the account, go to the [WelcomeRoute]
-    if (deviceList == null || deviceList.isEmpty) {
+    if (deviceList.isEmpty) {
       if (!mounted) return;
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => const WelcomeRoute(),
+          builder: (_) => const WelcomeRoute(),
         ),
       );
     }
     // If there is at least one device on the account, go to the [SoftenerMonitorRoute].
     else {
-      // Go to the water softener monitor route
-      if (mounted) {
-        await Navigator.pushReplacement(
-          context,
-          MaterialPageRoute<void>(
-            builder: (context) => SoftenerMonitorRoute(
-              devices: deviceList!,
-            ),
+      if (!mounted) return;
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (_) => SoftenerMonitorRoute(
+            devices: deviceList,
           ),
-        );
-      }
+        ),
+      );
     }
   }
 
@@ -103,9 +89,11 @@ class SetupController extends State<SetupRoute> {
     }
 
     try {
-      final PushNotificationsService pushNotificationsService = PushNotificationsService(
-        user: FirebaseAuth.instance.currentUser!,
-      );
+      final User? user = widget.authSession.currentUser;
+      if (user == null) return;
+
+      final PushNotificationsService pushNotificationsService =
+          widget.pushNotificationsServiceFactory?.call(user) ?? PushNotificationsService(user: user);
 
       await pushNotificationsService.registerFcmToken();
     } catch (e) {
@@ -113,32 +101,28 @@ class SetupController extends State<SetupRoute> {
     }
   }
 
-  /// First, gets a list of [BrineDevice]s on the users account. Second, for each device on the user's account, get the
-  /// salt and battery levels of the device.
+  /// Fetches the list of [BrineDevice]s on the user's account using the injected [AuthSession] and
+  /// [DeviceManagementService] factory.
   Future<List<BrineDevice>> _getDevices() async {
-    debugPrint(
-      'Getting devices for user, ${FirebaseAuth.instance.currentUser?.uid}',
-    );
+    final User? user = widget.authSession.currentUser;
+
+    debugPrint('Getting devices for user, ${user?.uid}');
+
+    if (user == null) {
+      throw AuthenticationException('No current user for the authentication session.');
+    }
 
     try {
-      // Get the current user.
-      final User? user = FirebaseAuth.instance.currentUser;
+      final DeviceManagementService deviceManagementService =
+          widget.deviceManagementServiceFactory?.call(user) ?? DeviceManagementService(user: user);
 
-      if (user == null) {
-        throw AuthenticationException('No current user for the authentication session.');
-      }
-
-      // Get an instance of the device management service for the current user.
-      final DeviceManagementService deviceManagementService = DeviceManagementService(user: user);
-
-      // Get the device's on the user's account.
       final List<BrineDevice> deviceList = await deviceManagementService.getUserDevices();
 
       return deviceList;
     } on AuthenticationException catch (e, s) {
       debugPrint('Failed to get devices with authentication exception, $e; $s');
 
-      await FirebaseCrashlytics.instance.recordError('Failed to get devices with authentication exception, $e', s);
+      await widget.crashReporter.recordError('Failed to get devices with authentication exception, $e', s);
 
       rethrow;
     } catch (e) {

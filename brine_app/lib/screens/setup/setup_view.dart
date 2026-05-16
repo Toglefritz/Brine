@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import '../../components/loaders/wave_loader.dart';
-import '../../extensions/brightness_extensions.dart';
-import 'setup_controller.dart';
-import 'setup_route.dart';
+part of 'setup_route.dart';
 
 /// View for the [SetupRoute].
 class SetupView extends StatelessWidget {
