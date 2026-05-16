@@ -1,7 +1,4 @@
-import 'dart:async';
-import 'dart:math';
-
-import 'package:flutter/material.dart';
+part of '../softener_monitor_route.dart';
 
 /// [WaveProgressIndicator] is a widget that displays a linear progress indicator with a wave animation. It takes a
 /// [progressPercent] parameter which determines how much of the progress indicator is filled.

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of '../softener_monitor_route.dart';
 
 /// Displays an icon to indicate the remaining battery life on the Brine monitor.
 class BatteryIndicator extends StatelessWidget {

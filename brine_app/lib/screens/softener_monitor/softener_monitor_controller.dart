@@ -1,12 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../services/analytics/analytics.dart';
-import '../../services/device_management/models/brine_device.dart';
-import '../account/account_route.dart';
-import '../device_configuration/scan/scan_route.dart';
-import 'softener_monitor_overdue_view.dart';
-import 'softener_monitor_route.dart';
-import 'softener_monitor_view.dart';
+part of 'softener_monitor_route.dart';
 
 /// Controller for [SoftenerMonitorRoute].
 class SoftenerMonitorController extends State<SoftenerMonitorRoute> {

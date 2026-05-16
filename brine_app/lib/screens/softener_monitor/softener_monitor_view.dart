@@ -1,15 +1,4 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../l10n/app_localizations.dart';
-import '../../theme/insets.dart';
-import 'components/battery_indicator.dart';
-import 'components/softener_monitor_app_bar.dart';
-import 'components/wave_progress_indicator.dart';
-import 'softener_monitor_controller.dart';
-import 'softener_monitor_route.dart';
+part of 'softener_monitor_route.dart';
 
 /// View for [SoftenerMonitorRoute].
 // TODO(Toglefritz): implement option for selecting device
