@@ -1,14 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../l10n/app_localizations.dart';
-import '../../services/analytics/analytics.dart';
-import '../../services/authentication/authentication_service.dart';
-import '../authentication/onboarding/onboarding_route.dart';
-import '../device_configuration/scan/scan_route.dart';
-import 'error_route.dart';
-import 'error_view.dart';
-import 'models/error_action.dart';
-import 'models/error_type.dart';
+part of 'error_route.dart';
 
 /// Controller for the [ErrorRoute].
 class ErrorController extends State<ErrorRoute> {

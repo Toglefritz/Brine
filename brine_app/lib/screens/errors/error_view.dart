@@ -1,13 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../components/app_bar/main_app_bar.dart';
-import '../../components/buttons/light_button.dart';
-import '../../extensions/brightness_extensions.dart';
-import '../../theme/insets.dart';
-import 'error_controller.dart';
-import 'error_route.dart';
+part of 'error_route.dart';
 
 /// View for the [ErrorRoute].
 class ErrorView extends StatelessWidget {
