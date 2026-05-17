@@ -1,13 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-
-import '../../../models/unit_of_measurement.dart';
-import '../../../services/analytics/analytics.dart';
-import '../../../services/device_management/device_management_service.dart';
-import '../brine_installation/brine_installation_route.dart';
-import '../provisioning_complete/provisioning_complete_route.dart';
-import 'appliance_measurement_route.dart';
-import 'appliance_measurement_view.dart';
+part of 'appliance_measurement_route.dart';
 
 /// Controller for [BrineInstallationRoute].
 class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
@@ -45,10 +36,16 @@ class ApplianceMeasurementController extends State<ApplianceMeasurementRoute> {
       final int height = _convertToMillimeters(rawHeight);
 
       // Get the current user.
-      final User user = FirebaseAuth.instance.currentUser!;
+      final User? user = widget.authSession.currentUser;
+      if (user == null) {
+        debugPrint('No authenticated user available for height submission.');
+        return;
+      }
 
       // Update the appliance height in the database.
-      await DeviceManagementService(user: user).updateApplianceHeight(
+      final DeviceManagementService service =
+          widget.deviceManagementServiceFactory?.call(user) ?? DeviceManagementService(user: user);
+      await service.updateApplianceHeight(
         deviceId: widget.device.deviceId,
         height: height,
       );

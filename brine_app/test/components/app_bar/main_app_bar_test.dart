@@ -132,7 +132,7 @@ void main() {
 
         // Verify the Account menu item is a PopupMenuItem with a non-null value (which triggers onSelected).
         final Finder menuItemFinder = find.byWidgetPredicate(
-          (Widget widget) => widget is PopupMenuItem<String> && (widget as PopupMenuItem<String>).value == 'Account',
+          (Widget widget) => widget is PopupMenuItem<String> && widget.value == 'Account',
         );
         expect(menuItemFinder, findsOneWidget);
       });
