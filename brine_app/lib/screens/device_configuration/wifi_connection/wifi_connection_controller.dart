@@ -1,6 +1,5 @@
 part of 'wifi_connection_route.dart';
 
-
 /// Controller for [WiFiConnectionRoute].
 class WiFiConnectionController extends State<WiFiConnectionRoute> {
   @override

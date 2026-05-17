@@ -2,8 +2,8 @@ part of 'device_connection_route.dart';
 
 /// Controller for the [DeviceConnectionRoute].
 class DeviceConnectionController extends State<DeviceConnectionRoute> {
-  /// The [SplendidBleCentral] instance used for BLE operations. Uses the injected instance from the widget if
-  /// provided, otherwise creates a new one.
+  /// The [SplendidBleCentral] instance used for BLE operations. Uses the injected instance from the widget if provided,
+  /// otherwise creates a new one.
   late final SplendidBleCentral _ble;
 
   /// A [StreamSubscription] used to listen for changes in the connection status between the app and the [BleDevice].

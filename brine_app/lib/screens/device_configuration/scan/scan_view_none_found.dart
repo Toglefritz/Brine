@@ -1,4 +1,5 @@
 part of 'scan_route.dart';
+
 /// View for the [ScanRoute].
 class ScanViewNoneFound extends StatelessWidget {
   /// Creates an instance of [ScanViewNoneFound].

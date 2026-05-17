@@ -91,8 +91,7 @@ void main() {
         await pumpRoute(tester, mockBle: mockBle);
 
         // Verify that writeValue was called with a command containing the SSID and password.
-        final VerificationResult result = verify(mockBle.writeValue(value: captureAnyNamed('value')))
-        ..called(1);
+        final VerificationResult result = verify(mockBle.writeValue(value: captureAnyNamed('value')))..called(1);
 
         final String commandString = result.captured.single as String;
         expect(commandString, contains('wifi_connect'));

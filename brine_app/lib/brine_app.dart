@@ -8,10 +8,20 @@ import 'theme/brine_app_theme.dart';
 
 /// The entry point of the application.
 ///
-/// The [BrineApp] widget returns a [MaterialApp]
+/// Listens to the authentication state and routes to either the [SetupRoute] (authenticated) or the [OnboardingRoute]
+/// (unauthenticated). The auth state stream can be injected for testing.
 class BrineApp extends StatelessWidget {
   /// Creates an instance of [BrineApp].
-  const BrineApp({super.key});
+  const BrineApp({
+    this.authStateStream,
+    super.key,
+  });
+
+  /// An optional stream of authentication state changes.
+  ///
+  /// When null, the app uses `FirebaseAuth.instance.authStateChanges()`. Providing a stream in tests allows
+  /// verification of the routing logic without Firebase platform initialization.
+  final Stream<User?>? authStateStream;
 
   /// A key used for the [Navigator] provided by the [MaterialApp] widget.
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -29,7 +39,7 @@ class BrineApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
+          stream: authStateStream ?? FirebaseAuth.instance.authStateChanges(),
           builder: (context, authStateSnapshot) {
             if (authStateSnapshot.hasData) {
               return const SetupRoute();

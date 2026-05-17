@@ -142,9 +142,9 @@ void main() {
 
         await pumpRoute(tester, mockBle: mockBle);
 
-        // The connection was initiated, which means the timeout timer was also started.
-        // We verify this indirectly: if we advance time and the widget is still mounted, the timer exists.
-        // The actual timeout navigation is tested via integration tests due to async Timer limitations.
+        // The connection was initiated, which means the timeout timer was also started. We verify this indirectly: if
+        // we advance time and the widget is still mounted, the timer exists. The actual timeout navigation is tested
+        // via integration tests due to async Timer limitations.
         verify(mockBle.connect(deviceAddress: 'AA:BB:CC:DD:EE:FF')).called(1);
       });
     });

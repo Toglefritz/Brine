@@ -126,8 +126,8 @@ void main() {
         await pumpRoute(tester, mockBle: mockBle);
 
         // The scan was started, which means the timeout timer was also started. The actual timeout state transition
-        // involves async operations inside the timer callback that are difficult to test in the fake async
-        // environment. The timeout behavior is verified via integration tests.
+        // involves async operations inside the timer callback that are difficult to test in the fake async environment.
+        // The timeout behavior is verified via integration tests.
         verify(mockBle.startScan(filters: anyNamed('filters'))).called(1);
       });
 
