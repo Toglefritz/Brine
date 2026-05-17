@@ -1,21 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_splendid_ble/central/models/scan_filter.dart';
-import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
-import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
-import 'package:flutter_splendid_ble/shared/models/bluetooth_permission_status.dart';
-import 'package:flutter_splendid_ble/shared/models/bluetooth_status.dart';
-
-import '../../../services/analytics/analytics.dart';
-import '../../../services/ble/ble_communication_service.dart';
-import '../../errors/error_route.dart';
-import '../../errors/models/error_type.dart';
-import '../../setup/setup_route.dart';
-import '../device_confirmation/device_confirmation_route.dart';
-import 'scan_route.dart';
-import 'scan_view.dart';
-import 'scan_view_none_found.dart';
+part of 'scan_route.dart';
 
 /// Controller for the [ScanRoute].
 class ScanController extends State<ScanRoute> {
@@ -44,9 +27,14 @@ class ScanController extends State<ScanRoute> {
   /// Determines if the scan timeout was reached.
   bool _scanTimeoutReached = false;
 
+  /// The [SplendidBleCentral] instance used for BLE operations.
+  late final SplendidBleCentral _ble;
+
   @override
   void initState() {
     Analytics.trackPageView('scan');
+
+    _ble = widget.ble ?? BleCommunicationService.ble;
 
     // Initialize the Bluetooth permission status monitor.
     unawaited(_initBluetoothPermissionStatusMonitor());
@@ -58,7 +46,7 @@ class ScanController extends State<ScanRoute> {
   ///
   /// This method sets up a listener to monitor the current status of the Bluetooth permissions on the host platform.
   Future<void> _initBluetoothPermissionStatusMonitor() async {
-    _bluetoothPermissionStream = (await BleCommunicationService.ble.emitCurrentPermissionStatus()).listen(
+    _bluetoothPermissionStream = (await _ble.emitCurrentPermissionStatus()).listen(
       (status) async {
         _bluetoothPermissionStatus = status;
 
@@ -82,7 +70,7 @@ class ScanController extends State<ScanRoute> {
     );
 
     // Request Bluetooth permissions. If they have already been granted, this method will do nothing.
-    await BleCommunicationService.ble.requestBluetoothPermissions();
+    await _ble.requestBluetoothPermissions();
   }
 
   /// Initializes Bluetooth status monitoring.
@@ -91,7 +79,7 @@ class ScanController extends State<ScanRoute> {
   /// during the initialization phase of the app or when Bluetooth monitoring is required.
   Future<void> _initBluetoothAdapterStatusMonitor() async {
     try {
-      _bluetoothStatusStream = (await BleCommunicationService.ble.emitCurrentBluetoothStatus()).listen(
+      _bluetoothStatusStream = (await _ble.emitCurrentBluetoothStatus()).listen(
         (status) async {
           _bluetoothAdapterStatus = status;
 
@@ -130,7 +118,7 @@ class ScanController extends State<ScanRoute> {
     debugPrint('Starting scan');
 
     // Start the scan
-    _discoveredDeviceSubscription = (await BleCommunicationService.ble.startScan(
+    _discoveredDeviceSubscription = (await _ble.startScan(
       filters: <ScanFilter>[
         ScanFilter(serviceUuids: ['6272696e-6573-616c-746d-6f6e69746f72']),
       ],
@@ -198,16 +186,18 @@ class ScanController extends State<ScanRoute> {
 
   /// Stops the scan for nearby BLE devices.
   Future<void> _stopScan({bool? scanTimeout}) async {
-    BleCommunicationService.ble.stopScan();
+    _ble.stopScan();
     await _discoveredDeviceSubscription?.cancel();
 
     // If the scan was stopped due to a timeout, show a message to the user.
     if (scanTimeout ?? false) {
       debugPrint('Scan timed out');
 
-      setState(() {
-        _scanTimeoutReached = true;
-      });
+      if (mounted) {
+        setState(() {
+          _scanTimeoutReached = true;
+        });
+      }
     }
   }
 

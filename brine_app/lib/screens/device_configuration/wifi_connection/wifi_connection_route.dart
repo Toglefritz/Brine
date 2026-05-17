@@ -1,8 +1,25 @@
+/// This route accepts the SSID and password of a WiFi network to which the Brine monitor should connect and sends a
+/// command to the Brine device with this information.
+library;
+
 import 'package:flutter/material.dart';
 
+import '../../../components/loaders/wave_loader.dart';
+import '../../../extensions/json.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../services/analytics/analytics.dart';
 import '../../../services/ble/ble_communication_service.dart';
+import '../../../services/ble/models/command.dart';
+import '../../../services/ble/models/command_type.dart';
+import '../../../services/ble/models/response.dart';
+import '../../../services/ble/models/response_type.dart';
+import '../../../services/ble/models/wifi_connect_error_response.dart';
 import '../../../services/device_management/models/brine_device.dart';
-import 'wifi_connection_controller.dart';
+import '../../../theme/insets.dart';
+import '../brine_installation/brine_installation_route.dart';
+
+part 'wifi_connection_controller.dart';
+part 'wifi_connection_view.dart';
 
 /// This route accepts the SSID and password of a WiFi network to which the Brine monitor should connect and sends a
 /// command to the Brine device with this information.

@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../components/loaders/wave_loader.dart';
-import '../../../l10n/app_localizations.dart';
-import '../../../theme/insets.dart';
-import 'scan_controller.dart';
-import 'scan_route.dart';
+part of 'scan_route.dart';
 
 /// View for the [ScanRoute].
 class ScanView extends StatelessWidget {

@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../components/loaders/wave_loader.dart';
-import '../../../l10n/app_localizations.dart';
-import '../../../theme/insets.dart';
-import 'wifi_connection_controller.dart';
-import 'wifi_connection_route.dart';
+part of 'wifi_connection_route.dart';
 
 /// View for [WiFiConnectionRoute].
 class WiFiConnectionView extends StatelessWidget {

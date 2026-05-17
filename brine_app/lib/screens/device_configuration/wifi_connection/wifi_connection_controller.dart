@@ -1,15 +1,5 @@
-import 'package:flutter/material.dart';
+part of 'wifi_connection_route.dart';
 
-import '../../../extensions/json.dart';
-import '../../../services/analytics/analytics.dart';
-import '../../../services/ble/models/command.dart';
-import '../../../services/ble/models/command_type.dart';
-import '../../../services/ble/models/response.dart';
-import '../../../services/ble/models/response_type.dart';
-import '../../../services/ble/models/wifi_connect_error_response.dart';
-import '../brine_installation/brine_installation_route.dart';
-import 'wifi_connection_route.dart';
-import 'wifi_connection_view.dart';
 
 /// Controller for [WiFiConnectionRoute].
 class WiFiConnectionController extends State<WiFiConnectionRoute> {
