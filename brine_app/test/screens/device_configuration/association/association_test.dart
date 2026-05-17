@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:brine/components/loaders/wave_loader.dart';
 import 'package:brine/l10n/app_localizations.dart';
 import 'package:brine/screens/device_configuration/association/association_route.dart';
-import 'package:brine/screens/device_configuration/pre_shared_key_setup/pre_shared_key_setup_route.dart';
 import 'package:brine/services/device_management/device_management_service.dart';
 import 'package:brine/services/device_management/models/brine_device.dart';
 import 'package:brine/theme/brine_app_theme.dart';
@@ -176,12 +175,4 @@ class _TrackingPendingService extends DeviceManagementService {
     onAddDevice(device);
     return _completer.future;
   }
-}
-
-/// A [DeviceManagementService] that succeeds immediately.
-class _SucceedingService extends DeviceManagementService {
-  _SucceedingService({required super.user});
-
-  @override
-  Future<void> addDeviceToAccount({required BrineDevice device}) async {}
 }

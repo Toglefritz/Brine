@@ -1,8 +1,19 @@
+/// Displays a page showing information about a Brine device that was detected during the Bluetooth scanning process.
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../../components/buttons/light_button.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../services/analytics/analytics.dart';
+import '../../../theme/insets.dart';
+import '../device_connection/device_connection_route.dart';
 import '../scan/scan_route.dart';
-import 'device_confirmation_controller.dart';
+
+part 'device_confirmation_controller.dart';
+part 'device_confirmation_view.dart';
 
 /// Displays a page showing information about a Brine device that was detected during the Bluetooth scanning process.
 /// The user can either confirm that this device is the one they wish to provision, in which case the provisioning flow

@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../services/analytics/analytics.dart';
-import '../device_connection/device_connection_route.dart';
-import '../scan/scan_route.dart';
-import 'device_confirmation_route.dart';
-import 'device_confirmation_view.dart';
+part of 'device_confirmation_route.dart';
 
 /// Controller for [DeviceConfirmationRoute].
 class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
@@ -19,7 +13,7 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => DeviceConnectionRoute(
+        builder: (_) => DeviceConnectionRoute(
           device: widget.device,
         ),
       ),
@@ -45,7 +39,7 @@ class DeviceConfirmationController extends State<DeviceConfirmationRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => ScanRoute(
+        builder: (_) => ScanRoute(
           excludedDeviceNames: deviceExclusionList,
         ),
       ),
