@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../services/analytics/analytics.dart';
-import '../appliance_measurement/appliance_measurement_route.dart';
-import 'brine_installation_route.dart';
-import 'brine_installation_view.dart';
+part of 'brine_installation_route.dart';
 
 /// Controller for [BrineInstallationRoute].
 class BrineInstallationController extends State<BrineInstallationRoute> {
@@ -21,7 +16,7 @@ class BrineInstallationController extends State<BrineInstallationRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => ApplianceMeasurementRoute(
+        builder: (_) => ApplianceMeasurementRoute(
           device: widget.device,
           bleCommunicationManager: widget.bleCommunicationManager,
         ),
