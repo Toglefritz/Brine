@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:brine/components/buttons/light_button.dart';
 import 'package:brine/components/loaders/wave_loader.dart';
 import 'package:brine/l10n/app_localizations.dart';
 import 'package:brine/screens/device_configuration/scan/scan_route.dart';
 import 'package:brine/theme/brine_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
 import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
 import 'package:flutter_splendid_ble/shared/models/bluetooth_permission_status.dart';
 import 'package:flutter_splendid_ble/shared/models/bluetooth_status.dart';

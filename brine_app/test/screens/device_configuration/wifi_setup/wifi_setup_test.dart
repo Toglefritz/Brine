@@ -98,8 +98,8 @@ void main() {
 
         await pumpRoute(tester, mockBle: mockBle);
 
-        final VerificationResult result = verify(mockBle.writeValue(value: captureAnyNamed('value')));
-        result.called(1);
+        final VerificationResult result = verify(mockBle.writeValue(value: captureAnyNamed('value')))
+        ..called(1);
 
         final String commandString = result.captured.single as String;
         expect(commandString, contains('scan'));
