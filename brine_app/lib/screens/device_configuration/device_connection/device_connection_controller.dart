@@ -1,30 +1,10 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_splendid_ble/central/models/ble_characteristic.dart';
-import 'package:flutter_splendid_ble/central/models/ble_connection_state.dart';
-import 'package:flutter_splendid_ble/central/models/ble_service.dart';
-import 'package:flutter_splendid_ble/central/splendid_ble_central.dart';
-import 'package:flutter_splendid_ble/shared/models/ble_device.dart';
-
-import '../../../extensions/json.dart';
-import '../../../services/analytics/analytics.dart';
-import '../../../services/ble/ble_communication_service.dart';
-import '../../../services/ble/models/command.dart';
-import '../../../services/ble/models/command_type.dart';
-import '../../../services/ble/models/device_id_response.dart';
-import '../../../services/ble/models/response.dart';
-import '../../../services/device_management/models/brine_device.dart';
-import '../../errors/error_route.dart';
-import '../../errors/models/error_type.dart';
-import '../association/association_route.dart';
-import 'device_connection_route.dart';
-import 'device_connection_view.dart';
+part of 'device_connection_route.dart';
 
 /// Controller for the [DeviceConnectionRoute].
 class DeviceConnectionController extends State<DeviceConnectionRoute> {
-  /// An instance of the [SplendidBle] service used for the Bluetooth scanning process.
-  final SplendidBle _ble = SplendidBle();
+  /// The [SplendidBleCentral] instance used for BLE operations. Uses the injected instance from the widget if
+  /// provided, otherwise creates a new one.
+  late final SplendidBleCentral _ble;
 
   /// A [StreamSubscription] used to listen for changes in the connection status between the app and the [BleDevice].
   StreamSubscription<BleConnectionState>? _connectionStream;
@@ -33,10 +13,8 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   StreamSubscription<List<BleService>>? _servicesDiscoveredStream;
 
   /// An instance of [BleCommunicationService] that will be created by this controller after a connection has been
-  /// established with the Brine device and service discovery has been performed. This instance will be passed to
-  /// subsequent steps in the provisioning process so they can use the centrally-established characteristic
-  /// subscription.
-  late BleCommunicationService? _bleCommunicationManager;
+  /// established with the Brine device and service discovery has been performed.
+  BleCommunicationService? _bleCommunicationManager;
 
   /// The device ID of the Brine device.
   late String _deviceId;
@@ -60,8 +38,10 @@ class DeviceConnectionController extends State<DeviceConnectionRoute> {
   void initState() {
     Analytics.trackPageView('device_connection');
 
-    // Start the process of connecting to the provided BleDevice. This is done after the build method is complete
-    // because the controller needs to have access to the context in order to navigate to the next route.
+    // Use the injected BLE instance or create a new one.
+    _ble = widget.ble ?? SplendidBleCentral();
+
+    // Start the process of connecting to the provided BleDevice.
     WidgetsBinding.instance.addPostFrameCallback((_) => _connectToDevice());
 
     super.initState();
