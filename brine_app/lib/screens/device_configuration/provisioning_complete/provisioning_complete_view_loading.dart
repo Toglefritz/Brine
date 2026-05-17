@@ -1,11 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../components/loaders/wave_loader.dart';
-import '../../../l10n/app_localizations.dart';
-import '../../../theme/insets.dart';
-import 'provisioning_complete_controller.dart';
-import 'provisioning_complete_route.dart';
-import 'provisioning_complete_view.dart';
+part of 'provisioning_complete_route.dart';
 
 /// View for the [ProvisioningCompleteRoute] presented while the provisioning process is finalized.
 class ProvisioningCompleteViewLoading extends StatelessWidget {

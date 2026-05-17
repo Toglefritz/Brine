@@ -1,17 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-
-import '../../../extensions/json.dart';
-import '../../../services/analytics/analytics.dart';
-import '../../../services/ble/models/command.dart';
-import '../../../services/ble/models/command_type.dart';
-import '../../../services/ble/models/response.dart';
-import '../../../services/ble/models/response_type.dart';
-import '../../setup/setup_route.dart';
-import 'provisioning_complete_route.dart';
-import 'provisioning_complete_view.dart';
-import 'provisioning_complete_view_loading.dart';
+part of 'provisioning_complete_route.dart';
 
 /// Controller for [ProvisioningCompleteRoute].
 class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
@@ -106,7 +93,7 @@ class ProvisioningCompleteController extends State<ProvisioningCompleteRoute> {
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => const SetupRoute(),
+        builder: (_) => const SetupRoute(),
       ),
     );
   }
