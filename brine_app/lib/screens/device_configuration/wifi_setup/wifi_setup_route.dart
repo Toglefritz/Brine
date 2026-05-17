@@ -1,8 +1,23 @@
-import 'package:flutter/material.dart';
+/// Sends a command to the Brine monitor to have it perform a scan for available WiFi networks.
+library;
 
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../../components/loaders/wave_loader.dart';
+import '../../../extensions/json.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../services/analytics/analytics.dart';
 import '../../../services/ble/ble_communication_service.dart';
+import '../../../services/ble/models/command.dart';
+import '../../../services/ble/models/command_type.dart';
 import '../../../services/device_management/models/brine_device.dart';
-import 'wifi_setup_controller.dart';
+import '../../../theme/insets.dart';
+import '../wifi_connection/wifi_connection_route.dart';
+
+part 'wifi_setup_controller.dart';
+part 'wifi_setup_view.dart';
+part 'models/wifi_network.dart';
 
 /// Sends a command to the Brine monitor to have it perform a scan for available WiFi networks. Then displays a list of
 /// the detected networks to the user so they can select the network to which the Brine monitor should connect.

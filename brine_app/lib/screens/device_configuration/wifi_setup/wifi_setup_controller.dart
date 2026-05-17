@@ -1,13 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../extensions/json.dart';
-import '../../../services/analytics/analytics.dart';
-import '../../../services/ble/models/command.dart';
-import '../../../services/ble/models/command_type.dart';
-import '../wifi_connection/wifi_connection_route.dart';
-import 'models/wifi_network.dart';
-import 'wifi_setup_route.dart';
-import 'wifi_setup_view.dart';
+part of 'wifi_setup_route.dart';
 
 /// Controller for [WiFiSetupRoute].
 class WiFiSetupController extends State<WiFiSetupRoute> {
