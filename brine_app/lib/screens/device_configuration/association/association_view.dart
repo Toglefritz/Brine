@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../components/loaders/wave_loader.dart';
-import '../../../l10n/app_localizations.dart';
-import '../../../theme/insets.dart';
-import 'association_controller.dart';
-import 'association_route.dart';
+part of 'association_route.dart';
 
 /// View for the [AssociationRoute].
 class AssociationView extends StatelessWidget {

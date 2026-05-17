@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../components/loaders/wave_loader.dart';
-import '../../../l10n/app_localizations.dart';
-import '../../../theme/insets.dart';
-import 'pre_shared_key_setup_route.dart';
+part of 'pre_shared_key_setup_route.dart';
 
 /// View for the [PreSharedKeySetupRoute].
 class PreSharedKeySetupView extends StatelessWidget {

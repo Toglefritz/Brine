@@ -1,12 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-
-import '../../../services/device_management/device_management_service.dart';
-import '../pre_shared_key_setup/pre_shared_key_setup_route.dart';
-import 'association_route.dart';
-import 'association_view.dart';
+part of 'association_route.dart';
 
 /// Controller for the [AssociationRoute].
+///
+/// On initialization, attempts to associate the Brine device with the authenticated user's account via the backend.
+/// After a successful (or failed) association, navigates to the [PreSharedKeySetupRoute].
 class AssociationController extends State<AssociationRoute> {
   @override
   void initState() {
@@ -19,13 +16,17 @@ class AssociationController extends State<AssociationRoute> {
   /// Attempt to associate the Brine device with the user's account.
   Future<void> _associateDevice() async {
     try {
-      // Get the current user.
-      final User user = FirebaseAuth.instance.currentUser!;
+      // Get the current user from the injected auth session.
+      final User? user = widget.authSession.currentUser;
 
-      // Add the device to the user's account.
-      await DeviceManagementService(user: user).addDeviceToAccount(
-        device: widget.device,
-      );
+      if (user == null) {
+        debugPrint('No authenticated user available for device association.');
+      } else {
+        // Add the device to the user's account.
+        final DeviceManagementService service =
+            widget.deviceManagementServiceFactory?.call(user) ?? DeviceManagementService(user: user);
+        await service.addDeviceToAccount(device: widget.device);
+      }
     } catch (e) {
       debugPrint('Failed to associate device with exception, $e');
 
