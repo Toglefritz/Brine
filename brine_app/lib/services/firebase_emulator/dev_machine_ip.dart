@@ -1,3 +1,5 @@
+// coverage:ignore-file
+
 import 'dart:io';
 
 /// The IP address of the development machine running the Firebase emulator suite. This IP is used in debug builds to

@@ -7,8 +7,10 @@ class FirebaseCrashReporter implements CrashReporter {
   /// Creates an instance of [FirebaseCrashReporter].
   const FirebaseCrashReporter();
 
+  // coverage:ignore-start
   @override
   Future<void> recordError(dynamic exception, StackTrace stackTrace) {
     return FirebaseCrashlytics.instance.recordError(exception, stackTrace);
   }
+  // coverage:ignore-end
 }

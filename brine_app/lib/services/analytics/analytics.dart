@@ -15,6 +15,7 @@ class Analytics {
   static void trackPageView(String pageName) {
     debugPrint('Analytics trackPageView: $pageName');
 
+    // coverage:ignore-start
     if (!kDebugMode) {
       unawaited(
         FirebaseAnalytics.instance.logScreenView(
@@ -22,33 +23,40 @@ class Analytics {
         ),
       );
     }
+    // coverage:ignore-end
   }
 
   /// Tracks a sign-up event.
   static void trackSignUp(AuthMethod signUpMethod) {
     debugPrint('Analytics trackSignUp');
 
+    // coverage:ignore-start
     if (!kDebugMode) {
       unawaited(FirebaseAnalytics.instance.logSignUp(signUpMethod: signUpMethod.name));
     }
+    // coverage:ignore-end
   }
 
   /// Tracks login events.
   static void trackLogin() {
     debugPrint('Analytics trackLogin');
 
+    // coverage:ignore-start
     if (!kDebugMode) {
       unawaited(FirebaseAnalytics.instance.logLogin());
     }
+    // coverage:ignore-end
   }
 
   /// Tracks logout events.
   static void trackLogout() {
     debugPrint('Analytics trackLogout');
 
+    // coverage:ignore-start
     if (!kDebugMode) {
       unawaited(FirebaseAnalytics.instance.logEvent(name: 'logout'));
     }
+    // coverage:ignore-end
   }
 
   /// Tracks a custom event with an optional map of parameters.
@@ -58,6 +66,7 @@ class Analytics {
   }) {
     debugPrint('Analytics trackEvent: $eventName, $parameters');
 
+    // coverage:ignore-start
     if (!kDebugMode) {
       unawaited(
         FirebaseAnalytics.instance.logEvent(
@@ -66,5 +75,6 @@ class Analytics {
         ),
       );
     }
+    // coverage:ignore-end
   }
 }

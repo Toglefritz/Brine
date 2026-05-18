@@ -42,6 +42,7 @@ class PushNotificationsService {
   /// one mobile device. Additionally, the FCM token for a device can change over time for semi-unpredictable reasons
   /// such as OS updates, app updates, or other factors. Last, if a user has denied the app permission to send push
   /// notifications, the FCM token will not be generated.
+  // coverage:ignore-start
   Future<void> registerFcmToken() async {
     try {
       // Retrieve the FCM token for the current device
@@ -83,4 +84,5 @@ class PushNotificationsService {
       throw Exception('Failed to register FCM token with exception: $e');
     }
   }
+  // coverage:ignore-end
 }

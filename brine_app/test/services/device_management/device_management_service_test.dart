@@ -236,5 +236,159 @@ void main() {
         expect(brineDevice.batteryLevel, 0.7);
       });
     });
+
+    /// This group contains tests for the `createUserDocument` method.
+    group('createUserDocument', () {
+      test('should successfully create a user document', () async {
+        final Map<String, dynamic> responseBody = {'message': 'User document created'};
+        final MockHttpServer mockServer = MockHttpServer(() {
+          return FakeHttpResponse(statusCode: 200, body: jsonEncode(responseBody));
+        });
+        HttpOverrides.global = mockServer;
+
+        final MockUser mockUser = MockUser();
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
+        when(mockUser.uid).thenReturn('test_uid');
+
+        final DeviceManagementService service = DeviceManagementService(user: mockUser);
+        await service.createUserDocument();
+
+        HttpOverrides.global = null;
+      });
+
+      test('should throw when the response status code is not 200 or 201', () async {
+        final MockHttpServer mockServer = MockHttpServer(() {
+          return FakeHttpResponse(statusCode: 500, body: 'Internal Server Error');
+        });
+        HttpOverrides.global = mockServer;
+
+        final MockUser mockUser = MockUser();
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
+
+        final DeviceManagementService service = DeviceManagementService(user: mockUser);
+
+        expect(() => service.createUserDocument(), throwsException);
+
+        HttpOverrides.global = null;
+      });
+    });
+
+    /// This group contains tests for the `generatePreSharedKey` method.
+    group('generatePreSharedKey', () {
+      test('should successfully generate and return a pre-shared key', () async {
+        final Map<String, dynamic> responseBody = {
+          'psk': '7caf96e97207a08a4a90b9a845d7259703f255790f8384f812fe44c605e1d23b',
+        };
+        final MockHttpServer mockServer = MockHttpServer(() {
+          return FakeHttpResponse(statusCode: 200, body: jsonEncode(responseBody));
+        });
+        HttpOverrides.global = mockServer;
+
+        final MockUser mockUser = MockUser();
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
+
+        final DeviceManagementService service = DeviceManagementService(user: mockUser);
+        final dynamic psk = await service.generatePreSharedKey(deviceId: 'test_device');
+
+        HttpOverrides.global = null;
+
+        expect(psk.value, '7caf96e97207a08a4a90b9a845d7259703f255790f8384f812fe44c605e1d23b');
+      });
+
+      test('should throw when the response status code is not 200', () async {
+        final MockHttpServer mockServer = MockHttpServer(() {
+          return FakeHttpResponse(statusCode: 403, body: 'Forbidden');
+        });
+        HttpOverrides.global = mockServer;
+
+        final MockUser mockUser = MockUser();
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
+
+        final DeviceManagementService service = DeviceManagementService(user: mockUser);
+
+        expect(() => service.generatePreSharedKey(deviceId: 'test_device'), throwsException);
+
+        HttpOverrides.global = null;
+      });
+    });
+
+    /// This group contains tests for the `removeDeviceFromAccount` method.
+    group('removeDeviceFromAccount', () {
+      test('should successfully remove a device from the account', () async {
+        final MockHttpServer mockServer = MockHttpServer(() {
+          return FakeHttpResponse(statusCode: 200, body: jsonEncode({'message': 'Device removed'}));
+        });
+        HttpOverrides.global = mockServer;
+
+        final MockUser mockUser = MockUser();
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
+
+        final DeviceManagementService service = DeviceManagementService(user: mockUser);
+        await service.removeDeviceFromAccount(deviceId: 'test_device_id');
+
+        HttpOverrides.global = null;
+      });
+
+      test('should throw when the response status code is not 200', () async {
+        final MockHttpServer mockServer = MockHttpServer(() {
+          return FakeHttpResponse(statusCode: 404, body: 'Not Found');
+        });
+        HttpOverrides.global = mockServer;
+
+        final MockUser mockUser = MockUser();
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
+
+        final DeviceManagementService service = DeviceManagementService(user: mockUser);
+
+        expect(() => service.removeDeviceFromAccount(deviceId: 'test_device_id'), throwsException);
+
+        HttpOverrides.global = null;
+      });
+    });
+
+    /// This group contains tests for error handling in existing methods.
+    group('error handling', () {
+      test('getUserDevices should throw AuthenticationException on 401 response', () async {
+        final MockHttpServer mockServer = MockHttpServer(() {
+          return FakeHttpResponse(statusCode: 401, body: 'Unauthorized');
+        });
+        HttpOverrides.global = mockServer;
+
+        final MockUser mockUser = MockUser();
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
+
+        final DeviceManagementService service = DeviceManagementService(user: mockUser);
+
+        expect(() => service.getUserDevices(), throwsA(isA<Exception>()));
+
+        HttpOverrides.global = null;
+      });
+
+      test('addDeviceToAccount should throw on non-200 response', () async {
+        final MockHttpServer mockServer = MockHttpServer(() {
+          return FakeHttpResponse(statusCode: 500, body: 'Server Error');
+        });
+        HttpOverrides.global = mockServer;
+
+        final MockUser mockUser = MockUser();
+        when(mockUser.getIdToken()).thenAnswer((_) async => 'mock_id_token');
+
+        final DeviceManagementService service = DeviceManagementService(user: mockUser);
+        final BrineDevice device = BrineDevice(
+          deviceId: 'test',
+          name: 'test',
+          saltDistance: 100,
+          applianceHeight: 200,
+          saltLevel: 0.5,
+          batteryLevel: 0.8,
+          lastUpdatedTimestamp: DateTime.now(),
+          retrievalTimestamp: DateTime.now(),
+        );
+
+        expect(() => service.addDeviceToAccount(device: device), throwsException);
+
+        HttpOverrides.global = null;
+      });
+    });
   });
 }

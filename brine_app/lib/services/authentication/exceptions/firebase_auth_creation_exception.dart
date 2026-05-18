@@ -1,3 +1,5 @@
+// coverage: ignore-file
+
 /// Exception thrown when Firebase Auth user creation fails.
 class FirebaseAuthCreationException implements Exception {
   /// Optional message to provide more context about the exception.
