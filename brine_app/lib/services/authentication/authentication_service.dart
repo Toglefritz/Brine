@@ -28,6 +28,8 @@ class AuthenticationService {
       ? 'http://$_cloudFunctionsHost:5001/brine-3b212/us-central1'
       : ''; // TODO(Toglefritz): update prod endpoint
 
+  // coverage:ignore-start
+
   /// Creates a password-based account with Firebase Auth.
   ///
   /// As part of creating a password-based account with Firebase Auth, a [FirebaseAuthException] can be thrown if issues
@@ -207,4 +209,6 @@ class AuthenticationService {
       throw Exception('Error deleting user document: $e');
     }
   }
+
+  // coverage:ignore-end
 }

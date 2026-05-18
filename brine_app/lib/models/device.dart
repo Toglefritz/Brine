@@ -1,4 +1,4 @@
- // coverage:ignore-file
+// coverage:ignore-file
 
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';

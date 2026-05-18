@@ -57,7 +57,7 @@ void main() {
 
     group('trackLogin', () {
       test('executes without error', () {
-        expect(() => Analytics.trackLogin(), returnsNormally);
+        expect(Analytics.trackLogin, returnsNormally);
       });
 
       test('prints the login event', () {
@@ -76,7 +76,7 @@ void main() {
 
     group('trackLogout', () {
       test('executes without error', () {
-        expect(() => Analytics.trackLogout(), returnsNormally);
+        expect(Analytics.trackLogout, returnsNormally);
       });
 
       test('prints the logout event', () {

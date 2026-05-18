@@ -1,4 +1,4 @@
-// coverage: ignore-file
+// coverage:ignore-file
 
 /// Exception thrown when user document creation in Firestore fails.
 class UserDocumentCreationException implements Exception {

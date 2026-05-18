@@ -30,7 +30,7 @@ class DeviceManagementService {
     // coverage:ignore-start
     if (useFirebaseEmulator) {
       return 'http://$_cloudFunctionsHost:5001/brine-3b212/us-central1/$function';
-    } 
+    }
     // coverage:ignore-end
     else {
       return 'https://$function-7wo3szegoq-uc.a.run.app';

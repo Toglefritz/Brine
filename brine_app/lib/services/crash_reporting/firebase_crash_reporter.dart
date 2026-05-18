@@ -12,5 +12,6 @@ class FirebaseCrashReporter implements CrashReporter {
   Future<void> recordError(dynamic exception, StackTrace stackTrace) {
     return FirebaseCrashlytics.instance.recordError(exception, stackTrace);
   }
+
   // coverage:ignore-end
 }

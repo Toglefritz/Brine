@@ -84,5 +84,6 @@ class PushNotificationsService {
       throw Exception('Failed to register FCM token with exception: $e');
     }
   }
+
   // coverage:ignore-end
 }

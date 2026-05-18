@@ -242,7 +242,7 @@ void main() {
       test('should successfully create a user document', () async {
         final Map<String, dynamic> responseBody = {'message': 'User document created'};
         final MockHttpServer mockServer = MockHttpServer(() {
-          return FakeHttpResponse(statusCode: 200, body: jsonEncode(responseBody));
+          return FakeHttpResponse(body: jsonEncode(responseBody));
         });
         HttpOverrides.global = mockServer;
 
@@ -267,7 +267,7 @@ void main() {
 
         final DeviceManagementService service = DeviceManagementService(user: mockUser);
 
-        expect(() => service.createUserDocument(), throwsException);
+        expect(service.createUserDocument, throwsException);
 
         HttpOverrides.global = null;
       });
@@ -280,7 +280,7 @@ void main() {
           'psk': '7caf96e97207a08a4a90b9a845d7259703f255790f8384f812fe44c605e1d23b',
         };
         final MockHttpServer mockServer = MockHttpServer(() {
-          return FakeHttpResponse(statusCode: 200, body: jsonEncode(responseBody));
+          return FakeHttpResponse(body: jsonEncode(responseBody));
         });
         HttpOverrides.global = mockServer;
 
@@ -292,6 +292,7 @@ void main() {
 
         HttpOverrides.global = null;
 
+        // ignore: avoid_dynamic_calls
         expect(psk.value, '7caf96e97207a08a4a90b9a845d7259703f255790f8384f812fe44c605e1d23b');
       });
 
@@ -316,7 +317,7 @@ void main() {
     group('removeDeviceFromAccount', () {
       test('should successfully remove a device from the account', () async {
         final MockHttpServer mockServer = MockHttpServer(() {
-          return FakeHttpResponse(statusCode: 200, body: jsonEncode({'message': 'Device removed'}));
+          return FakeHttpResponse(body: jsonEncode({'message': 'Device removed'}));
         });
         HttpOverrides.global = mockServer;
 
@@ -359,7 +360,7 @@ void main() {
 
         final DeviceManagementService service = DeviceManagementService(user: mockUser);
 
-        expect(() => service.getUserDevices(), throwsA(isA<Exception>()));
+        expect(service.getUserDevices, throwsA(isA<Exception>()));
 
         HttpOverrides.global = null;
       });
