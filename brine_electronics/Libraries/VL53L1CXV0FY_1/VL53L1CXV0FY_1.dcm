@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP VL53L1CXV0FY_1
+D A new generation, long distance ranging Time-of-Flight sensor based on ST's FlightSense technology
+K
+F https://www.st.com/resource/en/datasheet/vl53l1x.pdf
+$ENDCMP
+#
+#End Doc Library

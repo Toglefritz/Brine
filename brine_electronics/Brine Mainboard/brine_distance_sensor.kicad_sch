@@ -2085,7 +2085,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Sensor_Distance:ST_VL53L1x"
+		(property "Footprint" "VL53L1CXV0FY_1:VL53L1CXV0FY1"
 			(at 109.855 87.63 0)
 			(hide yes)
 			(show_name no)
