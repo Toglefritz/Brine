@@ -1248,6 +1248,28 @@
 				)
 			)
 		)
+		(property "Color" ""
+			(at 152.4 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C17414"
+			(at 152.4 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "73c2315e-79c5-4b08-b08b-099cd5021b82")
 		)
@@ -1507,10 +1529,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "78d9e3bf-1aa5-4ef8-99cd-d8ffb561267e")
 		(property "Reference" "R5"
-			(at 149.86 121.9201 0)
+			(at 149.86 119.126 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1521,7 +1542,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 149.86 119.3801 0)
+			(at 150.114 121.412 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1554,6 +1575,28 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 152.4 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Color" ""
+			(at 152.4 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C17414"
 			(at 152.4 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -2036,6 +2079,28 @@
 				)
 			)
 		)
+		(property "Color" ""
+			(at 88.9 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C1711"
+			(at 88.9 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "41afc04a-c5b4-4a3a-8605-b94b0d321de5")
 		)
@@ -2108,6 +2173,28 @@
 			)
 		)
 		(property "Description" "4m distance ranging ToF sensor, Optical LGA12"
+			(at 127 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Color" ""
+			(at 127 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C190004"
 			(at 127 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -2220,6 +2307,28 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 76.2 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Color" ""
+			(at 76.2 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C1746"
 			(at 76.2 101.6 0)
 			(hide yes)
 			(show_name no)

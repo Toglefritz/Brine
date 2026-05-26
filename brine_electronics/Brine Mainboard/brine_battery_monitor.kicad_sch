@@ -434,6 +434,28 @@
 				)
 			)
 		)
+		(property "Color" ""
+			(at 116.84 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C17556"
+			(at 116.84 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "70c154d5-8f81-40e7-8d5f-152ce67b34d7")
 		)
@@ -594,6 +616,28 @@
 		)
 		(property "Mouser Link" "https://www.mouser.com/ProductDetail/YAGEO/RC0805JR-072K2L?qs=KyGMWp10Ukt1e57HDpPYkQ%3D%3D"
 			(at 144.78 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Color" ""
+			(at 144.78 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C25611"
+			(at 144.78 101.6 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

@@ -701,12 +701,6 @@
         },
         {
           "group_by": false,
-          "label": "Manufacturer_Part_Number",
-          "name": "Manufacturer_Part_Number",
-          "show": false
-        },
-        {
-          "group_by": false,
           "label": "Mouser Link",
           "name": "Mouser Link",
           "show": true
@@ -721,18 +715,6 @@
           "group_by": false,
           "label": "Mouser Price/Stock",
           "name": "Mouser Price/Stock",
-          "show": false
-        },
-        {
-          "group_by": false,
-          "label": "MouserLink",
-          "name": "MouserLink",
-          "show": false
-        },
-        {
-          "group_by": false,
-          "label": "Sim.Pins",
-          "name": "Sim.Pins",
           "show": false
         },
         {
@@ -755,14 +737,26 @@
         },
         {
           "group_by": false,
-          "label": "Breakout",
-          "name": "Breakout",
+          "label": "Manufacturer_Part_Number",
+          "name": "MANUFACTURER_PART_NUMBER",
           "show": false
         },
         {
           "group_by": false,
-          "label": "Breakout Board",
-          "name": "Breakout Board",
+          "label": "VENDOR",
+          "name": "VENDOR",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "DigiKey Link",
+          "name": "DigiKey Link",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC Part #",
+          "name": "LCSC Part #",
           "show": false
         }
       ],
