@@ -691,7 +691,7 @@
 				)
 			)
 		)
-		(property "LCSC Part #" "C318884"
+		(property "JLCPCB Part #" "C318884"
 			(at 111.76 113.03 0)
 			(hide yes)
 			(show_name no)

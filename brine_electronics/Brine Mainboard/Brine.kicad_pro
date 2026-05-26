@@ -755,8 +755,8 @@
         },
         {
           "group_by": false,
-          "label": "LCSC Part #",
-          "name": "LCSC Part #",
+          "label": "JLCPCB Part #",
+          "name": "JLCPCB Part #",
           "show": false
         }
       ],

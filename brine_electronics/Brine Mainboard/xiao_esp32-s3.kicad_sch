@@ -1674,7 +1674,7 @@
 				)
 			)
 		)
-		(property "LCSC Part #" "C17520"
+		(property "JLCPCB Part #" "C17520"
 			(at 190.5 132.08 90)
 			(hide yes)
 			(show_name no)
@@ -1846,17 +1846,6 @@
 			)
 		)
 		(property "Color" ""
-			(at 139.7 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC Part #" ""
 			(at 139.7 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -2341,7 +2330,7 @@
 				)
 			)
 		)
-		(property "LCSC Part #" "C17520"
+		(property "JLCPCB Part #" "C17520"
 			(at 190.5 121.92 90)
 			(hide yes)
 			(show_name no)
