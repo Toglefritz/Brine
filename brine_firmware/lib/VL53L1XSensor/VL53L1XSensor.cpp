@@ -2,7 +2,7 @@
 #include "DebugService.h" // For debugging output
 
 // Constructor
-VL53L1XSensor::VL53L1XSensor() : sensor() {}
+VL53L1XSensor::VL53L1XSensor() : sensor(), lastRangeStatus(0) {}
 
 /**
  * @brief Initializes the VL53L1X sensor.
@@ -12,17 +12,17 @@ VL53L1XSensor::VL53L1XSensor() : sensor() {}
  */
 bool VL53L1XSensor::begin(TwoWire &i2cBus) {
   // Initialize the sensor
+  // SparkFun begin() returns true on success, false on failure
   bool status = sensor.begin(i2cBus);
 
-  // Check if the sensor failed to initialize
-  if (status != 0) {
-    DebugService::getInstance().debugPrint("Sensor failed to initialize with status ");
-    DebugService::getInstance().debugPrintln(String(status));
+  if (!status) {
+    DebugService::getInstance().debugPrint("Sensor failed to initialize");
+    DebugService::getInstance().debugPrintln("");
 
     return false;
-  } else {
-    return true;
   }
+
+  return true;
 }
 
 /**
@@ -39,7 +39,7 @@ void VL53L1XSensor::startMeasurement() { sensor.startRanging(); }
  *  - 2: Sigma fail
  *  - 7: Wrapped target fail
  */
-int VL53L1XSensor::getRangeStatus() { return sensor.getRangeStatus(); }
+int VL53L1XSensor::getRangeStatus() { return lastRangeStatus; }
 
 /**
  * @brief Retrieves the current distance measurement.
@@ -54,6 +54,7 @@ int VL53L1XSensor::getDistance() {
     delay(1); // Wait for measurement to be ready
   }
   int distance = sensor.getDistance();
+  lastRangeStatus = sensor.getRangeStatus(); // Cache before clearing
   sensor.clearInterrupt();
   sensor.stopRanging();
 

@@ -69,6 +69,7 @@ public:
 
 private:
   SFEVL53L1X sensor; /// Instance of the sensor class.
+  int lastRangeStatus = 0; /// Cached range status from last measurement.
 };
 
 #endif // VL53L1X_SENSOR_H
